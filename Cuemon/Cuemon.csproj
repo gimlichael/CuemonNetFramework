@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EAD7AC4F-B064-4959-8C6D-E90A3021E8EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cuemon</RootNamespace>
+    <AssemblyName>Cuemon</AssemblyName>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <NoWarn>649</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Act.cs" />
+    <Compile Include="Annotations\MinLengthValidationAttribute.cs" />
+    <Compile Include="Annotations\MaxLengthValidationAttribute.cs" />
+    <Compile Include="Annotations\EmailAddressValidationAttribute.cs" />
+    <Compile Include="Annotations\RangeValidationAttribute.cs" />
+    <Compile Include="ArrayUtility.cs" />
+    <Compile Include="AssemblyUtility.cs" />
+    <Compile Include="Caching\CacheCollection.GetOrAdd.cs" />
+    <Compile Include="Collections\Generic\PagedCollection.cs" />
+    <Compile Include="Collections\Generic\PagedSettings.cs" />
+    <Compile Include="Collections\Generic\PartitionCollection.cs" />
+    <Compile Include="Collections\Specialized\NameValueCollectionUtility.cs" />
+    <Compile Include="ComparisonUtility.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="ActivatorUtility.cs" />
+    <Compile Include="Globalization\CulturalRegion.cs" />
+    <Compile Include="IO\InternalStreamWriter.cs" />
+    <Compile Include="IO\StreamWriterSettings.cs" />
+    <Compile Include="IO\StreamWriterUtility.cs" />
+    <Compile Include="ISortableTable.cs" />
+    <Compile Include="Mapping.cs" />
+    <Compile Include="Net\Http\HttpWebRequestSettings.cs" />
+    <Compile Include="IndexMapping.cs" />
+    <Compile Include="DataPair.cs" />
+    <Compile Include="DataPairCollection.cs" />
+    <Compile Include="Security\SecurityTokenSettings.cs" />
+    <Compile Include="TesterDoerFactory.cs" />
+    <Compile Include="IReadOnlyData.cs" />
+    <Compile Include="Diagnostics\InstrumentationUtility.cs" />
+    <Compile Include="ActFactory.cs" />
+    <Compile Include="Annotations\RequiredValidationAttribute.cs" />
+    <Compile Include="Annotations\UniqueValidationAttribute.cs" />
+    <Compile Include="Annotations\ValidationAttribute.cs" />
+    <Compile Include="AssignmentUtility.cs" />
+    <Compile Include="ByteUtility.cs" />
+    <Compile Include="Caching\CacheCollection.cs" />
+    <Compile Include="Caching\Cache.cs" />
+    <Compile Include="Caching\CacheCollection.Memoization.cs" />
+    <Compile Include="Caching\CacheEventArgs.cs" />
+    <Compile Include="Caching\CacheValidator.cs" />
+    <Compile Include="Collections\Generic\ListUtility.cs" />
+    <Compile Include="Collections\Generic\DictionaryUtility.cs" />
+    <Compile Include="Collections\Generic\IReadOnlyCollection.cs" />
+    <Compile Include="Collections\Generic\IReadOnlyDictionary.cs" />
+    <Compile Include="Collections\Generic\ReadOnlyCollection.cs" />
+    <Compile Include="Collections\Generic\ReadOnlyDictionary.cs" />
+    <Compile Include="ComponentModel\MethodEnteredEventArgs.cs" />
+    <Compile Include="ComponentModel\INotifyMethodEntered.cs" />
+    <Compile Include="ComponentModel\INotifyMethodExited.cs" />
+    <Compile Include="ComponentModel\MethodExitedEventArgs.cs" />
+    <Compile Include="ConvertUtility.cs" />
+    <Compile Include="ArgumentEmptyException.cs" />
+    <Compile Include="Collections\Generic\EnumerableSizeComparer.cs" />
+    <Compile Include="AssignmentOperator.cs" />
+    <Compile Include="Diagnostics\FactoryInstrumentation.cs" />
+    <Compile Include="Diagnostics\TimeMeasureUtility.cs" />
+    <Compile Include="EventArgs.cs" />
+    <Compile Include="DelegateUtility.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="StructUtility.cs" />
+    <Compile Include="TesterDoer.cs" />
+    <Compile Include="GuidUtility.cs" />
+    <Compile Include="IO\FileMapping.cs" />
+    <Compile Include="SafeNativeMethods.cs" />
+    <Compile Include="SortOrder.cs" />
+    <Compile Include="Threading\CountdownEventBase.cs" />
+    <Compile Include="Threading\CountdownEventSlim.cs" />
+    <Compile Include="Threading\ISortedDoerWorkItemPool.cs" />
+    <Compile Include="Threading\FactoryDoerWorkItem.cs" />
+    <Compile Include="Threading\FactoryActWorkItem.cs" />
+    <Compile Include="Threading\IDoerWorkItemPool.cs" />
+    <Compile Include="Threading\DoerWorkItemPool.cs" />
+    <Compile Include="Threading\DoerWorkItem.cs" />
+    <Compile Include="Threading\IDoerWorkItem.cs" />
+    <Compile Include="Threading\ISynchronization.cs" />
+    <Compile Include="Threading\Spinner.cs" />
+    <Compile Include="Threading\ThreadPoolInfo.cs" />
+    <Compile Include="Threading\ThreadPoolSettings.cs" />
+    <Compile Include="Threading\ThreadPoolUtility.cs" />
+    <Compile Include="Threading\ParallelThreadPool.For.cs" />
+    <Compile Include="Threading\ParallelThreadPool.ForEach.cs" />
+    <Compile Include="Threading\ParallelThreadPool.ForEachTask.cs" />
+    <Compile Include="Threading\ParallelThreadPool.ForTask.cs" />
+    <Compile Include="Threading\ThreadSettings.cs" />
+    <Compile Include="Threading\ThreadUtility.cs" />
+    <Compile Include="Threading\WorkItemException.cs" />
+    <Compile Include="Threading\WorkItemExceptionEventArgs.cs" />
+    <Compile Include="TimeUnit.cs" />
+    <Compile Include="Transactions\TransactionUtility.cs" />
+    <Compile Include="TypeArgumentException.cs" />
+    <Compile Include="Validator.cs" />
+    <Compile Include="Wrapper.cs" />
+    <Compile Include="IWrapper.cs" />
+    <Compile Include="ExceptionUtility.cs" />
+    <Compile Include="DoerFactory.cs" />
+    <Compile Include="Hierarchy.cs" />
+    <Compile Include="HierarchyUtility.cs" />
+    <Compile Include="IHierarchy.cs" />
+    <Compile Include="DefaultOr.cs" />
+    <Compile Include="LoopUtility.cs" />
+    <Compile Include="RelationalOperator.cs" />
+    <Compile Include="Security\Cryptography\CyclicRedundancyCheck.cs" />
+    <Compile Include="Security\Cryptography\CyclicRedundancyCheck32.cs" />
+    <Compile Include="Security\Cryptography\PolynomialRepresentation.cs" />
+    <Compile Include="TransientFaultException.cs" />
+    <Compile Include="Diagnostics\IInstrumentation.cs" />
+    <Compile Include="EnumUtility.cs" />
+    <Compile Include="TransientFaultUtility.cs" />
+    <Compile Include="TesterDoerUtility.cs" />
+    <Compile Include="Management\PerformanceMonitorCounter.cs" />
+    <Compile Include="PlatformUtility.cs" />
+    <Compile Include="Reflection\MethodSignature.cs" />
+    <Compile Include="Diagnostics\PerformanceLogEntry.cs" />
+    <Compile Include="Diagnostics\Instrumentation.cs" />
+    <Compile Include="Diagnostics\ProcessSnapshot.cs" />
+    <Compile Include="Diagnostics\TimeMeasureCompletedEventArgs.cs" />
+    <Compile Include="Diagnostics\IPropertyPerformanceTiming.cs" />
+    <Compile Include="Diagnostics\IMethodPerformanceTiming.cs" />
+    <Compile Include="Diagnostics\PerformanceLog.cs" />
+    <Compile Include="Diagnostics\TimeMeasure.cs" />
+    <Compile Include="Diagnostics\TimeMeasureRunningEventArgs.cs" />
+    <Compile Include="EventUtility.cs" />
+    <Compile Include="Doer.cs" />
+    <Compile Include="IData.cs" />
+    <Compile Include="IO\Compression\CompressionUtility.cs" />
+    <Compile Include="IO\JsonInstance.cs" />
+    <Compile Include="IO\JsonInstanceCollection.cs" />
+    <Compile Include="IO\JsonTextWriter.cs" />
+    <Compile Include="IO\JsonWriter.cs" />
+    <Compile Include="Management\ManagementUtility.cs" />
+    <Compile Include="Net\Http\HttpMethods.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Net\Http\NetHttpUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Net\ServicePointManagerUtility.cs" />
+    <Compile Include="ReferenceComparer.cs" />
+    <Compile Include="Globalization\Currency.cs" />
+    <Compile Include="Globalization\GlobalizationUtility.cs" />
+    <Compile Include="Reflection\ParameterSignature.cs" />
+    <Compile Include="Reflection\PropertyEqualityComparer.cs" />
+    <Compile Include="Security\Cryptography\AdvancedEncryptionStandardUtility.cs" />
+    <Compile Include="Security\SecurityToken.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Security\SecurityUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StringReplaceCoordinate.cs" />
+    <Compile Include="StringReplaceEngine.cs" />
+    <Compile Include="StringReplacePair.cs" />
+    <Compile Include="Annotations\ValidationException.cs" />
+    <Compile Include="Threading\AsyncCall.cs" />
+    <Compile Include="Threading\AsyncCallResult.cs" />
+    <Compile Include="Threading\ActFactoryWorkItem.cs" />
+    <Compile Include="Threading\DoerFactorySortedWorkItem.cs" />
+    <Compile Include="Threading\FactorySortedWorkItem.cs" />
+    <Compile Include="Threading\DoerFactoryWorkItem.cs" />
+    <Compile Include="Threading\SortedDoerWorkItem.cs" />
+    <Compile Include="Threading\IActWorkItemPool.cs" />
+    <Compile Include="Threading\ActWorkItemPool.cs" />
+    <Compile Include="Threading\ISortedDoerWorkItem.cs" />
+    <Compile Include="Threading\CountdownEvent.cs" />
+    <Compile Include="Threading\IActWorkItem.cs" />
+    <Compile Include="Threading\SortedDoerWorkItemPool.cs" />
+    <Compile Include="Threading\ActWorkItem.cs" />
+    <Compile Include="WatcherEventArgs.cs" />
+    <Compile Include="DateSpan.cs" />
+    <Compile Include="Dependency.cs" />
+    <Compile Include="Caching\CachingManager.cs" />
+    <Compile Include="Diagnostics\FileExceptionLog.cs" />
+    <Compile Include="Diagnostics\LogAttribute.cs" />
+    <Compile Include="Diagnostics\Log.cs" />
+    <Compile Include="Diagnostics\LogEntry.cs" />
+    <Compile Include="Diagnostics\ExceptionLog.cs" />
+    <Compile Include="IDependency.cs" />
+    <Compile Include="IO\FileUtility.cs" />
+    <Compile Include="IO\FileDependency.cs" />
+    <Compile Include="Collections\Generic\EnumerableUtility.cs" />
+    <Compile Include="Configuration\DataConnectionElement.cs" />
+    <Compile Include="Configuration\DataConnectionElementCollection.cs" />
+    <Compile Include="Configuration\IDataConnectionElement.cs" />
+    <Compile Include="Configuration\SectionGroup.cs" />
+    <Compile Include="Configuration\DataSection.cs" />
+    <Compile Include="DateTimeUtility.cs" />
+    <Compile Include="DependencyEventArgs.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="Globalization\TimeZoneInfo.cs" />
+    <Compile Include="Globalization\TimeZoneInfo.RegistryEntry.Cache.cs" />
+    <Compile Include="Globalization\TimeZoneInfoDictionary.cs" />
+    <Compile Include="Globalization\TimeZoneInfo.SYSTEMTIME.cs" />
+    <Compile Include="Globalization\TimeZoneInfoKey.cs" />
+    <Compile Include="Globalization\TimeZoneInfo.RegistryEntry.cs" />
+    <Compile Include="Globalization\TimeZoneInfo.TZI.cs" />
+    <Compile Include="IO\FileBase.cs" />
+    <Compile Include="IO\XmlFile.cs" />
+    <Compile Include="Net\NetDependency.cs" />
+    <Compile Include="Net\NetWatcher.cs" />
+    <Compile Include="Net\NetUtility.cs" />
+    <Compile Include="NumberUtility.cs" />
+    <Compile Include="ParseException.cs" />
+    <Compile Include="IO\StreamUtility.cs" />
+    <Compile Include="Net\IPAddressUtility.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\ReflectionUtility.cs" />
+    <Compile Include="Runtime\Serialization\SimpleSerializationSurrogate.cs" />
+    <Compile Include="Runtime\Serialization\SerializationUtility.cs" />
+    <Compile Include="Runtime\Serialization\SimpleSurrogateSelector.cs" />
+    <Compile Include="Security\Cryptography\HashUtility.cs" />
+    <Compile Include="StringUtility.cs" />
+    <Compile Include="Text\EncodingUtility.cs" />
+    <Compile Include="Text\Obfuscator.cs" />
+    <Compile Include="Text\ObfuscatorMapping.cs" />
+    <Compile Include="TypeUtility.cs" />
+    <Compile Include="UriUtility.cs" />
+    <Compile Include="Watcher.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Globalization\Currency.csv" />
+    <Compile Include="Threading\ParallelThread.ForEach.cs" />
+    <Compile Include="Threading\ParallelThreadPool.While.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

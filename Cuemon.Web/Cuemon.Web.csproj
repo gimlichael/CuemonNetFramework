@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3B7C19D2-D09B-4F8A-BE18-0A755971C0B3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cuemon.Web</RootNamespace>
+    <AssemblyName>Cuemon.Web</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CdnGlobalModule.cs" />
+    <Compile Include="Configuration\WebConfigurationUtility.cs" />
+    <Compile Include="GlobalModule.Exception.cs" />
+    <Compile Include="GlobalModule.Routing.cs" />
+    <Compile Include="HttpCachingAttribute.cs" />
+    <Compile Include="HttpResponseAttribute.cs" />
+    <Compile Include="HttpResponseFilter.cs" />
+    <Compile Include="GlobalModule.ClientCaching.cs" />
+    <Compile Include="GlobalModule.Compression.cs" />
+    <Compile Include="GlobalModule.Init.cs" />
+    <Compile Include="GlobalModule.TokenParsing.cs" />
+    <Compile Include="Configuration\ApplicationSection.cs" />
+    <Compile Include="Configuration\WebsiteCompressionElement.cs" />
+    <Compile Include="Configuration\WebsiteCachingExpiresHeaderElement.cs" />
+    <Compile Include="Configuration\WebsiteCachingExpiresHeaderElementCollection.cs" />
+    <Compile Include="Configuration\WebsiteCachingElement.cs" />
+    <Compile Include="Configuration\WebsiteRequestPipelineProcessingElement.cs" />
+    <Compile Include="Configuration\WebsiteDataConnectionElement.cs" />
+    <Compile Include="Configuration\WebsiteDataConnectionElementCollection.cs" />
+    <Compile Include="Configuration\WebsiteDataElement.cs" />
+    <Compile Include="Configuration\WebsiteRobotsElement.cs" />
+    <Compile Include="Configuration\WebsiteBindingElement.cs" />
+    <Compile Include="Configuration\WebsiteBindingElementCollection.cs" />
+    <Compile Include="Configuration\WebSectionGroup.cs" />
+    <Compile Include="Configuration\UISection.cs" />
+    <Compile Include="Configuration\WebSection.cs" />
+    <Compile Include="Configuration\WebsiteGlobalizationCultureInfoElement.cs" />
+    <Compile Include="Configuration\WebsiteGlobalizationCultureInfoElementCollection.cs" />
+    <Compile Include="Configuration\WebsiteGlobalizationElement.cs" />
+    <Compile Include="Configuration\WebsiteMaintenanceElement.cs" />
+    <Compile Include="Configuration\WebsiteSecurityElement.cs" />
+    <Compile Include="Configuration\WebsiteSecurityIPRestrictionElement.cs" />
+    <Compile Include="Configuration\WebsiteSecurityIPRestrictionElementCollection.cs" />
+    <Compile Include="Configuration\UI\PageElement.cs" />
+    <Compile Include="Configuration\WebsiteElement.cs" />
+    <Compile Include="Configuration\WebsiteElementCollection.cs" />
+    <Compile Include="Configuration\WebsiteThemeElement.cs" />
+    <Compile Include="Configuration\WebsiteThemeElementCollection.cs" />
+    <Compile Include="HttpResponseContentFilter.cs" />
+    <Compile Include="GlobalModule.cs" />
+    <Compile Include="DefaultWebsite.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HttpContextItem.cs" />
+    <Compile Include="HttpContextItemCollection.cs" />
+    <Compile Include="HttpRequestUtility.cs" />
+    <Compile Include="HttpResponseUtility.cs" />
+    <Compile Include="ICacheableHttpHandler.cs" />
+    <Compile Include="ISearchEngineOptimizer .cs" />
+    <Compile Include="MimeUtility.cs" />
+    <Compile Include="RouteModule.cs" />
+    <Compile Include="Routing\HttpRouteNotFoundException.cs" />
+    <Compile Include="Routing\HttpRoute.cs" />
+    <Compile Include="Routing\HttpRouteAttribute.cs" />
+    <Compile Include="Routing\HttpRouteCollection.cs" />
+    <Compile Include="Routing\HttpRouteException.cs" />
+    <Compile Include="Routing\HttpRoutePath.cs" />
+    <Compile Include="Routing\HttpRouteTable.cs" />
+    <Compile Include="Routing\HttpRouteUtility.cs" />
+    <Compile Include="Security\WebSecurityUtility.cs" />
+    <Compile Include="SessionState\HttpFastSessionState.cs" />
+    <Compile Include="SiteMapProtocolHandler.cs" />
+    <Compile Include="UI\ControlUtility.cs" />
+    <Compile Include="UI\WebControls\DebugView.cs" />
+    <Compile Include="UI\XsltMasterPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI\XsltPageLocalization.cs" />
+    <Compile Include="UI\XsltPageLocalizationPhrase.cs" />
+    <Compile Include="UI\XsltPageLocalizationPhraseCollection.cs" />
+    <Compile Include="WcfGlobalModule.cs" />
+    <Compile Include="WebsiteGlobalizationTimeZone.cs" />
+    <Compile Include="WebsitePrivacyProvider.cs" />
+    <Compile Include="WebsiteRobots.cs" />
+    <Compile Include="WebsiteSecurityIPRestriction.cs" />
+    <Compile Include="WebsiteSecurityIPRestrictionCollection.cs" />
+    <Compile Include="WebsiteSecurity.cs" />
+    <Compile Include="WebsiteMaintenance.cs" />
+    <Compile Include="UI\XsltPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Website.cs" />
+    <Compile Include="WebsiteBinding.cs" />
+    <Compile Include="WebsiteBindingCollection.cs" />
+    <Compile Include="WebsiteGlobalization.cs" />
+    <Compile Include="WebsiteGlobalizationCultureInfo.cs" />
+    <Compile Include="WebsiteGlobalizationCultureInfoCollection.cs" />
+    <Compile Include="WebsiteModule.cs" />
+    <Compile Include="WebsiteUtility.cs" />
+    <Compile Include="WebsiteSiteMap.cs" />
+    <Compile Include="WebsiteThemeCollection.cs" />
+    <Compile Include="WebsiteTheme.cs" />
+    <Compile Include="WebsiteGlobalizationTimeZoneDictionary.cs" />
+    <Compile Include="WebsiteSiteMapProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cuemon.Xml\Cuemon.Xml.csproj">
+      <Project>{c789d3df-3cc6-47c1-825a-65245a255bb9}</Project>
+      <Name>Cuemon.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cuemon\Cuemon.csproj">
+      <Project>{ead7ac4f-b064-4959-8c6d-e90a3021e8ea}</Project>
+      <Name>Cuemon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53A4A935-B2FE-424A-8CF8-46B7F38EF0EB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cuemon.Data</RootNamespace>
+    <AssemblyName>Cuemon.Data</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release\</OutputPath>
+    <DefineConstants>CODE_ANALYSIS;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CsvClient\CsvDataReader.cs" />
+    <Compile Include="DataAdapter.cs" />
+    <Compile Include="DataAdapterEventArgs.cs" />
+    <Compile Include="DataAdapterException.cs" />
+    <Compile Include="BulkCopyDataReader.cs" />
+    <Compile Include="DataTransferSorter.cs" />
+    <Compile Include="StringDataReader.cs" />
+    <Compile Include="DataTransfer.cs" />
+    <Compile Include="DataTransferColumn.cs" />
+    <Compile Include="DataTransferColumnCollection.cs" />
+    <Compile Include="DataCommand.cs" />
+    <Compile Include="DataConnection.cs" />
+    <Compile Include="DataDependency.cs" />
+    <Compile Include="DataManager.cs" />
+    <Compile Include="DataParameterEqualityComparer.cs" />
+    <Compile Include="DataTransferRow.cs" />
+    <Compile Include="DataTransferRowCollection.cs" />
+    <Compile Include="DbColumn.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IDataCommand.cs" />
+    <Compile Include="IDataConnection.cs" />
+    <Compile Include="DataWatcher.cs" />
+    <Compile Include="InOperator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryUtility.cs" />
+    <Compile Include="QueryBuilder.cs" />
+    <Compile Include="QueryFormat.cs" />
+    <Compile Include="QueryInsertAction.cs" />
+    <Compile Include="QueryType.cs" />
+    <Compile Include="SqlClient\SqlDataManager.cs" />
+    <Compile Include="SqlClient\SqlInOperator.cs" />
+    <Compile Include="SqlClient\SqlQueryBuilder.cs" />
+    <Compile Include="UniqueIndexViolationException.cs" />
+    <Compile Include="XmlClient\XmlDataReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cuemon.Xml\Cuemon.Xml.csproj">
+      <Project>{c789d3df-3cc6-47c1-825a-65245a255bb9}</Project>
+      <Name>Cuemon.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cuemon\Cuemon.csproj">
+      <Project>{ead7ac4f-b064-4959-8c6d-e90a3021e8ea}</Project>
+      <Name>Cuemon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

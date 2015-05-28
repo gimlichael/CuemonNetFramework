@@ -1,0 +1,37 @@
+﻿// This file is used by Code Analysis to maintain SuppressMessage 
+// attributes that are applied to this project.
+// Project-level suppressions either have no target or are given 
+// a specific target and scoped to a namespace, type, member, etc.
+//
+// To add a suppression to this file, right-click the message in the 
+// Error List, point to "Suppress Message(s)", and click 
+// "In Project Suppression File".
+// You do not need to add suppressions to this file manually.
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ce", Scope = "namespace", Target = "Cuemon.Data.SqlCeClient")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cuemon", Scope = "namespace", Target = "Cuemon.Data.SqlCeClient")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ce")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cuemon")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlDataManager.#ExecuteIdentityDecimal(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlDataManager.#ExecuteIdentityInt32(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlDataManager.#ExecuteIdentityInt64(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlDataManager.#Finalize()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlDataManager.#GetCommandCore(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ce", Scope = "type", Target = "Cuemon.Data.SqlCeClient.SqlCeDataConnection")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2215:Dispose methods should call base class dispose", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataConnection.#Dispose(System.Boolean)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ce", Scope = "type", Target = "Cuemon.Data.SqlCeClient.SqlCeQueryBuilder")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2215:Dispose methods should call base class dispose", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlDataManager.#Dispose(System.Boolean)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ce", Scope = "type", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2215:Dispose methods should call base class dispose", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#Dispose(System.Boolean)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#ExecuteIdentityDecimal(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#ExecuteIdentityInt32(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#ExecuteIdentityInt64(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#Finalize()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#GetCommandCore(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Cuemon.Data.DataCommand.#ctor(System.String,System.Data.CommandType,System.TimeSpan)", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#ExecuteIdentity`1(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ce", Scope = "namespace", Target = "Cuemon.Data.SqlCeClient")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ce")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ce", Scope = "type", Target = "Cuemon.Data.SqlCeClient.SqlCeDataConnection")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ce", Scope = "type", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ce", Scope = "type", Target = "Cuemon.Data.SqlCeClient.SqlCeQueryBuilder")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "Cuemon.Data.SqlCeClient.SqlCeDataManager.#GetCommandCore(Cuemon.Data.IDataCommand,System.Data.IDataParameter[])")]

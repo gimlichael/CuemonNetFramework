@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{49223F4E-B4B6-4C4E-98AA-692600A46F21}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cuemon.Data.Entity</RootNamespace>
+    <AssemblyName>Cuemon.Data.Entity</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessEntity.cs" />
+    <Compile Include="BusinessEntityCollection.cs" />
+    <Compile Include="DataMapperUtility.cs" />
+    <Compile Include="EntityDataAdapter.cs" />
+    <Compile Include="BusinessEntityEventArgs.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="EntityDataAdapterEventArgs.cs" />
+    <Compile Include="EntityDataAdapterSettings.cs" />
+    <Compile Include="DataMapper.cs" />
+    <Compile Include="EntityMapper.cs" />
+    <Compile Include="IEntityDataAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenListBulkedWorkItem.cs" />
+    <Compile Include="RuntimeBusinessEntity.cs" />
+    <Compile Include="BusinessEntityUtility.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IIdentifier.cs" />
+    <Compile Include="IIdentifiers.cs" />
+    <Compile Include="Mapping\AssociationAttribute.cs" />
+    <Compile Include="Mapping\ColumnAttribute.cs" />
+    <Compile Include="Mapping\DataAttribute.cs" />
+    <Compile Include="Mapping\DataSourceAttribute.cs" />
+    <Compile Include="Mapping\MappingUtility.cs" />
+    <Compile Include="Mapping\TableAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlClient\SqlEntityDataAdapter.cs" />
+    <Compile Include="SqlClient\DefaultSqlEntityDataAdapter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cuemon.Data\Cuemon.Data.csproj">
+      <Project>{53a4a935-b2fe-424a-8cf8-46b7f38ef0eb}</Project>
+      <Name>Cuemon.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cuemon.Xml\Cuemon.Xml.csproj">
+      <Project>{c789d3df-3cc6-47c1-825a-65245a255bb9}</Project>
+      <Name>Cuemon.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cuemon\Cuemon.csproj">
+      <Project>{ead7ac4f-b064-4959-8c6d-e90a3021e8ea}</Project>
+      <Name>Cuemon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

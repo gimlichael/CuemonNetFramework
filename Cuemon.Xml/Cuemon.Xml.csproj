@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C789D3DF-3CC6-47C1-825A-65245A255BB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cuemon.Xml</RootNamespace>
+    <AssemblyName>Cuemon.Xml</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Build\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Build\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Serialization\SerializableOrder.cs" />
+    <Compile Include="Serialization\XmlElementWrapper.cs" />
+    <Compile Include="Serialization\XmlQualifiedEntity.cs" />
+    <Compile Include="Serialization\XmlSerializationUtility.Deserialize.cs" />
+    <Compile Include="Serialization\XmlSerializationUtility.Deserializer.cs" />
+    <Compile Include="Serialization\XmlWrapper.cs" />
+    <Compile Include="Serialization\XmlWrapperAttribute.cs" />
+    <Compile Include="XmlConvertUtility.cs" />
+    <Compile Include="Diagnostics\XmlExceptionLog.cs" />
+    <Compile Include="Diagnostics\XmlFileExceptionLog.cs" />
+    <Compile Include="SecureXmlObfuscator.cs" />
+    <Compile Include="Serialization\XmlIgnoreChainedReferenceAttribute.cs" />
+    <Compile Include="XmlJsonInstance.cs" />
+    <Compile Include="XmlObfuscator.cs" />
+    <Compile Include="XmlReaderUtility.cs" />
+    <Compile Include="XmlUriResolver.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\IXmlSerialization.cs" />
+    <Compile Include="Serialization\XmlSerialization.cs" />
+    <Compile Include="Serialization\XmlSerializationUtility.cs" />
+    <Compile Include="Serialization\XmlSerializationAttribute.cs" />
+    <Compile Include="XmlUtility.cs" />
+    <Compile Include="XmlWriterUtility.cs" />
+    <Compile Include="XPath\XPathUtility.cs" />
+    <Compile Include="Xsl\IXsltParameter.cs" />
+    <Compile Include="Xsl\XsltOutput.cs" />
+    <Compile Include="Xsl\XsltOutputMethod.cs" />
+    <Compile Include="Xsl\XsltUtility.cs" />
+    <Compile Include="Xsl\XsltExtensionLibrary.cs" />
+    <Compile Include="Xsl\XsltParameter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Serialization\XmlSerializationUtility.Serialize.cs" />
+    <Compile Include="Serialization\XmlSerializationUtility.Serializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConvertEncoding.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cuemon\Cuemon.csproj">
+      <Project>{ead7ac4f-b064-4959-8c6d-e90a3021e8ea}</Project>
+      <Name>Cuemon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

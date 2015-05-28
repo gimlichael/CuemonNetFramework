@@ -1,0 +1,119 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+
+namespace Cuemon
+{
+    /// <summary>
+    /// This utility class is designed to make enum related operations easier to work with.
+    /// </summary>
+    public static class EnumUtility
+    {
+        /// <summary>
+        /// Determines whether the specified <paramref name="value"/> is an equivalent of <typeparamref name="TEnum"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to validate.</typeparam>
+        /// <param name="value">A string containing the name or value to validate.</param>
+        /// <returns><c>true</c> if the <paramref name="value"/> parameter is an equivalent of <typeparamref name="TEnum"/>; otherwise, <c>false</c>.</returns>
+        public static bool IsStringOf<TEnum>(string value) where TEnum : struct, IConvertible
+        {
+            TEnum result;
+            if (string.IsNullOrEmpty(value)) { return false; }
+            return typeof(TEnum).IsEnum && TryParse(value, true, out result);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="value"/> of the name or numeric value of one or more enumerated constants to an equivalent enumerated object.
+        /// The return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to convert.</typeparam>
+        /// <param name="value">A string containing the name or value to convert.</param>
+        /// <param name="result">When this method returns, <paramref name="result"/> contains an object of type <typeparamref name="TEnum"/> whose value is represented by <paramref name="value"/> if the parse operation succeeds. If the parse operation fails, result contains the default value of the underlying type of <typeparamref name="TEnum"/>.</param>
+        /// <returns><c>true</c> if the <paramref name="value"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        public static bool TryParse<TEnum>(string value, out TEnum result) where TEnum : struct, IConvertible
+        {
+            return TryParse(value, false, out result);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="value"/> of the name or numeric value of one or more enumerated constants to an equivalent enumerated object.
+        /// A parameter specifies whether the operation is case-sensitive. The return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to convert.</typeparam>
+        /// <param name="value">A string containing the name or value to convert.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <param name="result">When this method returns, <paramref name="result"/> contains an object of type <typeparamref name="TEnum"/> whose value is represented by <paramref name="value"/> if the parse operation succeeds. If the parse operation fails, result contains the default value of the underlying type of <typeparamref name="TEnum"/>.</param>
+        /// <returns><c>true</c> if the <paramref name="value"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        public static bool TryParse<TEnum>(string value, bool ignoreCase, out TEnum result) where TEnum : struct, IConvertible
+        {
+            return TesterDoerUtility.TryExecuteFunction(Parse<TEnum>, value, ignoreCase, out result);
+        }
+
+        private static void ThrowIfNullOrEmptyOrNotEnum<TEnum>() where TEnum : struct, IConvertible
+        {
+            if (!typeof(TEnum).IsEnum) { throw new TypeArgumentException("TEnum", "TEnum does not represents an enumeration."); }
+        }
+
+        private static void ThrowIfNullOrEmptyOrNotEnum<TEnum>(string value) where TEnum : struct, IConvertible
+        {
+            ThrowIfNullOrEmptyOrNotEnum<TEnum>();
+            Validator.ThrowIfNullOrEmpty(value, "value");
+        }
+
+        /// <summary>
+        /// Converts the string representation of the name or numeric <paramref name="value"/> of one or more enumerated constants to an equivalent enumerated <typeparamref name="TEnum"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to convert.</typeparam>
+        /// <param name="value">A string containing the name or value to convert.</param>
+        /// <returns>An enum of type <typeparamref name="TEnum"/> whose value is represented by <paramref name="value"/>.</returns>
+        public static TEnum Parse<TEnum>(string value) where TEnum : struct, IConvertible
+        {
+            return Parse<TEnum>(value, false);
+        }
+
+        /// <summary>
+        /// Converts the string representation of the name or numeric <paramref name="value"/> of one or more enumerated constants to an equivalent enumerated <typeparamref name="TEnum"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to convert.</typeparam>
+        /// <param name="value">A string containing the name or value to convert.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <returns>An enum of type <typeparamref name="TEnum" /> whose value is represented by <paramref name="value" />.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="value"/> is null.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        /// <typeparamref name="TEnum"/> does not represents an enumeration.
+        /// </exception>
+        public static TEnum Parse<TEnum>(string value, bool ignoreCase) where TEnum : struct, IConvertible
+        {
+            ThrowIfNullOrEmptyOrNotEnum<TEnum>(value);
+            return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
+        }
+
+        /// <summary>
+        /// Determines whether one or more bit fields are set in the specified <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="source">The bit field or bit fields to test if set in <paramref name="value"/>.</param>
+        /// <param name="value">An enumeration value.</param>
+        /// <returns><c>true</c> if the bit field or bit fields that are set in <paramref name="source"/> are also set in the <paramref name="value"/>; otherwise, <c>false</c>.</returns>
+        public static bool HasFlag<TEnum>(TEnum source, TEnum value) where TEnum : struct, IConvertible
+        {
+            ThrowIfNullOrEmptyOrNotEnum<TEnum>();
+
+            try
+            {
+                long signedSource = source.ToInt64(CultureInfo.InvariantCulture);
+                long signedValue = value.ToInt64(CultureInfo.InvariantCulture);
+                return ((signedSource & signedValue) == signedValue);
+            }
+            catch (OverflowException)
+            {
+                ulong unsignedSource = source.ToUInt64(CultureInfo.InvariantCulture);
+                ulong unsignedValue = value.ToUInt64(CultureInfo.InvariantCulture);
+                return ((unsignedSource & unsignedValue) == unsignedValue);
+            }
+        }
+    }
+}
