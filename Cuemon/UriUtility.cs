@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Cuemon.Collections.Generic;
 using Cuemon.Diagnostics;
@@ -9,15 +10,16 @@ namespace Cuemon
     /// </summary>
     public static class UriUtility
     {
-        private static readonly UriScheme[] AllUriSchemes = ConvertUtility.ToArray<UriScheme>(UriScheme.File, UriScheme.Ftp, UriScheme.Gopher, UriScheme.Http, UriScheme.Https, UriScheme.Mailto, UriScheme.NetPipe, UriScheme.NetTcp, UriScheme.News, UriScheme.Nntp);
-
         /// <summary>
         /// Gets all URI schemes currently supported by the .NET framework.
         /// </summary>
-        /// <returns>An <see cref="Array"/> of all URI schemes currently supported by the .NET framework.</returns>
-        public static UriScheme[] GetAllUriSchemes()
+        /// <returns>A sequence of all URI schemes currently supported by the .NET framework.</returns>
+        public static IEnumerable<UriScheme> AllUriSchemes
         {
-            return (UriScheme[])AllUriSchemes.Clone();
+            get
+            {
+                return EnumerableUtility.AsEnumerable(UriScheme.File, UriScheme.Ftp, UriScheme.Gopher, UriScheme.Http, UriScheme.Https, UriScheme.Mailto, UriScheme.NetPipe, UriScheme.NetTcp, UriScheme.News, UriScheme.Nntp);
+            }
         }
 
         /// <summary>
@@ -49,13 +51,13 @@ namespace Cuemon
         /// Determines whether the specified value is an absolute URI string.
         /// </summary>
         /// <param name="value">The string value representing the URI.</param>
-        /// <param name="schemes">An array of <see cref="UriScheme"/> values to use in the validation of the URI.</param>
+        /// <param name="uriSchemes">A sequence of <see cref="UriScheme"/> values to use in the validation of the URI.</param>
         /// <returns>
         /// 	<c>true</c> if the specified value evaluates to an absolute URI; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsUri(string value, UriScheme[] schemes)
+        public static bool IsUri(string value, IEnumerable<UriScheme> uriSchemes)
         {
-            return IsUri(value, UriKind.Absolute, schemes);
+            return IsUri(value, UriKind.Absolute, uriSchemes);
         }
 
         /// <summary>
@@ -63,30 +65,30 @@ namespace Cuemon
         /// </summary>
         /// <param name="value">The string value representing the URI.</param>
         /// <param name="uriKind">The type of the URI.</param>
-        /// <param name="schemes">An array of <see cref="UriScheme"/> values to use in the validation of the URI.</param>
+        /// <param name="uriSchemes">A sequence of <see cref="UriScheme"/> values to use in the validation of the URI.</param>
         /// <returns>
         /// 	<c>true</c> if the specified value evaluates to an URI; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsUri(string value, UriKind uriKind, UriScheme[] schemes)
+        public static bool IsUri(string value, UriKind uriKind, IEnumerable<UriScheme> uriSchemes)
         {
             Uri ignoreUri;
-            return TryParse(value, uriKind, schemes, out ignoreUri);
+            return TryParse(value, uriKind, uriSchemes, out ignoreUri);
         }
 
         /// <summary>
         /// Determines whether an URI string contains one of the <see cref="UriScheme"/> values.
         /// </summary>
         /// <param name="value">The URI string to evaluate.</param>
-        /// <param name="schemes">An <see cref="Array"/> of <see cref="UriScheme"/> values.</param>
+        /// <param name="uriSchemes">An <see cref="Array"/> of <see cref="UriScheme"/> values.</param>
         /// <returns>
         /// 	<c>true</c> if the specified URI string contains one of the <see cref="UriScheme"/> values; otherwise, <c>false</c>.
         /// </returns>
-        public static bool ContainsScheme(string value, params UriScheme[] schemes)
+        public static bool ContainsScheme(string value, params UriScheme[] uriSchemes)
         {
             Uri uriOut;
-            if (TryParse(value, UriKind.Absolute, schemes, out uriOut))
+            if (TryParse(value, UriKind.Absolute, uriSchemes, out uriOut))
             {
-                return ContainsScheme(uriOut, schemes);
+                return ContainsScheme(uriOut, uriSchemes);
             }
             return false;
         }
@@ -95,20 +97,20 @@ namespace Cuemon
         /// Determines whether an <see cref="Uri"/> contains one of the <see cref="UriScheme"/> values. 
         /// </summary>
         /// <param name="value">The <see cref="Uri"/> to evaluate.</param>
-        /// <param name="schemes">An <see cref="Array"/> of <see cref="UriScheme"/> values.</param>
+        /// <param name="uriSchemes">An <see cref="Array"/> of <see cref="UriScheme"/> values.</param>
         /// <returns>
         /// 	<c>true</c> if the specified <see cref="Uri"/> contains one of the <see cref="UriScheme"/> values; otherwise, <c>false</c>.
         /// </returns>
-        public static bool ContainsScheme(Uri value, params UriScheme[] schemes)
+        public static bool ContainsScheme(Uri value, params UriScheme[] uriSchemes)
         {
-            if (value == null) throw new ArgumentNullException("value");
-            return EnumerableUtility.Contains<UriScheme>(schemes, UriUtility.ParseScheme(value.Scheme));
+            Validator.ThrowIfNull(value, "value");
+            return EnumerableUtility.Contains<UriScheme>(uriSchemes, UriUtility.ParseScheme(value.Scheme));
         }
 
         /// <summary>
         /// Converts the specified string representation of an URI value to its <see cref="Uri"/> equivalent.
         /// </summary>
-        /// <param name="value">A string containing the URI to convert.</param>
+        /// <param name="uriString">A string containing the URI to convert.</param>
         /// <param name="uriKind">The type of the URI.</param>
         /// <param name="result">When this method returns, contains the constructed <see cref="Uri"/>.</param>
         /// <returns>
@@ -117,17 +119,17 @@ namespace Cuemon
         /// <remarks>
         /// If this method returns true, the new <see cref="Uri"/> is in result.
         /// </remarks>
-        public static bool TryParse(string value, UriKind uriKind, out Uri result)
+        public static bool TryParse(string uriString, UriKind uriKind, out Uri result)
         {
-            return TryParse(value, uriKind, AllUriSchemes, out result);
+            return TryParse(uriString, uriKind, AllUriSchemes, out result);
         }
 
         /// <summary>
         /// Converts the specified string representation of an URI value to its <see cref="Uri"/> equivalent, limited to what is specified in the <see paramref="schemes"/> parameter.
         /// </summary>
-        /// <param name="value">A string containing the URI to convert.</param>
+        /// <param name="uriString">A string containing the URI to convert.</param>
         /// <param name="uriKind">The type of the URI.</param>
-        /// <param name="schemes">An array of <see cref="UriScheme"/> values to use in the parsing of the URI.</param>
+        /// <param name="uriSchemes">A sequence of <see cref="UriScheme"/> values to use in the parsing of the URI.</param>
         /// <param name="result">When this method returns, contains the constructed <see cref="Uri"/>.</param>
         /// <returns>
         ///     <c>true</c> if the <see cref="Uri"/> was successfully created; otherwise, false.
@@ -135,61 +137,92 @@ namespace Cuemon
         /// <remarks>
         /// If this method returns true, the new <see cref="Uri"/> is in result.
         /// </remarks>
-        public static bool TryParse(string value, UriKind uriKind, UriScheme[] schemes, out Uri result)
+        public static bool TryParse(string uriString, UriKind uriKind, IEnumerable<UriScheme> uriSchemes, out Uri result)
         {
-            if (value == null) { throw new ArgumentNullException("value"); }
-            if (schemes == null) throw new ArgumentNullException("schemes");
-            if (schemes.Length == 0) { throw new ArgumentException("At least one UriScheme must be specified.", "schemes"); }
+            return TesterDoerUtility.TryExecuteFunction(Parse, uriString, uriKind, uriSchemes, out result);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of an URI value to its <see cref="Uri"/> equivalent, limited to what is specified in the <see paramref="schemes"/> parameter.
+        /// </summary>
+        /// <param name="uriString">A string containing the URI to convert.</param>
+        /// <param name="uriKind">The type of the URI.</param>
+        /// <returns>An <see cref="Uri"/> that is equivalent to the value contained in <paramref name="uriString"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="uriString"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentEmptyException">
+        /// <paramref name="uriString"/> is empty.
+        /// </exception>
+        public static Uri Parse(string uriString, UriKind uriKind)
+        {
+            return Parse(uriString, uriKind, AllUriSchemes);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of an URI value to its <see cref="Uri"/> equivalent, limited to what is specified in the <see paramref="schemes"/> parameter.
+        /// </summary>
+        /// <param name="uriString">A string containing the URI to convert.</param>
+        /// <param name="uriKind">The type of the URI.</param>
+        /// <param name="uriSchemes">A sequence of <see cref="UriScheme"/> values to use in the parsing of the URI.</param>
+        /// <returns>An <see cref="Uri"/> that is equivalent to the value contained in <paramref name="uriString"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="uriString"/> is null - or - <paramref name="uriSchemes"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentEmptyException">
+        /// <paramref name="uriString"/> is empty.
+        /// </exception>
+        public static Uri Parse(string uriString, UriKind uriKind, IEnumerable<UriScheme> uriSchemes)
+        {
+            Validator.ThrowIfNullOrEmpty(uriString, "uriString");
+            Validator.ThrowIfNull(uriSchemes, "uriSchemes");
 
             bool isValid = false;
             string format = "{0}{1}";
-
-            foreach (UriScheme scheme in schemes)
+            foreach (UriScheme scheme in uriSchemes)
             {
                 switch (scheme)
                 {
                     case UriScheme.File:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeFile, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeFile, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Ftp:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeFtp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeFtp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Gopher:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeGopher, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeGopher, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Http:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Https:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttps, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttps, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Mailto:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeMailto, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeMailto, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.NetPipe:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNetPipe, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNetPipe, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.NetTcp:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNetTcp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNetTcp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.News:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNews, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNews, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Nntp:
-                        isValid = value.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNntp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNntp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException("schemes");
+                        throw new ArgumentOutOfRangeException("uriSchemes");
                 }
                 if (isValid) { break; }
             }
 
-            result = null;
-            if (isValid)
-            {
-                isValid = Uri.TryCreate(value, uriKind, out result); // so far, the uri seems valid - lets make sure before we say it is
-            }
-            return isValid;
+            Uri result;
+            if (!isValid ||
+                !Uri.TryCreate(uriString, uriKind, out result)) { throw new ArgumentException("The specified uriString is not a valid URI.", "uriString"); }
+            return result;
         }
 
         /// <summary>
