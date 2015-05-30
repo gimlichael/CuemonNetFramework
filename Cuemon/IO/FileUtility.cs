@@ -26,12 +26,11 @@ namespace Cuemon.IO
         public static Version GetFileVersion(string fileName)
         {
             if (fileName == null) { throw new ArgumentNullException("fileName"); }
-            string directory = Path.GetDirectoryName(fileName);
-            string filter = Path.GetFileName(fileName);
-            Doer<string, FileVersionInfo> getVersionInfo = CachingManager.Cache.Memoize<string, FileVersionInfo>(GetVersionInfoCore, new FileDependency(directory, filter));
+            Doer<string, FileVersionInfo> getVersionInfo = CachingManager.Cache.Memoize<string, FileVersionInfo>(GetVersionInfoCore, FileVersionDependencies);
             FileVersionInfo fileVersion = getVersionInfo(fileName);
             return new Version(string.IsNullOrEmpty(fileVersion.FileVersion) ? "0.0.0.0" : fileVersion.FileVersion);
         }
+
 
         /// <summary>
         /// Returns a <see cref="Version"/> from the specified <paramref name="fileName"/>.
@@ -45,9 +44,7 @@ namespace Cuemon.IO
         public static Version GetProductVersion(string fileName)
         {
             if (fileName == null) { throw new ArgumentNullException("fileName"); }
-            string directory = Path.GetDirectoryName(fileName);
-            string filter = Path.GetFileName(fileName);
-            Doer<string, FileVersionInfo> getVersionInfo = CachingManager.Cache.Memoize<string, FileVersionInfo>(GetVersionInfoCore, new FileDependency(directory, filter));
+            Doer<string, FileVersionInfo> getVersionInfo = CachingManager.Cache.Memoize<string, FileVersionInfo>(GetVersionInfoCore, FileVersionDependencies);
             FileVersionInfo fileVersion = getVersionInfo(fileName);
             return new Version(string.IsNullOrEmpty(fileVersion.ProductVersion) ? "0.0.0.0" : fileVersion.ProductVersion);
         }
@@ -84,10 +81,20 @@ namespace Cuemon.IO
         public static CacheValidator GetCacheValidator(string fileName, int bytesToRead)
         {
             if (fileName == null) { throw new ArgumentNullException("fileName"); }
+            Doer<string, int, CacheValidator> getCacheValidator = CachingManager.Cache.Memoize<string, int, CacheValidator>(GetCacheValidatorCore, FileVersionDependencies);
+            return getCacheValidator(fileName.ToUpperInvariant(), bytesToRead).Clone();
+        }
+
+        private static IEnumerable<IDependency> FileVersionDependencies(string fileName, int bytesToRead)
+        {
+            return FileVersionDependencies(fileName);
+        }
+
+        private static IEnumerable<IDependency> FileVersionDependencies(string fileName)
+        {
             string directory = Path.GetDirectoryName(fileName);
             string filter = Path.GetFileName(fileName);
-            Doer<string, int, CacheValidator> getCacheValidator = CachingManager.Cache.Memoize<string, int, CacheValidator>(GetCacheValidatorCore, new FileDependency(directory, filter));
-            return getCacheValidator(fileName.ToUpperInvariant(), bytesToRead).Clone();
+            yield return new FileDependency(directory, filter);
         }
 
         private static CacheValidator GetCacheValidatorCore(string fileName, int bytesToRead)

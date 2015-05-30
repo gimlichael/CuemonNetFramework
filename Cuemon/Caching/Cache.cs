@@ -19,12 +19,12 @@ namespace Cuemon.Caching
         /// <param name="dependencies">A sequence of <see cref="Dependency"/> objects for the item. When any dependency changes, the object becomes invalid and is removed from the cache. If there are no dependencies, this parameter contains a null reference (Nothing in Visual Basic).</param>
         /// <param name="absoluteExpiration">The absolute expiration date time value of this <see cref="Cache"/>.</param>
         /// <param name="slidingExpiration">The sliding expiration value of this <see cref="Cache"/>.</param>
-        internal Cache(string key, object value, string group, IEnumerable<Dependency> dependencies, DateTime absoluteExpiration, TimeSpan slidingExpiration)
+        internal Cache(string key, object value, string group, IEnumerable<IDependency> dependencies, DateTime absoluteExpiration, TimeSpan slidingExpiration)
         {
             this.Key = key;
             this.Value = value;
             this.Group = group;
-            this.Dependencies = dependencies;
+            this.Dependencies = dependencies == null ? null : new List<IDependency>(dependencies);
             this.AbsoluteExpiration = absoluteExpiration.ToUniversalTime();
             this.SlidingExpiration = slidingExpiration;
             this.Created = DateTime.UtcNow;
@@ -58,7 +58,11 @@ namespace Cuemon.Caching
         /// <value>The group to associate and organize this <see cref="Cache"/> by.</value>
         public string Group { get; private set; }
 
-        public IEnumerable<Dependency> Dependencies { get; private set; }
+        /// <summary>
+        /// Gets a sequence of objects implementing the <see cref="IDependency"/> interface assigned to this <see cref="Cache"/>.
+        /// </summary>
+        /// <value>A sequence of objects implementing the <see cref="IDependency"/> interface assigned to this <see cref="Cache"/>.</value>
+        public IEnumerable<IDependency> Dependencies { get; private set; }
 
         /// <summary>
         /// Gets the UTC absolute expiration date time value of this <see cref="Cache"/>.
@@ -112,7 +116,7 @@ namespace Cuemon.Caching
         /// <value><c>true</c> if this <see cref="Cache"/> is relying on a <see cref="Dependency"/> object; otherwise, <c>false</c>.</value>
         public bool UseDependency
         {
-            get { return (this.Dependencies != null && EnumerableUtility.Count(this.Dependencies) > 0); }
+            get { return (this.Dependencies != null && EnumerableUtility.Any(this.Dependencies)); }
         }
 
         /// <summary>
@@ -152,7 +156,7 @@ namespace Cuemon.Caching
         /// </value>
         public bool CanExpire
         {
-            get { return this.UseAbsoluteExpiration || this.UseSlidingExpiration || (this.Dependencies != null); }
+            get { return this.UseAbsoluteExpiration || this.UseSlidingExpiration || (this.UseDependency); }
         }
         #endregion
 
@@ -160,7 +164,7 @@ namespace Cuemon.Caching
 
         internal void StartDependencies()
         {
-            if (this.Dependencies == null) { return; }
+            if (!this.UseDependency) { return; }
             foreach (Dependency dependency in this.Dependencies)
             {
                 dependency.DependencyChanged += new EventHandler<DependencyEventArgs>(ProcessDependencyChanged);
@@ -179,7 +183,7 @@ namespace Cuemon.Caching
         private void ProcessDependencyChanged(object sender, DependencyEventArgs e)
         {
             this.OnExpiredRaised(new CacheEventArgs(this));
-            if (this.Dependencies != null)
+            if (this.UseDependency)
             {
                 foreach (IDependency dependency in this.Dependencies)
                 {

@@ -167,7 +167,7 @@ namespace Cuemon.Caching
         /// </remarks>
         public void Add(string key, object value, string group)
         {
-            this.AddCore(key, value, group, DateTime.MaxValue, TimeSpan.Zero);
+            this.AddCore(key, value, group, DateTime.MaxValue, TimeSpan.Zero, null);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace Cuemon.Caching
         /// </remarks>
         public void Add(string key, object value, string group, DateTime absoluteExpiration)
         {
-            this.AddCore(key, value, group, absoluteExpiration, TimeSpan.Zero);
+            this.AddCore(key, value, group, absoluteExpiration, TimeSpan.Zero, null);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Cuemon.Caching
         /// </remarks>
         public void Add(string key, object value, string group, TimeSpan slidingExpiration)
         {
-            this.AddCore(key, value, group, DateTime.MaxValue, slidingExpiration);
+            this.AddCore(key, value, group, DateTime.MaxValue, slidingExpiration, null);
         }
 
         /// <summary>
@@ -252,7 +252,24 @@ namespace Cuemon.Caching
         /// <remarks>
         /// This method will not throw an <see cref="ArgumentException"/> in case of an existing cache item whose key matches the key parameter.
         /// </remarks>
-        public void Add(string key, object value, params Dependency[] dependencies)
+        public void Add(string key, object value, params IDependency[] dependencies)
+        {
+            this.Add(key, value, NoGroup, dependencies);
+        }
+
+        /// <summary>
+        /// Adds the specified <paramref name="key"/> and <paramref name="value"/> to the cache.
+        /// </summary>
+        /// <param name="key">The cache key used to identify the item.</param>
+        /// <param name="value">The object to be inserted in the cache.</param>
+        /// <param name="dependencies">The dependencies for the <paramref name="value"/>. When any dependency changes, the <paramref name="value"/> becomes invalid and is removed from the cache.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        ///     <paramref name="key"/> is null.
+        /// </exception>
+        /// <remarks>
+        /// This method will not throw an <see cref="ArgumentException"/> in case of an existing cache item whose key matches the key parameter.
+        /// </remarks>
+        public void Add(string key, object value, IEnumerable<IDependency> dependencies)
         {
             this.Add(key, value, NoGroup, dependencies);
         }
@@ -270,12 +287,30 @@ namespace Cuemon.Caching
         /// <remarks>
         /// This method will not throw an <see cref="ArgumentException"/> in case of an existing cache item whose key matches the key parameter.
         /// </remarks>
-        public void Add(string key, object value, string group, params Dependency[] dependencies)
+        public void Add(string key, object value, string group, params IDependency[] dependencies)
+        {
+            this.Add(key, value, group, EnumerableUtility.AsEnumerable(dependencies));
+        }
+
+        /// <summary>
+        /// Adds the specified <paramref name="key"/> and <paramref name="value"/> to the cache.
+        /// </summary>
+        /// <param name="key">The cache key used to identify the item.</param>
+        /// <param name="value">The object to be inserted in the cache.</param>
+        /// <param name="group">The group to associate the <paramref name="key"/> with.</param>
+        /// <param name="dependencies">The dependencies for the <paramref name="value"/>. When any dependency changes, the <paramref name="value"/> becomes invalid and is removed from the cache.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        ///     <paramref name="key"/> is null.
+        /// </exception>
+        /// <remarks>
+        /// This method will not throw an <see cref="ArgumentException"/> in case of an existing cache item whose key matches the key parameter.
+        /// </remarks>
+        public void Add(string key, object value, string group, IEnumerable<IDependency> dependencies)
         {
             this.AddCore(key, value, group, DateTime.MaxValue, TimeSpan.Zero, dependencies);
         }
 
-        private void AddCore(string key, object value, string group, DateTime absoluteExpiration, TimeSpan slidingExpiration, params Dependency[] dependencies)
+        private void AddCore(string key, object value, string group, DateTime absoluteExpiration, TimeSpan slidingExpiration, IEnumerable<IDependency> dependencies)
         {
             if (key == null) { throw new ArgumentNullException("key"); }
             if ((slidingExpiration < TimeSpan.Zero) || (slidingExpiration > TimeSpan.FromDays(365))) { throw new ArgumentOutOfRangeException("slidingExpiration", "The given argument cannot be set to less than TimeSpan.Zero or more than one year."); }
@@ -478,7 +513,7 @@ namespace Cuemon.Caching
         /// <value></value>
         public int Count(string group)
         {
-            int count = this.GetCaches(group).Count;           
+            int count = this.GetCaches(group).Count;
             return count;
         }
 
@@ -588,7 +623,7 @@ namespace Cuemon.Caching
 
         private IEnumerable<KeyValuePair<long, object>> CreateImpostor()
         {
-            lock (InnerCaches) 
+            lock (InnerCaches)
             {
                 foreach (KeyValuePair<long, Cache> keyValuePair in InnerCaches)
                 {
