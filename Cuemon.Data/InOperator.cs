@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Text;
 using Cuemon.Collections.Generic;
 
 namespace Cuemon.Data
@@ -51,7 +50,7 @@ namespace Cuemon.Data
         /// </summary>
         /// <param name="expression">An expression to test for a match in the IN operator.</param>
         /// <param name="index">The index of the <paramref name="expression"/>.</param>
-        /// <returns>A <see cref="String"/> representing the argument of the <paramref name="expression"/>.</returns>
+        /// <returns>A <see cref="string"/> representing the argument of the <paramref name="expression"/>.</returns>
         /// <remarks>Default is @param{index}.</remarks>
         protected virtual string ArgumentsSelector(T expression, int index)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Cuemon.Collections.Generic;
+
 namespace Cuemon.Data
 {
 	/// <summary>
@@ -10,7 +11,7 @@ namespace Cuemon.Data
 	public static class QueryUtility
 	{
         /// <summary>
-        /// Converts a sequence of <see cref="Int32"/> values to the desired query fragment format.
+        /// Converts a sequence of <see cref="int"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -21,7 +22,7 @@ namespace Cuemon.Data
         }
 
         /// <summary>
-        /// Converts sequence of <see cref="Int32"/> values to the desired query fragment format.
+        /// Converts sequence of <see cref="int"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -33,7 +34,7 @@ namespace Cuemon.Data
         }
 
 		/// <summary>
-		/// Converts an array of <see cref="Int32"/> values to the desired query fragment format.
+		/// Converts an array of <see cref="int"/> values to the desired query fragment format.
 		/// </summary>
 		/// <param name="format">The format to use for the query fragment.</param>
 		/// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -44,7 +45,7 @@ namespace Cuemon.Data
 		}
 
         /// <summary>
-        /// Converts an array of <see cref="Int32"/> values to the desired query fragment format.
+        /// Converts an array of <see cref="int"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -56,7 +57,7 @@ namespace Cuemon.Data
         }
 
         /// <summary>
-        /// Converts a sequence of <see cref="Int64"/> values to the desired query fragment format.
+        /// Converts a sequence of <see cref="long"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -67,7 +68,7 @@ namespace Cuemon.Data
         }
 
         /// <summary>
-        /// Converts sequence of <see cref="Int64"/> values to the desired query fragment format.
+        /// Converts sequence of <see cref="long"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -79,7 +80,7 @@ namespace Cuemon.Data
         }
 
         /// <summary>
-        /// Converts an array of <see cref="Int64"/> values to the desired query fragment format.
+        /// Converts an array of <see cref="long"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>
@@ -90,7 +91,7 @@ namespace Cuemon.Data
         }
 
         /// <summary>
-        /// Converts an array of <see cref="Int64"/> values to the desired query fragment format.
+        /// Converts an array of <see cref="long"/> values to the desired query fragment format.
         /// </summary>
         /// <param name="format">The format to use for the query fragment.</param>
         /// <param name="values">The values to be generated in the specified format for the query fragment.</param>

@@ -1,15 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Reflection;
-using System.Threading;
-using System.Transactions;
 using Cuemon.Collections.Generic;
 using Cuemon.Configuration;
+
 namespace Cuemon.Data.SqlClient
 {
     /// <summary>
@@ -72,7 +68,7 @@ namespace Cuemon.Data.SqlClient
         /// </summary>
         /// <param name="dataCommand">The data command to execute.</param>
         /// <param name="parameters">The parameters to use in the command.</param>
-        /// <returns><see cref="Int32"/></returns>
+        /// <returns><see cref="int"/></returns>
         public override int ExecuteIdentityInt32(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
             if (dataCommand == null) throw new ArgumentNullException("dataCommand");
@@ -89,7 +85,7 @@ namespace Cuemon.Data.SqlClient
         /// </summary>
         /// <param name="dataCommand">The data command to execute.</param>
         /// <param name="parameters">The parameters to use in the command.</param>
-        /// <returns><see cref="Int64"/></returns>
+        /// <returns><see cref="long"/></returns>
         public override long ExecuteIdentityInt64(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
             if (dataCommand == null) throw new ArgumentNullException("dataCommand");
@@ -106,7 +102,7 @@ namespace Cuemon.Data.SqlClient
         /// </summary>
         /// <param name="dataCommand">The data command to execute.</param>
         /// <param name="parameters">The parameters to use in the command.</param>
-        /// <returns><see cref="Decimal"/></returns>
+        /// <returns><see cref="decimal"/></returns>
         public override decimal ExecuteIdentityDecimal(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
             if (dataCommand == null) throw new ArgumentNullException("dataCommand");

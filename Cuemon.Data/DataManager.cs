@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using Cuemon.Collections.Generic;
 using Cuemon.Configuration;
-using Cuemon.IO;
 using Cuemon.Xml;
-using Cuemon.Xml.XPath;
+
 namespace Cuemon.Data
 {
 	/// <summary>
@@ -204,7 +203,7 @@ namespace Cuemon.Data
 		{
 			if (reader == null) { throw new ArgumentNullException("reader"); }
 			if (reader.IsClosed) { throw new ArgumentException("Reader is closed.", "reader"); }
-			IEnumerable<KeyValuePair<string, object>> columns = DataManager.GetReaderColumns(reader);
+			IEnumerable<KeyValuePair<string, object>> columns = GetReaderColumns(reader);
 			foreach (KeyValuePair<string, object> column in columns)
 			{
 				yield return column.Key;
@@ -220,7 +219,7 @@ namespace Cuemon.Data
 		{
 			if (reader == null) { throw new ArgumentNullException("reader"); }
 			if (reader.IsClosed) { throw new ArgumentException("Reader is closed.", "reader"); }
-			IEnumerable<KeyValuePair<string, object>> columns = DataManager.GetReaderColumns(reader);
+			IEnumerable<KeyValuePair<string, object>> columns = GetReaderColumns(reader);
 			foreach (KeyValuePair<string, object> column in columns)
 			{
 				yield return column.Value;
@@ -251,7 +250,7 @@ namespace Cuemon.Data
 		{
 			if (reader == null) { throw new ArgumentNullException("reader"); }
 			if (reader.IsClosed) { throw new ArgumentException("Reader is closed.", "reader"); }
-			return ConvertUtility.ToDictionary<string, object>(DataManager.GetReaderColumns(reader));
+			return ConvertUtility.ToDictionary<string, object>(GetReaderColumns(reader));
 		}
 
 		/// <summary>
@@ -481,7 +480,7 @@ namespace Cuemon.Data
 		/// <returns>
 		/// An <b><see cref="System.Xml.XmlDocument"/></b> object.
 		/// </returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode")]
 		public virtual XmlDocument ExecuteXmlDocument(IDataCommand dataCommand, params IDataParameter[] parameters)
 		{
 			using (IDataReader reader = this.ExecuteReader(dataCommand, parameters))

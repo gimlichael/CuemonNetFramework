@@ -64,7 +64,7 @@ namespace Cuemon.Data
         /// Gets the column with the specified name.
         /// </summary>
         /// <param name="name">The name of the column to find.</param>
-        /// <returns>The column with the specified name as an <see cref="Object"/>.</returns>
+        /// <returns>The column with the specified name as an <see cref="object"/>.</returns>
         public object this[string name]
         {
             get { return this.Fields[name]; }
@@ -74,7 +74,7 @@ namespace Cuemon.Data
         /// Gets the column located at the specified index.
         /// </summary>
         /// <param name="i">The zero-based index of the column to get.</param>
-        /// <returns>The column located at the specified index as an <see cref="Object"/>.</returns>
+        /// <returns>The column located at the specified index as an <see cref="object"/>.</returns>
         public object this[int i]
         {
             get { return this.Fields[i]; }

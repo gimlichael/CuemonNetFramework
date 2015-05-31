@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Globalization;
@@ -8,7 +7,7 @@ using System.Text;
 namespace Cuemon.Data
 {
     /// <summary>
-    /// Provides a generic way of reading a forward-only stream of rows from a <see cref="String"/> based data source. This is an abstract class.
+    /// Provides a generic way of reading a forward-only stream of rows from a <see cref="string"/> based data source. This is an abstract class.
     /// </summary>
     public abstract class StringDataReader : IDataReader
     {
@@ -23,7 +22,7 @@ namespace Cuemon.Data
         /// <summary>
         /// Initializes a new instance of the <see cref="StringDataReader"/> class.
         /// </summary>
-        /// <param name="parser">The function delegate that returns a primitive object whose value is equivalent to the provided <see cref="String"/> value.</param>
+        /// <param name="parser">The function delegate that returns a primitive object whose value is equivalent to the provided <see cref="string"/> value.</param>
         /// <remarks>The default implementation uses <see cref="ConvertUtility.ChangeType(System.String)"/> as <paramref name="parser"/>.</remarks>
         protected StringDataReader(Doer<string, object> parser)
         {
@@ -38,7 +37,7 @@ namespace Cuemon.Data
         /// Gets the column with the specified name.
         /// </summary>
         /// <param name="name">The name of the column to find.</param>
-        /// <returns>The column with the specified name as an <see cref="Object"/>.</returns>
+        /// <returns>The column with the specified name as an <see cref="object"/>.</returns>
         public object this[string name]
         {
             get { return this.Fields[name]; }
@@ -48,7 +47,7 @@ namespace Cuemon.Data
         /// Gets the column located at the specified index.
         /// </summary>
         /// <param name="i">The zero-based index of the column to get.</param>
-        /// <returns>The column located at the specified index as an <see cref="Object"/>.</returns>
+        /// <returns>The column located at the specified index as an <see cref="object"/>.</returns>
         public object this[int i]
         {
             get { return this.Fields[i]; }
@@ -77,7 +76,7 @@ namespace Cuemon.Data
         protected bool IsDisposed { get; private set; }
 
         /// <summary>
-        /// Gets a reference to the function delegate that returns a primitive object whose value is equivalent to the provided <see cref="String"/> value.
+        /// Gets a reference to the function delegate that returns a primitive object whose value is equivalent to the provided <see cref="string"/> value.
         /// </summary>
         /// <value>A reference to the function delegate that this instance was constructed with.</value>
         protected Doer<string, object> StringParser { get; private set; }

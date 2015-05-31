@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+
 namespace Cuemon.Data
 {
 	/// <summary>
@@ -29,8 +29,8 @@ namespace Cuemon.Data
 		{
 			if (x == null) { throw new ArgumentNullException("x"); }
 			if (y == null) { throw new ArgumentNullException("y"); }
-			if (Object.ReferenceEquals(x.ParameterName, y.ParameterName)) { return true; }
-			if (Object.ReferenceEquals(x.ParameterName, null) || Object.ReferenceEquals(y.ParameterName, null)) { return false; }
+			if (ReferenceEquals(x.ParameterName, y.ParameterName)) { return true; }
+			if (ReferenceEquals(x.ParameterName, null) || ReferenceEquals(y.ParameterName, null)) { return false; }
 			return (x.ParameterName == y.ParameterName);
 		}
 

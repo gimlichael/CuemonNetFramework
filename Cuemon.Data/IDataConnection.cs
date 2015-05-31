@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using Cuemon.Configuration;
+
 namespace Cuemon.Data
 {
     /// <summary>

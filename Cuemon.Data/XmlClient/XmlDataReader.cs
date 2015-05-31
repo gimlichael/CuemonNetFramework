@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Xml;
-using System.Xml.XPath;
-using Cuemon.Xml;
 
 namespace Cuemon.Data.XmlClient
 {

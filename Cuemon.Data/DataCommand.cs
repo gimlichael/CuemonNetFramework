@@ -37,7 +37,7 @@ namespace Cuemon.Data
 		/// <remarks>
 		/// For more information regarding the <paramref name="textFormat"/>, have a look here: http://msdn.microsoft.com/en-us/library/txafckwd(v=vs.80).aspx.
 		/// </remarks>
-		public DataCommand(string textFormat, params object[] args) : this(textFormat, DataCommand.DefaultTimeout,  args)
+		public DataCommand(string textFormat, params object[] args) : this(textFormat, DefaultTimeout,  args)
 		{
 		}
 
@@ -81,7 +81,7 @@ namespace Cuemon.Data
 		/// <remarks>
 		/// For more information regarding the <paramref name="textFormat"/>, have a look here: http://msdn.microsoft.com/en-us/library/txafckwd(v=vs.80).aspx.
 		/// </remarks>
-		public DataCommand(string textFormat, CommandType type, params object[] args) : this(textFormat, type, DataCommand.DefaultTimeout, args)
+		public DataCommand(string textFormat, CommandType type, params object[] args) : this(textFormat, type, DefaultTimeout, args)
         {
         }
 
