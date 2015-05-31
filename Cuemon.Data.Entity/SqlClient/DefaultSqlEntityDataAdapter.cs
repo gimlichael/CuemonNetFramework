@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using Cuemon.Data.SqlClient;
+﻿using Cuemon.Data.SqlClient;
 
 namespace Cuemon.Data.Entity.SqlClient
 {

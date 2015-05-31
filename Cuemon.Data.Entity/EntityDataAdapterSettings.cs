@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Cuemon.Data.Entity
+﻿namespace Cuemon.Data.Entity
 {
     /// <summary>
     /// Specifies a set of features to support on the <see cref="EntityDataAdapter"/> object. This class cannot be inherited.

@@ -412,7 +412,7 @@ namespace Cuemon.Data.Entity
 
         private IEnumerable<ColumnAttribute> ParseBusinessEntityCollectionColumnAttributes(Type entityType)
         {
-            Type entitiesEntityType = EntityMapper.ParseEntityTypeForOpenList(this.Source, entityType);
+            Type entitiesEntityType = ParseEntityTypeForOpenList(this.Source, entityType);
             IDictionary<PropertyInfo, ColumnAttribute[]> tempDictionary = ReflectionUtility.GetPropertyAttributeDecorations<ColumnAttribute>(entitiesEntityType);
             List<ColumnAttribute> resolvedEntityColumns = new List<ColumnAttribute>();
             foreach (ColumnAttribute[] columns in tempDictionary.Values)
@@ -443,7 +443,7 @@ namespace Cuemon.Data.Entity
                 object matchingColumn = DictionaryUtility.FirstMatchOrDefault(columns, column.Name, column.NameAlias);
                 if (matchingColumn == null) { throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "Unable to find a matching column from {0} (or alias {1}) mapped to storage field {2}.", column.Name ?? "null", column.NameAlias ?? "null", column.ResolveStorage() ?? "null"), "columns"); }
                 object value = matchingColumn == DBNull.Value ? null : matchingColumn;
-                EntityMapper.SetStorageValue(entity, entityType, column.ResolveStorage(), value);
+                SetStorageValue(entity, entityType, column.ResolveStorage(), value);
             }
         }
 

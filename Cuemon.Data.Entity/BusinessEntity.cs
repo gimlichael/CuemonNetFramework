@@ -1,20 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Serialization;
-using Cuemon.Annotations;
-using Cuemon.Collections.Generic;
-using Cuemon.Data.Entity.Mapping;
 using Cuemon.Data.Entity.SqlClient;
-using Cuemon.Data.SqlClient;
-using Cuemon.Reflection;
-using Cuemon.Xml.Serialization;
-using Cuemon.Xml.XPath;
 
 namespace Cuemon.Data.Entity
 {

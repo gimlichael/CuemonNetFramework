@@ -5,7 +5,7 @@ namespace Cuemon.Data.Entity.Mapping
     /// <summary>
     /// Designates a property to represent a database association, such as a foreign key relationship.
     /// </summary>
-    [AttributeUsageAttribute(AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AssociationAttribute : ColumnAttribute
     {
         private bool _isForeignKey;

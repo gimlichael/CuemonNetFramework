@@ -1,5 +1,4 @@
-﻿using System;
-namespace Cuemon.Data.Entity
+﻿namespace Cuemon.Data.Entity
 {
     /// <summary>
     /// An interface describing the contract for retreiving multiple indentifiers as a string.

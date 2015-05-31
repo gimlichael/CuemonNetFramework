@@ -228,7 +228,7 @@ namespace Cuemon.Data.Entity.Mapping
             if (storageType == null) { throw new ArgumentNullException("storageType"); }
 
             string[] propertyNames;
-            bool hasProperties = MappingUtility.ParseStorageField(ref fieldName, out propertyNames);
+            bool hasProperties = ParseStorageField(ref fieldName, out propertyNames);
 
             FieldInfo field = storageType.GetField(fieldName, bindings);
             if (field == null)
@@ -282,7 +282,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing no DB generated columns.</returns>
 		public static ColumnAttribute[] GetNoneDbGeneratedColumns(ColumnAttribute[] columns)
 		{
-			return Array.FindAll<ColumnAttribute>(columns, MappingUtility.ExcludeOnlyDbGeneratedColumns);
+			return Array.FindAll<ColumnAttribute>(columns, ExcludeOnlyDbGeneratedColumns);
 		}
 
 		/// <summary>
@@ -292,7 +292,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing no DB generated columns.</returns>
 		public static IEnumerable<ColumnAttribute> GetNoneDbGeneratedColumns(IEnumerable<ColumnAttribute> columns)
 		{
-			return EnumerableUtility.FindAll<ColumnAttribute>(columns, MappingUtility.ExcludeOnlyDbGeneratedColumns);
+			return EnumerableUtility.FindAll<ColumnAttribute>(columns, ExcludeOnlyDbGeneratedColumns);
 		}
 
 		/// <summary>
@@ -302,7 +302,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing no primary key columns.</returns>
 		public static ColumnAttribute[] GetColumns(ColumnAttribute[] columns)
 		{
-			return Array.FindAll<ColumnAttribute>(columns, MappingUtility.ExcludeOnlyPrimaryKeyColumns);
+			return Array.FindAll<ColumnAttribute>(columns, ExcludeOnlyPrimaryKeyColumns);
 		}
 
 		/// <summary>
@@ -312,7 +312,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing no primary key columns.</returns>
 		public static IEnumerable<ColumnAttribute> GetColumns(IEnumerable<ColumnAttribute> columns)
 		{
-			return EnumerableUtility.FindAll<ColumnAttribute>(columns, MappingUtility.ExcludeOnlyPrimaryKeyColumns);
+			return EnumerableUtility.FindAll<ColumnAttribute>(columns, ExcludeOnlyPrimaryKeyColumns);
 		}
 
 		/// <summary>
@@ -322,7 +322,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing only foreign key columns.</returns>
 		public static ColumnAttribute[] GetForeignKeyColumns(ColumnAttribute[] columns)
 		{
-			return Array.FindAll<ColumnAttribute>(columns, MappingUtility.IncludeOnlyForeignKeyColumns);
+			return Array.FindAll<ColumnAttribute>(columns, IncludeOnlyForeignKeyColumns);
 		}
 
 		/// <summary>
@@ -332,7 +332,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing only foreign key columns.</returns>
 		public static IEnumerable<ColumnAttribute> GetForeignKeyColumns(IEnumerable<ColumnAttribute> columns)
 		{
-			return EnumerableUtility.FindAll(columns, MappingUtility.IncludeOnlyForeignKeyColumns);
+			return EnumerableUtility.FindAll(columns, IncludeOnlyForeignKeyColumns);
 		}
 
 		/// <summary>
@@ -342,7 +342,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing only primary key columns.</returns>
 		public static ColumnAttribute[] GetPrimaryKeyColumns(ColumnAttribute[] columns)
 		{
-			return Array.FindAll<ColumnAttribute>(columns, MappingUtility.IncludeOnlyPrimaryKeyColumns);
+			return Array.FindAll<ColumnAttribute>(columns, IncludeOnlyPrimaryKeyColumns);
 		}
 
 		/// <summary>
@@ -352,7 +352,7 @@ namespace Cuemon.Data.Entity.Mapping
 		/// <returns>A filtered result of <paramref name="columns"/> containing only primary key columns.</returns>
 		public static IEnumerable<ColumnAttribute> GetPrimaryKeyColumns(IEnumerable<ColumnAttribute> columns)
 		{
-			return EnumerableUtility.FindAll(columns, MappingUtility.IncludeOnlyPrimaryKeyColumns);
+			return EnumerableUtility.FindAll(columns, IncludeOnlyPrimaryKeyColumns);
 		}
 	}
 }

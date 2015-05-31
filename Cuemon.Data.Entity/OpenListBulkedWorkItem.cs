@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
 using Cuemon.Collections.Generic;
 using Cuemon.Data.Entity.Mapping;
 using Cuemon.Reflection;
-using Cuemon.Threading;
 
 namespace Cuemon.Data.Entity
 {
