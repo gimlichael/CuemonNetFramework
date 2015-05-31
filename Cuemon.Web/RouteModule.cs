@@ -41,7 +41,7 @@ namespace Cuemon.Web
             {
                 PhysicalFileNames = EnumerableUtility.FindAll(Directory.GetFiles(path, "*.*", SearchOption.AllDirectories), Match, extensions);
             }
-            Validator.ThrowIfNull(context, "context");
+
             this.DiscoverHandlerRoutes(typeof(IHttpHandler));
             base.OnApplicationStart(context);
             //this.DiscoverHandlerActions();
