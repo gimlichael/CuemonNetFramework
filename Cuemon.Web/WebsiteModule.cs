@@ -114,40 +114,39 @@ namespace Cuemon.Web
         /// </summary>
         /// <param name="context">The context of the ASP.NET application.</param>
         /// <remarks>This method is invoked just before ASP.NET sends content to the client but after the processing of <see cref="GlobalModule.OnPreSendRequestContent"/>.</remarks>
-		protected override void OnSendRequestContent(HttpApplication context)
-		{
+        protected override void OnSendRequestContent(HttpApplication context)
+        {
             if (context == null) { throw new ArgumentNullException("context"); }
-            if (context.Context.CurrentHandler == null) { return; }
-			XsltPage page = context.Context.CurrentHandler as XsltPage;
-			if (page != null && XsltPage.EnableDebug)
-			{
-				XmlDocument document = page.SnapshotOfXmlForDebugging == null ? XmlUtility.CreateXmlDocument("<ClientCachedWebsite></ClientCachedWebsite>") : XmlUtility.CreateXmlDocument(page.SnapshotOfXmlForDebugging);
-				XmlNode applicationLifecycleNode = document.CreateElement("LifecycleExceutionTime");
-				StringBuilder xml = new StringBuilder();
-				TimeSpan lastMeasurement = TimeSpan.Zero;
+            XsltPage page = context.Context.CurrentHandler as XsltPage;
+            if (page != null && XsltPage.EnableDebug)
+            {
+                XmlDocument document = page.SnapshotOfXmlForDebugging == null ? XmlUtility.CreateXmlDocument("<ClientCachedWebsite></ClientCachedWebsite>") : XmlUtility.CreateXmlDocument(page.SnapshotOfXmlForDebugging);
+                XmlNode applicationLifecycleNode = document.CreateElement("LifecycleExceutionTime");
+                StringBuilder xml = new StringBuilder();
+                TimeSpan lastMeasurement = TimeSpan.Zero;
 
                 foreach (KeyValuePair<string, TimeSpan> measurement in this.MeasuredApplicationLifecycle)
-				{
-					TimeSpan currentMeasurement = measurement.Value;
-					xml.AppendFormat(CultureInfo.InvariantCulture, "<{0}", measurement.Key);
+                {
+                    TimeSpan currentMeasurement = measurement.Value;
+                    xml.AppendFormat(CultureInfo.InvariantCulture, "<{0}", measurement.Key);
                     xml.AppendFormat(CultureInfo.InvariantCulture, " ticks=\"{2}\" totalMilliseconds=\"{3}\"" +
                                                                     " lifecycleTicks=\"{0}\" lifecycleTotalMilliseconds=\"{1}\" />",
                                                                     currentMeasurement.Ticks.ToString(CultureInfo.InvariantCulture),
                                                                     currentMeasurement.TotalMilliseconds.ToString(CultureInfo.InvariantCulture),
                                                                     currentMeasurement.Subtract(lastMeasurement).Ticks.ToString(CultureInfo.InvariantCulture),
                                                                     currentMeasurement.Subtract(lastMeasurement).TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-					lastMeasurement = currentMeasurement;
-				}
+                    lastMeasurement = currentMeasurement;
+                }
 
-				applicationLifecycleNode.InnerXml = xml.ToString();
-				document.DocumentElement.PrependChild(applicationLifecycleNode);
+                applicationLifecycleNode.InnerXml = xml.ToString();
+                document.DocumentElement.PrependChild(applicationLifecycleNode);
 
-				string debugKey = string.Format(CultureInfo.InvariantCulture, "{0}{1}", WebsiteUtility.CuemonDebugViewKey, page.GetType().FullName.ToLowerInvariant());
-				HttpFastSessionState session = new HttpFastSessionState(context.Request, context.Response); // improvised do to ASP.NET built-in Web Development Server (no HttpContext.Current available here)
-				session.Add(debugKey, document.OuterXml);
-				session = null;
-			}
-		}
+                string debugKey = string.Format(CultureInfo.InvariantCulture, "{0}{1}", WebsiteUtility.CuemonDebugViewKey, page.GetType().FullName.ToLowerInvariant());
+                HttpFastSessionState session = new HttpFastSessionState(context.Request, context.Response); // improvised due to ASP.NET built-in Web Development Server (no HttpContext.Current available here)
+                session.Add(debugKey, document.OuterXml);
+                session = null;
+            }
+        }
 
 		/// <summary>
 		/// Handles the Error event of the HttpApplication control.
