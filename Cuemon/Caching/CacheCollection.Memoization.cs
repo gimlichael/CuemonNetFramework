@@ -51,11 +51,11 @@ namespace Cuemon.Caching
         /// </summary>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<TResult> Memoize<TResult>(Doer<TResult> method, Doer<IEnumerable<IDependency>> dependencies)
+        public Doer<TResult> Memoize<TResult>(Doer<TResult> method, Doer<IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -102,11 +102,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T">The type of the parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T, TResult> Memoize<T, TResult>(Doer<T, TResult> method, Doer<T, IEnumerable<IDependency>> dependencies)
+        public Doer<T, TResult> Memoize<T, TResult>(Doer<T, TResult> method, Doer<T, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -157,11 +157,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T2">The type of the second parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, TResult> Memoize<T1, T2, TResult>(Doer<T1, T2, TResult> method, Doer<T1, T2, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, TResult> Memoize<T1, T2, TResult>(Doer<T1, T2, TResult> method, Doer<T1, T2, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -216,11 +216,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T3">The type of the third parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, TResult> Memoize<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> method, Doer<T1, T2, T3, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, TResult> Memoize<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> method, Doer<T1, T2, T3, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -279,11 +279,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T4">The type of the fourth parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, TResult> Memoize<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> method, Doer<T1, T2, T3, T4, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, TResult> Memoize<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> method, Doer<T1, T2, T3, T4, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -346,11 +346,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T5">The type of the fifth parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, T5, TResult> Memoize<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> method, Doer<T1, T2, T3, T4, T5, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, T5, TResult> Memoize<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> method, Doer<T1, T2, T3, T4, T5, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -417,11 +417,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T6">The type of the sixth parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, T5, T6, TResult> Memoize<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> method, Doer<T1, T2, T3, T4, T5, T6, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, T5, T6, TResult> Memoize<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> method, Doer<T1, T2, T3, T4, T5, T6, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -492,11 +492,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T7">The type of the seventh parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, T5, T6, T7, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, T5, T6, T7, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -571,11 +571,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T8">The type of the eighth parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, T8, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, T8, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -654,11 +654,11 @@ namespace Cuemon.Caching
         /// <typeparam name="T9">The type of the ninth parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
+        /// <param name="dependencyResolver">The function delegate that is used to assign dependencies to the memoized <paramref name="method"/>. When any dependency changes, the object becomes invalid and is removed from the cache.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
         /// <summary>
@@ -741,14 +741,14 @@ namespace Cuemon.Caching
         /// <typeparam name="T10">The type of the tenth parameter of the delegate <paramref name="method" />.</typeparam>
         /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate that is invoked once and then stored in cache for fast access.</param>
-        /// <param name="dependencies">Establishes one or more <see cref="Dependency"/> relations to this memoized function delegate.</param>
+        /// <param name="dependencyResolver">Establishes one or more <see cref="Dependency"/> relations to this memoized function delegate.</param>
         /// <returns>A memoized function delegate that is otherwise equivalent to <paramref name="method"/>.</returns>
-        public Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, IEnumerable<IDependency>> dependencies)
+        public Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Memoize<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, IEnumerable<IDependency>> dependencyResolver)
         {
-            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencies);
+            return MemoizeCore(method, DateTime.MaxValue, TimeSpan.Zero, dependencyResolver);
         }
 
-        private Doer<TResult> MemoizeCore<TResult>(Doer<TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<IEnumerable<IDependency>> dependencies)
+        private Doer<TResult> MemoizeCore<TResult>(Doer<TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate()
             {
@@ -759,14 +759,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method();
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies());
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver());
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T, TResult> MemoizeCore<T, TResult>(Doer<T, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T, IEnumerable<IDependency>> dependencies)
+        private Doer<T, TResult> MemoizeCore<T, TResult>(Doer<T, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T arg)
             {
@@ -777,14 +777,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, TResult> MemoizeCore<T1, T2, TResult>(Doer<T1, T2, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, TResult> MemoizeCore<T1, T2, TResult>(Doer<T1, T2, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2)
             {
@@ -795,14 +795,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, TResult> MemoizeCore<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, TResult> MemoizeCore<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3)
             {
@@ -813,14 +813,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, TResult> MemoizeCore<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, TResult> MemoizeCore<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
             {
@@ -831,14 +831,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, T5, TResult> MemoizeCore<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, T5, TResult> MemoizeCore<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
             {
@@ -849,14 +849,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4, arg5);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4, arg5));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, T5, T6, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, T5, T6, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
             {
@@ -867,14 +867,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4, arg5, arg6);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4, arg5, arg6));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, T5, T6, T7, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, T5, T6, T7, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
             {
@@ -885,14 +885,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, T8, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, T8, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
             {
@@ -903,14 +903,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
             {
@@ -921,14 +921,14 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
                     }
                     return result;
                 }
             };
         }
 
-        private Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, IEnumerable<IDependency>> dependencies)
+        private Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> MemoizeCore<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, DateTime absoluteExpiration, TimeSpan slidingExpiration, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, IEnumerable<IDependency>> dependencyResolver)
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
             {
@@ -939,7 +939,7 @@ namespace Cuemon.Caching
                     if (!this.TryGetValue(key, MemoizationGroup, out result))
                     {
                         result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencies == null ? null : dependencies(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
                     }
                     return result;
                 }
