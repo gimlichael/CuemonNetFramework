@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Cuemon.Caching
 {
@@ -29,16 +28,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<TResult>(string key, string group, Doer<TResult> resolver)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver();
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver();
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -66,16 +68,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<TResult>(string key, string group, Doer<TResult> resolver, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver();
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver();
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -103,16 +108,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<TResult>(string key, string group, Doer<TResult> resolver, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver();
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver();
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -141,16 +149,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver();
-                    this.Add(key, result, group, dependencyResolver());
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver();
+                        this.Add(key, result, group, dependencyResolver());
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -180,16 +191,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T, TResult>(string key, string group, Doer<T, TResult> resolver, T arg)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -221,16 +235,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T, TResult>(string key, string group, Doer<T, TResult> resolver, T arg, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -262,16 +279,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T, TResult>(string key, string group, Doer<T, TResult> resolver, T arg, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -304,16 +324,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg);
-                    this.Add(key, result, group, dependencyResolver(arg));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg);
+                        this.Add(key, result, group, dependencyResolver(arg));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -347,16 +370,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, TResult>(string key, string group, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -392,16 +418,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, TResult>(string key, string group, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -437,16 +466,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, TResult>(string key, string group, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -483,16 +515,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -530,16 +565,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, TResult>(string key, string group, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -579,16 +617,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, TResult>(string key, string group, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -628,16 +669,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, TResult>(string key, string group, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -678,16 +722,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -729,16 +776,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, TResult>(string key, string group, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -782,16 +832,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, TResult>(string key, string group, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -835,16 +888,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, TResult>(string key, string group, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -889,16 +945,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -944,16 +1003,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1001,16 +1063,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1058,16 +1123,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1116,16 +1184,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1175,16 +1246,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1236,16 +1310,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1297,16 +1374,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1359,16 +1439,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1422,16 +1505,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1487,16 +1573,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1552,16 +1641,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1618,16 +1710,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1685,16 +1780,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1754,16 +1852,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1823,16 +1924,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1893,16 +1997,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -1964,16 +2071,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2037,16 +2147,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2110,16 +2223,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2184,16 +2300,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2259,16 +2378,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                    this.Add(key, result, group);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                        this.Add(key, result, group);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2336,16 +2458,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, DateTime absoluteExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                    this.Add(key, result, group, absoluteExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                        this.Add(key, result, group, absoluteExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2413,16 +2538,19 @@ namespace Cuemon.Caching
         public TResult GetOrAdd<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, string group, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, TimeSpan slidingExpiration)
         {
             Validator.ThrowIfNull(resolver, "resolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                    this.Add(key, result, group, slidingExpiration);
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                        this.Add(key, result, group, slidingExpiration);
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>
@@ -2491,16 +2619,19 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
-            lock (InnerCaches)
+            TResult result;
+            if (!this.TryGetValue(key, group, out result))
             {
-                TResult result;
-                if (!this.TryGetValue(key, group, out result))
+                lock (InnerCaches)
                 {
-                    result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                    this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                    if (!this.TryGetValue(key, group, out result))
+                    {
+                        result = resolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                    }
                 }
-                return result;
             }
+            return result;
         }
     }
 }

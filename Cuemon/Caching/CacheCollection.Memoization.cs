@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using Cuemon.Security.Cryptography;
 
 namespace Cuemon.Caching
 {
@@ -752,17 +750,20 @@ namespace Cuemon.Caching
         {
             return delegate()
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method();
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver());
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method();
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver());
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -770,17 +771,20 @@ namespace Cuemon.Caching
         {
             return delegate(T arg)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -788,17 +792,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -806,17 +813,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -824,17 +834,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -842,17 +855,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4, arg5);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4, arg5);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -860,17 +876,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4, arg5, arg6);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4, arg5, arg6);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -878,17 +897,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -896,17 +918,21 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                        }
+
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -914,17 +940,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
@@ -932,17 +961,20 @@ namespace Cuemon.Caching
         {
             return delegate(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
             {
-                lock (InnerCaches)
+                TResult result;
+                string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                if (!this.TryGetValue(key, MemoizationGroup, out result))
                 {
-                    TResult result;
-                    string key = CalculateCompositeKey(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                    if (!this.TryGetValue(key, MemoizationGroup, out result))
+                    lock (InnerCaches)
                     {
-                        result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                        this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                        if (!this.TryGetValue(key, MemoizationGroup, out result))
+                        {
+                            result = method(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                            this.AddCore(key, result, MemoizationGroup, absoluteExpiration, slidingExpiration, dependencyResolver == null ? null : dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                        }
                     }
-                    return result;
                 }
+                return result;
             };
         }
 
