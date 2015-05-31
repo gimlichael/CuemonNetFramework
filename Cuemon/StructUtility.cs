@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using Cuemon.Collections.Generic;
 
 namespace Cuemon
 {
@@ -94,7 +92,7 @@ namespace Cuemon
                             string value = convertible as string;
                             if (value == null)
                             {
-                                hash ^= StructUtility.HashCodeForNullValue;
+                                hash ^= HashCodeForNullValue;
                             }
                             else
                             {

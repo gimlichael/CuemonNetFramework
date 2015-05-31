@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-namespace Cuemon.Security.Cryptography
+﻿namespace Cuemon.Security.Cryptography
 {
     /// <summary>
     /// Defines the common ways to express a CRC generator polynomial representation.

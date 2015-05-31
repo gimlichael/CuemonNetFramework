@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Cuemon.Diagnostics;
+
 namespace Cuemon
 {
     /// <summary>
-    /// The exception that is thrown when an empty <see cref="String"/> is passed to a method that does not accept it as a valid argument.
+    /// The exception that is thrown when an empty <see cref="string"/> is passed to a method that does not accept it as a valid argument.
     /// </summary>
     [Serializable]
     public class ArgumentEmptyException : ArgumentException

@@ -1,6 +1,4 @@
-﻿using System;
-using Cuemon.Diagnostics;
-namespace Cuemon.Caching
+﻿namespace Cuemon.Caching
 {
     /// <summary>
     /// Provides access to caching in an application.

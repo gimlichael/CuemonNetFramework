@@ -25,7 +25,7 @@ namespace Cuemon.Globalization
 		public static Currency GetCurrency(string threeLetterIsoCode)
 		{
 			if (!HasCurrency(threeLetterIsoCode)) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No currency could be resolved by the provided three-letter ISO currency code: {0}.", threeLetterIsoCode), "threeLetterIsoCode"); }
-			return GlobalizationUtility.Currencies[GlobalizationUtility.CurrencyCodes[threeLetterIsoCode]];
+			return Currencies[CurrencyCodes[threeLetterIsoCode]];
 		}
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace Cuemon.Globalization
 		public static Currency GetCurrency(int isoCode)
 		{
 			if (!HasCurrency(isoCode)) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No currency could be resolved by the provided ISO currency code: {0}.", isoCode), "isoCode"); }
-			return GlobalizationUtility.Currencies[isoCode];
+			return Currencies[isoCode];
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Cuemon.Globalization
 		{
 			if (threeLetterIsoCode == null) { throw new ArgumentNullException("threeLetterIsoCode"); }
 			if (threeLetterIsoCode.Length != 3) { throw new ArgumentException("The length of the ISO code must be exactly 3, hence the name.", "threeLetterIsoCode"); }
-			return GlobalizationUtility.CurrencyCodes.ContainsKey(threeLetterIsoCode);
+			return CurrencyCodes.ContainsKey(threeLetterIsoCode);
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Cuemon.Globalization
 		/// </returns>
 		public static bool HasCurrency(int isoCode)
 		{
-			return GlobalizationUtility.CurrencyCodes.Values.Contains(isoCode);
+			return CurrencyCodes.Values.Contains(isoCode);
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace Cuemon.Globalization
         /// <returns>A sequence of ISO 4217 compatible <see cref="Currency"/> objects available on the current system.</returns>
 		public static IEnumerable<Currency> GetCurrencies()
 		{
-			foreach (KeyValuePair<int, Currency> currency in GlobalizationUtility.Currencies)
+			foreach (KeyValuePair<int, Currency> currency in Currencies)
 			{
 				yield return currency.Value;
 			}

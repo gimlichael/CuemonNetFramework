@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
-using Cuemon.Collections.Generic;
 
 namespace Cuemon.Security.Cryptography
 {

@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Globalization
 {
     /// <summary>
@@ -20,7 +20,7 @@ namespace Cuemon.Globalization
         /// </summary>
         public TimeZoneInfo()
         {
-            _standardName = TimeZone.CurrentTimeZone.StandardName;
+            _standardName = CurrentTimeZone.StandardName;
             _daylightChangesYearInUse = _currentUtcYear;
         }
 

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.Management;
-using System.Text.RegularExpressions;
 
 namespace Cuemon.Collections.Generic
 {

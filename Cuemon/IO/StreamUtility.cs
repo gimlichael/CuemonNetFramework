@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
-using Cuemon.Diagnostics;
 using Cuemon.Text;
 
 namespace Cuemon.IO
@@ -69,7 +67,7 @@ namespace Cuemon.IO
 		/// <exception cref="T:System.IO.IOException">An I/O error occurred.</exception>
 		public static void CopyStream(Stream source, Stream destination)
 		{
-			StreamUtility.CopyStream(source, destination, 2048);
+			CopyStream(source, destination, 2048);
 		}
 
 

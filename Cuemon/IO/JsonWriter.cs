@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+
 namespace Cuemon.IO
 {
 	/// <summary>
@@ -68,7 +68,7 @@ namespace Cuemon.IO
 		{
 			if (output == null) { throw new ArgumentNullException("output"); }
 			if (encoding == null) { throw new ArgumentNullException("encoding"); }
-			JsonWriter.ValidateEncoding(encoding);
+			ValidateEncoding(encoding);
 			_writer = new StreamWriter(output, encoding);
 			_encoding = encoding;
 		}

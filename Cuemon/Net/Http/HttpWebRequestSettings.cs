@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net;
-using System.Net.Mime;
-using System.Net.Security;
-using System.Text;
-using Cuemon.Collections.Generic;
 
 namespace Cuemon.Net.Http
 {

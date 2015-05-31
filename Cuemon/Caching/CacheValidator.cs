@@ -588,7 +588,7 @@ namespace Cuemon.Caching
         public static CacheValidator GetMostSignificant(params CacheValidator[] sequence)
         {
             if (sequence == null) { throw new ArgumentNullException("sequence"); }
-            CacheValidator mostSignificant = CacheValidator.Default;
+            CacheValidator mostSignificant = Default;
             foreach (CacheValidator candidate in sequence)
             {
                 if (candidate.GetMostSignificant().Ticks > mostSignificant.GetMostSignificant().Ticks) { mostSignificant = candidate; }

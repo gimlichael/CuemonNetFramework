@@ -133,7 +133,7 @@ namespace Cuemon
         {
             if (value == null) { throw new ArgumentNullException("value"); }
             if (encoding == null) { throw new ArgumentNullException("encoding"); }
-            return ToHexString(ConvertUtility.ToByteArray(value, sequence, encoding));
+            return ToHexString(ToByteArray(value, sequence, encoding));
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace Cuemon
                     converted.Add(Convert.ToByte(new string(new [] { firstChar, secondChar }), 16));
                 }
             }
-            return ConvertUtility.ToString(converted.ToArray(), sequence, encoding);
+            return ToString(converted.ToArray(), sequence, encoding);
         }
 
         /// <summary>
@@ -1937,7 +1937,7 @@ namespace Cuemon
 		/// <remarks>What differs from the <see cref="Convert.ChangeType(object,System.TypeCode)"/> is, that this converter supports generics and enums somewhat automated.</remarks>
 		public static object ChangeType(object value, Type conversionType)
 		{
-		    return ConvertUtility.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+		    return ChangeType(value, conversionType, CultureInfo.InvariantCulture);
 		}
 
         /// <summary>

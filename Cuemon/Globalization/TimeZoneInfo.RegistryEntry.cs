@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Security.Permissions;
 using Cuemon.Caching;
-using Cuemon.Diagnostics;
 using Cuemon.Security.Cryptography;
 using Microsoft.Win32;
+
 namespace Cuemon.Globalization
 {
     partial class TimeZoneInfo
@@ -25,10 +24,10 @@ namespace Cuemon.Globalization
             private const string CacheGroupName = "Cuemon.Globalization.TimeZoneInfo";
 
             #region Constructors
-            [EnvironmentPermissionAttribute(SecurityAction.LinkDemand, Unrestricted = true)]
+            [EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
             internal RegistryEntry(string standardName)
             {
-                TimeZoneInfoKey resolvedKey = TimeZoneInfo.GetKey(standardName);
+                TimeZoneInfoKey resolvedKey = GetKey(standardName);
                 if (resolvedKey == TimeZoneInfoKey.Undefined) { return; }
 
                 TimeZoneCachedCore core = GetTimeZones()[resolvedKey];
@@ -56,7 +55,7 @@ namespace Cuemon.Globalization
                                     using (RegistryKey subKey = key.OpenSubKey(timeZoneName))
                                     {
                                         string standardName = (string)subKey.GetValue("Std");
-                                        TimeZoneInfoKey resolvedKey = TimeZoneInfo.GetKey(standardName);
+                                        TimeZoneInfoKey resolvedKey = GetKey(standardName);
                                         if (resolvedKey != TimeZoneInfoKey.Undefined)
                                         {
                                             TimeZonesRegistryCore.Add(resolvedKey, new TimeZoneCachedCore((string)subKey.GetValue("Display"), (string)subKey.GetValue("Dlt"), (byte[])subKey.GetValue("TZI")));
@@ -109,7 +108,7 @@ namespace Cuemon.Globalization
             #endregion
 
             #region Methods
-            [EnvironmentPermissionAttribute(SecurityAction.LinkDemand, Unrestricted = true)]
+            [EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
             private TZI InitializeTZI(byte[] tziValue)
             {
                 string hashKey = HashUtility.ComputeHash(tziValue);

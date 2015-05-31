@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using Cuemon.Collections.Generic;
 using Cuemon.Management;
 

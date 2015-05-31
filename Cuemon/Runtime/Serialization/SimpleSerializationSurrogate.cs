@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Cuemon.Diagnostics;
 using Cuemon.Reflection;
 
 namespace Cuemon.Runtime.Serialization

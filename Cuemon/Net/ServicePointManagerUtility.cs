@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Security;
+﻿using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Net
 {
 	/// <summary>

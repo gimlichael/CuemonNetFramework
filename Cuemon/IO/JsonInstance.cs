@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Cuemon.Security.Cryptography;
+
 namespace Cuemon.IO
 {
 	/// <summary>

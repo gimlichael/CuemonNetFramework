@@ -142,7 +142,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew(Act method)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method);
+            return StartNew(CreateSettings(), method);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T>(Act<T> method, T arg)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg);
+            return StartNew(CreateSettings(), method, arg);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2>(Act<T1, T2> method, T1 arg1, T2 arg2)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2);
+            return StartNew(CreateSettings(), method, arg1, arg2);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3>(Act<T1, T2, T3> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4>(Act<T1, T2, T3, T4> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4, T5>(Act<T1, T2, T3, T4, T5> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4, arg5);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4, T5, T6>(Act<T1, T2, T3, T4, T5, T6> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4, T5, T6, T7>(Act<T1, T2, T3, T4, T5, T6, T7> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4, T5, T6, T7, T8>(Act<T1, T2, T3, T4, T5, T6, T7, T8> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Act<T1, T2, T3, T4, T5, T6, T7, T8, T9> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -382,7 +382,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static Thread StartNew<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            return StartNew(ThreadUtility.CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            return StartNew(CreateSettings(), method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>

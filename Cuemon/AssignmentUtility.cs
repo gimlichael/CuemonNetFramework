@@ -24,7 +24,7 @@ namespace Cuemon
         /// </exception>
         public static T Add<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Addition);
+            return AssignmentCore(x, y, AssignmentOperator.Addition);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Cuemon
         /// </exception>
         public static T And<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.And);
+            return AssignmentCore(x, y, AssignmentOperator.And);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Cuemon
         /// </exception>
         public static T Assign<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Assign);
+            return AssignmentCore(x, y, AssignmentOperator.Assign);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Cuemon
         /// </exception>
         public static T Divide<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Division);
+            return AssignmentCore(x, y, AssignmentOperator.Division);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Cuemon
         /// </exception>
         public static T ExclusiveOr<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.ExclusiveOr);
+            return AssignmentCore(x, y, AssignmentOperator.ExclusiveOr);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Cuemon
         /// </exception>
         public static T LeftShift<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.LeftShift);
+            return AssignmentCore(x, y, AssignmentOperator.LeftShift);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Cuemon
         /// </exception>
         public static T Multiply<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Multiplication);
+            return AssignmentCore(x, y, AssignmentOperator.Multiplication);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Cuemon
         /// </exception>
         public static T Or<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Or);
+            return AssignmentCore(x, y, AssignmentOperator.Or);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Cuemon
         /// </exception>
         public static T Remainder<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Remainder);
+            return AssignmentCore(x, y, AssignmentOperator.Remainder);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Cuemon
         /// </exception>
         public static T RightShift<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.RightShift);
+            return AssignmentCore(x, y, AssignmentOperator.RightShift);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace Cuemon
         /// </exception>
         public static T Subtract<T>(T x, T y) where T : struct, IConvertible
         {
-            return AssignmentUtility.AssignmentCore(x, y, AssignmentOperator.Subtraction);
+            return AssignmentCore(x, y, AssignmentOperator.Subtraction);
         }
 
         /// <summary>
@@ -222,27 +222,27 @@ namespace Cuemon
             switch (assignment)
             {
                 case AssignmentOperator.Addition:
-                    return AssignmentUtility.Add(x, y);
+                    return Add(x, y);
                 case AssignmentOperator.And:
-                    return AssignmentUtility.And(x, y);
+                    return And(x, y);
                 case AssignmentOperator.Assign:
-                    return AssignmentUtility.Assign(x, y);
+                    return Assign(x, y);
                 case AssignmentOperator.Division:
-                    return AssignmentUtility.Divide(x, y);
+                    return Divide(x, y);
                 case AssignmentOperator.ExclusiveOr:
-                    return AssignmentUtility.ExclusiveOr(x, y);
+                    return ExclusiveOr(x, y);
                 case AssignmentOperator.LeftShift:
-                    return AssignmentUtility.LeftShift(x, y);
+                    return LeftShift(x, y);
                 case AssignmentOperator.Multiplication:
-                    return AssignmentUtility.Multiply(x, y);
+                    return Multiply(x, y);
                 case AssignmentOperator.Or:
-                    return AssignmentUtility.Or(x, y);
+                    return Or(x, y);
                 case AssignmentOperator.Remainder:
-                    return AssignmentUtility.Remainder(x, y);
+                    return Remainder(x, y);
                 case AssignmentOperator.RightShift:
-                    return AssignmentUtility.RightShift(x, y);
+                    return RightShift(x, y);
                 case AssignmentOperator.Subtraction:
-                    return AssignmentUtility.Subtract(x, y);
+                    return Subtract(x, y);
                 default:
                     throw new ArgumentOutOfRangeException("assignment");
             }

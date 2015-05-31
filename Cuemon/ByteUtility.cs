@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
-using Cuemon.IO;
 using Cuemon.Text;
 
 namespace Cuemon
 {
 	/// <summary>
-	/// This utility class is designed to make common <see cref="Byte"/> operations easier to work with.
+	/// This utility class is designed to make common <see cref="byte"/> operations easier to work with.
 	/// </summary>
 	public static class ByteUtility
 	{
@@ -47,11 +44,11 @@ namespace Cuemon
 		}
 
 		/// <summary>
-		/// Removes the preamble information (if present) from the specified <see cref="Byte"/> array.
+		/// Removes the preamble information (if present) from the specified <see cref="byte"/> array.
 		/// </summary>
-		/// <param name="input">The input <see cref="Byte"/> array to process.</param>
+		/// <param name="input">The input <see cref="byte"/> array to process.</param>
 		/// <param name="encoding">The encoding to use when determining the preamble to remove.</param>
-		/// <returns>A <see cref="Byte"/> array without preamble information.</returns>
+		/// <returns>A <see cref="byte"/> array without preamble information.</returns>
 		public static byte[] RemovePreamble(byte[] input, Encoding encoding)
 		{
 			if (input == null) { throw new ArgumentNullException("input"); }
@@ -71,10 +68,10 @@ namespace Cuemon
 		}
 
 		/// <summary>
-		/// Removes trailing zero information (if any) from the specified <see cref="Byte"/> array.
+		/// Removes trailing zero information (if any) from the specified <see cref="byte"/> array.
 		/// </summary>
-		/// <param name="input">The input <see cref="Byte"/> array to process.</param>
-		/// <returns>A <see cref="Byte"/> array without trailing zeros.</returns>
+		/// <param name="input">The input <see cref="byte"/> array to process.</param>
+		/// <returns>A <see cref="byte"/> array without trailing zeros.</returns>
 		public static byte[] RemoveTrailingZeros(byte[] input)
 		{
 			if (input == null) { throw new ArgumentNullException("input"); }

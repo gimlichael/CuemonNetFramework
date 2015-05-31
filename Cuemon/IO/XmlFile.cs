@@ -1,6 +1,4 @@
-﻿using System;
-using Cuemon.Diagnostics;
-namespace Cuemon.IO
+﻿namespace Cuemon.IO
 {
     /// <summary>
     /// Exposes an interface for reading common properties of a XML file.

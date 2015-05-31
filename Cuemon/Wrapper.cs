@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
-using Cuemon.Collections.Generic;
 
 namespace Cuemon
 {
@@ -18,7 +15,7 @@ namespace Cuemon
         /// </summary>
         /// <typeparam name="T">The type of the encapsulated instance of <paramref name="wrapper"/>.</typeparam>
         /// <param name="wrapper">The wrapper object to parse the instance.</param>
-        /// <returns>A human-readable <see cref="String"/> representation of the wrapped instance in the <see cref="Wrapper{T}"/> object.</returns>
+        /// <returns>A human-readable <see cref="string"/> representation of the wrapped instance in the <see cref="Wrapper{T}"/> object.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="wrapper"/> is null.
         /// </exception>

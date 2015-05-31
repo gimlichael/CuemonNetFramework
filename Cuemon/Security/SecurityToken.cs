@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Threading;
-using Cuemon.IO;
-using Cuemon.IO.Compression;
 
 namespace Cuemon.Security
 {
@@ -128,7 +122,7 @@ namespace Cuemon.Security
         /// <returns><c>true</c> if the values of <paramref name="token1"/> and <paramref name="token2"/> are equal; otherwise, false. </returns>
         public static bool operator ==(SecurityToken token1, SecurityToken token2)
         {
-            if (Object.ReferenceEquals(token1, token2)) { return true; }
+            if (ReferenceEquals(token1, token2)) { return true; }
             if (((object)token1 == null) || ((object)token2 == null)) { return false; }
             return token1.GetHashCode() == token2.GetHashCode();
         }

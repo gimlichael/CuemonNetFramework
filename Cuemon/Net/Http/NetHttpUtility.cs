@@ -7,6 +7,7 @@ using Cuemon.Collections.Generic;
 using Cuemon.Collections.Specialized;
 using Cuemon.IO;
 using Cuemon.Threading;
+
 namespace Cuemon.Net.Http
 {
     /// <summary>
@@ -403,7 +404,7 @@ namespace Cuemon.Net.Http
             request.SendChunked = settings.SendChunked;
             request.Timeout = (int)settings.Timeout.TotalMilliseconds;
 
-            NetHttpUtility.ParseRequestHeaders(request, settings.Headers);
+            ParseRequestHeaders(request, settings.Headers);
 
             if (content != null)
             {

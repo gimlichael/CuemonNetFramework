@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Runtime.Serialization
 {
     /// <summary>

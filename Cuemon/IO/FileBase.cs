@@ -2,8 +2,8 @@
 using System.IO;
 using System.Net;
 using Cuemon.Caching;
-using Cuemon.Diagnostics;
 using Cuemon.Net;
+
 namespace Cuemon.IO
 {
     /// <summary>

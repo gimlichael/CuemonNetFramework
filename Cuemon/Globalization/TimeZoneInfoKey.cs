@@ -1,4 +1,5 @@
-using System;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Cuemon.Globalization
 {
     /// <summary>
@@ -61,7 +62,7 @@ namespace Cuemon.Globalization
         /// <summary>
         /// Cen. Australia Standard Time
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cen")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cen")]
         CenAustraliaStandardTime,
         /// <summary>
         /// Central America Standard Time
@@ -130,7 +131,7 @@ namespace Cuemon.Globalization
         /// <summary>
         /// Ekaterinburg Standard Time
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ekaterinburg")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ekaterinburg")]
         EkaterinburgStandardTime,
         /// <summary>
         /// Fiji Standard Time
@@ -139,7 +140,7 @@ namespace Cuemon.Globalization
         /// <summary>
         /// FLE Standard Time
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Fle")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Fle")]
         FleStandardTime,
         /// <summary>
         /// Georgian Standard Time
@@ -160,7 +161,7 @@ namespace Cuemon.Globalization
         /// <summary>
         /// GTB Standard Time
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gtb")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gtb")]
         GtbStandardTime,
         /// <summary>
         /// Hawaiian Standard Time

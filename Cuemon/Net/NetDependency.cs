@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Net
 {
 	/// <summary>

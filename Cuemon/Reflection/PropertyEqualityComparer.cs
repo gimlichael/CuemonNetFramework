@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+
 namespace Cuemon.Reflection
 {
 	/// <summary>
@@ -63,8 +64,8 @@ namespace Cuemon.Reflection
 			object xReflectedProperty = this.Property.GetValue(x, null);
 			object yReflectedProperty = this.Property.GetValue(y, null);
 
-			if (Object.Equals(xReflectedProperty, yReflectedProperty)) { return true; }
-			if (Object.Equals(xReflectedProperty, null) || Object.ReferenceEquals(yReflectedProperty, null)) { return false; }
+			if (Equals(xReflectedProperty, yReflectedProperty)) { return true; }
+			if (Equals(xReflectedProperty, null) || ReferenceEquals(yReflectedProperty, null)) { return false; }
 
 			return this.Comparer == null ? (xReflectedProperty == yReflectedProperty) : this.Comparer.Equals(xReflectedProperty, yReflectedProperty);
 		}

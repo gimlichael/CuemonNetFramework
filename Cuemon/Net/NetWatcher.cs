@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 using Cuemon.IO;
-using Cuemon.Security.Cryptography;
 using Cuemon.Net.Http;
+using Cuemon.Security.Cryptography;
 
 namespace Cuemon.Net
 {

@@ -1,12 +1,12 @@
-using System;
 using System.Configuration;
-using Cuemon.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Cuemon.Configuration
 {
     /// <summary>
     /// Represents a configuration element containing a collection of child elements (<see cref="T:Cuemon.Configuration.DataConnectionElement"></see>).
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
+    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
     public class DataConnectionElementCollection : ConfigurationElementCollection
     {
         /// <summary>

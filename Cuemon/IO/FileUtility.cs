@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using Cuemon.Caching;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.IO
 {
     /// <summary>

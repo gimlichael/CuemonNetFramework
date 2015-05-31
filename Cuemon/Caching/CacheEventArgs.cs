@@ -1,5 +1,5 @@
 ﻿using System;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Caching
 {
     /// <summary>

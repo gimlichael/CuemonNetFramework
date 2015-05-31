@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
-using Cuemon.Reflection;
 using Cuemon.Security.Cryptography;
 
 namespace Cuemon
@@ -185,7 +183,7 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// <returns><c>true</c> if <paramref name="x"/> object are of the same instance as the <paramref name="y"/> object; otherwise <c>false</c>.</returns>
         public static bool AreSame<T>(T x, T y)
         {
-            return Object.ReferenceEquals(x, y);
+            return ReferenceEquals(x, y);
         }
 
         /// <summary>

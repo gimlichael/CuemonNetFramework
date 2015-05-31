@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using Cuemon.Collections.Generic;
-using Cuemon.Reflection;
 
 namespace Cuemon.Reflection
 {
@@ -235,7 +234,7 @@ namespace Cuemon.Reflection
         /// <returns>An <see cref="IDictionary{TKey,TValue}"/> containing the merged result of the <see cref="Parameters"/> signature of this instance and <paramref name="runtimeParameterValues"/>.</returns>
         public IDictionary<string, object> MergeParameters(params object[] runtimeParameterValues)
         {
-            return MethodSignature.MergeParameters(this.Parameters, runtimeParameterValues);
+            return MergeParameters(this.Parameters, runtimeParameterValues);
         }
 
         /// <summary>
@@ -247,7 +246,7 @@ namespace Cuemon.Reflection
         public static IDictionary<string, object> MergeParameters(MethodSignature method, params object[] runtimeParameterValues)
         {
             if (method == null) { throw new ArgumentNullException("method"); }
-            return MethodSignature.MergeParameters(method.Parameters, runtimeParameterValues);
+            return MergeParameters(method.Parameters, runtimeParameterValues);
         }
 
         /// <summary>

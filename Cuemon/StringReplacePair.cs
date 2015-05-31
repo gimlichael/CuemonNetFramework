@@ -1,5 +1,5 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
+
 namespace Cuemon
 {
     /// <summary>
@@ -14,8 +14,8 @@ namespace Cuemon
         /// <summary>
         /// Initializes a new instance of the <see cref="StringReplacePair"/> struct.
         /// </summary>
-        /// <param name="oldValue">The <see cref="String"/> value to be replaced.</param>
-        /// <param name="newValue">The <see cref="String"/> value to replace all occurrences of <paramref name="oldValue"/>.</param>
+        /// <param name="oldValue">The <see cref="string"/> value to be replaced.</param>
+        /// <param name="newValue">The <see cref="string"/> value to replace all occurrences of <paramref name="oldValue"/>.</param>
         public StringReplacePair(string oldValue, string newValue) : this()
         {
             this.NewValue = newValue;
@@ -25,9 +25,9 @@ namespace Cuemon
 
         #region Properties
         /// <summary>
-        /// Gets the <see cref="String"/> value to be replaced.
+        /// Gets the <see cref="string"/> value to be replaced.
         /// </summary>
-        /// <value>The <see cref="String"/> value to be replaced.</value>
+        /// <value>The <see cref="string"/> value to be replaced.</value>
         public string OldValue
         {
             get { return _oldValue; }
@@ -35,9 +35,9 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Gets the <see cref="String"/> value to replace all occurrences of <see cref="OldValue"/>.
+        /// Gets the <see cref="string"/> value to replace all occurrences of <see cref="OldValue"/>.
         /// </summary>
-        /// <value>The <see cref="String"/> value to replace all occurrences of <see cref="OldValue"/>.</value>
+        /// <value>The <see cref="string"/> value to replace all occurrences of <see cref="OldValue"/>.</value>
         public string NewValue
         {
             get { return _newValue; }

@@ -81,7 +81,7 @@ namespace Cuemon.Reflection
         /// <returns><c>true</c> if the specified <paramref name="source"/> has a circular reference; otherwise, <c>false</c>.</returns>
         public static bool HasCircularReference<T>(T source) where T : class
         {
-            return ReflectionUtility.HasCircularReference(source, 2);
+            return HasCircularReference(source, 2);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Cuemon.Reflection
         /// <returns><c>true</c> if the specified <paramref name="source"/> has a circular reference; otherwise, <c>false</c>.</returns>
         public static bool HasCircularReference<T>(T source, int maxDepth) where T : class
         {
-            return ReflectionUtility.HasCircularReference(source, maxDepth, DefaultPropertyIndexParametersResolver);
+            return HasCircularReference(source, maxDepth, DefaultPropertyIndexParametersResolver);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Cuemon.Reflection
                 {
                     if (property.CanRead && property.PropertyType == currentType)
                     {
-                        T propertyValue = (T)ReflectionUtility.GetPropertyValue(current, property, propertyIndexParametersResolver);
+                        T propertyValue = (T)GetPropertyValue(current, property, propertyIndexParametersResolver);
                         stack.Push(propertyValue);
                         hasCircularReference = currentDepth == maxDepth;
                     }
@@ -247,7 +247,7 @@ namespace Cuemon.Reflection
         /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
         public static IHierarchy<object> GetObjectHierarchy(object source)
         {
-            return ReflectionUtility.GetObjectHierarchy(source, 10);
+            return GetObjectHierarchy(source, 10);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace Cuemon.Reflection
         /// </exception>
         public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth)
         {
-            return ReflectionUtility.GetObjectHierarchy(source, maxDepth, DefaultSkipPropertiesCallback);
+            return GetObjectHierarchy(source, maxDepth, DefaultSkipPropertiesCallback);
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Cuemon.Reflection
         /// </exception>
         public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties)
         {
-            return ReflectionUtility.GetObjectHierarchy(source, maxDepth, skipProperties, DefaultSkipPropertyCallback);
+            return GetObjectHierarchy(source, maxDepth, skipProperties, DefaultSkipPropertyCallback);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace Cuemon.Reflection
         /// </exception>
         public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties, Doer<PropertyInfo, bool> skipProperty)
         {
-            return ReflectionUtility.GetObjectHierarchy(source, maxDepth, skipProperties, skipProperty, ReflectionUtility.HasCircularReference);
+            return GetObjectHierarchy(source, maxDepth, skipProperties, skipProperty, HasCircularReference);
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace Cuemon.Reflection
         /// </exception>
         public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties, Doer<PropertyInfo, bool> skipProperty, Doer<object, bool> hasCircularReference)
         {
-            return ReflectionUtility.GetObjectHierarchy(source, maxDepth, skipProperties, skipProperty, hasCircularReference, DefaultPropertyIndexParametersResolver);
+            return GetObjectHierarchy(source, maxDepth, skipProperties, skipProperty, hasCircularReference, DefaultPropertyIndexParametersResolver);
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace Cuemon.Reflection
                     continue;
                 }
 
-                foreach (PropertyInfo property in currentType.GetProperties(ReflectionUtility.BindingInstancePublic))
+                foreach (PropertyInfo property in currentType.GetProperties(BindingInstancePublic))
                 {
                     if (skipProperty(property)) { continue; }
                     if (!property.CanRead) { continue; }
@@ -381,7 +381,7 @@ namespace Cuemon.Reflection
                         }
                     }
 
-                    object propertyValue = ReflectionUtility.GetPropertyValue(current.Instance, property, propertyIndexParametersResolver);
+                    object propertyValue = GetPropertyValue(current.Instance, property, propertyIndexParametersResolver);
                     if (propertyValue == null) { continue; }
                     if (!hasCircularReference(propertyValue))
                     {
@@ -521,7 +521,7 @@ namespace Cuemon.Reflection
 			if (methodSignature == null) { throw new ArgumentNullException("methodSignature"); }
 			if (methodParameters != null) { if (methodSignature.Length != methodParameters.Length) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "There is a size mismatch between the method signature and provided parameters. Expected size of the method signature: {0}.", methodParameters.Length), "methodSignature"); } }
 			IDictionary<string, object> parsedParameters = new Dictionary<string, object>();
-			MethodInfo method = ReflectionUtility.GetMethod(source, methodName, methodSignature);
+			MethodInfo method = GetMethod(source, methodName, methodSignature);
 			if (method != null)
 			{
 				ParameterInfo[] parameters = method.GetParameters();

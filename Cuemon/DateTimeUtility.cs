@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon
 {
     /// <summary>

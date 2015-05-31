@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cuemon.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Cuemon.Globalization
 {
     /// <summary>
@@ -231,7 +231,7 @@ namespace Cuemon.Globalization
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public IEnumerator<KeyValuePair<TimeZoneInfoKey, T>> GetEnumerator()
         {
             return InnerDictionary.GetEnumerator();

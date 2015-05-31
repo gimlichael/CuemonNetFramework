@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Text;
-using Cuemon.Diagnostics;
 
 namespace Cuemon
 {

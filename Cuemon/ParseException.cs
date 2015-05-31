@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Cuemon.Diagnostics;
+
 namespace Cuemon
 {
     /// <summary>

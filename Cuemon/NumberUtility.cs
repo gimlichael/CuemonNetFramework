@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Security.Cryptography;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon
 {
     /// <summary>
@@ -137,7 +136,7 @@ namespace Cuemon
 		/// <returns>A megabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
 		public static double BytesToMegabytes(long bytes)
 		{
-			return NumberUtility.BytesToKilobytes(bytes) / 1024f;
+			return BytesToKilobytes(bytes) / 1024f;
 		}
 
 		/// <summary>
@@ -147,7 +146,7 @@ namespace Cuemon
 		/// <returns>A gigabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
 		public static double BytesToGigabytes(long bytes)
 		{
-			return NumberUtility.BytesToMegabytes(bytes) / 1024f;
+			return BytesToMegabytes(bytes) / 1024f;
 		}
 
 		/// <summary>
@@ -157,7 +156,7 @@ namespace Cuemon
 		/// <returns>A terabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
 		public static double BytesToTerabytes(long bytes)
 		{
-			return NumberUtility.BytesToGigabytes(bytes) / 1024f;
+			return BytesToGigabytes(bytes) / 1024f;
 		}
 
         /// <summary>

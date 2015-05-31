@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Cuemon
 {
@@ -68,7 +66,7 @@ namespace Cuemon
         /// <summary>
         /// Gets the hierarchical path of the node in the hierarchical structure.
         /// </summary>
-        /// <value>A <see cref="String"/> that identifies the hierarchical path relative to the current node.</value>
+        /// <value>A <see cref="string"/> that identifies the hierarchical path relative to the current node.</value>
         string GetPath();
 
         /// <summary>

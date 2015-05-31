@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-namespace Cuemon.Configuration
+﻿namespace Cuemon.Configuration
 {
     /// <summary>
     /// An interface representing a configuration element within a configuration file (@name, @address, @database, @networkLibrary, @password, @timeout, @userId).

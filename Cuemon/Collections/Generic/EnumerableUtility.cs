@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cuemon.Diagnostics;
-using Cuemon.Threading;
 
 namespace Cuemon.Collections.Generic
 {
     /// <summary>
-    /// This utility class provides a set of static methods for querying objects that implement <see cref="IEnumerable&lt;T&gt;"/>. 
+    /// This utility class provides a set of static methods for querying objects that implement <see cref="IEnumerable{T}"/>. 
     /// </summary>
     public static class EnumerableUtility
     {
@@ -177,7 +175,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{Int32}"/> that contains a range of sequential integral numbers.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// <paramref name="count"/> is less than 0 or <br/>
-        /// <paramref name="start"/> + <paramref name="count"/> is larger than <see cref="Int32.MaxValue"/>.
+        /// <paramref name="start"/> + <paramref name="count"/> is larger than <see cref="int.MaxValue"/>.
         /// </exception>
         public static IEnumerable<int> Range(int start, int count)
         {
@@ -633,9 +631,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the maximum value in a sequence of <see cref="Int32"/> values.
+        /// Returns the maximum value in a sequence of <see cref="int"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32"/> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="int"/> values to determine the maximum value of.</param>
         /// <returns>The maximum value in the sequence.</returns>
         public static int Max(IEnumerable<int> source)
         {
@@ -649,9 +647,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the maximum value in a sequence of <see cref="Int64"/> values.
+        /// Returns the maximum value in a sequence of <see cref="long"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64"/> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="long"/> values to determine the maximum value of.</param>
         /// <returns>The maximum value in the sequence.</returns>
         public static long Max(IEnumerable<long> source)
         {
@@ -665,9 +663,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the maximum value in a sequence of <see cref="Double"/> values.
+        /// Returns the maximum value in a sequence of <see cref="double"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double"/> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="double"/> values to determine the maximum value of.</param>
         /// <returns>The maximum value in the sequence.</returns>
         public static double Max(IEnumerable<double> source)
         {
@@ -681,9 +679,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the maximum value in a sequence of <see cref="Decimal"/> values.
+        /// Returns the maximum value in a sequence of <see cref="decimal"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Decimal"/> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="decimal"/> values to determine the maximum value of.</param>
         /// <returns>The maximum value in the sequence.</returns>
         public static decimal Max(IEnumerable<decimal> source)
         {
@@ -697,9 +695,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the minimum value in a sequence of <see cref="Int32"/> values.
+        /// Returns the minimum value in a sequence of <see cref="int"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32"/> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="int"/> values to determine the minimum value of.</param>
         /// <returns>The minimum value in the sequence.</returns>
         public static int Min(IEnumerable<int> source)
         {
@@ -713,9 +711,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the minimum value in a sequence of <see cref="Int64"/> values.
+        /// Returns the minimum value in a sequence of <see cref="long"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64"/> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="long"/> values to determine the minimum value of.</param>
         /// <returns>The minimum value in the sequence.</returns>
         public static long Min(IEnumerable<long> source)
         {
@@ -729,9 +727,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the minimum value in a sequence of <see cref="Double"/> values.
+        /// Returns the minimum value in a sequence of <see cref="double"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double"/> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="double"/> values to determine the minimum value of.</param>
         /// <returns>The minimum value in the sequence.</returns>
         public static double Min(IEnumerable<double> source)
         {
@@ -745,9 +743,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the minimum value in a sequence of <see cref="Decimal"/> values.
+        /// Returns the minimum value in a sequence of <see cref="decimal"/> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Decimal"/> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="decimal"/> values to determine the minimum value of.</param>
         /// <returns>The minimum value in the sequence.</returns>
         public static decimal Min(IEnumerable<decimal> source)
         {

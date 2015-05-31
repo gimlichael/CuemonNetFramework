@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace Cuemon
+﻿namespace Cuemon
 {
     /// <summary>
     /// Defines the mapping between a column/field/item in a data source and a column/field/item in the data destination. This class cannot be inherited.

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon
 {
     /// <summary>
@@ -104,7 +104,7 @@ namespace Cuemon
         public static bool ContainsScheme(Uri value, params UriScheme[] uriSchemes)
         {
             Validator.ThrowIfNull(value, "value");
-            return EnumerableUtility.Contains<UriScheme>(uriSchemes, UriUtility.ParseScheme(value.Scheme));
+            return EnumerableUtility.Contains<UriScheme>(uriSchemes, ParseScheme(value.Scheme));
         }
 
         /// <summary>

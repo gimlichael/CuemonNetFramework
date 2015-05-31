@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Management;
-using System.Reflection;
 using System.Security.Permissions;
 using System.ServiceProcess;
-using System.Text;
 using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.Diagnostics;
@@ -65,16 +62,16 @@ namespace Cuemon.Management
 		/// </remarks>
 		public static IReadOnlyDictionary<string, object> GetComputerSystemInfo()
 		{
-			ManagementUtility.CheckIfWindowsManagementInstrumentationIsRunning();
+			CheckIfWindowsManagementInstrumentationIsRunning();
 
 			IDictionary<string, object> result = new Dictionary<string, object>();
-			using (ManagementObjectCollection wmiObjects = ManagementUtility.ParseWin32("Win32_ComputerSystem"))
+			using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_ComputerSystem"))
 			{
 				foreach (ManagementObject wmiObject in wmiObjects)
 				{
 					using (wmiObject)
 					{
-						ManagementUtility.AddPropertyData(wmiObject, result);
+						AddPropertyData(wmiObject, result);
 					}
 				}
 			}
@@ -90,16 +87,16 @@ namespace Cuemon.Management
 		/// </remarks>
 		public static IReadOnlyDictionary<string, object> GetOperatingSystemInfo()
 		{
-			ManagementUtility.CheckIfWindowsManagementInstrumentationIsRunning();
+			CheckIfWindowsManagementInstrumentationIsRunning();
 
 			IDictionary<string, object> result = new Dictionary<string, object>();           
-			using (ManagementObjectCollection wmiObjects = ManagementUtility.ParseWin32("Win32_OperatingSystem"))
+			using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_OperatingSystem"))
 			{
 				foreach (ManagementObject wmiObject in wmiObjects)
 				{
 					using (wmiObject)
 					{
-						ManagementUtility.AddPropertyData(wmiObject, result);
+						AddPropertyData(wmiObject, result);
 					}
 				}
 			}
@@ -115,7 +112,7 @@ namespace Cuemon.Management
 		/// </remarks>
 		public static IReadOnlyDictionary<string, object> GetProcessInfo()
 		{
-			return ManagementUtility.GetProcessInfo(Process.GetCurrentProcess());
+			return GetProcessInfo(Process.GetCurrentProcess());
 		}
 
 		/// <summary>
@@ -129,16 +126,16 @@ namespace Cuemon.Management
 		public static IReadOnlyDictionary<string, object> GetProcessInfo(Process process)
 		{
 			if (process == null) { throw new ArgumentNullException("process"); }
-			ManagementUtility.CheckIfWindowsManagementInstrumentationIsRunning();
+			CheckIfWindowsManagementInstrumentationIsRunning();
 
 			IDictionary<string, object> result = new Dictionary<string, object>();
-			using (ManagementObjectCollection wmiObjects = ManagementUtility.ParseWin32("Win32_Process", "ProcessID = {0}", process.Id))
+			using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_Process", "ProcessID = {0}", process.Id))
 			{
 				foreach (ManagementObject wmiObject in wmiObjects)
 				{
 					using (wmiObject)
 					{
-						ManagementUtility.AddPropertyData(wmiObject, result);
+						AddPropertyData(wmiObject, result);
 
 						string[] ownerInfo = new string[2];
 						uint code = (uint)wmiObject.InvokeMethod("GetOwner", ownerInfo);
@@ -162,17 +159,17 @@ namespace Cuemon.Management
         /// </remarks>
         public static IReadOnlyDictionary<string, object> GetProcessorInfo()
         {
-            ManagementUtility.CheckIfWindowsManagementInstrumentationIsRunning();
+            CheckIfWindowsManagementInstrumentationIsRunning();
 
             IDictionary<string, object> result = new Dictionary<string, object>();
             
-            using (ManagementObjectCollection wmiObjects = ManagementUtility.ParseWin32("Win32_Processor"))
+            using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_Processor"))
             {
                 foreach (ManagementObject wmiObject in wmiObjects)
                 {
                     using (wmiObject)
                     {
-                        ManagementUtility.AddPropertyData(wmiObject, result);
+                        AddPropertyData(wmiObject, result);
                     }
                 }
             }
@@ -237,7 +234,7 @@ namespace Cuemon.Management
         /// </exception>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName, params string[] instanceNames)
         {
-            return ManagementUtility.GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), instanceNames);
+            return GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), instanceNames);
         }
 
         /// <summary>
@@ -260,7 +257,7 @@ namespace Cuemon.Management
         /// <remarks>If the calculated sample value of a counter depends on two counter reads, a delay has to be used before the result is accurate. The recommended delay time is one second to allow the counter to perform the next incremental read, but is default 64 milliseconds for performance considerations.</remarks>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName, TimeSpan sampleDelay, params string[] instanceNames)
         {
-            return ManagementUtility.GetPerformanceMonitorCounters(categoryName, sampleDelay, instanceNames as IEnumerable<string>);
+            return GetPerformanceMonitorCounters(categoryName, sampleDelay, instanceNames as IEnumerable<string>);
         }
 
         /// <summary>
@@ -281,7 +278,7 @@ namespace Cuemon.Management
         /// </exception>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName, IEnumerable<string> instanceNames)
         {
-            return ManagementUtility.GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), instanceNames);
+            return GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), instanceNames);
         }
 
         /// <summary>
@@ -344,7 +341,7 @@ namespace Cuemon.Management
         /// <returns>A instance name compatible with the GetPerformanceMonitorCounters methods of the currently active process.</returns>
         public static string GetInstanceName()
         {
-            return ManagementUtility.GetInstanceName(Process.GetCurrentProcess());
+            return GetInstanceName(Process.GetCurrentProcess());
         }
 
         /// <summary>
@@ -388,7 +385,7 @@ namespace Cuemon.Management
 		[PermissionSet(SecurityAction.LinkDemand, Unrestricted = true)]
 		public static ManagementObjectCollection ParseWin32(string className)
 		{
-			return ManagementUtility.ParseWin32(className, null);
+			return ParseWin32(className, null);
 		}
 
 		/// <summary>
@@ -464,7 +461,7 @@ namespace Cuemon.Management
 
 		private static void CheckIfWindowsManagementInstrumentationIsRunning()
 		{
-			if (!ManagementUtility.IsWindowsManagementInstrumentationRunning()) { throw new PlatformNotSupportedException("Unable to establish contact with the Windows Management Instrumentation service."); }
+			if (!IsWindowsManagementInstrumentationRunning()) { throw new PlatformNotSupportedException("Unable to establish contact with the Windows Management Instrumentation service."); }
 		}
 
 		private static void AddPropertyData(ManagementObject management, IDictionary<string, object> preResult)
@@ -475,7 +472,7 @@ namespace Cuemon.Management
 		    {
                 foreach (PropertyData property in management.Properties)
                 {
-                    Type valueType = ManagementUtility.ParseCimType(property.Type);
+                    Type valueType = ParseCimType(property.Type);
                     value = property.Value ?? "null";
                     if (valueType == typeof(DateTime) & property.Value != null) { value = ManagementDateTimeConverter.ToDateTime((string)value); }
                     if (property.IsArray & property.Value != null)

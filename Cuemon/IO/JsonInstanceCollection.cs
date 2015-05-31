@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace Cuemon.IO
 {
 	/// <summary>

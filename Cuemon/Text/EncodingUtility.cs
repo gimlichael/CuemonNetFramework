@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Text
 {
     /// <summary>
@@ -72,9 +72,9 @@ namespace Cuemon.Text
         }
 
         /// <summary>
-        /// Tries to resolve the Unicode <see cref="Encoding"/> object from the specified <see cref="Byte"/> array.
+        /// Tries to resolve the Unicode <see cref="Encoding"/> object from the specified <see cref="byte"/> array.
         /// </summary>
-        /// <param name="value">The <see cref="Byte"/> array to resolve the Unicode <see cref="Encoding"/> object from.</param>
+        /// <param name="value">The <see cref="byte"/> array to resolve the Unicode <see cref="Encoding"/> object from.</param>
         /// <param name="result">When this method returns, it contains the Unicode <see cref="Encoding"/> value equivalent to the encoding contained in <paramref name="value"/>, if the conversion succeeded, or a null reference (Nothing in Visual Basic) if the conversion failed. The conversion fails if the <paramref name="value"/> parameter is null, or does not contain a Unicode representation of an <see cref="Encoding"/>.</param>
         /// <returns><c>true</c> if the <paramref name="value"/> parameter was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(byte[] value, out Encoding result)

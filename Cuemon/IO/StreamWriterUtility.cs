@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Cuemon.Reflection;
 
 namespace Cuemon.IO
 {
@@ -125,7 +124,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream(Act<StreamWriter> writer)
         {
-            return CreateStream(writer, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, CreateSettings());
         }
 
         /// <summary>
@@ -138,7 +137,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T>(Act<StreamWriter, T> writer, T arg)
         {
-            return CreateStream(writer, arg, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg, CreateSettings());
         }
 
         /// <summary>
@@ -153,7 +152,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2>(Act<StreamWriter, T1, T2> writer, T1 arg1, T2 arg2)
         {
-            return CreateStream(writer, arg1, arg2, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, CreateSettings());
         }
 
         /// <summary>
@@ -170,7 +169,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3>(Act<StreamWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3)
         {
-            return CreateStream(writer, arg1, arg2, arg3, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, CreateSettings());
         }
 
         /// <summary>
@@ -189,7 +188,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4>(Act<StreamWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, CreateSettings());
         }
 
         /// <summary>
@@ -210,7 +209,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4, T5>(Act<StreamWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, CreateSettings());
         }
 
         /// <summary>
@@ -233,7 +232,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6>(Act<StreamWriter, T1, T2, T3, T4, T5, T6> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, CreateSettings());
         }
 
         /// <summary>
@@ -258,7 +257,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, CreateSettings());
         }
 
         /// <summary>
@@ -285,7 +284,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7, T8>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CreateSettings());
         }
 
         /// <summary>
@@ -314,7 +313,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CreateSettings());
         }
 
         /// <summary>
@@ -345,7 +344,7 @@ namespace Cuemon.IO
         /// <remarks>This method uses a default implementation of <see cref="StreamWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, StreamWriterUtility.CreateSettings());
+            return CreateStream(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CreateSettings());
         }
 
         /// <summary>

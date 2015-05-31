@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
+
 namespace Cuemon.Runtime.Serialization
 {
     /// <summary>
@@ -89,7 +84,7 @@ namespace Cuemon.Runtime.Serialization
         public static T Deserialize<T>(Stream value)
         {
             if (value == null) { throw new ArgumentNullException("value"); }
-            return SerializationUtility.Deserialize<T>(value, false);
+            return Deserialize<T>(value, false);
         }
 
         /// <summary>
@@ -105,7 +100,7 @@ namespace Cuemon.Runtime.Serialization
         public static T Deserialize<T>(Stream value, bool leaveStreamOpen)
         {
             if (value == null) { throw new ArgumentNullException("value"); }
-            return SerializationUtility.Deserialize<T>(new BinaryFormatter(), value, leaveStreamOpen);
+            return Deserialize<T>(new BinaryFormatter(), value, leaveStreamOpen);
         }
 
         /// <summary>
@@ -122,7 +117,7 @@ namespace Cuemon.Runtime.Serialization
         {
             if (formatter == null) { throw new ArgumentNullException("formatter"); }
             if (value == null) { throw new ArgumentNullException("value"); }
-            return SerializationUtility.Deserialize<T>(formatter, value, false);
+            return Deserialize<T>(formatter, value, false);
         }
 
         /// <summary>

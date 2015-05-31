@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
-using Cuemon.Collections.Generic;
 
 namespace Cuemon.Reflection
 {
@@ -71,7 +69,7 @@ namespace Cuemon.Reflection
         public static IEnumerable<ParameterSignature> Parse(MethodBase method)
         {
             if (method == null) { throw new ArgumentNullException("method"); }
-            return ParameterSignature.Parse(method.GetParameters());
+            return Parse(method.GetParameters());
         }
 
         /// <summary>

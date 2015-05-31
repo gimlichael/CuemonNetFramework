@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
-using Cuemon.Diagnostics;
-using Cuemon.Text;
 
 namespace Cuemon.IO.Compression
 {

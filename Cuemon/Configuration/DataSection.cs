@@ -1,6 +1,6 @@
-using System;
 using System.Configuration;
-using Cuemon.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Cuemon.Configuration
 {
     /// <summary>
@@ -42,7 +42,7 @@ namespace Cuemon.Configuration
         /// Gets the default connection from the connection collection as specified in the corresponding attribute.
         /// </summary>
         /// <returns>The default connection as specified in the corresponding attribute.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public DataConnectionElement GetDefaultConnectionFromCollection()
         {
             foreach (DataConnectionElement connection in this.Connections)

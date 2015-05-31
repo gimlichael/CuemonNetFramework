@@ -270,7 +270,7 @@ namespace Cuemon
         public static IEnumerable<IHierarchy<T>> SiblingsAndSelf<T>(IHierarchy<T> node)
         {
             if (node == null) { throw new ArgumentNullException("node"); }
-            return Hierarchy.SiblingsAndSelfAt(node, node.Depth);
+            return SiblingsAndSelfAt(node, node.Depth);
         }
 
         /// <summary>
@@ -290,8 +290,8 @@ namespace Cuemon
         {
             if (node == null) { throw new ArgumentNullException("node"); }
             if (depth < 0) { throw new ArgumentOutOfRangeException("depth"); }
-            IHierarchy<T> root = EnumerableUtility.FirstOrDefault(Hierarchy.AncestorsAndSelf(node));
-            IEnumerable<IHierarchy<T>> descendantsFromRoot = Hierarchy.DescendantsAndSelf(root);
+            IHierarchy<T> root = EnumerableUtility.FirstOrDefault(AncestorsAndSelf(node));
+            IEnumerable<IHierarchy<T>> descendantsFromRoot = DescendantsAndSelf(root);
             foreach (IHierarchy<T> descendantItem in descendantsFromRoot)
             {
                 if (descendantItem.Depth == depth) { yield return descendantItem; }
@@ -336,8 +336,8 @@ namespace Cuemon
         public static IEnumerable<IHierarchy<T>> FlattenAll<T>(IHierarchy<T> node)
         {
             if (node == null) { throw new ArgumentNullException("node"); }
-            IHierarchy<T> root = EnumerableUtility.FirstOrDefault(Hierarchy.AncestorsAndSelf(node));
-            return Hierarchy.DescendantsAndSelf(root);
+            IHierarchy<T> root = EnumerableUtility.FirstOrDefault(AncestorsAndSelf(node));
+            return DescendantsAndSelf(root);
         }
         #endregion
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Cuemon.Collections.Generic;
 using Cuemon.Security.Cryptography;
 

@@ -1,5 +1,3 @@
-using System;
-using Cuemon.Diagnostics;
 namespace Cuemon.Globalization
 {
     partial class TimeZoneInfo

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
-using Cuemon.Diagnostics;
 using Cuemon.Security.Cryptography;
+
 namespace Cuemon.Text
 {
     /// <summary>
@@ -32,7 +31,7 @@ namespace Cuemon.Text
         /// <summary>
         /// Initializes a new instance of the <see cref="Obfuscator"/> class using <see cref="System.Text.Encoding.Unicode"/> for the character encoding.
         /// </summary>
-        /// <param name="exclusions">A sequence of <see cref="String"/> values used for excluding matching original values in the obfuscation process.</param>
+        /// <param name="exclusions">A sequence of <see cref="string"/> values used for excluding matching original values in the obfuscation process.</param>
         protected Obfuscator(IEnumerable<string> exclusions) : this(Encoding.Unicode, exclusions)
         {
         }
@@ -50,7 +49,7 @@ namespace Cuemon.Text
         /// Initializes a new instance of the <see cref="Obfuscator"/> class.
         /// </summary>
         /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="exclusions">A sequence of <see cref="String"/> values used for excluding matching original values in the obfuscation process.</param>
+        /// <param name="exclusions">A sequence of <see cref="string"/> values used for excluding matching original values in the obfuscation process.</param>
         protected Obfuscator(Encoding encoding, IEnumerable<string> exclusions)
         {
             if (encoding == null) throw new ArgumentNullException("encoding");
@@ -144,10 +143,10 @@ namespace Cuemon.Text
         }
 
         /// <summary>
-        /// Computes a SHA-1 hash value of the specified <see cref="String"/> value.
+        /// Computes a SHA-1 hash value of the specified <see cref="string"/> value.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to compute a hash code for.</param>
-        /// <returns>A <see cref="String"/> containing the computed SHA-1 hash value of <paramref name="value"/>.</returns>
+        /// <param name="value">The <see cref="string"/> value to compute a hash code for.</param>
+        /// <returns>A <see cref="string"/> containing the computed SHA-1 hash value of <paramref name="value"/>.</returns>
         /// <remarks>Do override this method if you prefer another hashing than SHA-1.</remarks>
         protected virtual string ComputeHash(string value)
         {
@@ -165,9 +164,9 @@ namespace Cuemon.Text
         }
 
         /// <summary>
-        /// Creates and returns a random generated <see cref="String"/> with a factorial size of (x - <see cref="CurrentCombinationLength"/>) ideal for obfuscated usage.
+        /// Creates and returns a random generated <see cref="string"/> with a factorial size of (x - <see cref="CurrentCombinationLength"/>) ideal for obfuscated usage.
         /// </summary>
-        /// <returns>A random generated <see cref="String"/> with a factorial size of (x - <see cref="CurrentCombinationLength"/>) ideal for obfuscated usage, where x in the default implementation equals 62.</returns>
+        /// <returns>A random generated <see cref="string"/> with a factorial size of (x - <see cref="CurrentCombinationLength"/>) ideal for obfuscated usage, where x in the default implementation equals 62.</returns>
         /// <remarks>
         /// This implementation uses the values from <see cref="PermutationCharacters"/> to compute the permutation.
         /// Using the standard implementation gives a close to limitless permutation in regards to obfuscation, as the value automatically grows when needed.
