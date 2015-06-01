@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using Cuemon.Threading;
 using Cuemon.Xml.Serialization;
 
 namespace Cuemon.Xml
@@ -56,7 +53,7 @@ namespace Cuemon.Xml
             if (reader.ReadState != ReadState.Initial) { throw new ArgumentException("The Read method of the XmlReader object has already been called.", "reader"); }
             List<XmlReader> outerReaders = new List<XmlReader>();
             XmlReaderSettings readerSettings = reader.Settings;
-            if (XmlReaderUtility.MoveToFirstElement(reader))
+            if (MoveToFirstElement(reader))
             {
                 XmlQualifiedEntity rootElement = new XmlQualifiedEntity(reader.Prefix, reader.LocalName, reader.NamespaceURI);
                 List<XmlReader> innerReaders = new List<XmlReader>();

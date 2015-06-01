@@ -6,10 +6,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
-using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
 using Cuemon.IO;
-using Cuemon.Xml.Serialization;
 using Cuemon.Xml.XPath;
 
 namespace Cuemon.Xml
@@ -26,7 +23,7 @@ namespace Cuemon.Xml
         /// <returns>An <see cref="XmlElement"/> variant of the specified <paramref name="exception"/>.</returns>
         public static XmlElement ToXmlElement(Exception exception)
         {
-            return XmlConvertUtility.ToXmlElement(exception, Encoding.Unicode);
+            return ToXmlElement(exception, Encoding.Unicode);
         }
 
         /// <summary>
@@ -37,7 +34,7 @@ namespace Cuemon.Xml
         /// <returns>An <see cref="XmlElement"/> variant of the specified <paramref name="exception"/>.</returns>
         public static XmlElement ToXmlElement(Exception exception, Encoding encoding)
         {
-            return XmlConvertUtility.ToXmlElement(exception, encoding, false);
+            return ToXmlElement(exception, encoding, false);
         }
 
         /// <summary>
@@ -49,7 +46,7 @@ namespace Cuemon.Xml
         /// <returns>An <see cref="XmlElement"/> variant of the specified <paramref name="exception"/>.</returns>
         public static XmlElement ToXmlElement(Exception exception, Encoding encoding, bool includeStackTrace)
         {
-            using (Stream output = XmlConvertUtility.ToStream(exception, encoding, includeStackTrace))
+            using (Stream output = ToStream(exception, encoding, includeStackTrace))
             {
                 XmlDocument document = new XmlDocument();
                 document.Load(output);
@@ -65,7 +62,7 @@ namespace Cuemon.Xml
         /// <remarks>The converted <paramref name="exception"/> defaults to using an instance of <see cref="UTF8Encoding"/> unless specified otherwise.</remarks>
         public static Stream ToStream(Exception exception)
         {
-            return XmlConvertUtility.ToStream(exception, Encoding.UTF8);
+            return ToStream(exception, Encoding.UTF8);
         }
 
         /// <summary>
@@ -76,7 +73,7 @@ namespace Cuemon.Xml
         /// <returns>An XML <see cref="Stream"/> variant of the specified <paramref name="exception"/>.</returns>
         public static Stream ToStream(Exception exception, Encoding encoding)
         {
-            return XmlConvertUtility.ToStream(exception, encoding, false);
+            return ToStream(exception, encoding, false);
         }
 
         /// <summary>

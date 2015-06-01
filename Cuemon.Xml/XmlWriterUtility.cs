@@ -22,7 +22,7 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy(XmlReader reader)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings());
+            return Copy(reader, CreateSettings());
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream Copy(XmlReader reader, Act<XmlWriter, XmlReader> copier)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings(), copier);
+            return Copy(reader, CreateSettings(), copier);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream Copy<T>(XmlReader reader, Act<XmlWriter, XmlReader, T> copier, T arg)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings(), copier, arg);
+            return Copy(reader, CreateSettings(), copier, arg);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream Copy<T1, T2>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2> copier, T1 arg1, T2 arg2)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings(), copier, arg1, arg2);
+            return Copy(reader, CreateSettings(), copier, arg1, arg2);
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream Copy<T1, T2, T3>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2, T3> copier, T1 arg1, T2 arg2, T3 arg3)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings(), copier, arg1, arg2, arg3);
+            return Copy(reader, CreateSettings(), copier, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream Copy<T1, T2, T3, T4>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2, T3, T4> copier, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings(), copier, arg1, arg2, arg3, arg4);
+            return Copy(reader, CreateSettings(), copier, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream Copy<T1, T2, T3, T4, T5>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2, T3, T4, T5> copier, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return Copy(reader, XmlWriterUtility.CreateSettings(), copier, arg1, arg2, arg3, arg4, arg5);
+            return Copy(reader, CreateSettings(), copier, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -721,7 +721,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml(Act<XmlWriter> writer)
         {
-            return CreateXml(writer, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, CreateSettings());
         }
 
         /// <summary>
@@ -746,7 +746,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T>(Act<XmlWriter, T> writer, T arg)
         {
-            return CreateXml(writer, arg, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg, CreateSettings());
         }
 
         /// <summary>
@@ -775,7 +775,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2>(Act<XmlWriter, T1, T2> writer, T1 arg1, T2 arg2)
         {
-            return CreateXml(writer, arg1, arg2, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, CreateSettings());
         }
 
         /// <summary>
@@ -808,7 +808,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3>(Act<XmlWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3)
         {
-            return CreateXml(writer, arg1, arg2, arg3, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, CreateSettings());
         }
 
         /// <summary>
@@ -845,7 +845,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4>(Act<XmlWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, CreateSettings());
         }
 
         /// <summary>
@@ -886,7 +886,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4, T5>(Act<XmlWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, CreateSettings());
         }
 
         /// <summary>
@@ -931,7 +931,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6>(Act<XmlWriter, T1, T2, T3, T4, T5, T6> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, CreateSettings());
         }
 
         /// <summary>
@@ -980,7 +980,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, CreateSettings());
         }
 
         /// <summary>
@@ -1033,7 +1033,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7, T8>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CreateSettings());
         }
 
         /// <summary>
@@ -1090,7 +1090,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CreateSettings());
         }
 
         /// <summary>
@@ -1151,7 +1151,7 @@ namespace Cuemon.Xml
         /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings()"/>.</remarks>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, XmlWriterUtility.CreateSettings());
+            return CreateXml(writer, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CreateSettings());
         }
 
         /// <summary>

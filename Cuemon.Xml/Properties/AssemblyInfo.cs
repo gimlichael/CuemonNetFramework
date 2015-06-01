@@ -1,9 +1,9 @@
 using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
+
 [assembly: AssemblyTitle(".NET Framework Additions")]
 [assembly: AssemblyDescription("This assembly contains supporting and assisting base XML classes for the Microsoft .NET Framework.")]
 [assembly: AssemblyConfiguration("")]
@@ -14,7 +14,7 @@ using System.Security.Permissions;
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]
 [assembly: AllowPartiallyTrustedCallers]
-[assembly: EnvironmentPermissionAttribute(SecurityAction.RequestMinimum, Unrestricted = true)]
+[assembly: EnvironmentPermission(SecurityAction.RequestMinimum, Unrestricted = true)]
 [assembly: ComVisible(false)]
 [assembly: Guid("8ee54d93-a954-4402-b650-7ff1338b43b3")]
 [assembly: AssemblyFileVersion("3.0.2015.1500")]

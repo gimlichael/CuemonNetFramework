@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Xml;
-using Cuemon.Globalization;
 using System.Xml.XPath;
-using Cuemon.IO;
-using Cuemon.Xml.XPath;
+
 namespace Cuemon.Xml.Xsl
 {
 	/// <summary>

@@ -1,10 +1,10 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Cuemon.IO;
+
 namespace Cuemon.Xml.XPath
 {
 	/// <summary>

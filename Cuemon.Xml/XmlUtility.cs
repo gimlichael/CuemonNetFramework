@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
-using System.Security;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
-using System.Xml.Xsl;
 using Cuemon.Collections.Generic;
-using Cuemon.IO;
-using Cuemon.Reflection;
 using Cuemon.Text;
 using Cuemon.Xml.XPath;
-using Cuemon.Xml.Xsl;
+
 namespace Cuemon.Xml
 {
 	/// <summary>
@@ -102,9 +96,9 @@ namespace Cuemon.Xml
 		}
 
 		/// <summary>
-		/// Escapes the given XML <see cref="String"/>.
+		/// Escapes the given XML <see cref="string"/>.
 		/// </summary>
-		/// <param name="value">The XML <see cref="String"/> to escape.</param>
+		/// <param name="value">The XML <see cref="string"/> to escape.</param>
 		/// <returns>The input <paramref name="value"/> with an escaped equivalent.</returns>
 		public static string Escape(string value)
 		{
@@ -119,9 +113,9 @@ namespace Cuemon.Xml
 
 
 		/// <summary>
-		/// Unescapes the given XML <see cref="String"/>.
+		/// Unescapes the given XML <see cref="string"/>.
 		/// </summary>
-		/// <param name="value">The XML <see cref="String"/> to unescape.</param>
+		/// <param name="value">The XML <see cref="string"/> to unescape.</param>
 		/// <returns>The input <paramref name="value"/> with an unescaped equivalent.</returns>
 		public static string Unescape(string value)
 		{

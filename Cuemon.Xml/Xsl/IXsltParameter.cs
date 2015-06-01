@@ -1,5 +1,4 @@
-﻿using System;
-namespace Cuemon.Xml.Xsl
+﻿namespace Cuemon.Xml.Xsl
 {
     /// <summary>
     /// An interface that defines the contract that an XSLT parameter must fulfill.

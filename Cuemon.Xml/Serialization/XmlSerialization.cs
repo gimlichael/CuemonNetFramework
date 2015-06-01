@@ -5,11 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using System.Xml.Serialization;
-using Cuemon.IO;
 using Cuemon.Reflection;
-using Cuemon.Security.Cryptography;
-using Cuemon.Text;
 
 namespace Cuemon.Xml.Serialization
 {

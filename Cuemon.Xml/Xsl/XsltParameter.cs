@@ -1,5 +1,4 @@
-﻿using System;
-namespace Cuemon.Xml.Xsl
+﻿namespace Cuemon.Xml.Xsl
 {
     /// <summary>
     /// Represents a XSLT parameter to be used with the <see cref="System.Xml.Xsl.XsltArgumentList"/> class.

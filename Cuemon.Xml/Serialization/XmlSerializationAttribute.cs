@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Xml.Serialization;
+
 namespace Cuemon.Xml.Serialization
 {
 	/// <summary>

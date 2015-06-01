@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
-using Cuemon.Collections.Generic;
 using Cuemon.Reflection;
-using Cuemon.Runtime.Serialization;
 
 namespace Cuemon.Xml.Serialization
 {

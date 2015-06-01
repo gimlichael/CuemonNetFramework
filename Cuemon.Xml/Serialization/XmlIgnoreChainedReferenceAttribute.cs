@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Cuemon.Xml.Serialization
 {
     /// <summary>

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Xml;
 using Cuemon.Diagnostics;
 
 namespace Cuemon.Xml.Diagnostics

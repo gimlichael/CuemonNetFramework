@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-namespace Cuemon.Xml.Xsl
+﻿namespace Cuemon.Xml.Xsl
 {
 	/// <summary>
 	/// Defines the output format of an XSLT.

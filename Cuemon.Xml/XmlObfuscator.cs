@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using Cuemon.Security.Cryptography;
 using Cuemon.Text;
 using Cuemon.Xml.XPath;
 

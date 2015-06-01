@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Security;
@@ -9,12 +7,10 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using Cuemon.Caching;
-using Cuemon.IO;
 using Cuemon.Net;
 using Cuemon.Security.Cryptography;
 using Cuemon.Text;
 using Cuemon.Xml.Serialization;
-using Cuemon.Xml.XPath;
 
 namespace Cuemon.Xml.Xsl
 {
