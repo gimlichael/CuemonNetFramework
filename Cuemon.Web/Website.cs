@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Security;
 using System.Web;
-using System.Web.Caching;
 using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Serialization;
@@ -17,7 +16,7 @@ using Cuemon.Web.Configuration;
 using Cuemon.Web.UI;
 using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
-using Cuemon.Xml.XPath;
+
 namespace Cuemon.Web
 {
 	/// <summary>
@@ -572,7 +571,7 @@ namespace Cuemon.Web
 			{
 				if (!CachingManager.Cache.ContainsKey(siteMapCacheKey, SiteMapCacheGroupName))
 				{
-					InitSitemapFiles(Website.Create());
+					InitSitemapFiles(Create());
 				}
 				return CachingManager.Cache.Get<IDictionary<ushort, IXPathNavigable>>(siteMapCacheKey, SiteMapCacheGroupName);
 			}

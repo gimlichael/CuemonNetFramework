@@ -28,6 +28,7 @@ using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
 using Cuemon.Xml.XPath;
 using Cuemon.Xml.Xsl;
+using Calendar = System.Web.UI.WebControls.Calendar;
 
 namespace Cuemon.Web.UI
 {
@@ -816,7 +817,7 @@ namespace Cuemon.Web.UI
                             case "Button":
                                 break;
                             case "Calendar":
-                                ((System.Web.UI.WebControls.Calendar)control).SelectedDate = DateTime.Parse((string)item.Value, Thread.CurrentThread.CurrentCulture);
+                                ((Calendar)control).SelectedDate = DateTime.Parse((string)item.Value, Thread.CurrentThread.CurrentCulture);
                                 break;
                             case "CheckBox":
                                 ((CheckBox)control).Checked = true;

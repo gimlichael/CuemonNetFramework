@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Web;
@@ -255,7 +254,7 @@ namespace Cuemon.Web
                 return;
             }
 
-            if (GlobalModule.EnableTokenParsingForClientCaching)
+            if (EnableTokenParsingForClientCaching)
             {
                 if (context.Response.BufferOutput) { context.Response.Filter = new HttpResponseContentFilter(context); }
             }
@@ -449,22 +448,22 @@ namespace Cuemon.Web
 		protected virtual void OnPreSendRequestHeaders(HttpApplication context)
 		{
 			if (context == null) { throw new ArgumentNullException("context"); }
-            if (GlobalModule.EnableTokenParsingForClientCaching) { this.HandleHtmlRelatedContentParsing(context); }
-            if (GlobalModule.EnableDynamicClientCaching)
+            if (EnableTokenParsingForClientCaching) { this.HandleHtmlRelatedContentParsing(context); }
+            if (EnableDynamicClientCaching)
             {
                 if (!HttpRequestUtility.IsStandaloneServerLocal(context.Request))
                 {
                     this.HandleDynamicContentExpiresHeaders(context);
                 }
             }
-            if (GlobalModule.EnableStaticClientCaching)
+            if (EnableStaticClientCaching)
             {
                 if (!HttpRequestUtility.IsStandaloneServerLocal(context.Request))
                 {
                     this.HandleStaticContentExpiresHeaders(context);
                 }
             }
-            if (GlobalModule.EnableExceptionToXmlInterception) { this.HandleExceptionInterception(context); }
+            if (EnableExceptionToXmlInterception) { this.HandleExceptionInterception(context); }
             this.HandleCompressionHeaders(context);
 		}
 

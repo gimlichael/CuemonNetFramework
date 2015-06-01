@@ -4,20 +4,13 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Web;
-using System.Web.Caching;
 using System.Web.UI;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Xml.XPath;
-using System.Xml.Xsl;
 using Cuemon.Caching;
 using Cuemon.IO;
-using Cuemon.Net;
-using Cuemon.Runtime.Serialization;
-using Cuemon.Security.Cryptography;
-using Cuemon.Text;
 using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
 using Cuemon.Xml.Xsl;
@@ -154,22 +147,22 @@ namespace Cuemon.Web.UI
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
         /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
+        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
+        /// <returns>A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
         public string ToString(Stream value)
         {
             return this.ToString(value, PreambleSequence.Keep);
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
         /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
+        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
         /// <param name="sequence">Specifies whether too keep or remove any preamble sequence from the decoded content.</param>
         /// <returns>
-        /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
+        /// A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.
         /// </returns>
         public string ToString(Stream value, PreambleSequence sequence)
         {

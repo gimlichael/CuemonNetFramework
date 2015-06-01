@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -8,12 +9,10 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Cuemon.Globalization;
 using Cuemon.IO;
-using Cuemon.Runtime.Serialization;
-using Cuemon.Security.Cryptography;
-using Cuemon.Text;
 using Cuemon.Web.Configuration;
 using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
+
 namespace Cuemon.Web
 {
 	/// <summary>
@@ -205,7 +204,7 @@ namespace Cuemon.Web
 		/// Generates an object from its XML representation.
 		/// </summary>
 		/// <param name="reader">The <see cref="T:System.Xml.XmlReader"></see> stream from which the object is deserialized.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.NotImplementedException.#ctor(System.String)")]
+		[SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.NotImplementedException.#ctor(System.String)")]
 		public void ReadXml(XmlReader reader)
 		{
 			throw new NotImplementedException("The method or operation is not implemented.");
@@ -215,11 +214,11 @@ namespace Cuemon.Web
 		/// Converts an object into its XML representation.
 		/// </summary>
 		/// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentNullException.#ctor(System.String,System.String)")]
+		[SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentNullException.#ctor(System.String,System.String)")]
 		public void WriteXml(XmlWriter writer)
 		{
 			if (writer == null) { throw new ArgumentNullException("writer"); }
-			writer.WriteAttributeString("lcid", this.LCID.ToString(CultureInfo.InvariantCulture));
+			writer.WriteAttributeString("lcid", this.LCID.ToString(InvariantCulture));
 			writer.WriteAttributeString("name", this.Name);
 			writer.WriteAttributeString("displayName", this.DisplayName);
 			writer.WriteAttributeString("englishName", this.EnglishName);
@@ -315,22 +314,22 @@ namespace Cuemon.Web
 		}
 
 		/// <summary>
-		/// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
+		/// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
 		/// </summary>
-		/// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-		/// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
+		/// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
+		/// <returns>A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
 		public string ToString(Stream value)
 		{
 			return this.ToString(value, PreambleSequence.Keep);
 		}
 
 		/// <summary>
-		/// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
+		/// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
 		/// </summary>
-		/// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
+		/// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
 		/// <param name="sequence">Specifies whether too keep or remove any preamble sequence from the decoded content.</param>
 		/// <returns>
-		/// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
+		/// A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.
 		/// </returns>
 		public string ToString(Stream value, PreambleSequence sequence)
 		{

@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Security;
 using System.Text;
-using System.Threading;
 using System.Web;
 using System.Web.SessionState;
 using System.Xml;
 using System.Xml.XPath;
 using Cuemon.Caching;
-using Cuemon.IO;
-using Cuemon.Net;
 using Cuemon.Net.Http;
 using Cuemon.Xml;
 
@@ -154,7 +149,7 @@ namespace Cuemon.Web
         {
             if (context == null) { throw new ArgumentNullException("context"); }
             this.BuildSitemapProtocol(context);
-            WriteSiteMapProtocol(context.ApplicationInstance, CachingManager.Cache.Get<byte[]>(SiteMapProtocolHandler.SitemapXmlFilename, SiteMapProtocolHandler.CacheGroupName));
+            WriteSiteMapProtocol(context.ApplicationInstance, CachingManager.Cache.Get<byte[]>(SitemapXmlFilename, CacheGroupName));
         }
 
         private static void WriteSiteMapProtocol(HttpApplication application, byte[] bytes)

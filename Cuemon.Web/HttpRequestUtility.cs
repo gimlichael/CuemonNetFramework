@@ -93,7 +93,7 @@ namespace Cuemon.Web
         public static Uri GetHostAuthority(HttpRequest request)
 		{
 			if (request == null) { throw new ArgumentNullException("request"); }
-			return HttpRequestUtility.GetHostAuthority(request.Url);
+			return GetHostAuthority(request.Url);
 		}
 
         /// <summary>
@@ -277,8 +277,8 @@ namespace Cuemon.Web
         public static CompressionMethodScheme ParseAcceptEncoding(HttpRequest request)
         {
             if (request == null) { throw new ArgumentNullException("request"); }
-            IEnumerable<CompressionMethodScheme> compressionMethods = HttpRequestUtility.GetAcceptEncodingHeader(request);
-            return HttpRequestUtility.ParseAcceptEncoding(compressionMethods);
+            IEnumerable<CompressionMethodScheme> compressionMethods = GetAcceptEncodingHeader(request);
+            return ParseAcceptEncoding(compressionMethods);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace Cuemon.Web
         {
             if (validator == null) { throw new ArgumentNullException("validator"); }
             if (request == null) { throw new ArgumentNullException("request"); }
-            return HttpRequestUtility.IsClientSideResourceCached(validator, request.Headers);
+            return IsClientSideResourceCached(validator, request.Headers);
         }
 
         /// <summary>
@@ -403,12 +403,12 @@ namespace Cuemon.Web
             DateTime lastModified = validator.GetMostSignificant();
             lastModified = new DateTime(lastModified.Year, lastModified.Month, lastModified.Day, lastModified.Hour, lastModified.Minute, lastModified.Second, DateTimeKind.Utc); // make sure, that modified has the same format as the if-modified-since header
             DateTime result;
-            HttpRequestUtility.TryGetLastModifiedHeader(headers, out result);
+            TryGetLastModifiedHeader(headers, out result);
             bool isClientSideContentCached = (lastModified != DateTime.MinValue) && (result.ToUniversalTime() >= lastModified);
             if (isClientSideContentCached && validator.Strength != ChecksumStrength.None)
             {
                 string clientSideContentEntityTag;
-                if (HttpRequestUtility.TryGetEntityTagHeader(headers, out clientSideContentEntityTag))
+                if (TryGetEntityTagHeader(headers, out clientSideContentEntityTag))
                 {
                     if (clientSideContentEntityTag.StartsWith("W/", StringComparison.OrdinalIgnoreCase)) { clientSideContentEntityTag = clientSideContentEntityTag.Remove(0, 2); }
                     int indexOfStartQuote = clientSideContentEntityTag.IndexOf('"');
@@ -455,7 +455,7 @@ namespace Cuemon.Web
         public static bool IsClientSideResourceCached(DateTime lastModified, HttpRequest request)
 		{
             if (request == null) { throw new ArgumentNullException("request"); }
-            return HttpRequestUtility.IsClientSideResourceCached(lastModified, request.Headers);
+            return IsClientSideResourceCached(lastModified, request.Headers);
 		}
 
         /// <summary>
@@ -472,7 +472,7 @@ namespace Cuemon.Web
         public static bool IsClientSideResourceCached(DateTime lastModified, NameValueCollection headers)
         {
             if (headers == null) { throw new ArgumentNullException("headers"); }
-            return HttpRequestUtility.IsClientSideResourceCached(lastModified, headers, null);
+            return IsClientSideResourceCached(lastModified, headers, null);
         }
 
         /// <summary>
@@ -510,7 +510,7 @@ namespace Cuemon.Web
         public static bool IsClientSideResourceCached(DateTime lastModified, WebHeaderCollection headers)
         {
             if (headers == null) { throw new ArgumentNullException("headers"); }
-            return HttpRequestUtility.IsClientSideResourceCached(lastModified, headers, null);
+            return IsClientSideResourceCached(lastModified, headers, null);
         }
 
         /// <summary>
@@ -533,7 +533,7 @@ namespace Cuemon.Web
         {
             if (headers == null) { throw new ArgumentNullException("headers"); }
             CacheValidator validator = new CacheValidator(lastModified, lastModified, entityTag);
-            return HttpRequestUtility.IsClientSideResourceCached(validator, headers);
+            return IsClientSideResourceCached(validator, headers);
         }
 
         /// <summary>

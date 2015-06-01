@@ -165,7 +165,7 @@ namespace Cuemon.Web
         {
             GlobalModule.CheckForHttpContextAvailability();
             HttpContext context = HttpContext.Current;
-            HttpResponseUtility.SetClientCompressionMethod(context.Response, context.Request);
+            SetClientCompressionMethod(context.Response, context.Request);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Cuemon.Web
             if (response == null) { throw new ArgumentNullException("response"); }
             if (request == null) { throw new ArgumentNullException("request"); }
             IEnumerable<CompressionMethodScheme> compressionMethods = HttpRequestUtility.GetAcceptEncodingHeader(request);
-            HttpResponseUtility.SetClientCompressionMethod(response, compressionMethods);
+            SetClientCompressionMethod(response, compressionMethods);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Cuemon.Web
         public static void SetClientCompressionMethod(IEnumerable<CompressionMethodScheme> compressionMethods)
         {
             GlobalModule.CheckForHttpContextAvailability();
-            HttpResponseUtility.SetClientCompressionMethod(HttpContext.Current.Response, compressionMethods);
+            SetClientCompressionMethod(HttpContext.Current.Response, compressionMethods);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Cuemon.Web
             if (response == null) { throw new ArgumentNullException("response"); }
             if (compressionMethods == null) { throw new ArgumentNullException("compressionMethods"); }
             CompressionMethodScheme compressionMethod = HttpRequestUtility.ParseAcceptEncoding(compressionMethods);
-            HttpResponseUtility.SetClientCompressionMethod(response, compressionMethod);
+            SetClientCompressionMethod(response, compressionMethod);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Cuemon.Web
             {
                 case CompressionMethodScheme.Deflate:
                 case CompressionMethodScheme.GZip:
-                    HttpResponseUtility.RemoveResponseHeader(response, "Content-Encoding");
+                    RemoveResponseHeader(response, "Content-Encoding");
                     response.AppendHeader("Content-Encoding", compressionMethod.ToString().ToLowerInvariant());
                     break;
             }
@@ -319,7 +319,7 @@ namespace Cuemon.Web
         public static void SetClientSideContentCacheExpiresHeaders(CacheValidator validator, DateTime expires)
         {
             GlobalModule.CheckForHttpContextAvailability();
-            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(HttpContext.Current.Request, HttpContext.Current.Response, validator, expires);
+            SetClientSideContentCacheExpiresHeaders(HttpContext.Current.Request, HttpContext.Current.Response, validator, expires);
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace Cuemon.Web
         /// <param name="expires">The UTC date time value to expire the <see cref="HttpCacheability.Private"/> caching.</param>
         public static void SetClientSideContentCacheExpiresHeaders(HttpRequest request, HttpResponse response, CacheValidator validator, DateTime expires)
         {
-            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(request, response, validator, expires, HttpCacheability.Private);
+            SetClientSideContentCacheExpiresHeaders(request, response, validator, expires, HttpCacheability.Private);
         }
 
         /// <summary>
@@ -366,15 +366,15 @@ namespace Cuemon.Web
             if (validator == null) { throw new ArgumentNullException("validator"); }
 
             #region Clear ClientCache Related Headers
-            HttpResponseUtility.RemoveResponseHeader(response, "Expires");
-            HttpResponseUtility.RemoveResponseHeader(response, "Cache-Control");
-            HttpResponseUtility.RemoveResponseHeader(response, "Pragma");
-            HttpResponseUtility.RemoveResponseHeader(response, "Last-Modified");
-            HttpResponseUtility.RemoveResponseHeader(response, "ETag");
+            RemoveResponseHeader(response, "Expires");
+            RemoveResponseHeader(response, "Cache-Control");
+            RemoveResponseHeader(response, "Pragma");
+            RemoveResponseHeader(response, "Last-Modified");
+            RemoveResponseHeader(response, "ETag");
             #endregion
 
             HttpStatusCode statusCode;
-            WebHeaderCollection headers = HttpResponseUtility.CreateClientSideContentCacheExpiresHeaders(validator, expires, cacheability, HttpRequestUtility.IsClientSideResourceCached, request.Headers, out statusCode);
+            WebHeaderCollection headers = CreateClientSideContentCacheExpiresHeaders(validator, expires, cacheability, HttpRequestUtility.IsClientSideResourceCached, request.Headers, out statusCode);
             response.Headers.Add(headers);
 
             response.StatusCode = (int)statusCode;
@@ -393,7 +393,7 @@ namespace Cuemon.Web
         public static void SetClientSideContentCacheExpiresHeaders(DateTime lastModified, DateTime expires)
         {
             GlobalModule.CheckForHttpContextAvailability();
-            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(HttpContext.Current.Request, HttpContext.Current.Response, lastModified, expires);
+            SetClientSideContentCacheExpiresHeaders(HttpContext.Current.Request, HttpContext.Current.Response, lastModified, expires);
         }
 
         /// <summary>
@@ -405,7 +405,7 @@ namespace Cuemon.Web
         /// <param name="expires">The UTC date time value to expire the <see cref="HttpCacheability.Private"/> caching.</param>
         public static void SetClientSideContentCacheExpiresHeaders(HttpRequest request, HttpResponse response, DateTime lastModified, DateTime expires)
         {
-            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(request, response, lastModified, expires, HttpCacheability.Private);
+            SetClientSideContentCacheExpiresHeaders(request, response, lastModified, expires, HttpCacheability.Private);
         }
 
         /// <summary>
@@ -428,7 +428,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static void SetClientSideContentCacheExpiresHeaders(HttpRequest request, HttpResponse response, DateTime lastModified, DateTime expires, HttpCacheability cacheability)
         {
-            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(request, response, lastModified, expires, cacheability, null);
+            SetClientSideContentCacheExpiresHeaders(request, response, lastModified, expires, cacheability, null);
         }
 
         /// <summary>
@@ -459,7 +459,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static void SetClientSideContentCacheExpiresHeaders(HttpRequest request, HttpResponse response, DateTime lastModified, DateTime expires, HttpCacheability cacheability, string entityTag)
         {
-            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(request, response, new CacheValidator(lastModified, lastModified, entityTag), expires, cacheability);
+            SetClientSideContentCacheExpiresHeaders(request, response, new CacheValidator(lastModified, lastModified, entityTag), expires, cacheability);
         }
 
         /// <summary>

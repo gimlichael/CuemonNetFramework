@@ -1,22 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
 using System.Globalization;
-using System.Text;
+using System.IO;
 using System.Web;
-using System.Web.Caching;
 using System.Web.SessionState;
-using System.Web.UI;
-using System.Xml.XPath;
-using Cuemon.Caching;
 using Cuemon.Globalization;
-using Cuemon.IO;
-using Cuemon.Reflection;
 using Cuemon.Security.Cryptography;
-using Cuemon.Web.Configuration;
 using Cuemon.Web.SessionState;
-using Cuemon.Xml.XPath;
 
 namespace Cuemon.Web
 {
@@ -188,15 +178,15 @@ namespace Cuemon.Web
 			get
 			{
 				DoModuleImplementationCheck();
-				if (WebsiteUtility.FastSession[SessionTimeZoneKey] != null)
+				if (FastSession[SessionTimeZoneKey] != null)
 				{
-					return (TimeZoneInfoKey)WebsiteUtility.FastSession[SessionTimeZoneKey];
+					return (TimeZoneInfoKey)FastSession[SessionTimeZoneKey];
 				}
 				return TimeZoneApplication.Value;
 			}
 			set
 			{
-				WebsiteUtility.FastSession[SessionTimeZoneKey] = value;
+				FastSession[SessionTimeZoneKey] = value;
 			}
 		}
 
@@ -210,15 +200,15 @@ namespace Cuemon.Web
 			get
 			{
 				DoModuleImplementationCheck();
-				if (WebsiteUtility.FastSession[SessionCultureInfoKey] != null)
+				if (FastSession[SessionCultureInfoKey] != null)
 				{
-					return (ushort)WebsiteUtility.FastSession[SessionCultureInfoKey];
+					return (ushort)FastSession[SessionCultureInfoKey];
 				}
 				return CultureInfoApplication.Value;
 			}
 			set
 			{
-				WebsiteUtility.FastSession[SessionCultureInfoKey] = value;
+				FastSession[SessionCultureInfoKey] = value;
 			}
 		}
 

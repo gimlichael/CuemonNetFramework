@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Web;
-using System.Web.Caching;
-using System.Web.UI;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
-using Cuemon.Globalization;
 using Cuemon.Web.Configuration;
-using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
+
 namespace Cuemon.Web
 {
     /// <summary>

@@ -1,6 +1,7 @@
-using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using Cuemon.Globalization;
+
 namespace Cuemon.Web.Configuration
 {
     /// <summary>
@@ -56,7 +57,7 @@ namespace Cuemon.Web.Configuration
         /// Gets the available cultures from your configuration file.
         /// </summary>
         /// <value>The cultures as entered in your configuration file.</value>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Infos"), ConfigurationProperty("CultureInfos")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Infos"), ConfigurationProperty("CultureInfos")]
         public WebsiteGlobalizationCultureInfoElementCollection CultureInfos
         {
             get
@@ -69,7 +70,7 @@ namespace Cuemon.Web.Configuration
         /// Gets the default cultureinfo from the cultureinfo collection as specified in the corresponding attribute.
         /// </summary>
         /// <returns>The default cultureinfo as specified in the corresponding attribute.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public WebsiteGlobalizationCultureInfoElement GetDefaultCultureInfoFromCollection()
         {
             foreach (WebsiteGlobalizationCultureInfoElement cultureInfo in this.CultureInfos)

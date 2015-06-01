@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Security;
-using System.Web;
-using System.Web.Caching;
-using System.Xml;
+﻿using System.Web;
 using System.Xml.Serialization;
-using System.Xml.XPath;
-using Cuemon.Xml;
-using Cuemon.Xml.XPath;
-using Cuemon.Web.Configuration;
-using System.Web.Configuration;
-using System.Configuration;
+
 namespace Cuemon.Web
 {
     /// <summary>

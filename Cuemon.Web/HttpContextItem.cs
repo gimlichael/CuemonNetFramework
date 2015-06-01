@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web;
 using System.Xml.Serialization;
 using Cuemon.Xml.Serialization;
+
 namespace Cuemon.Web
 {
     /// <summary>

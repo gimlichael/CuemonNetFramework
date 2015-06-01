@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
-using System.Net;
-using System.Text;
 using System.Web;
-using System.Web.Caching;
 using System.Xml;
-using System.Xml.XPath;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 using Cuemon.Caching;
 using Cuemon.IO;
 using Cuemon.Net;
 using Cuemon.Security.Cryptography;
 using Cuemon.Xml.Serialization;
-using Cuemon.Xml;
 using Cuemon.Xml.XPath;
 using Cuemon.Xml.Xsl;
+
 namespace Cuemon.Web
 {
     /// <summary>

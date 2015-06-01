@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Runtime.Remoting.Messaging;
 using System.Security;
 using System.Text;
 using System.Web;
 using Cuemon.Security;
 using Cuemon.Security.Cryptography;
-using Cuemon.Xml;
 
 namespace Cuemon.Web.Security
 {

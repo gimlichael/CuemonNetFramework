@@ -1,24 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
 using System.Web.Hosting;
-using System.Xml.XPath;
 using Cuemon.Caching;
-using Cuemon.Collections.Generic;
 using Cuemon.IO;
 using Cuemon.IO.Compression;
-using Cuemon.Runtime.Serialization;
 using Cuemon.Threading;
 using Cuemon.Web.Routing;
-using Cuemon.Xml;
-using Cuemon.Xml.XPath;
 
 namespace Cuemon.Web
 {

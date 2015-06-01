@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
-using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using Cuemon.Web.Configuration;
 using Cuemon.Xml.Serialization;
+
 namespace Cuemon.Web
 {
     /// <summary>
@@ -137,7 +137,7 @@ namespace Cuemon.Web
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"></see> stream from which the object is deserialized.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.NotImplementedException.#ctor(System.String)")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.NotImplementedException.#ctor(System.String)")]
         public override void ReadXml(XmlReader reader)
         {
             throw new NotImplementedException("The method or operation is not implemented.");

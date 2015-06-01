@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Text;
-using System.Web;
 using System.Web.UI.WebControls;
 using System.Xml;
-using Cuemon.Caching;
 using Cuemon.Xml;
 
 namespace Cuemon.Web.UI.WebControls

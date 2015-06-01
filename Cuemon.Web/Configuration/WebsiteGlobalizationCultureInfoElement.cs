@@ -1,6 +1,7 @@
-using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using Cuemon.Globalization;
+
 namespace Cuemon.Web.Configuration
 {
     /// <summary>
@@ -12,7 +13,7 @@ namespace Cuemon.Web.Configuration
         /// Gets or sets the LCID of the supported culture.
         /// </summary>
         /// <value>The LCID of the supported culture.</value>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1705:LongAcronymsShouldBePascalCased", MessageId = "Member"), ConfigurationProperty("lcid", IsKey = true, IsRequired = true)]
+        [SuppressMessage("Microsoft.Naming", "CA1705:LongAcronymsShouldBePascalCased", MessageId = "Member"), ConfigurationProperty("lcid", IsKey = true, IsRequired = true)]
         public ushort LCID
         {
             get { return (ushort)base["lcid"]; }

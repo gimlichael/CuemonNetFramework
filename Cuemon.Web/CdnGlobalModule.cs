@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Security.Principal;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -24,7 +19,7 @@ namespace Cuemon.Web
         protected override void OnApplicationStart(HttpApplication context)
         {
             base.OnApplicationStart(context);
-            GlobalModule.EnableTokenParsingForClientCaching = true;
+            EnableTokenParsingForClientCaching = true;
         }
 
         /// <summary>
@@ -34,7 +29,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when a security module has verified user authorization.</remarks>
         protected override void OnAuthorizeRequest(HttpApplication context)
         {
-            if (GlobalModule.EnableTokenParsingForClientCaching) { this.HandleTokenParsingUrlRouting(context); }
+            if (EnableTokenParsingForClientCaching) { this.HandleTokenParsingUrlRouting(context); }
         }
 
         /// <summary>
@@ -94,14 +89,14 @@ namespace Cuemon.Web
         protected override void OnPreSendRequestHeaders(HttpApplication context)
         {
             if (context == null) { throw new ArgumentNullException("context"); }
-            if (GlobalModule.EnableDynamicClientCaching)
+            if (EnableDynamicClientCaching)
             {
                 if (!HttpRequestUtility.IsStandaloneServerLocal(context.Request))
                 {
                     this.HandleDynamicContentExpiresHeaders(context);
                 }
             }
-            if (GlobalModule.EnableStaticClientCaching)
+            if (EnableStaticClientCaching)
             {
                 if (!HttpRequestUtility.IsStandaloneServerLocal(context.Request))
                 {

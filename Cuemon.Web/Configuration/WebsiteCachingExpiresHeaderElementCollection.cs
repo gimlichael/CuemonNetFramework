@@ -1,11 +1,12 @@
-using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Cuemon.Web.Configuration
 {
     /// <summary>
     /// Represents a configuration element containing a collection of child elements (<see cref="T:Cuemon.Web.Configuration.WebsiteCachingExpiresHeaderElement"></see>).
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
+    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
     public sealed class WebsiteCachingExpiresHeaderElementCollection : ConfigurationElementCollection
     {
         /// <summary>

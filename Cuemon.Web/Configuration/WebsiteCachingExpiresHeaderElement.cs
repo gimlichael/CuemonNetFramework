@@ -1,6 +1,6 @@
 using System;
 using System.Configuration;
-using Cuemon.Globalization;
+
 namespace Cuemon.Web.Configuration
 {
     /// <summary>

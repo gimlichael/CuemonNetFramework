@@ -1,7 +1,6 @@
 using System;
 using System.Configuration;
-using System.Xml;
-using Cuemon.Configuration;
+
 namespace Cuemon.Web.Configuration
 {
 	/// <summary>

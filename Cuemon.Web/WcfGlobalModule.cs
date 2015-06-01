@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
-using System.Text;
 using System.Web;
 using System.Xml.XPath;
 using Cuemon.Collections.Generic;
@@ -54,7 +51,7 @@ namespace Cuemon.Web
         protected override void HandleExceptionInterception(HttpApplication context, bool includeStackTrace)
         {
             if (context == null) { throw new ArgumentNullException("context"); }
-            if (context.Response.StatusCode >= 400 && WcfGlobalModule.EnableWcfRestFaultXmlParsing)
+            if (context.Response.StatusCode >= 400 && EnableWcfRestFaultXmlParsing)
             {
                 string contentType = context.Response.ContentType;
                 int indexOfSemicolon = contentType.IndexOf(';');
@@ -188,7 +185,7 @@ namespace Cuemon.Web
             base.OnPreRequestHandlerExecute(context);
             if (context.Response.Filter is HttpResponseContentFilter) { return; }
 
-            if (WcfGlobalModule.EnableWcfRestFaultXmlParsing)
+            if (EnableWcfRestFaultXmlParsing)
             {
                 if (context.Response.BufferOutput)
                 {

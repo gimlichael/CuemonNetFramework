@@ -1,4 +1,5 @@
 using System.Configuration;
+
 namespace Cuemon.Web.Configuration
 {
     /// <summary>

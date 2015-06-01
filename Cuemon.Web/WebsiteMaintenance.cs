@@ -1,14 +1,9 @@
 using System;
-using System.Globalization;
-using System.IO;
-using System.Web;
-using System.Web.Caching;
-using System.Web.UI;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Serialization;
-using Cuemon.Globalization;
-using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
+
 namespace Cuemon.Web
 {
     /// <summary>
@@ -62,7 +57,7 @@ namespace Cuemon.Web
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"></see> stream from which the object is deserialized.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.NotImplementedException.#ctor(System.String)")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.NotImplementedException.#ctor(System.String)")]
         public override void ReadXml(XmlReader reader)
         {
             throw new NotImplementedException("The method or operation is not implemented.");
@@ -72,7 +67,7 @@ namespace Cuemon.Web
         /// Converts an object into its XML representation.
         /// </summary>
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentNullException.#ctor(System.String,System.String)")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.ArgumentNullException.#ctor(System.String,System.String)")]
         public override void WriteXml(XmlWriter writer)
         {
             if (writer == null) { throw new ArgumentNullException("writer"); }
