@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Web;
-using Cuemon.Web;
 
 namespace Cuemon.ServiceModel
 {

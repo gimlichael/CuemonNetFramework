@@ -1,6 +1,4 @@
-﻿using System;
-using System.Xml;
-using Cuemon.Xml.Serialization;
+﻿using Cuemon.Xml.Serialization;
 
 namespace Cuemon.ServiceModel
 {

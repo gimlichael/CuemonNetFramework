@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 using Cuemon.Xml;
 

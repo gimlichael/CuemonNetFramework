@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Web;
-using Cuemon.Caching;
 using Cuemon.Diagnostics;
 using Cuemon.Reflection;
 using Cuemon.Web;
@@ -18,7 +15,7 @@ namespace Cuemon.ServiceModel
         /// </summary>
         /// <param name="caller">A <see cref="MethodBase"/> object representing the executing caller method.</param>
         /// <param name="method">The delegate to instrument and invoke.</param>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string,object})"/>.</remarks>
         public void ExecuteAction(MethodBase caller, Act method)
         {
             ActFactory factory = new ActFactory(method);

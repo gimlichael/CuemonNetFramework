@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Text;
-using System.Web;
 
 namespace Cuemon.ServiceModel
 {
@@ -72,10 +71,10 @@ namespace Cuemon.ServiceModel
         }
 
         /// <summary>
-        /// Gets the value of this <see cref="HttpMultipartContent"/> as a <see cref="String"/>.
+        /// Gets the value of this <see cref="HttpMultipartContent"/> as a <see cref="string"/>.
         /// </summary>
         /// <param name="encoding">The encoding to use when getting the form item value of this <see cref="HttpMultipartContent"/> instance.</param>
-        /// <returns>A <see cref="String"/> representing a form item value.</returns>
+        /// <returns>A <see cref="string"/> representing a form item value.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="encoding"/> is null.
         /// </exception>

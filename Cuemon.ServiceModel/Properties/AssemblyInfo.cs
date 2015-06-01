@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
+
 [assembly: AssemblyTitle(".NET Framework Additions")]
 [assembly: AssemblyDescription("This assembly contains supporting and assisting base REST classes for the Microsoft .NET Framework.")]
 [assembly: AssemblyConfiguration("")]

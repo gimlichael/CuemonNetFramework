@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Web;
-using System.Configuration;
-using System.Web.Compilation;
 using System.Web.Configuration;
 using System.Xml.XPath;
 using Cuemon.Collections.Generic;
@@ -37,10 +33,10 @@ namespace Cuemon.ServiceModel
         {
             if (context == null) { throw new ArgumentNullException("context"); }
 
-            GlobalModule.EnableExceptionToXmlInterception = true;
-            GlobalModule.EnableCompression = true;
-            GlobalModule.EnableStaticClientCaching = false;
-            GlobalModule.EnableDynamicClientCaching = false;
+            EnableExceptionToXmlInterception = true;
+            EnableCompression = true;
+            EnableStaticClientCaching = false;
+            EnableDynamicClientCaching = false;
 
             IReadOnlyCollection<Type> endpoints = GetReferencedTypes(typeof(Endpoint));
             foreach (Type endpoint in endpoints)
@@ -204,7 +200,7 @@ namespace Cuemon.ServiceModel
         private void WriteException(HttpApplication context, byte[] outputInBytes)
         {
             context.Response.ClearContent();
-            if (GlobalModule.EnableCompression &&
+            if (EnableCompression &&
                 this.IsValidForCompression(context))
             {
                 CompressionType? compressionType = null;
