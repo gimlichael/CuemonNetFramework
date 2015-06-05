@@ -259,7 +259,7 @@ namespace Cuemon
         /// <returns><c>true</c> if elements of the <paramref name="source"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
         public static bool IsSequenceOf<T>(IEnumerable<string> source, CultureInfo culture)
         {
-            return IsSequenceOf<T>(source, culture, null);
+            return IsSequenceOf<T>(source, culture, (ITypeDescriptorContext)null);
         }
 
         /// <summary>
@@ -272,11 +272,43 @@ namespace Cuemon
         /// <returns><c>true</c> if elements of the <paramref name="source"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
         public static bool IsSequenceOf<T>(IEnumerable<string> source, CultureInfo culture, ITypeDescriptorContext context)
         {
+            return IsSequenceOfCore<T>(source, culture, context, null);
+        }
+
+        /// <summary>
+        /// Determines whether the elements of the specified <paramref name="source"/> is equivalent to the specified <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the expected values contained within the sequence of <paramref name="source"/>.</typeparam>
+        /// <param name="source">A sequence in which to evaluate if a string value is equivalent to the specified <typeparamref name="T"/>.</param>
+        /// <param name="parser">The function delegate that evaluates if the elements  of <paramref name="source"/> is equivalent to the specified <typeparamref name="T"/>.</param>
+        /// <returns><c>true</c> if elements of the <paramref name="source"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
+        public static bool IsSequenceOf<T>(IEnumerable<string> source, Doer<string, CultureInfo, bool> parser)
+        {
+            return IsSequenceOf<T>(source, CultureInfo.InvariantCulture, parser);
+        }
+
+        /// <summary>
+        /// Determines whether the elements of the specified <paramref name="source"/> is equivalent to the specified <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the expected values contained within the sequence of <paramref name="source"/>.</typeparam>
+        /// <param name="source">A sequence in which to evaluate if a string value is equivalent to the specified <typeparamref name="T"/>.</param>
+        /// <param name="culture">The culture-specific formatting information to apply on the elements within <paramref name="source"/>.</param>
+        /// <param name="parser">The function delegate that evaluates if the elements  of <paramref name="source"/> is equivalent to the specified <typeparamref name="T"/>.</param>
+        /// <returns><c>true</c> if elements of the <paramref name="source"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
+        public static bool IsSequenceOf<T>(IEnumerable<string> source, CultureInfo culture, Doer<string, CultureInfo, bool> parser)
+        {
+            Validator.ThrowIfNull(parser, "parser");
+            return IsSequenceOfCore<T>(source, culture, null, parser);
+        }
+
+        private static bool IsSequenceOfCore<T>(IEnumerable<string> source, CultureInfo culture, ITypeDescriptorContext context, Doer<string, CultureInfo, bool> parser)
+        {
             Validator.ThrowIfNull(source, "source");
+            bool converterHasValue = (parser != null);
             bool valid = true;
             foreach (string substring in source)
             {
-                valid &= ConvertUtility.ParseWith(substring, CanConvertString<T>, culture, context);
+                valid &= converterHasValue ? parser(substring, culture) : ConvertUtility.ParseWith(substring, CanConvertString<T>, culture, context);
             }
             return valid;
         }
