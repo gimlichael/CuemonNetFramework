@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 
 namespace Cuemon.Data.SqlClient
 {
@@ -15,7 +14,8 @@ namespace Cuemon.Data.SqlClient
         /// Initializes a new instance of the <see cref="InOperator{T}"/> class.
         /// </summary>
         /// <param name="expressions">The expressions to test for a match in the IN operator of the WHERE clause.</param>
-        public SqlInOperator(params T[] expressions) : base(expressions)
+        public SqlInOperator(params T[] expressions)
+            : base(expressions)
         {
         }
 
@@ -23,9 +23,11 @@ namespace Cuemon.Data.SqlClient
         /// Initializes a new instance of the <see cref="InOperator{T}"/> class.
         /// </summary>
         /// <param name="expressions">The expressions to test for a match in the IN operator of the WHERE clause.</param>
-        public SqlInOperator(IEnumerable<T> expressions) : base(expressions)
+        public SqlInOperator(IEnumerable<T> expressions)
+            : base(expressions)
         {
         }
+
 
         /// <summary>
         /// A callback method that is responsible for the values passed to the <see cref="InOperator{T}.Parameters"/> property.
@@ -35,7 +37,7 @@ namespace Cuemon.Data.SqlClient
         /// <returns>An <see cref="IDataParameter"/> representing the value of the <paramref name="expression"/>.</returns>
         protected override IDataParameter ParametersSelector(T expression, int index)
         {
-            return new SqlParameter(string.Format(CultureInfo.InvariantCulture, "@param{0}", index), expression);
+            return new SqlParameter(string.Concat(this.ParameterName, index), expression);
         }
     }
 }

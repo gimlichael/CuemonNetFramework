@@ -16,7 +16,8 @@ namespace Cuemon.Data
         /// Initializes a new instance of the <see cref="InOperator{T}"/> class.
         /// </summary>
         /// <param name="expressions">The expressions to test for a match in the IN operator of the WHERE clause.</param>
-        protected InOperator(params T[] expressions) : this(expressions as IEnumerable<T>)
+        protected InOperator(params T[] expressions)
+            : this(expressions as IEnumerable<T>)
         {
         }
 
@@ -28,6 +29,7 @@ namespace Cuemon.Data
         {
             if (expressions == null) { throw new ArgumentNullException("expressions"); }
             IList<T> elements = expressions as List<T> ?? new List<T>(expressions);
+            this.ParameterName = string.Format(CultureInfo.InvariantCulture, "@param{0}{1}", StringUtility.CreateRandomString(1, StringUtility.EnglishAlphabetCharactersMajuscule), StringUtility.CreateRandomString(5, StringUtility.EnglishAlphabetCharactersMinuscule));
             this.Arguments = QueryUtility.GetQueryFragment(QueryFormat.Delimited, EnumerableUtility.Select(elements, ArgumentsSelector));
             this.Parameters = EnumerableUtility.ToArray(EnumerableUtility.Select(elements, ParametersSelector));
         }
@@ -46,6 +48,12 @@ namespace Cuemon.Data
         public IDataParameter[] Parameters { get; private set; }
 
         /// <summary>
+        /// Gets the name of the parameter that will be concatenated with <c>index</c> of both <see cref="ArgumentsSelector"/> and <see cref="ParametersSelector"/>.
+        /// </summary>
+        /// <value>The name of the parameter that will be concatenated with <c>index</c>.</value>
+        protected string ParameterName { get; private set; }
+
+        /// <summary>
         /// A callback method that is responsible for the values passed to the <see cref="Arguments"/> property.
         /// </summary>
         /// <param name="expression">An expression to test for a match in the IN operator.</param>
@@ -54,7 +62,7 @@ namespace Cuemon.Data
         /// <remarks>Default is @param{index}.</remarks>
         protected virtual string ArgumentsSelector(T expression, int index)
         {
-            return string.Format(CultureInfo.InvariantCulture, "@param{0}", index);
+            return string.Concat(this.ParameterName, index);
         }
 
         /// <summary>
