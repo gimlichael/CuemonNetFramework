@@ -185,6 +185,23 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
+        /// Generates a sequence of <typeparamref name="T"/> within a specified range.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements to return.</typeparam>
+        /// <param name="count">The number of objects of <typeparamref name="T"/> to generate.</param>
+        /// <param name="resolver">The function delegate that will resolve the value of <typeparamref name="T"/>; the parameter passed to the delegate represents the index of the element to return.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> that contains a range of <typeparamref name="T"/> elements.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <paramref name="count"/> is less than 0.
+        /// </exception>
+        public static IEnumerable<T> RangeOf<T>(int count, Doer<int, T> resolver)
+        {
+            if (count < 0) { throw new ArgumentOutOfRangeException("count"); }
+            for (int i = 0; i < count; i++) { yield return resolver(i); }
+
+        }
+
+        /// <summary>
         /// Filters a sequence of values based on a predicate.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
