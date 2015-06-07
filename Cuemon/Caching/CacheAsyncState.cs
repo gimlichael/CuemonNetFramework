@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Cuemon.Caching
@@ -89,12 +90,19 @@ namespace Cuemon.Caching
 
         public static void Callback(IAsyncResult asyncResult)
         {
-            CacheAsyncState<TResult> asyncState = asyncResult.AsyncState as CacheAsyncState<TResult>;
-            if (asyncState == null) { return; }
-            lock (asyncState.Cache)
+            try
             {
-                TResult result = asyncState.Doer.EndExecuteMethod(asyncResult);
-                asyncState.Cache.Set(asyncState.Key, asyncState.Group, result);
+                CacheAsyncState<TResult> asyncState = asyncResult.AsyncState as CacheAsyncState<TResult>;
+                if (asyncState == null) { return; }
+                lock (asyncState.Cache)
+                {
+                    TResult result = asyncState.Doer.EndExecuteMethod(asyncResult);
+                    asyncState.Cache.Set(asyncState.Key, asyncState.Group, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
             }
         }
     }
