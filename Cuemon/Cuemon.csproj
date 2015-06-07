@@ -89,7 +89,9 @@
     <Compile Include="Annotations\RangeValidationAttribute.cs" />
     <Compile Include="ArrayUtility.cs" />
     <Compile Include="AssemblyUtility.cs" />
+    <Compile Include="Caching\CacheAsyncState.cs" />
     <Compile Include="Caching\CacheCollection.GetOrAdd.cs" />
+    <Compile Include="Caching\CacheCollection.GetOrAddAsync.cs" />
     <Compile Include="Collections\Generic\PagedCollection.cs" />
     <Compile Include="Collections\Generic\PagedSettings.cs" />
     <Compile Include="Collections\Generic\PartitionCollection.cs" />

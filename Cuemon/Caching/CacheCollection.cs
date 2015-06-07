@@ -29,34 +29,26 @@ namespace Cuemon.Caching
 
         #region Properties
         /// <summary>
-        /// Gets the cached item with the specified key.
+        /// Gets the cached item with the specified <paramref name="key"/>.
         /// </summary>
-        /// <value></value>
+        /// <value>The cached item matching the specified <paramref name="key"/>.</value>
         public object this[string key]
         {
             get
             {
                 return this[key, NoGroup];
             }
-            set
-            {
-                this[key, NoGroup] = value;
-            }
         }
 
         /// <summary>
-        /// Gets the cached item from the specified group with the specified key.
+        /// Gets the cached item with the specified <paramref name="key"/> and <paramref name="group"/>.
         /// </summary>
-        /// <value></value>
+        /// <value>The cached item matching the specified <paramref name="key"/> and <paramref name="group"/>.</value>
         public object this[string key, string group]
         {
             get
             {
                 return this.Get<object>(key, group);
-            }
-            set
-            {
-                this.Add(key, value, group);
             }
         }
 
@@ -88,6 +80,24 @@ namespace Cuemon.Caching
             T result;
             this.TryGetValue(key, group, out result);
             return result;
+        }
+
+        /// <summary>
+        /// Updates the specified item from the associated group of the <see cref="CacheCollection" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the item in the <see cref="CacheCollection" />.</typeparam>
+        /// <param name="key">The identifier of the cache item to retrieve and update with <paramref name="value"/>.</param>
+        /// <param name="group">The associated group of the cache item to retrieve and update with <paramref name="value"/>.</param>
+        /// <param name="value">The value to apply to the cached item.</param>
+        internal void Set<T>(string key, string group, T value)
+        {
+            if (key == null) { throw new ArgumentNullException("key"); }
+            Cache cache;
+            if (TryGetCache(key, group, out cache))
+            {
+                cache.Value = value;
+                cache.Refresh();
+            }
         }
 
         /// <summary>
@@ -319,18 +329,17 @@ namespace Cuemon.Caching
         Retry:
             try
             {
-
-                Cache cache = new Cache(key, value, @group, dependencies, absoluteExpiration, slidingExpiration);
-                cache.Expired += new EventHandler<CacheEventArgs>(CacheExpired);
                 lock (InnerCaches)
                 {
                     if (!InnerCaches.ContainsKey(groupKey))
                     {
+                        Cache cache = new Cache(key, value, @group, dependencies, absoluteExpiration, slidingExpiration);
+                        cache.Expired += new EventHandler<CacheEventArgs>(CacheExpired);
                         cache.StartDependencies();
                         InnerCaches.Add(groupKey, cache);
+                        if (cache.CanExpire && this.ExpirationTimer == null) { this.ExpirationTimer = new Timer(new TimerCallback(this.ExpirationTimerInvoking), null, TimeSpan.Zero, TimeSpan.FromMinutes(30)); }
                     }
                 }
-                if (cache.CanExpire && this.ExpirationTimer == null) { this.ExpirationTimer = new Timer(new TimerCallback(this.ExpirationTimerInvoking), null, TimeSpan.Zero, TimeSpan.FromMinutes(30)); }
             }
             catch (IndexOutOfRangeException)
             {
