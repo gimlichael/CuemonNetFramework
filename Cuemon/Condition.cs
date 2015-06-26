@@ -20,6 +20,9 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// </summary>
         /// <param name="value">The string to verify has a valid format of an email address.</param>
         /// <returns><c>true</c> if the specified <paramref name="value"/> has a valid format of an email address; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// In my search for the most comprehensive and up-to-date regular expression for email address validation, this was the article I choose to implement: http://blog.trojanhunter.com/2012/09/26/the-best-regex-to-validate-an-email-address/.
+        /// </remarks>
         public static bool IsEmailAddress(string value)
         {
             if (String.IsNullOrEmpty(value)) { return false; }
@@ -329,6 +332,32 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         public static bool IsLowerThanOrEqual<T>(T x, T y) where T : struct, IConvertible
         {
             return (IsLowerThan(x, y) || AreEqual(x, y));
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="x"/> is within range of <paramref name="min"/> and <paramref name="max"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to compare.</typeparam>
+        /// <param name="x">The object to compare.</param>
+        /// <param name="min">The minimum value of <paramref name="x"/>.</param>
+        /// <param name="max">The maximum value of <paramref name="x"/>.</param>
+        /// <returns><c>true</c> if <paramref name="x"/> is within range of <paramref name="min"/> and <paramref name="max"/>; otherwise <c>false</c>.</returns>
+        public static bool IsWithinRange<T>(T x, T min, T max) where T : struct, IConvertible
+        {
+            return (IsGreaterThanOrEqual(x, min) && IsLowerThanOrEqual(x, max));
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="x"/> is outside the range of <paramref name="min"/> and <paramref name="max"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to compare.</typeparam>
+        /// <param name="x">The object to compare.</param>
+        /// <param name="min">The minimum value of <paramref name="x"/>.</param>
+        /// <param name="max">The maximum value of <paramref name="x"/>.</param>
+        /// <returns><c>true</c> if <paramref name="x"/> is outside the range of <paramref name="min"/> and <paramref name="max"/>; otherwise <c>false</c>.</returns>
+        public static bool IsNotWithinRange<T>(T x, T min, T max) where T : struct, IConvertible
+        {
+            return !IsWithinRange(x, min, max);
         }
 
         /// <summary>

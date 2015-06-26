@@ -87,6 +87,8 @@
     <Compile Include="Annotations\MaxLengthValidationAttribute.cs" />
     <Compile Include="Annotations\EmailAddressValidationAttribute.cs" />
     <Compile Include="Annotations\RangeValidationAttribute.cs" />
+    <Compile Include="Annotations\RequiredSequenceValidationAttribute.cs" />
+    <Compile Include="Annotations\ValidationUtility.cs" />
     <Compile Include="ArrayUtility.cs" />
     <Compile Include="AssemblyUtility.cs" />
     <Compile Include="Caching\CacheAsyncState.cs" />

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
-using Cuemon.Reflection;
 
 namespace Cuemon.Annotations
 {
@@ -11,6 +9,8 @@ namespace Cuemon.Annotations
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public sealed class MinLengthValidationAttribute : ValidationAttribute
     {
+        private static Doer<long, long, bool> validator = Condition.IsLowerThan;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxLengthValidationAttribute"/> class.
         /// </summary>
@@ -21,62 +21,49 @@ namespace Cuemon.Annotations
         }
 
         /// <summary>
+        /// Sets the function delegate that is invoked when <see cref="Validate(string,string)"/> or <see cref="Validate(string,Array)"/> is called.
+        /// </summary>
+        /// <value>The function delegate that will verify if a string or an array meets a specified minimum length.</value>
+        /// <remarks><see cref="Condition.IsLowerThan{T}"/> is the default value of this function delegate.</remarks>
+        public static Doer<long, long, bool> MinLengthValidator
+        {
+            set
+            {
+                Validator.ThrowIfNull(value, "value");
+                validator = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the minimum length of the array or string.
         /// </summary>
         /// <value>The minimum length of the array or string for the decorated property.</value>
         public long Length { get; private set; }
 
         /// <summary>
-        /// Validates the specified <paramref name="entity"/>.
+        /// Validates the specified <paramref name="value"/> has a length that must be at least the minimum defined <see cref="Length"/>.
         /// </summary>
-        /// <param name="entity">The value of the entity to validate.</param>
-        /// <param name="entityType">The type of the entity to validate.</param>
-        /// <param name="entityProperty">The property of the entity to validate.</param>
-        /// <exception cref="System.ArgumentException">entityType
-        /// <paramref name="entityProperty"/> is not suitable for this attribute.
+        /// <param name="name">The name to include in the message of the <see cref="ValidationException"/>.</param>
+        /// <param name="value">The string to verify has a length that must be at least the minimum defined <see cref="Length"/>.</param>
+        /// <exception cref="Cuemon.Annotations.ValidationException">
+        /// <paramref name="value"/> does not meed the minimum <see cref="Length"/>.
         /// </exception>
-        public void Validate(object entity, Type entityType, PropertyInfo entityProperty)
+        public void Validate(string name, string value)
         {
-            if (entity == null) { throw new ArgumentNullException("entity"); }
-            if (entityType == null) { throw new ArgumentNullException("entityType"); }
-            if (entityProperty == null) { throw new ArgumentNullException("entityProperty"); }
-
-            if (entityProperty.PropertyType.IsArray)
-            {
-                object array = entityProperty.GetValue(entity, null);
-                PropertyInfo longLength = ReflectionUtility.GetProperty(entityProperty.PropertyType, "LongLength", typeof(long), null, ReflectionUtility.BindingInstancePublic);
-                if (longLength != null && longLength.CanRead)
-                {
-                    long arrayLength = (long)longLength.GetValue(array, null);
-                    if (arrayLength < this.Length) { throw new ValidationException(string.IsNullOrEmpty(this.Message) ? string.Format(CultureInfo.InvariantCulture, "Minimum length of {0} must be at least {1} elements. Actually length was {2}.", entityProperty.Name, this.Length, arrayLength) : this.Message); }
-                }
-            }
-            else
-            {
-                TypeCode typeCode = Type.GetTypeCode(entityProperty.PropertyType);
-                switch (typeCode)
-                {
-                    case TypeCode.String:
-                        this.Validate(entityProperty.GetValue(entity, null) as string, entityProperty.Name);
-                        break;
-                    case TypeCode.Object:
-                        if (entityProperty.PropertyType == typeof (Uri))
-                        {
-                            Uri uri = entityProperty.GetValue(entity, null) as Uri;
-                            if (uri != null) { this.Validate(uri.OriginalString, entityProperty.Name); }
-                            break;
-                        }
-                        goto default;
-                    default:
-                        throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Property '{0}' on '{1}' having a typecode of '{2}' is not suitable for the MinLengthValidationAttribute.", entityProperty.Name, entityType, typeCode), "entityProperty");
-                }
-            }
+            if (value != null && validator(value.Length, this.Length)) { throw new ValidationException(string.IsNullOrEmpty(this.Message) ? string.Format(CultureInfo.InvariantCulture, "Minimum length of {0} must be at least {1} characters. Actually characters was {2}.", name, this.Length, value.Length) : this.Message); }
         }
 
-        private void Validate(string value, string propertyName)
+        /// <summary>
+        /// Validates the specified <paramref name="value"/> has a length that must be at least the minimum defined <see cref="Length"/>.
+        /// </summary>
+        /// <param name="name">The name to include in the message of the <see cref="ValidationException"/>.</param>
+        /// <param name="value">The string to verify has a length that must be at least the minimum defined <see cref="Length"/>.</param>
+        /// <exception cref="Cuemon.Annotations.ValidationException">
+        /// <paramref name="value"/> does not meed the minimum <see cref="Length"/>.
+        /// </exception>
+        public void Validate(string name, Array value)
         {
-            if (value != null &&
-                value.Length < this.Length) { throw new ValidationException(string.IsNullOrEmpty(this.Message) ? string.Format(CultureInfo.InvariantCulture, "Minimum length of {0} must be at least {1} characters. Actually characters was {2}.", propertyName, this.Length, value.Length) : this.Message); }
+            if (value != null && validator(value.LongLength, this.Length)) { throw new ValidationException(string.IsNullOrEmpty(this.Message) ? string.Format(CultureInfo.InvariantCulture, "Minimum length of {0} must be at least {1} elements. Actually length was {2}.", name, this.Length, value.LongLength) : this.Message); }
         }
     }
 }
