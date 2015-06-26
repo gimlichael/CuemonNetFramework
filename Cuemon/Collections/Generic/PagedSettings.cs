@@ -28,6 +28,7 @@ namespace Cuemon.Collections.Generic
             this.PageSize = DefaultPageSize;
             this.PageNumber = 1;
             this.SortOrderDirection = SortOrder.Unspecified;
+            this.Data = new DataPairDictionary();
         }
         #endregion
 
@@ -79,6 +80,12 @@ namespace Cuemon.Collections.Generic
         /// </summary>
         /// <value>The one-based number of the page to iterate.</value>
         public int PageNumber { get; set; }
+
+        /// <summary>
+        /// Gets a collection of <see cref="DataPair"/> elements that provide information about arbitrary data.
+        /// </summary>
+        /// <value>The collection of <see cref="DataPair"/> elements that provide information about arbitrary data.</value>
+        public DataPairDictionary Data { get; private set; }
         #endregion
     }
 }

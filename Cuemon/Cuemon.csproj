@@ -101,6 +101,7 @@
     <Compile Include="ComparisonUtility.cs" />
     <Compile Include="Condition.cs" />
     <Compile Include="ActivatorUtility.cs" />
+    <Compile Include="DataPairDictionary.cs" />
     <Compile Include="Globalization\CulturalRegion.cs" />
     <Compile Include="IO\InternalStreamWriter.cs" />
     <Compile Include="IO\StreamWriterSettings.cs" />
