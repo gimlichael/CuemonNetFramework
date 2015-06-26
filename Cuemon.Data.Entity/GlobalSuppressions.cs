@@ -137,3 +137,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "Cuemon.Data.Entity.EntityMapper.#ParseDemoteStatement(Cuemon.Act`2<Cuemon.Data.IDataCommand,System.Data.IDataParameter[]>,System.Type)")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "demoter", Scope = "member", Target = "Cuemon.Data.Entity.EntityMapper.#ParseDemoteStatement(Cuemon.Act`2<Cuemon.Data.IDataCommand,System.Data.IDataParameter[]>,System.Type)")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "Cuemon.Data.Entity.EntityMapper.#GetInheritanceChain()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames")]

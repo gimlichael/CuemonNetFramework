@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -85,7 +84,8 @@ namespace Cuemon.Data.Entity
         [XmlIgnore]
         public bool IsDirty
         {
-            get; protected set;
+            get;
+            protected set;
         }
 
         /// <summary>
@@ -95,7 +95,8 @@ namespace Cuemon.Data.Entity
         [XmlIgnore]
         public bool IsNew
         {
-            get; protected set;
+            get;
+            protected set;
         }
 
         /// <summary>
@@ -107,7 +108,8 @@ namespace Cuemon.Data.Entity
         [XmlIgnore]
         protected bool HasLoaded
         {
-            get; set;
+            get;
+            set;
         }
 
         /// <summary>
@@ -119,7 +121,8 @@ namespace Cuemon.Data.Entity
         [XmlIgnore]
         protected bool HasInitialized
         {
-            get; set;
+            get;
+            set;
         }
 
         /// <summary>
@@ -131,7 +134,8 @@ namespace Cuemon.Data.Entity
         [XmlIgnore]
         protected bool IsInitializing
         {
-            get; set;
+            get;
+            set;
         }
 
         /// <summary>
@@ -317,7 +321,7 @@ namespace Cuemon.Data.Entity
         /// Deletes the specified <paramref name="entityType"/> from the data source.
         /// </summary>
         /// <param name="entityType">The entity type to delete from the data source.</param>
-        public virtual void Delete(Type entityType) 
+        public virtual void Delete(Type entityType)
         {
             this.DataAdapter.Delete(entityType);
         }
@@ -398,7 +402,7 @@ namespace Cuemon.Data.Entity
                     {
                         if (this.IsDirty)
                         {
-                            this.SaveOnly(this.GetType(), QueryType.Update);    
+                            this.SaveOnly(this.GetType(), QueryType.Update);
                             this.IsDirty = false;
                         }
                     }
@@ -655,59 +659,25 @@ namespace Cuemon.Data.Entity
         /// <param name="entityType">The <see cref="BusinessEntity"/> to validate towards.</param>
         public virtual void Validate(Type entityType)
         {
-            IDictionary<PropertyInfo, ValidationAttribute[]> propertiesAndAttributes = ReflectionUtility.GetPropertyAttributeDecorations<ValidationAttribute>(entityType);
-            foreach (KeyValuePair<PropertyInfo, ValidationAttribute[]> propertyAndAttribute in propertiesAndAttributes)
+            ValidationUtility.Validate(this, entityType);
+            ValidationUtility.Validate(this, entityType, UniqueValidationParser);
+        }
+
+        private void UniqueValidationParser(ValidationAttribute attribute, PropertyInfo property, object instance, Type instanceType)
+        {
+            UniqueValidationParserCore(attribute as UniqueValidationAttribute, property, instanceType);
+        }
+
+        private void UniqueValidationParserCore(UniqueValidationAttribute attribute, PropertyInfo property, Type instanceType)
+        {
+            if (attribute == null) { return; }
+            ColumnAttribute[] columns = property.GetCustomAttributes(typeof(ColumnAttribute), false) as ColumnAttribute[];
+            ColumnAttribute column = columns != null && columns.Length > 0 ? columns[0] : null;
+            if (column == null) { return; }
+            object uniqueValue = this.GetCore<object>(property.Name);
+            if (this.DataAdapter.ValidateUniqueIndex(instanceType, column, uniqueValue))
             {
-                foreach (ValidationAttribute validationAttribute in propertyAndAttribute.Value)
-                {
-                    ColumnAttribute[] columns = propertyAndAttribute.Key.GetCustomAttributes(typeof(ColumnAttribute), false) as ColumnAttribute[];
-                    ColumnAttribute column = columns != null && columns.Length > 0 ? columns[0] : null;
-                    if (column == null) { continue; }
-                    PropertyInfo property;
-                    switch (validationAttribute.GetType().Name)
-                    {
-                        case "UniqueValidationAttribute":
-                            if (this.DataAdapter.ValidateUniqueIndex(entityType, column, this.GetCore<object>(propertyAndAttribute.Key.Name)))
-                            {
-                                throw new ValidationException(string.IsNullOrEmpty(validationAttribute.Message) ? string.Format(CultureInfo.InvariantCulture, "{0} must be unique.", propertyAndAttribute.Key.Name) : validationAttribute.Message);
-                            }
-                            break;
-                        case "RequiredValidationAttribute":
-                            property = this.GetProperty(propertyAndAttribute.Key.Name);
-                            object requiredValue = property.GetValue(this, null);
-                            if (requiredValue == null)
-                            {
-                                throw new ValidationException(string.IsNullOrEmpty(validationAttribute.Message) ? string.Format(CultureInfo.InvariantCulture, "{0} specification is required.", property.Name) : validationAttribute.Message);
-                            }
-
-                            if (TypeUtility.ContainsInterface(requiredValue, typeof(IEnumerable)))
-                            {
-                                if (EnumerableUtility.Count(requiredValue as IEnumerable) == 0) { throw new ValidationException(string.IsNullOrEmpty(validationAttribute.Message) ? string.Format(CultureInfo.InvariantCulture, "{0} specification is required.", propertyAndAttribute.Key.Name) : validationAttribute.Message); }
-                            }
-                            break;
-                        case "RangeValidationAttribute":
-                            RangeValidationAttribute range = validationAttribute as RangeValidationAttribute;
-                            property = this.GetProperty(propertyAndAttribute.Key.Name);
-                            range.Validate(this, entityType, property);
-                            break;
-                        case "MinLengthValidationAttribute":
-                            MinLengthValidationAttribute minLength = validationAttribute as MinLengthValidationAttribute;
-                            property = this.GetProperty(propertyAndAttribute.Key.Name);
-                            minLength.Validate(this, entityType, property);
-                            break;
-                        case "MaxLengthValidationAttribute":
-                            MaxLengthValidationAttribute maxLength = validationAttribute as MaxLengthValidationAttribute;
-                            property = this.GetProperty(propertyAndAttribute.Key.Name);
-                            maxLength.Validate(this, entityType, property);
-                            break;
-                        case "EmailAddressValidationAttribute":
-                            EmailAddressValidationAttribute emailAddress = validationAttribute as EmailAddressValidationAttribute;
-                            property = this.GetProperty(propertyAndAttribute.Key.Name);
-                            emailAddress.Validate(this, entityType, property);
-                            break;
-                    }
-                }
-
+                attribute.Validate(property.Name, uniqueValue);
             }
         }
 
