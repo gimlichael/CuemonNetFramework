@@ -22,12 +22,12 @@ namespace Cuemon.Collections.Generic
         /// </summary>
         /// <param name="source">The sequence to search and apply paging on.</param>
         /// <param name="match">The function delegate that defines the conditions of the elements to search for.</param>
-        /// <param name="criteria">The condition to <paramref name="match"/> before applying paging to this instance.</param>
-        /// <returns>A <see cref="PagedCollection{T}"/> that is the result of <paramref name="match"/> and <paramref name="criteria"/>.</returns>
+        /// <param name="settings">The settings that specifies the conditions of the <paramref name="match"/> before applying paging to this instance.</param>
+        /// <returns>A <see cref="PagedCollection{T}"/> that is the result of <paramref name="match"/>.</returns>
         /// <remarks>This search is performed by using a default value of <see cref="StringComparison.OrdinalIgnoreCase"/>.</remarks>
-        public static PagedCollection<T> Search<T>(IEnumerable<T> source, Doer<T, string, StringComparison, bool> match, string criteria)
+        public static PagedCollection<T> Search<T>(IEnumerable<T> source, Doer<T, PagedSettings, StringComparison, bool> match, PagedSettings settings)
         {
-            return Search(source, match, criteria, StringComparison.OrdinalIgnoreCase);
+            return Search(source, match, settings, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -35,36 +35,34 @@ namespace Cuemon.Collections.Generic
         /// </summary>
         /// <param name="source">The sequence to search and apply paging on.</param>
         /// <param name="match">The function delegate that defines the conditions of the elements to search for.</param>
-        /// <param name="criteria">The condition to <paramref name="match"/> before applying paging to this instance.</param>
+        /// <param name="settings">The settings that specifies the conditions of the <paramref name="match"/> before applying paging to this instance.</param>
         /// <param name="comparison">One of the enumeration values that specifies the rules to use in the comparison.</param>
-        /// <returns>A <see cref="PagedCollection{T}"/> that is the result of <paramref name="match"/> and <paramref name="criteria"/>.</returns>
-        public static PagedCollection<T> Search<T>(IEnumerable<T> source, Doer<T, string, StringComparison, bool> match, string criteria, StringComparison comparison)
+        /// <returns>A <see cref="PagedCollection{T}"/> that is the result of <paramref name="match"/>.</returns>
+        public static PagedCollection<T> Search<T>(IEnumerable<T> source, Doer<T, PagedSettings, StringComparison, bool> match, PagedSettings settings, StringComparison comparison)
         {
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(match, "match");
+            Validator.ThrowIfNull(settings, "settings");
+
             PagedCollection<T> pagedSource = source as PagedCollection<T>;
-            PagedCollection<T> paged = new PagedCollection<T>(new List<T>(EnumerableUtility.FindAll(pagedSource == null ? source : pagedSource.OriginalSource, match, criteria, comparison)));
-            paged.Settings.SearchCriteria = criteria;
-            return paged;
+            return new PagedCollection<T>(new List<T>(EnumerableUtility.FindAll(pagedSource == null ? source : pagedSource.OriginalSource, match, settings, comparison)), settings);
         }
 
         /// <summary>
-        /// Sort all the elements in <paramref name="source"/> by the <paramref name="direction"/> that matches the <paramref name="orderBy"/> defined by the specified function delegate <paramref name="sorter"/>.
+        /// Sort all the elements in <paramref name="source"/> by the <paramref name="settings"/> applied to the specified function delegate <paramref name="sorter"/>.
         /// </summary>
         /// <param name="source">The sequence to sort and apply paging on.</param>
         /// <param name="sorter">The function delegate that defines how the sorting is applied to the elements in <paramref name="source"/>.</param>
-        /// <param name="orderBy">The criteria that specifies what element the <paramref name="sorter"/> should use before applying paging to this instance.</param>
-        /// <param name="direction">The direction (Ascending or Descending) to apply to the <paramref name="orderBy"/>.</param>
+        /// <param name="settings">The settings that specifies the conditions of the <paramref name="sorter"/> before applying paging to this instance.</param>
         /// <returns>A <see cref="PagedCollection{T}"/> that is sorted by the specified <paramref name="sorter"/>.</returns>
-        public static PagedCollection<T> Sort<T>(IEnumerable<T> source, Doer<IEnumerable<T>, string, SortOrder, IEnumerable<T>> sorter, string orderBy, SortOrder direction)
+        public static PagedCollection<T> Sort<T>(IEnumerable<T> source, Doer<IEnumerable<T>, PagedSettings, IEnumerable<T>> sorter, PagedSettings settings)
         {
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(sorter, "sorter");
+            Validator.ThrowIfNull(settings, "settings");
+
             PagedCollection<T> pagedSource = source as PagedCollection<T>;
-            PagedCollection<T> paged = new PagedCollection<T>(sorter(pagedSource == null ? source : pagedSource.OriginalSource, orderBy, direction));
-            paged.Settings.SortOrderBy = orderBy;
-            paged.Settings.SortOrderDirection = direction;
-            return paged;
+            return new PagedCollection<T>(sorter(pagedSource == null ? source : pagedSource.OriginalSource, settings), settings);
         }
     }
 
@@ -193,7 +191,7 @@ namespace Cuemon.Collections.Generic
         /// </summary>
         /// <value>The total number of elements in the sequence before paging is applied.</value>
         public int TotalElementCount { get; private set; }
-        
+
         /// <summary>
         /// Gets a value indicating whether this instance has a next paged data sequence.
         /// </summary>
@@ -276,7 +274,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the paged collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator(); 
+            return this.GetEnumerator();
         }
 
         /// <summary>
