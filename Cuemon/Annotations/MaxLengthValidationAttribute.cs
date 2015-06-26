@@ -21,12 +21,13 @@ namespace Cuemon.Annotations
         }
 
         /// <summary>
-        /// Sets the function delegate that is invoked when <see cref="Validate(string,string)"/> or <see cref="Validate(string,Array)"/> is called.
+        /// Gets or sets the function delegate that is invoked when <see cref="Validate(string,string)"/> or <see cref="Validate(string,Array)"/> is called.
         /// </summary>
         /// <value>The function delegate that will verify if a string or an array does not exceed a specified maximum length.</value>
         /// <remarks><see cref="Condition.IsGreaterThan{T}"/> is the default value of this function delegate.</remarks>
         public static Doer<long, long, bool> MaxLengthValidator
         {
+            get { return validator; }
             set
             {
                 Validator.ThrowIfNull(value, "value");

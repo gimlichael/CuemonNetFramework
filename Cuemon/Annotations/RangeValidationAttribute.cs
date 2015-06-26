@@ -36,12 +36,13 @@ namespace Cuemon.Annotations
         }
 
         /// <summary>
-        /// Sets the function delegate that is invoked when <see cref="Validate(string,double)"/>  is called.
+        /// Gets or sets the function delegate that is invoked when <see cref="Validate(string,double)"/>  is called.
         /// </summary>
         /// <value>The function delegate that will verify if a value is within a given range.</value>
         /// <remarks><see cref="Condition.IsWithinRange{T}"/> is the default value of this function delegate.</remarks>
         public static Doer<double, double, double, bool> RangeValidator
         {
+            get { return validator; }
             set
             {
                 Validator.ThrowIfNull(value, "value");

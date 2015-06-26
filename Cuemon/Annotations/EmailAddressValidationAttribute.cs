@@ -19,12 +19,13 @@ namespace Cuemon.Annotations
         }
 
         /// <summary>
-        /// Sets the function delegate that is invoked when <see cref="Validate"/> is called.
+        /// Gets or sets the function delegate that is invoked when <see cref="Validate"/> is called.
         /// </summary>
         /// <value>The function delegate that will verify if a string value has a valid format of an email address.</value>
         /// <remarks><see cref="Condition.IsEmailAddress"/> is the default value of this function delegate.</remarks>
         public static Doer<string, bool> EmailAddressValidator
         {
+            get { return validator; }
             set
             {
                 Validator.ThrowIfNull(value, "value");

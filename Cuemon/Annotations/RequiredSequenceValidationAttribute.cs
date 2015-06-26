@@ -30,12 +30,13 @@ namespace Cuemon.Annotations
         }
 
         /// <summary>
-        /// Sets the function delegate that is invoked when <see cref="Validate(string,IEnumerable)"/> is called.
+        /// Gets or sets the function delegate that is invoked when <see cref="Validate(string,IEnumerable)"/> is called.
         /// </summary>
         /// <value>The function delegate that will verify if a given sequence has at least one element.</value>
         /// <remarks><see cref="EnumerableUtility.Any"/> is the default value of this function delegate.</remarks>
         public static Doer<IEnumerable, bool> RequiredSequenceValidator
         {
+            get { return validator; }
             set
             {
                 Validator.ThrowIfNull(value, "value");

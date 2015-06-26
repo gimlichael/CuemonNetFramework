@@ -28,12 +28,13 @@ namespace Cuemon.Annotations
         }
 
         /// <summary>
-        /// Sets the function delegate that is invoked when <see cref="Validate(string,object)"/> is called.
+        /// Gets or sets the function delegate that is invoked when <see cref="Validate(string,object)"/> is called.
         /// </summary>
         /// <value>The function delegate that will verify if a given object has a value.</value>
         /// <remarks><see cref="Condition.IsNull{T}"/> is the default value of this function delegate.</remarks>
         public static Doer<object, bool> RequiredValidator
         {
+            get { return validator; }
             set
             {
                 Validator.ThrowIfNull(value, "value");
