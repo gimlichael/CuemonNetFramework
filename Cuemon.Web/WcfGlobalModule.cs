@@ -24,7 +24,8 @@ namespace Cuemon.Web
         /// <remarks>For this to work, you must have enabled <c>AspNetCompatibilityRequirements</c> in your WCF service to either <c>AspNetCompatibilityRequirementsMode.Allowed</c> or <c>AspNetCompatibilityRequirementsMode.Required</c>.</remarks>
         public static bool EnableWcfRestFaultXmlParsing
         {
-            get; set;
+            get;
+            set;
         }
 
         /// <summary>
@@ -83,6 +84,19 @@ namespace Cuemon.Web
                 }
                 base.HandleExceptionInterception(context, includeStackTrace); // fallback to ASP.NET Lifecycle
             }
+        }
+
+        /// <summary>
+        /// Evaluates if the current request of the specified <paramref name="context"/> is valid for compression.
+        /// </summary>
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <returns><c>true</c> if the current request of the specified <paramref name="context"/> is valid for compression; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// This implementation relies on the <see cref="HttpResponse.ContentType"/> resolved through the specified <paramref name="context"/>.
+        /// </remarks>
+        protected override bool IsValidForCompression(HttpApplication context)
+        {
+            return base.IsValidForCompressionCore(MimeUtility.ParseContentType(context.Response.ContentType));
         }
 
         /// <summary>

@@ -61,6 +61,7 @@ namespace Cuemon.Web.Routing
             this.RouteArgumentsAsHexString = new string[0];
             this.Data = new Dictionary<string, object>();
         }
+
         #region Properties
         /// <summary>
         /// The object that processes requests for the route that implements the <see cref="IHttpHandler"/> interface.
@@ -159,25 +160,6 @@ namespace Cuemon.Web.Routing
             Uri requestUri = new Uri(baseUri, this.UriPattern); // this causes 404 - change to request url and match start of uripattern
             HttpMethods currentVerb = EnumUtility.Parse<HttpMethods>(request.HttpMethod, true);
             return HttpRouteUtility.ParseRouteMethod(this.Handler, requestUri, currentVerb, out parameters);
-            //Uri requestUri = request.Url;
-            //HttpMethods currentVerb = EnumUtility.Parse<HttpMethods>(request.HttpMethod, true);
-            //Uri baseUri = HttpRequestUtility.GetHostAuthority(requestUri);
-
-            //string currentPattern = this.UriPattern;
-            //int currentPatternSegments = StringUtility.Count(currentPattern, '/');
-            //foreach (KeyValuePair<HttpRouteAttribute, MethodInfo> candidate in this.GetReflectedMethods())
-            //{
-
-            //    HttpRouteAttribute attribute = candidate.Key;
-            //    int attributePatternSegments = StringUtility.Count(attribute.UriPattern, '/');
-            //    if (currentPatternSegments == attributePatternSegments &&
-            //        StringUtility.Contains(currentPattern, attribute.UriPattern, StringComparison.OrdinalIgnoreCase) &&
-            //        EnumUtility.HasFlag(attribute.Methods, currentVerb))
-            //    {
-            //        return candidate.Value;
-            //    }
-            //}
-            //return null;
         }
         #endregion
     }

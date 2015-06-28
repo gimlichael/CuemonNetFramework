@@ -26,7 +26,8 @@ namespace Cuemon.Web
         /// </value>
         public static bool EnableCompression
         {
-            get; set;
+            get;
+            set;
         }
 
         /// <summary>
@@ -76,8 +77,9 @@ namespace Cuemon.Web
             if (context == null) { throw new ArgumentNullException("context"); }
             if (HttpRequestUtility.IsStandaloneServerLocal(context.Request)) { return; }
             if (context.Response.SuppressContent) { return; }
-            if (!this.IsValidForCompression(context)) {
-                HttpResponseUtility.RemoveResponseHeader(context.Response, "Content-Encoding"); 
+            if (!this.IsValidForCompression(context))
+            {
+                HttpResponseUtility.RemoveResponseHeader(context.Response, "Content-Encoding");
             }
             else
             {
@@ -94,7 +96,7 @@ namespace Cuemon.Web
                         HttpResponseUtility.RemoveResponseHeader(context.Response, "Content-Encoding");
                         return;
                 }
-   
+
             }
         }
 
@@ -157,19 +159,20 @@ namespace Cuemon.Web
         protected virtual bool IsValidForCompression(HttpApplication context)
         {
             if (context == null) { return false; }
+
             Doer<FileMapping, bool> compress = CachingManager.Cache.Memoize<FileMapping, bool>(IsValidForCompressionCore);
             HttpRoutePath path = new HttpRoutePath(context.Context);
             FileMapping mimeType = path.IsHandler ? MimeUtility.ParseContentType(context.Response.ContentType) : path.PhysicalFileMimeType;
-            if (mimeType == null) { return false; }
             return compress(mimeType);
         }
 
-        private bool IsValidForCompressionCore(FileMapping mimeType)
+        internal bool IsValidForCompressionCore(FileMapping mimeType)
         {
+            if (mimeType == null) { return false; }
             return ((mimeType.ContentType.StartsWith("text", StringComparison.OrdinalIgnoreCase) || mimeType.ContentType.StartsWith("font", StringComparison.OrdinalIgnoreCase)) ||
                 (StringUtility.Contains(mimeType.ContentType, StringComparison.OrdinalIgnoreCase, "image/bmp", "image/svg+xml", "image/vnd.microsoft.icon", "image/x-icon")) ||
-                (StringUtility.Contains(mimeType.ContentType, StringComparison.OrdinalIgnoreCase, "application/atom+xml", 
-                "application/javascript", 
+                (StringUtility.Contains(mimeType.ContentType, StringComparison.OrdinalIgnoreCase, "application/atom+xml",
+                "application/javascript",
                 "application/x-javascript",
                 "application/json",
                 "application/ld+json",
@@ -237,7 +240,7 @@ namespace Cuemon.Web
                 CachingManager.Cache.Remove(pathToResource.VirtualFilePath, CompressionCacheGroup);
                 return pathToResource.VirtualFilePath;
             }
-            return virtualPathToTempFile; 
+            return virtualPathToTempFile;
         }
 
         /// <summary>
@@ -333,7 +336,7 @@ namespace Cuemon.Web
             if (context == null) { throw new ArgumentNullException("context"); }
             if (output == null) { throw new ArgumentNullException("output"); }
             return EnableCompression && this.IsValidForCompression(context.ApplicationInstance)
-                ? this.ParseHttpOutputStream(output, this.GetClientCompressionMethod(context.Request)) 
+                ? this.ParseHttpOutputStream(output, this.GetClientCompressionMethod(context.Request))
                 : output;
         }
 
@@ -349,7 +352,7 @@ namespace Cuemon.Web
         protected virtual byte[] ParseHttpOutputStream(byte[] output, CompressionMethodScheme compressionMethod)
         {
             if (output == null) { throw new ArgumentNullException("output"); }
-            return EnableCompression 
+            return EnableCompression
                 ? this.ParseHttpOutputStream(new MemoryStream(output), compressionMethod)
                 : output;
         }
@@ -368,7 +371,7 @@ namespace Cuemon.Web
             if (context == null) { throw new ArgumentNullException("context"); }
             if (output == null) { throw new ArgumentNullException("output"); }
             return EnableCompression && this.IsValidForCompression(context.ApplicationInstance)
-                ? this.ParseHttpOutputStream(output, this.GetClientCompressionMethod(context.Request)) 
+                ? this.ParseHttpOutputStream(output, this.GetClientCompressionMethod(context.Request))
                 : ConvertUtility.ToByteArray(output);
         }
 

@@ -11,7 +11,6 @@ namespace Cuemon.Web
 {
     public partial class GlobalModule : IHttpModule
     {
-        private bool _isHeadersWrittenDoToIisAdaptiveErrorLifecycleViolation;
         private static bool _hasIisIntegratedPipelineMode = true;
         private EventHandler<EventArgs> _sendRequestContent = null;
         internal static WindowsIdentity AppPoolIdentity;
@@ -576,11 +575,7 @@ namespace Cuemon.Web
         /// IMO this is as much a deal breaker as it is a design flaw as one should unconditionally be able to trust the ASP.NET Lifecycle.<br/><br/>
         /// Headers to the client should NEVER (and let me emphasis that) NEVER be send until after <see cref="OnPreSendRequestHeaders"/> (which is equivalent to <see cref="HttpApplication.PreSendRequestHeaders"/>) just as client content should be sent AFTER <see cref="OnPreSendRequestContent"/> (which is equivalent to <see cref="HttpApplication.PreSendRequestContent"/>).
         /// </remarks>
-        public bool IsHeadersWrittenDoToIisAdaptiveErrorLifecycleViolation
-        {
-            get { return _isHeadersWrittenDoToIisAdaptiveErrorLifecycleViolation; }
-            private set { _isHeadersWrittenDoToIisAdaptiveErrorLifecycleViolation = value; }
-        }
+        public bool IsHeadersWrittenDoToIisAdaptiveErrorLifecycleViolation { get; private set; }
 
         /// <summary>
         /// Handles the Error event of the HttpApplication control.
@@ -621,7 +616,6 @@ namespace Cuemon.Web
         {
             HttpApplication application = sender as HttpApplication;
             this.OnPostResolveRequestCache(application);
-            this.HandleUrlRouting(application);
             this.AddOrUpdateMeasuredApplicationLifecycle("OnPostResolveRequestCache", this.ApplicationLifecycle.Elapsed);
         }
 
