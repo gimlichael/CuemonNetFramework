@@ -162,3 +162,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.DateTime.ToString(System.String)", Scope = "member", Target = "Cuemon.Xml.Xsl.XsltExtensionLibrary.#formatDate(System.String,System.UInt16,System.String)")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "cdata", Scope = "member", Target = "Cuemon.Xml.XmlUtility.#SanitizeElementText(System.String,System.Boolean)")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate", Scope = "member", Target = "Cuemon.Xml.Xsl.XsltOutput.#CacheGroupName")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames")]
