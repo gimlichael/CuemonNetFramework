@@ -94,6 +94,8 @@
     <Compile Include="Caching\CacheAsyncState.cs" />
     <Compile Include="Caching\CacheCollection.GetOrAdd.cs" />
     <Compile Include="Caching\CacheCollection.GetOrAddAsync.cs" />
+    <Compile Include="Collections\Generic\DynamicComparer.cs" />
+    <Compile Include="Collections\Generic\DynamicEqualityComparer.cs" />
     <Compile Include="Collections\Generic\PagedCollection.cs" />
     <Compile Include="Collections\Generic\PagedSettings.cs" />
     <Compile Include="Collections\Generic\PartitionCollection.cs" />
