@@ -301,22 +301,6 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Converts the elements of an <see cref="IEnumerable{T}"/> to the specified type.
-        /// </summary>
-        /// <typeparam name="TSource">The original source type of the elements of <paramref name="source"/>.</typeparam>
-        /// <typeparam name="TResult">The converted result type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">The <see cref="IEnumerable{T}"/> that contains the elements to be cast to type <typeparamref name="TResult"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation once per iteration.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> that contains each element of the <paramref name="source"/> sequence converted to the specified <typeparamref name="TResult"/>.</returns>
-        internal static IEnumerable<TResult> Convert<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, TResult> converter)
-        {
-            foreach (TSource obj in source)
-            {
-                yield return converter(obj);
-            }
-        }
-
-        /// <summary>
         /// Retrieves all the elements that match the conditions defined by the specified predicate.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>

@@ -8,7 +8,6 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using Cuemon.Collections.Generic;
 using Cuemon.IO;
 
 namespace Cuemon
@@ -299,119 +298,6 @@ namespace Cuemon
             }
             output.Position = 0;
             return output;
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <param name="source">The object to convert to a string representation.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a string representation.</param>
-        /// <returns>A <see cref="System.String" /> that represents <paramref name="source"/>.</returns>
-        public static string ToString<TSource>(TSource source, Doer<TSource, string> converter)
-        {
-            DoerFactory<TSource, string> factory = new DoerFactory<TSource, string>(converter, source);
-            return ToStringCore(factory);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="T">The type of the parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The object to convert to a string representation.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a string representation.</param>
-        /// <param name="arg">The parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <see cref="System.String" /> that represents <paramref name="source"/>.</returns>
-        public static string ToString<TSource, T>(TSource source, Doer<TSource, T, string> converter, T arg)
-        {
-            DoerFactory<TSource, T, string> factory = new DoerFactory<TSource, T, string>(converter, source, arg);
-            return ToStringCore(factory);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The object to convert to a string representation.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a string representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <see cref="System.String" /> that represents <paramref name="source"/>.</returns>
-        public static string ToString<TSource, T1, T2>(TSource source, Doer<TSource, T1, T2, string> converter, T1 arg1, T2 arg2)
-        {
-            DoerFactory<TSource, T1, T2, string> factory = new DoerFactory<TSource, T1, T2, string>(converter, source, arg1, arg2);
-            return ToStringCore(factory);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The object to convert to a string representation.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a string representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <see cref="System.String" /> that represents <paramref name="source"/>.</returns>
-        public static string ToString<TSource, T1, T2, T3>(TSource source, Doer<TSource, T1, T2, T3, string> converter, T1 arg1, T2 arg2, T3 arg3)
-        {
-            DoerFactory<TSource, T1, T2, T3, string> factory = new DoerFactory<TSource, T1, T2, T3, string>(converter, source, arg1, arg2, arg3);
-            return ToStringCore(factory);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The object to convert to a string representation.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a string representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <see cref="System.String" /> that represents <paramref name="source"/>.</returns>
-        public static string ToString<TSource, T1, T2, T3, T4>(TSource source, Doer<TSource, T1, T2, T3, T4, string> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
-        {
-            DoerFactory<TSource, T1, T2, T3, T4, string> factory = new DoerFactory<TSource, T1, T2, T3, T4, string>(converter, source, arg1, arg2, arg3, arg4);
-            return ToStringCore(factory);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents <paramref name="source"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The object to convert to a string representation.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a string representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <see cref="System.String" /> that represents <paramref name="source"/>.</returns>
-        public static string ToString<TSource, T1, T2, T3, T4, T5>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, string> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
-        {
-            DoerFactory<TSource, T1, T2, T3, T4, T5, string> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, string>(converter, source, arg1, arg2, arg3, arg4, arg5);
-            return ToStringCore(factory);
-        }
-
-        private static string ToStringCore(DoerFactory<string> factory)
-        {
-            return factory.ExecuteMethod();
         }
 
         /// <summary>
@@ -1326,138 +1212,6 @@ namespace Cuemon
             }
         }
 
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the converted result.</typeparam>
-        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
-        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> in to a <typeparamref name="TResult"/> representation.</param>
-        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="converter"/> is null.
-        /// </exception>
-        public static TResult ParseWith<TSource, TResult>(TSource source, Doer<TSource, TResult> converter)
-        {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the converted result.</typeparam>
-        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
-        /// <typeparam name="T">The type of the parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> in to a <typeparamref name="TResult"/> representation.</param>
-        /// <param name="arg">The parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="converter"/> is null.
-        /// </exception>
-        public static TResult ParseWith<T, TSource, TResult>(TSource source, Doer<TSource, T, TResult> converter, T arg)
-        {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source, arg);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the converted result.</typeparam>
-        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> in to a <typeparamref name="TResult"/> representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="converter"/> is null.
-        /// </exception>
-        public static TResult ParseWith<T1, T2, TSource, TResult>(TSource source, Doer<TSource, T1, T2, TResult> converter, T1 arg1, T2 arg2)
-        {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source, arg1, arg2);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the converted result.</typeparam>
-        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> in to a <typeparamref name="TResult"/> representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="converter"/> is null.
-        /// </exception>
-        public static TResult ParseWith<T1, T2, T3, TSource, TResult>(TSource source, Doer<TSource, T1, T2, T3, TResult> converter, T1 arg1, T2 arg2, T3 arg3)
-        {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source, arg1, arg2, arg3);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the converted result.</typeparam>
-        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> in to a <typeparamref name="TResult"/> representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="converter"/> is null.
-        /// </exception>
-        public static TResult ParseWith<T1, T2, T3, T4, TSource, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
-        {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source, arg1, arg2, arg3, arg4);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the converted result.</typeparam>
-        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
-        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
-        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> in to a <typeparamref name="TResult"/> representation.</param>
-        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
-        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="converter"/> is null.
-        /// </exception>
-        public static TResult ParseWith<T1, T2, T3, T4, T5, TSource, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
-        {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source, arg1, arg2, arg3, arg4, arg5);
-        }
-
         private static string DefaultConverter<T>(T value)
         {
             return value.ToString();
@@ -1892,7 +1646,7 @@ namespace Cuemon
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="value">The object to convert the underlying type.</param>
         /// <returns>The <paramref name="value"/> converted to the specified <typeparamref name="TResult"/>.</returns>
-        /// <remarks>This method uses the <see cref="ChangeType(object,System.Type)"/> for the operation.</remarks>
+        /// <remarks>This method first checks if <paramref name="value"/> is compatible with <typeparamref name="TResult"/>; if not compatible the method continues with <see cref="ChangeType(object,System.Type,IFormatProvider)"/> for the operation.</remarks>
         public static TResult As<TResult>(object value)
         {
             return As(value, default(TResult));
@@ -1905,7 +1659,7 @@ namespace Cuemon
         /// <param name="value">The object to convert the underlying type.</param>
         /// <param name="resultOnConversionNotPossible">The value to return if the conversion is not possible.</param>
         /// <returns>The <paramref name="value"/> converted to the specified <typeparamref name="TResult"/>.</returns>
-        /// <remarks>This method uses the <see cref="ChangeType(object,System.Type)"/> for the operation.</remarks>
+        /// <remarks>This method first checks if <paramref name="value"/> is compatible with <typeparamref name="TResult"/>; if not compatible the method continues with <see cref="ChangeType(object,System.Type,IFormatProvider)"/> for the operation.</remarks>
         public static TResult As<TResult>(object value, TResult resultOnConversionNotPossible)
         {
             return As(value, resultOnConversionNotPossible, CultureInfo.InvariantCulture);
@@ -1919,7 +1673,7 @@ namespace Cuemon
         /// <param name="resultOnConversionNotPossible">The value to return if the conversion is not possible.</param>
         /// <param name="provider">An object that supplies culture-specific formatting information.</param>
         /// <returns>The <paramref name="value"/> converted to the specified <typeparamref name="TResult"/>.</returns>
-        /// <remarks>This method uses the <see cref="ChangeType(object,System.Type,IFormatProvider)"/> for the operation.</remarks>
+        /// <remarks>This method first checks if <paramref name="value"/> is compatible with <typeparamref name="TResult"/>; if not compatible the method continues with <see cref="ChangeType(object,System.Type,IFormatProvider)"/> for the operation.</remarks>
         public static TResult As<TResult>(object value, TResult resultOnConversionNotPossible, IFormatProvider provider)
         {
             if (value is TResult) { return (TResult)value; }
@@ -1999,30 +1753,587 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the elements of an <see cref="IEnumerable{T}"/> to the specified type.
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
         /// </summary>
-        /// <typeparam name="TSource">The original source type of the elements of <paramref name="source"/>.</typeparam>
-        /// <typeparam name="TResult">The converted result type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">The <see cref="IEnumerable{T}"/> that contains the elements to be cast to type <typeparamref name="TResult"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation once per iteration.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> that contains each element of the <paramref name="source"/> sequence converted to the specified <typeparamref name="TResult"/>.</returns>
-        public static IEnumerable<TResult> TransformSequence<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, TResult> converter)
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, TResult> converter)
         {
-            return EnumerableUtility.Convert(source, converter);
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, TResult> factory = new DoerFactory<TSource, TResult>(converter, default(TSource));
+            return ParseSequenceWithCore(factory, source);
         }
 
         /// <summary>
-        /// Converts the <paramref name="source"/> to the specified type.
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
         /// </summary>
-        /// <typeparam name="TSource">The original source type of <paramref name="source"/>.</typeparam>
-        /// <typeparam name="TResult">The converted result type of the <paramref name="source"/>.</typeparam>
-        /// <param name="source">The object to be cast to type <typeparamref name="TResult"/>.</param>
-        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
-        /// <returns>The <paramref name="source"/> converted to the specified <typeparamref name="TResult"/>.</returns>
-        public static TResult Transform<TSource, TResult>(TSource source, Doer<TSource, TResult> converter)
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T">The type of the parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg">The parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T, TResult>(IEnumerable<TSource> source, Doer<TSource, T, TResult> converter, T arg)
         {
-            if (converter == null) { throw new ArgumentNullException("converter"); }
-            return converter(source);
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T, TResult> factory = new DoerFactory<TSource, T, TResult>(converter, default(TSource), arg);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, TResult> converter, T1 arg1, T2 arg2)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, TResult> factory = new DoerFactory<TSource, T1, T2, TResult>(converter, default(TSource), arg1, arg2);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, TResult> converter, T1 arg1, T2 arg2, T3 arg3)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, TResult> factory = new DoerFactory<TSource, T1, T2, T3, TResult>(converter, default(TSource), arg1, arg2, arg3);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, T4, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, T4, T5, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, T4, T5, T6, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T7">The type of the seventh parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg7">The seventh parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T7">The type of the seventh parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T8">The type of the eighth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg7">The seventh parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg8">The eighth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T7">The type of the seventh parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T8">The type of the eighth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T9">The type of the ninth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}" /> source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource" /> to a <typeparamref name="TResult" /> representation once per iteration.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg7">The seventh parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg8">The eighth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg9">The ninth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}" /> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="converter"/> is null.
+        /// </exception>
+        public static IEnumerable<TResult> ParseSequenceWith<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            return ParseSequenceWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, TResult>(TSource source, Doer<TSource, TResult> converter)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, TResult> factory = new DoerFactory<TSource, TResult>(converter, default(TSource));
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T">The type of the parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg">The parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T, TResult>(TSource source, Doer<TSource, T, TResult> converter, T arg)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T, TResult> factory = new DoerFactory<TSource, T, TResult>(converter, default(TSource), arg);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, TResult>(TSource source, Doer<TSource, T1, T2, TResult> converter, T1 arg1, T2 arg2)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, TResult> factory = new DoerFactory<TSource, T1, T2, TResult>(converter, default(TSource), arg1, arg2);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, TResult>(TSource source, Doer<TSource, T1, T2, T3, TResult> converter, T1 arg1, T2 arg2, T3 arg3)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, TResult> factory = new DoerFactory<TSource, T1, T2, T3, TResult>(converter, default(TSource), arg1, arg2, arg3);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, T4, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, T4, T5, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, T4, T5, T6, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, T6, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T7">The type of the seventh parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg7">The seventh parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T7">The type of the seventh parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T8">The type of the eighth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg7">The seventh parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg8">The eighth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            return ParseWithCore(factory, source);
+        }
+
+        /// <summary>
+        /// Converts the specified <paramref name="source"/> to a <typeparamref name="TResult"/> representation using the specified <paramref name="converter"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the <paramref name="source"/> to convert.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T6">The type of the sixth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T7">The type of the seventh parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T8">The type of the eighth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="T9">The type of the ninth parameter of the function delegate <paramref name="converter"/>.</typeparam>
+        /// <typeparam name="TResult">The type of the converted result.</typeparam>
+        /// <param name="source">The source to parse and convert using the function delegate <paramref name="converter"/>.</param>
+        /// <param name="converter">The function delegate that converts <typeparamref name="TSource"/> to a <typeparamref name="TResult"/> representation.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg6">The sixth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg7">The seventh parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg8">The eighth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <param name="arg9">The ninth parameter of the function delegate <paramref name="converter"/>.</param>
+        /// <returns>A <typeparamref name="TResult"/> that is equivalent to the <typeparamref name="TSource"/> contained in <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="converter"/> is null.
+        /// </exception>
+        public static TResult ParseWith<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(TSource source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+        {
+            Validator.ThrowIfNull(converter, "converter");
+
+            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            return ParseWithCore(factory, source);
+        }
+
+        private static IEnumerable<TResult> ParseSequenceWithCore<TSource, TResult>(DoerFactory<TSource, TResult> factory, IEnumerable<TSource> source)
+        {
+            foreach (TSource obj in source)
+            {
+                yield return ParseWithCore(factory, obj);
+            }
+        }
+
+        private static TResult ParseWithCore<TSource, TResult>(DoerFactory<TSource, TResult> factory, TSource source)
+        {
+            factory.Arg1 = source;
+            return factory.ExecuteMethod();
         }
     }
 }
