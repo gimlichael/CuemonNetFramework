@@ -14,6 +14,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="hashCalculator">The function delegate that calculates a hash code of the specified object and is invoked first.</param>
         /// <param name="equalityComparer">The function delegate that determines whether the specified objects are equal. This delegate is invoked second if qualified.</param>
         /// <returns>A dynamic instance of <see cref="IEqualityComparer{T}"/> for type <typeparamref name="T"/>.</returns>
+        /// <remarks>The function delegate, <paramref name="hashCalculator"/> (<see cref="IEqualityComparer{T}.GetHashCode(T)"/>), is evaluated with a conditional-AND before the second function delegate, <paramref name="equalityComparer"/> (<see cref="IEqualityComparer{T}.Equals(T,T)"/>), is ivoked.</remarks>
         public static IEqualityComparer<T> Create<T>(Doer<T, int> hashCalculator, Doer<T, T, bool> equalityComparer)
         {
             return new DynamicEqualityComparer<T>(hashCalculator, equalityComparer);
