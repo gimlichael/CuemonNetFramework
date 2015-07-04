@@ -16,5 +16,5 @@ using System.Security.Permissions;
 [assembly: EnvironmentPermissionAttribute(SecurityAction.RequestMinimum, Unrestricted = true)]
 [assembly: ComVisible(false)]
 [assembly: Guid("47d534d9-1152-4f4a-9764-cf028231edfb")]
-[assembly: AssemblyFileVersion("3.0.2015.1780")]
+[assembly: AssemblyFileVersion("3.0.2015.1850")]
 [assembly: AssemblyVersion("3.0.2015.150")]
