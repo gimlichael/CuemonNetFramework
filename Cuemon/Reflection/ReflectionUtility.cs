@@ -44,6 +44,27 @@ namespace Cuemon.Reflection
 		public static readonly BindingFlags BindingInstancePublicAndPrivateNoneInheritedIncludeStatic = BindingInstancePublicAndPrivateNoneInherited | BindingFlags.Static;
 
         /// <summary>
+        /// Determines whether the specified <paramref name="method"/> has been overridden.
+        /// </summary>
+        /// <param name="method">The method to evaluate has been overridden.</param>
+        /// <returns><c>true</c> if the specified <paramref name="method"/> has been overridden; otherwise, <c>false</c>.</returns>
+        public static bool IsOverride(MethodInfo method)
+        {
+            Validator.ThrowIfNull(method, "method");
+            return method.GetBaseDefinition().DeclaringType != method.DeclaringType;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="property"/> has been overridden.
+        /// </summary>
+        /// <param name="property">The property to evaluate has been overridden.</param>
+        /// <returns><c>true</c> if the specified <paramref name="property"/> has been overridden; otherwise, <c>false</c>.</returns>
+        public static bool IsOverride(PropertyInfo property)
+        {
+            return IsOverride(property.GetGetMethod());
+        }
+
+        /// <summary>
         /// Determines whether the specified <paramref name="property"/> is considered an automatic property implementation.
         /// </summary>
         /// <param name="property">The property to check for automatic property implementation.</param>
