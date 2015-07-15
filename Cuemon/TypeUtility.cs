@@ -127,10 +127,12 @@ namespace Cuemon
         /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
         public static string SanitizeTypeName(Type source, bool fullName, bool excludeGenericArguments)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (!source.IsGenericType) { return source.Name; }
-            Type[] parameters = source.GetGenericArguments();
+            Validator.ThrowIfNull(source, "source");
+
             string typeName = String.Format(CultureInfo.InvariantCulture, "{0}", fullName ? source.FullName : source.Name);
+            if (!source.IsGenericType) { return typeName; }
+
+            Type[] parameters = source.GetGenericArguments();
             int indexOfGraveAccent = typeName.IndexOf('`');
             typeName = indexOfGraveAccent >= 0 ? typeName.Remove(indexOfGraveAccent) : typeName;
             return excludeGenericArguments ? typeName : String.Format(CultureInfo.InvariantCulture, "{0}<{1}>", typeName, ConvertUtility.ToDelimitedString(parameters, ", ", SanitizeTypeNameConverter, fullName));
