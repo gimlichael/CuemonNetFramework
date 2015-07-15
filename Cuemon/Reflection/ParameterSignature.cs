@@ -87,7 +87,7 @@ namespace Cuemon.Reflection
             if (safeParameters.Count == 0) { yield break; }
 
             int i = 0;
-            foreach (ParameterInfo parameter in parameters)
+            foreach (ParameterInfo parameter in safeParameters)
             {
                 i++;
                 yield return new ParameterSignature(parameter.ParameterType, string.IsNullOrEmpty(parameter.Name) ? string.Format(CultureInfo.InvariantCulture, "arg{0}", i) : parameter.Name);
