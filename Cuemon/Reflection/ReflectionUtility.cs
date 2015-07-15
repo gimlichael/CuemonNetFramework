@@ -387,7 +387,7 @@ namespace Cuemon.Reflection
                     {
                         index++;
                         result[(int)current.Data["index"]].Add(propertyValue, property);
-                        if (IsComplexType(property.PropertyType))
+                        if (TypeUtility.IsComplex(property.PropertyType))
                         {
                             int circularCalls = 0;
                             if (current.Data.ContainsKey("circularReference"))
@@ -410,15 +410,6 @@ namespace Cuemon.Reflection
                 }
             }
             return result;
-        }
-
-        private static bool IsComplexType(Type source)
-        {
-            return !((source.IsClass && source == typeof(string)) ||
-                      (source.IsClass && source == typeof(object)) ||
-                      (source.IsValueType ||
-                      source.IsPrimitive ||
-                      source.IsEnum));
         }
 
 		/// <summary>
