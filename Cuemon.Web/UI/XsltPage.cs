@@ -40,7 +40,6 @@ namespace Cuemon.Web.UI
     public abstract class XsltPage : Page, IXmlSerialization, ISearchEngineOptimizer, IRequiresSessionState, ICacheableHttpHandler
     {
         private static string _defaultXsltExtension = ".xslt";
-        private readonly Stopwatch _stopwatch = new Stopwatch();
         private IXPathNavigable _styleSheetNavigable;
         private Website _website;
         private XsltArgumentList _parameters;
@@ -71,8 +70,8 @@ namespace Cuemon.Web.UI
         /// </summary>
         protected XsltPage()
         {
-            _stopwatch.Start();
             AutoStyleSheetResolving = true;
+            InitInstance();
             SetConstructorDefaults();
         }
 
@@ -82,8 +81,8 @@ namespace Cuemon.Web.UI
         /// <param name="styleSheet">The <see cref="System.String"/> of the XSLT stylesheet, or a valid XSLT stylesheet document.</param>
         protected XsltPage(string styleSheet)
         {
-            _stopwatch.Start();
             _stylesheet = styleSheet;
+            InitInstance();
             SetConstructorDefaults();
         }
 
@@ -93,9 +92,15 @@ namespace Cuemon.Web.UI
         /// <param name="styleSheet">The <see cref="System.Xml.XPath.IXPathNavigable"/> XSLT stylesheet document.</param>
         protected XsltPage(IXPathNavigable styleSheet)
         {
-            _stopwatch.Start();
             _styleSheetNavigable = styleSheet;
+            InitInstance();
             SetConstructorDefaults();
+        }
+
+        private void InitInstance()
+        {
+            this.StopWatch = Stopwatch.StartNew();
+            this.SafeRawUrl = HttpRequestUtility.RawUrl(HttpContext.Current.Request).OriginalString;
         }
 
         private static void SetConstructorDefaults()
@@ -112,6 +117,14 @@ namespace Cuemon.Web.UI
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the raw URL of the current request not modified by IIS/ASP.NET.
+        /// </summary>
+        /// <value>The raw URL of the current request not modified by IIS/ASP.NET.</value>
+        public string SafeRawUrl { get; private set; }
+
+        private Stopwatch StopWatch { get; set; }
+
         /// <summary>
         /// Gets or sets the default XSLT extension value. Default is <c>.xslt</c>.
         /// </summary>
@@ -594,12 +607,12 @@ namespace Cuemon.Web.UI
             if (this.Parameters.GetExtensionObject("urn:schemas-cuemon-dk:xslt") == null) { this.Parameters.AddExtensionObject("urn:schemas-cuemon-dk:xslt", XsltExtensionLibrary.ExtensionObject); }
             if (this.Parameters.GetParam("_utcDateTimeNow", "") == null) { this.Parameters.AddParam("_utcDateTimeNow", "", utcDateTimeNow.ToString("s", CultureInfo.InvariantCulture)); }
             if (this.Website != null) { if (this.Parameters.GetParam("_dateTimeNowWithAddedUtcOffset", "") == null) { this.Parameters.AddParam("_dateTimeNowWithAddedUtcOffset", "", utcDateTimeNow.Add(new WebsiteGlobalizationTimeZone(WebsiteUtility.TimezoneBySurrogateSession).GetUtcOffset()).ToString("s", CultureInfo.InvariantCulture)); } }
-            if (this.Parameters.GetParam("_rawUrl", "") == null) { this.Parameters.AddParam("_rawUrl", "", this.Request.RawUrl); }
-            if (this.Parameters.GetParam("_charset", "") == null) { this.Parameters.AddParam("_charset", "", EncodingUtility.GetEncodingName(this.Request.ContentEncoding.CodePage)); }
-            if (this.Parameters.GetParam("_hostScheme", "") == null) { this.Parameters.AddParam("_hostScheme", "", this.Request.Url.Scheme); }
-            if (this.Parameters.GetParam("_host", "") == null) { this.Parameters.AddParam("_host", "", this.Request.Url.Host); }
-            if (this.Parameters.GetParam("_hostPort", "") == null) { this.Parameters.AddParam("_hostPort", "", this.Request.Url.Port); }
-            if (this.Parameters.GetParam("_uri", "") == null) { this.Parameters.AddParam("_uri", "", HttpRequestUtility.GetHostAuthority(this.Request).OriginalString); }
+            if (this.Parameters.GetParam("_rawUrl", "") == null) { this.Parameters.AddParam("_rawUrl", "", this.SafeRawUrl); }
+            if (this.Parameters.GetParam("_charset", "") == null) { this.Parameters.AddParam("_charset", "", EncodingUtility.GetEncodingName(HttpContext.Current.Request.ContentEncoding.CodePage)); }
+            if (this.Parameters.GetParam("_hostScheme", "") == null) { this.Parameters.AddParam("_hostScheme", "", HttpContext.Current.Request.Url.Scheme); }
+            if (this.Parameters.GetParam("_host", "") == null) { this.Parameters.AddParam("_host", "", HttpContext.Current.Request.Url.Host); }
+            if (this.Parameters.GetParam("_hostPort", "") == null) { this.Parameters.AddParam("_hostPort", "", HttpContext.Current.Request.Url.Port); }
+            if (this.Parameters.GetParam("_uri", "") == null) { this.Parameters.AddParam("_uri", "", HttpRequestUtility.GetHostAuthority(HttpContext.Current.Request).OriginalString); }
             if (this.Parameters.GetParam("_typeOf", "") == null) { this.Parameters.AddParam("_typeOf", "", this.GetType().FullName); }
             if (this.Parameters.GetParam("_enableDebug", "") == null) { this.Parameters.AddParam("_enableDebug", "", EnableDebug.ToString().ToLowerInvariant()); }
             if (this.Parameters.GetParam("_isPostBack", "") == null) { this.Parameters.AddParam("_isPostBack", "", this.IsPostBack.ToString().ToLowerInvariant()); }
@@ -738,8 +751,7 @@ namespace Cuemon.Web.UI
         {
             if (EnableMetadataCaching)
             {
-                string rawUrl = HttpRequestUtility.RawUrl(page.Request).OriginalString;
-                string cacheKey = string.Concat(rawUrl.ToLowerInvariant(), "_ReadXmlInput()");
+                string cacheKey = string.Concat(page.SafeRawUrl.ToLowerInvariant(), "_ReadXmlInput()");
                 return new MemoryStream(CachingManager.Cache.GetOrAdd(cacheKey, CacheGroupName, ReadXmlInputFromPage, page));
             }
             return ReadXmlInputFromPageCore(page);
@@ -893,7 +905,7 @@ namespace Cuemon.Web.UI
         /// <returns>A <see cref="System.TimeSpan"/> with the current execution time.</returns>
         protected TimeSpan GetExecutionTime()
         {
-            return _stopwatch.Elapsed;
+            return this.StopWatch.Elapsed;
         }
 
         /// <summary>
@@ -902,7 +914,7 @@ namespace Cuemon.Web.UI
         /// <value>The <see cref="XmlResolver"/> to associate with the XSL Transformation..</value>
         public virtual XmlResolver Resolver
         {
-            get { return new XmlUriResolver(EnableLocalResolver ? new Uri(this.MapPath(".")) : HttpRequestUtility.GetHostAuthority(this.Request)); }
+            get { return new XmlUriResolver(EnableLocalResolver ? new Uri(HttpContext.Current.Server.MapPath(".")) : HttpRequestUtility.GetHostAuthority(HttpContext.Current.Request)); }
         }
 
         /// <summary>
@@ -914,7 +926,7 @@ namespace Cuemon.Web.UI
         {
             this.AddTransformCoreExtensionsAndParameters();
             XsltUtility.EnableXslCompiledTransformCaching = EnableStyleSheetCaching;
-            return XsltUtility.Transform(input, this.StyleSheetAsStream, this.Response.ContentEncoding, this.Parameters, this.Resolver);
+            return XsltUtility.Transform(input, this.StyleSheetAsStream, HttpContext.Current.Response.ContentEncoding, this.Parameters, this.Resolver);
         }
 
         /// <summary>
@@ -1132,7 +1144,7 @@ namespace Cuemon.Web.UI
         {
             if (writer == null) { throw new ArgumentNullException("writer"); }
             writer.WriteAttributeString("name", this.Name);
-            writer.WriteAttributeString("nameAndQuery", this.Request.Url.PathAndQuery);
+            writer.WriteAttributeString("nameAndQuery", HttpContext.Current.Request.Url.PathAndQuery);
             writer.WriteAttributeString("friendlyName", this.GetFriendlyName());
             writer.WriteAttributeString("friendlyNameAndQuery", this.GetFriendlyName(true));
             writer.WriteAttributeString("typeOf", this.GetType().FullName);
