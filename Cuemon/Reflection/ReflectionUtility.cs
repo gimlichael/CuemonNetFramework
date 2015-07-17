@@ -61,6 +61,7 @@ namespace Cuemon.Reflection
         /// <returns><c>true</c> if the specified <paramref name="property"/> has been overridden; otherwise, <c>false</c>.</returns>
         public static bool IsOverride(PropertyInfo property)
         {
+            Validator.ThrowIfNull(property, "property");
             return IsOverride(property.GetGetMethod());
         }
 
@@ -149,6 +150,20 @@ namespace Cuemon.Reflection
                 currentDepth++;
             }
             return hasCircularReference;
+        }
+
+        /// <summary>
+        /// Gets the property value of a specified <paramref name="source"/> with check for the need of property index values initialized by the specified <paramref name="propertyIndexParametersResolver"/>.
+        /// </summary>
+        /// <param name="source">The source whose property value will be returned.</param>
+        /// <param name="property">The <see cref="PropertyInfo"/> to access it's value from.</param>
+        /// <returns>The property value of the specified <paramref name="source"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="source"/> is null - or - <paramref name="property"/> is null.
+        /// </exception>
+        public static object GetPropertyValue(object source, PropertyInfo property)
+        {
+            return GetPropertyValue(source, property, DefaultPropertyIndexParametersResolver);
         }
 
         /// <summary>
