@@ -10,6 +10,38 @@ namespace Cuemon.Collections.Generic
     public static class EnumerableUtility
     {
         /// <summary>
+        /// Returns a random element of a sequence of elements, or a default value if no element is found.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}"/> to return a random element of.</param>
+        /// <returns>default(TSource) if source is empty; otherwise, a random element of <paramref name="source"/>.</returns>
+        public static TSource RandomOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            Validator.ThrowIfNull(source, "source");
+            return RandomOrDefault(source, DefaultRandomizer);
+        }
+
+        /// <summary>
+        /// Returns a random element of a sequence of elements, or a default value if no element is found.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}"/> to return a random element of.</param>
+        /// <param name="randomizer">The function delegate that will select a random element of <paramref name="source"/>.</param>
+        /// <returns>default(TSource) if source is empty; otherwise, a random element of <paramref name="source"/>.</returns>
+        public static TSource RandomOrDefault<TSource>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, TSource> randomizer)
+        {
+            Validator.ThrowIfNull(source, "source");
+            return randomizer(source);
+        }
+
+        private static TSource DefaultRandomizer<TSource>(IEnumerable<TSource> source)
+        {
+            if (source == null) { return default(TSource); }
+            ICollection<TSource> collection = source as ICollection<TSource> ?? new List<TSource>(source);
+            return collection.Count == 0 ? default(TSource) : ElementAt(collection, NumberUtility.GetRandomNumber(collection.Count));
+        }
+
+        /// <summary>
         /// Returns the input typed as <see cref="IEnumerable{TSource}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
