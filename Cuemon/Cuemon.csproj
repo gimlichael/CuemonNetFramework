@@ -114,6 +114,7 @@
     <Compile Include="IndexMapping.cs" />
     <Compile Include="DataPair.cs" />
     <Compile Include="DataPairCollection.cs" />
+    <Compile Include="ObjectUtility.cs" />
     <Compile Include="Security\SecurityTokenSettings.cs" />
     <Compile Include="TesterDoerFactory.cs" />
     <Compile Include="IReadOnlyData.cs" />
