@@ -19,7 +19,7 @@ namespace Cuemon
         /// </summary>
         /// <param name="source">A sequence of values to order by <paramref name="direction"/>.</param>
         /// <param name="direction">The <see cref="SortOrder"/> to apply to the <paramref name="source"/> sequence.</param>
-        /// <returns>An <see cref="IEnumerable{TSource}"/> whose elements are sorted according to <see cref="OrderByColumn"/> and <paramref name="direction"/>.</returns>
+        /// <returns>An <see cref="IEnumerable{T}"/> whose elements are sorted according to <see cref="OrderByColumn"/> and <paramref name="direction"/>.</returns>
         IEnumerable<TSource> OrderBy(IEnumerable<TSource> source, SortOrder direction);
     }
 }
