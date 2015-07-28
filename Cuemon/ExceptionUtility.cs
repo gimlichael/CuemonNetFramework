@@ -39,8 +39,8 @@ namespace Cuemon
         /// </exception>
         public static T Refine<T>(T exception, MethodBase method, params object[] parameters) where T : Exception
         {
-            if (exception == null) { throw new ArgumentNullException("exception"); }
-            if (method == null) { throw new ArgumentNullException("method"); }
+            Validator.ThrowIfNull(exception, "exception");
+            Validator.ThrowIfNull(method, "method");
 
             MethodSignature methodSignature = MethodSignature.Create(method);
             exception.Source = methodSignature.ToString();
@@ -48,12 +48,10 @@ namespace Cuemon
             {
                 foreach (KeyValuePair<string, object> item in methodSignature.MergeParameters(parameters))
                 {
-                    bool isValueNull = item.Value == null;
-                    bool isValueSerializable = (!isValueNull && item.Value.GetType().IsSerializable);
                     string key = String.Format(CultureInfo.InvariantCulture, "{0}.{1} --> {2}", methodSignature.ClassName, methodSignature.MethodName, item.Key);
                     if (!exception.Data.Contains(key))
                     {
-                        exception.Data.Add(key, isValueNull ? "null" : isValueSerializable ? item.Value : item.ToString());    
+                        exception.Data.Add(key, ObjectUtility.ToString(item.Value));
                     }
                 }
             }
