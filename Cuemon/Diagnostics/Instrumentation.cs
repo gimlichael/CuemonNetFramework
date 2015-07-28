@@ -475,26 +475,8 @@ namespace Cuemon.Diagnostics
         /// </exception>
 		protected virtual void TimeMeasureCompletedHandling(string memberName, TimeSpan elapsed, IDictionary<string, object> data)
 		{
-            if (memberName == null) { throw new ArgumentNullException("memberName"); }
-            if (memberName.Length == 0) { throw new ArgumentEmptyException("memberName"); }
-			if (data == null) { throw new ArgumentNullException("data"); }
-			StringBuilder result = new StringBuilder(String.Format(CultureInfo.InvariantCulture, "{0} took {1}ms to execute.", memberName, Math.Round(elapsed.TotalMilliseconds)));
-			if (data.Count > 0)
-			{
-				result.Append(" Parameters: { ");
-				foreach (KeyValuePair<string, object> keyValuePair in data)
-				{
-					result.AppendFormat(CultureInfo.InvariantCulture, "{0}={1}, ", keyValuePair.Key, keyValuePair.Value ?? "null");
-				}
-				result.Remove(result.Length - 2, 2);
-				result.Append(" }");
-            }
-#if DEBUG
-            Debug.WriteLine(result.ToString());
-#else
-            Trace.WriteLine(result.ToString());
-#endif
-		}
+            InstrumentationUtility.DefaultTimeMeasureCompletedCallback(memberName, elapsed, data);
+        }
 	    #endregion
 	}
 }
