@@ -153,7 +153,7 @@ namespace Cuemon.Reflection
         }
 
         /// <summary>
-        /// Gets the property value of a specified <paramref name="source"/> with check for the need of property index values initialized by the specified <paramref name="propertyIndexParametersResolver"/>.
+        /// Gets the property value of a specified <paramref name="source"/>.
         /// </summary>
         /// <param name="source">The source whose property value will be returned.</param>
         /// <param name="property">The <see cref="PropertyInfo"/> to access it's value from.</param>
