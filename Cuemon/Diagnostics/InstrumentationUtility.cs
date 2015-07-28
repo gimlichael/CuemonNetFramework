@@ -1379,16 +1379,16 @@ namespace Cuemon.Diagnostics
 
         internal static void DefaultTimeMeasureCompletedCallback(string memberName, TimeSpan elapsed, IDictionary<string, object> data)
         {
-            if (memberName == null) { throw new ArgumentNullException("memberName"); }
-            if (memberName.Length == 0) { throw new ArgumentEmptyException("memberName"); }
-            if (data == null) { throw new ArgumentNullException("data"); }
+            Validator.ThrowIfNullOrEmpty(memberName, "memberName");
+            Validator.ThrowIfNull(data, "data");
+
             StringBuilder result = new StringBuilder(String.Format(CultureInfo.InvariantCulture, "{0} took {1}ms to execute.", memberName, Math.Round(elapsed.TotalMilliseconds)));
             if (data.Count > 0)
             {
                 result.Append(" Parameters: { ");
                 foreach (KeyValuePair<string, object> keyValuePair in data)
                 {
-                    result.AppendFormat(CultureInfo.InvariantCulture, "{0}={1}, ", keyValuePair.Key, keyValuePair.Value ?? "null");
+                    result.AppendFormat(CultureInfo.InvariantCulture, "{0}={1}, ", keyValuePair.Key, ObjectUtility.ToString(keyValuePair.Value));
                 }
                 result.Remove(result.Length - 2, 2);
                 result.Append(" }");
