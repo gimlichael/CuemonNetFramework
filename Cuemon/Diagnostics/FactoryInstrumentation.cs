@@ -278,6 +278,10 @@ namespace Cuemon.Diagnostics
                 this.OnMethodEntered(caller, threadSafeId);
                 factory.ExecuteMethod();
             }
+            catch (Exception ex)
+            {
+                throw ExceptionUtility.Refine(ex, caller, factory.GetGenericArguments());
+            }
             finally
             {
                 this.OnMethodExited(caller, threadSafeId, factory.GetGenericArguments());
@@ -291,6 +295,10 @@ namespace Cuemon.Diagnostics
             {
                 this.OnMethodEntered(caller, threadSafeId);
                 return factory.ExecuteMethod();
+            }
+            catch (Exception ex)
+            {
+                throw ExceptionUtility.Refine(ex, caller, factory.GetGenericArguments());
             }
             finally
             {
