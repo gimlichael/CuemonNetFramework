@@ -81,7 +81,7 @@ namespace Cuemon
             Validator.ThrowIfNull(propertyConverter, "propertyConverter");
             Validator.ThrowIfNull(propertiesReader, "propertiesReader");
 
-            if (instance == null) { return ""; }
+            if (instance == null) { return "<null>"; }
 
             Doer<string> toString = instance.ToString;
             if (ReflectionUtility.IsOverride(toString.Method))
