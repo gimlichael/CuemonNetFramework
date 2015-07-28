@@ -31,6 +31,7 @@ namespace Cuemon.Collections.Generic
         public static TSource RandomOrDefault<TSource>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, TSource> randomizer)
         {
             Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(randomizer, "randomizer");
             return randomizer(source);
         }
 
