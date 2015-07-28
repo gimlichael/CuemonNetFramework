@@ -245,7 +245,7 @@ namespace Cuemon.Reflection
         /// <returns>An <see cref="IDictionary{TKey,TValue}"/> containing the merged result of the <paramref name="method"/> parameter signature and <paramref name="runtimeParameterValues"/>.</returns>
         public static IDictionary<string, object> MergeParameters(MethodSignature method, params object[] runtimeParameterValues)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
+            Validator.ThrowIfNull(method, "method");
             return MergeParameters(method.Parameters, runtimeParameterValues);
         }
 
