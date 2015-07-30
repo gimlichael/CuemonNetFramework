@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using Cuemon.Collections.Generic;
 using Cuemon.Management;
 
@@ -22,12 +23,19 @@ namespace Cuemon
                 int coreCount = logicalProcessorCount >= 4 ? logicalProcessorCount / 2 : logicalProcessorCount;
                 if (TesterDoerUtility.TryExecuteFunction(ManagementUtility.GetProcessorInfo, out ProcessorInfo))
                 {
-                    IDictionary<string, object> compositeProcessorInfo = ConvertUtility.ToDictionary(ProcessorInfo);
-                    IReadOnlyDictionary<string, object> computerSystem = ManagementUtility.GetComputerSystemInfo();
-                    if (computerSystem.ContainsKey("NumberOfProcessors")) { compositeProcessorInfo.Add("NumberOfProcessors", computerSystem["NumberOfProcessors"]); }
-                    if (!compositeProcessorInfo.ContainsKey("NumberOfCores")) { compositeProcessorInfo.Add("NumberOfCores", coreCount); }
-                    if (!compositeProcessorInfo.ContainsKey("NumberOfLogicalProcessors")) { compositeProcessorInfo.Add("NumberOfLogicalProcessors", logicalProcessorCount); }
-                    return  new ReadOnlyDictionary<string, object>(compositeProcessorInfo);
+                    try
+                    {
+                        IDictionary<string, object> compositeProcessorInfo = ConvertUtility.ToDictionary(ProcessorInfo);
+                        IReadOnlyDictionary<string, object> computerSystem = ManagementUtility.GetComputerSystemInfo();
+                        if (computerSystem.ContainsKey("NumberOfProcessors")) { compositeProcessorInfo.Add("NumberOfProcessors", computerSystem["NumberOfProcessors"]); }
+                        if (!compositeProcessorInfo.ContainsKey("NumberOfCores")) { compositeProcessorInfo.Add("NumberOfCores", coreCount); }
+                        if (!compositeProcessorInfo.ContainsKey("NumberOfLogicalProcessors")) { compositeProcessorInfo.Add("NumberOfLogicalProcessors", logicalProcessorCount); }
+                        return new ReadOnlyDictionary<string, object>(compositeProcessorInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ExceptionUtility.Refine(ex, MethodBase.GetCurrentMethod()));
+                    }
                 }
                 IDictionary<string, object> fallback = new Dictionary<string, object>();
                 fallback.Add("NumberOfCores", coreCount);
