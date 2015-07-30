@@ -13,142 +13,85 @@ using Cuemon.Threading;
 
 namespace Cuemon.Management
 {
-	/// <summary>
-	/// This utility class is designed to make common management operations instrumented to the Windows Management Instrumentation (WMI) infrastructure easier to work with.
-	/// </summary>
-	public static class ManagementUtility
-	{
-		private static readonly object SyncRoot = new object();
+    /// <summary>
+    /// This utility class is designed to make common management operations instrumented to the Windows Management Instrumentation (WMI) infrastructure easier to work with.
+    /// </summary>
+    public static class ManagementUtility
+    {
+        private static readonly object SyncRoot = new object();
 
-		/// <summary>
-		/// Determines whether the Windows Management Instrumentation service is running.
-		/// </summary>
-		/// <returns>
-		///   <c>true</c> if the Windows Management Instrumentation service is running; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsWindowsManagementInstrumentationRunning()
-		{
-			string key = HashUtility.ComputeHash("IsWindowsManagementInstrumentationRunning()");
-			if (!CachingManager.Cache.ContainsKey(key))
-			{
-				lock (SyncRoot)
-				{
-					if (!CachingManager.Cache.ContainsKey(key))
-					{
-						bool isRunning = false;
-						try
-						{
-							using (ServiceController controller = new ServiceController("Winmgmt"))
-							{
-								if (controller.Status == ServiceControllerStatus.Running) { isRunning = true; }
-							}
-						}
-						catch (ArgumentException)
-						{
-						}
-						CachingManager.Cache.Add(key, isRunning, TimeSpan.FromMinutes(15));
-					}
-				}
-			}
-			return CachingManager.Cache.Get<bool>(key);
-		}
+        /// <summary>
+        /// Determines whether the Windows Management Instrumentation service is running.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if the Windows Management Instrumentation service is running; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsWindowsManagementInstrumentationRunning()
+        {
+            string key = HashUtility.ComputeHash("IsWindowsManagementInstrumentationRunning()");
+            return CachingManager.Cache.GetOrAdd(key, ServiceControllerResolver, TimeSpan.FromMinutes(15));
+        }
 
-		/// <summary>
-		/// Creates and returns a read-only representation of the Win32_ComputerSystem WMI class.
-		/// </summary>
-		/// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties of the Win32_ComputerSystem WMI class.</returns>
-		/// <remarks>
-		/// For more information about the Win32_ComputerSystem WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394102(v=vs.85).aspx.
-		/// </remarks>
-		public static IReadOnlyDictionary<string, object> GetComputerSystemInfo()
-		{
-			CheckIfWindowsManagementInstrumentationIsRunning();
+        private static bool ServiceControllerResolver()
+        {
+            lock (SyncRoot)
+            {
+                bool isRunning = false;
+                try
+                {
+                    using (ServiceController controller = new ServiceController("Winmgmt"))
+                    {
+                        if (controller.Status == ServiceControllerStatus.Running) { isRunning = true; }
+                    }
+                }
+                catch (ArgumentException)
+                {
+                }
+                return isRunning;
+            }
+        }
 
-			IDictionary<string, object> result = new Dictionary<string, object>();
-			using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_ComputerSystem"))
-			{
-				foreach (ManagementObject wmiObject in wmiObjects)
-				{
-					using (wmiObject)
-					{
-						AddPropertyData(wmiObject, result);
-					}
-				}
-			}
-			return new ReadOnlyDictionary<string, object>(result);
-		}
+        /// <summary>
+        /// Creates and returns a read-only representation of the Win32_ComputerSystem WMI class.
+        /// </summary>
+        /// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties of the Win32_ComputerSystem WMI class.</returns>
+        /// <remarks>
+        /// For more information about the Win32_ComputerSystem WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394102(v=vs.85).aspx.
+        /// </remarks>
+        public static IReadOnlyDictionary<string, object> GetComputerSystemInfo()
+        {
+            CheckIfWindowsManagementInstrumentationIsRunning();
+            return ParseWmiObjects("Win32_ComputerSystem");
+        }
 
-		/// <summary>
-		/// Creates and returns a read-only representation of the Win32_OperatingSystem WMI class.
-		/// </summary>
-		/// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties of the Win32_OperatingSystem WMI class.</returns>
-		/// <remarks>
-		/// For more information about the Win32_OperatingSystem WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394239(v=vs.85).aspx.
-		/// </remarks>
-		public static IReadOnlyDictionary<string, object> GetOperatingSystemInfo()
-		{
-			CheckIfWindowsManagementInstrumentationIsRunning();
+        private static IReadOnlyDictionary<string, object> ParseWmiObjects(string wmiClass)
+        {
+            IDictionary<string, object> result = new Dictionary<string, object>();
+            using (ManagementObjectCollection wmiObjects = ParseWin32(wmiClass))
+            {
+                foreach (ManagementObject wmiObject in wmiObjects)
+                {
+                    using (wmiObject)
+                    {
+                        AddPropertyData(wmiObject, result);
+                    }
+                }
+            }
+            return new ReadOnlyDictionary<string, object>(result);
+        }
 
-			IDictionary<string, object> result = new Dictionary<string, object>();           
-			using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_OperatingSystem"))
-			{
-				foreach (ManagementObject wmiObject in wmiObjects)
-				{
-					using (wmiObject)
-					{
-						AddPropertyData(wmiObject, result);
-					}
-				}
-			}
-			return new ReadOnlyDictionary<string, object>(result);
-		}
-
-		/// <summary>
-		/// Creates and returns a read-only representation of the Win32_Process WMI class for the currently active process.
-		/// </summary>
-		/// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties (and owner information) of the Win32_Process WMI class.</returns>
-		/// <remarks>
-		/// For more information about the Win32_Process WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394372(v=vs.85).aspx.
-		/// </remarks>
-		public static IReadOnlyDictionary<string, object> GetProcessInfo()
-		{
-			return GetProcessInfo(Process.GetCurrentProcess());
-		}
-
-		/// <summary>
-		/// Creates and returns a read-only representation of the Win32_Process WMI class.
-		/// </summary>
-		/// <param name="process">The <see cref="Process"/> to query.</param>
-		/// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties (and owner information) of the Win32_Process WMI class.</returns>
-		/// <remarks>
-		/// For more information about the Win32_Process WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394372(v=vs.85).aspx.
-		/// </remarks>
-		public static IReadOnlyDictionary<string, object> GetProcessInfo(Process process)
-		{
-			if (process == null) { throw new ArgumentNullException("process"); }
-			CheckIfWindowsManagementInstrumentationIsRunning();
-
-			IDictionary<string, object> result = new Dictionary<string, object>();
-			using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_Process", "ProcessID = {0}", process.Id))
-			{
-				foreach (ManagementObject wmiObject in wmiObjects)
-				{
-					using (wmiObject)
-					{
-						AddPropertyData(wmiObject, result);
-
-						string[] ownerInfo = new string[2];
-						uint code = (uint)wmiObject.InvokeMethod("GetOwner", ownerInfo);
-						if (code == 0)
-						{
-							string userName = string.IsNullOrEmpty(ownerInfo[1]) ? ownerInfo[0] : string.Concat(ownerInfo[1], "\\", ownerInfo[0]);
-							result.Add("UserName", userName);
-						}
-					}
-				}
-			}
-			return new ReadOnlyDictionary<string, object>(result);
-		}
+        /// <summary>
+        /// Creates and returns a read-only representation of the Win32_OperatingSystem WMI class.
+        /// </summary>
+        /// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties of the Win32_OperatingSystem WMI class.</returns>
+        /// <remarks>
+        /// For more information about the Win32_OperatingSystem WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394239(v=vs.85).aspx.
+        /// </remarks>
+        public static IReadOnlyDictionary<string, object> GetOperatingSystemInfo()
+        {
+            CheckIfWindowsManagementInstrumentationIsRunning();
+            return ParseWmiObjects("Win32_OperatingSystem");
+        }
 
         /// <summary>
         /// Creates and returns a read-only representation of the Win32_Processor WMI class.
@@ -160,16 +103,50 @@ namespace Cuemon.Management
         public static IReadOnlyDictionary<string, object> GetProcessorInfo()
         {
             CheckIfWindowsManagementInstrumentationIsRunning();
+            return ParseWmiObjects("Win32_Processor");
+        }
+
+        /// <summary>
+        /// Creates and returns a read-only representation of the Win32_Process WMI class for the currently active process.
+        /// </summary>
+        /// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties (and owner information) of the Win32_Process WMI class.</returns>
+        /// <remarks>
+        /// For more information about the Win32_Process WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394372(v=vs.85).aspx.
+        /// </remarks>
+        public static IReadOnlyDictionary<string, object> GetProcessInfo()
+        {
+            return GetProcessInfo(Process.GetCurrentProcess());
+        }
+
+        /// <summary>
+        /// Creates and returns a read-only representation of the Win32_Process WMI class.
+        /// </summary>
+        /// <param name="process">The <see cref="Process"/> to query.</param>
+        /// <returns>An <see cref="IReadOnlyDictionary{String,Object}"/> representing the properties (and owner information) of the Win32_Process WMI class.</returns>
+        /// <remarks>
+        /// For more information about the Win32_Process WMI class, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394372(v=vs.85).aspx.
+        /// </remarks>
+        public static IReadOnlyDictionary<string, object> GetProcessInfo(Process process)
+        {
+            if (process == null) { throw new ArgumentNullException("process"); }
+            CheckIfWindowsManagementInstrumentationIsRunning();
 
             IDictionary<string, object> result = new Dictionary<string, object>();
-            
-            using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_Processor"))
+            using (ManagementObjectCollection wmiObjects = ParseWin32("Win32_Process", "ProcessID = {0}", process.Id))
             {
                 foreach (ManagementObject wmiObject in wmiObjects)
                 {
                     using (wmiObject)
                     {
                         AddPropertyData(wmiObject, result);
+
+                        string[] ownerInfo = new string[2];
+                        uint code = (uint)wmiObject.InvokeMethod("GetOwner", ownerInfo);
+                        if (code == 0)
+                        {
+                            string userName = string.IsNullOrEmpty(ownerInfo[1]) ? ownerInfo[0] : string.Concat(ownerInfo[1], "\\", ownerInfo[0]);
+                            result.Add("UserName", userName);
+                        }
                     }
                 }
             }
@@ -353,11 +330,11 @@ namespace Cuemon.Management
         /// <paramref name="process"/> is null.
         /// </exception>
 	    public static string GetInstanceName(Process process)
-	    {
+        {
             if (process == null) { throw new ArgumentNullException("process"); }
             ProcessSnapshot snapshot = new ProcessSnapshot(process);
             return string.Format(CultureInfo.InvariantCulture, "{0}[{1}]", snapshot.Name.ToLowerInvariant(), snapshot.ProcessIdentifier);
-	    }
+        }
 
         private static void DoWorkInstance(PerformanceCounterCategory category, string instanceName, TimeSpan sampleDelay, DoerWorkItemPool<PerformanceMonitorCounter> pool, CountdownEvent sync)
         {
@@ -383,117 +360,103 @@ namespace Cuemon.Management
 		/// For more information about Win32 Classes, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394084(v=vs.85).aspx.
 		/// </remarks>
 		[PermissionSet(SecurityAction.LinkDemand, Unrestricted = true)]
-		public static ManagementObjectCollection ParseWin32(string className)
-		{
-			return ParseWin32(className, null);
-		}
+        public static ManagementObjectCollection ParseWin32(string className)
+        {
+            return ParseWin32(className, null);
+        }
 
-		/// <summary>
-		/// Parses and returns a sequence of Win32 object equivalent to the specified <paramref name="className"/>.
-		/// </summary>
-		/// <param name="className">The name of the Win32 Class to query an instance of.</param>
-		/// <param name="conditionFormat">The condition to be applied when querying the Win32 class as a composite format string (see Remarks).</param>
-		/// <param name="args">An object array that contains zero or more objects to format.</param>
-		/// <returns>A <see cref="ManagementObjectCollection"/> containing the objects that match the specified query.</returns>
-		/// <remarks>
-		/// For more information about Win32 Classes, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394084(v=vs.85).aspx.
-		/// <br/>
-		/// For more information regarding the <paramref name="conditionFormat"/>, have a look here: http://msdn.microsoft.com/en-us/library/txafckwd(v=vs.80).aspx.
-		/// </remarks>
+        /// <summary>
+        /// Parses and returns a sequence of Win32 object equivalent to the specified <paramref name="className"/>.
+        /// </summary>
+        /// <param name="className">The name of the Win32 Class to query an instance of.</param>
+        /// <param name="conditionFormat">The condition to be applied when querying the Win32 class as a composite format string (see Remarks).</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>A <see cref="ManagementObjectCollection"/> containing the objects that match the specified query.</returns>
+        /// <remarks>
+        /// For more information about Win32 Classes, do visit this address: http://msdn.microsoft.com/en-us/library/windows/desktop/aa394084(v=vs.85).aspx.
+        /// <br/>
+        /// For more information regarding the <paramref name="conditionFormat"/>, have a look here: http://msdn.microsoft.com/en-us/library/txafckwd(v=vs.80).aspx.
+        /// </remarks>
         [PermissionSet(SecurityAction.LinkDemand, Unrestricted = true)]
-		public static ManagementObjectCollection ParseWin32(string className, string conditionFormat, params object[] args)
-		{
-			if (className == null) { throw new ArgumentNullException("className"); }
-			if (className.Length == 0) { throw new ArgumentEmptyException("className"); }
+        public static ManagementObjectCollection ParseWin32(string className, string conditionFormat, params object[] args)
+        {
+            if (className == null) { throw new ArgumentNullException("className"); }
+            if (className.Length == 0) { throw new ArgumentEmptyException("className"); }
 
-			SelectQuery query = new SelectQuery(className, conditionFormat != null ? string.Format(CultureInfo.InvariantCulture, conditionFormat, args) : null);
-			using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
-			{
-				return searcher.Get();
-			}
-		}
+            SelectQuery query = new SelectQuery(className, conditionFormat != null ? string.Format(CultureInfo.InvariantCulture, conditionFormat, args) : null);
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
+            {
+                return searcher.Get();
+            }
+        }
 
-		/// <summary>
-		/// Parses and returns a <see cref="Type"/> equivalent of <paramref name="cimType"/>.
-		/// </summary>
-		/// <param name="cimType">The <see cref="CimType"/> to parse.</param>
-		/// <returns>A <see cref="Type"/> equivalent of <paramref name="cimType"/>.</returns>
-		public static Type ParseCimType(CimType cimType)
-		{
-			switch (cimType)
-			{
-				case CimType.SInt8:
-					return typeof(SByte);
-				case CimType.UInt8:
-					return typeof(Byte);
-				case CimType.Boolean:
-					return typeof(Boolean);
-				case CimType.SInt16:
-				case CimType.Reference:
-					return typeof(Int16);
-				case CimType.SInt32:
-					return typeof(Int32);
-				case CimType.SInt64:
-					return typeof(Int64);
-				case CimType.UInt64:
-					return typeof(UInt64);
-				case CimType.UInt32:
-					return typeof(UInt32);
-				case CimType.UInt16:
-					return typeof(UInt16);
-				case CimType.Real32:
-					return typeof(Single);
-				case CimType.Real64:
-					return typeof(Double);
-				case CimType.DateTime:
-					return typeof(DateTime);
-				case CimType.Object:
-					return typeof(object);
-				case CimType.String:
-					return typeof(string);
-				case CimType.Char16:
-					return typeof(Char);
-				case CimType.None:
-					return null;
-			}
-			throw new ArgumentOutOfRangeException("cimType", string.Format(CultureInfo.InvariantCulture, "Type, '{0}', is unsupported.", cimType));
-		}
+        /// <summary>
+        /// Parses and returns a <see cref="Type"/> equivalent of <paramref name="cimType"/>.
+        /// </summary>
+        /// <param name="cimType">The <see cref="CimType"/> to parse.</param>
+        /// <returns>A <see cref="Type"/> equivalent of <paramref name="cimType"/>.</returns>
+        public static Type ParseCimType(CimType cimType)
+        {
+            switch (cimType)
+            {
+                case CimType.SInt8:
+                    return typeof(SByte);
+                case CimType.UInt8:
+                    return typeof(Byte);
+                case CimType.Boolean:
+                    return typeof(Boolean);
+                case CimType.SInt16:
+                case CimType.Reference:
+                    return typeof(Int16);
+                case CimType.SInt32:
+                    return typeof(Int32);
+                case CimType.SInt64:
+                    return typeof(Int64);
+                case CimType.UInt64:
+                    return typeof(UInt64);
+                case CimType.UInt32:
+                    return typeof(UInt32);
+                case CimType.UInt16:
+                    return typeof(UInt16);
+                case CimType.Real32:
+                    return typeof(Single);
+                case CimType.Real64:
+                    return typeof(Double);
+                case CimType.DateTime:
+                    return typeof(DateTime);
+                case CimType.Object:
+                    return typeof(object);
+                case CimType.String:
+                    return typeof(string);
+                case CimType.Char16:
+                    return typeof(Char);
+                case CimType.None:
+                    return null;
+            }
+            throw new ArgumentOutOfRangeException("cimType", string.Format(CultureInfo.InvariantCulture, "Type, '{0}', is unsupported.", cimType));
+        }
 
-		private static void CheckIfWindowsManagementInstrumentationIsRunning()
-		{
-			if (!IsWindowsManagementInstrumentationRunning()) { throw new PlatformNotSupportedException("Unable to establish contact with the Windows Management Instrumentation service."); }
-		}
+        private static void CheckIfWindowsManagementInstrumentationIsRunning()
+        {
+            if (!IsWindowsManagementInstrumentationRunning()) { throw new PlatformNotSupportedException("Unable to establish contact with the Windows Management Instrumentation service."); }
+        }
 
-		private static void AddPropertyData(ManagementObject management, IDictionary<string, object> preResult)
-		{
-		    string key = null;
-		    object value = null;
-		    try
-		    {
+        private static void AddPropertyData(ManagementObject management, IDictionary<string, object> preResult)
+        {
+            string key = null;
+            object value = null;
+            try
+            {
                 foreach (PropertyData property in management.Properties)
                 {
                     Type valueType = ParseCimType(property.Type);
+                    key = property.Name;
                     value = property.Value ?? "null";
                     if (valueType == typeof(DateTime) & property.Value != null) { value = ManagementDateTimeConverter.ToDateTime((string)value); }
-                    if (property.IsArray & property.Value != null)
+                    if (!property.IsArray && property.Value != null)
                     {
-                        object[] originalValue = value as object[];
-                        dynamic[] array = new dynamic[originalValue.Length];
-                        for (int i = 0; i < originalValue.Length; i++)
-                        {
-                            array[i] = ConvertUtility.ChangeType(originalValue[i], valueType);
-                        }
-                        value = array;
+                        value = ConvertUtility.ChangeType(value, valueType);
                     }
-                    else
-                    {
-                        if (property.Value != null)
-                        {
-                            value = ConvertUtility.ChangeType(value, valueType);
-                        }
-                    }
-
-                    key = property.Name;
 
                     object currentValue;
                     if (preResult.TryGetValue(key, out currentValue))
@@ -502,16 +465,16 @@ namespace Cuemon.Management
                     }
                     else
                     {
-                        preResult.Add(key, value);    
+                        preResult.Add(key, value);
                     }
                 }
-		    }
-		    catch (ArgumentException ex)
-		    {
-		        ex.Data.Add("propertyDataName", key);
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("propertyDataName", key);
                 ex.Data.Add("propertyDataValue", value);
-		        throw;
-		    }
-		}
-	}
+                throw;
+            }
+        }
+    }
 }
