@@ -1796,4 +1796,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Cuemon.ObjectUtility.ToString(System.Object)", Scope = "member", Target = "Cuemon.Diagnostics.InstrumentationUtility.#DefaultTimeMeasureCompletedCallback(System.String,System.TimeSpan,System.Collections.Generic.IDictionary`2<System.String,System.Object>)")]
 [assembly: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Cuemon.ObjectUtility.ToString(System.Object)", Scope = "member", Target = "Cuemon.ExceptionUtility.#Refine`1(!!0,System.Reflection.MethodBase,System.Object[])")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "Cuemon.Reflection.MethodSignature.#MergeParameters(Cuemon.Reflection.MethodSignature,System.Object[])")]
+[assembly: SuppressMessage("Microsoft.Security", "CA2116:AptcaMethodsShouldOnlyCallAptcaMethods", Scope = "member", Target = "Cuemon.Management.ManagementUtility.#ServiceControllerResolver()")]
+[assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope = "member", Target = "Cuemon.Management.ManagementUtility.#ParseWmiObjects(System.String)")]
+[assembly: SuppressMessage("Microsoft.Security", "CA2116:AptcaMethodsShouldOnlyCallAptcaMethods", Scope = "member", Target = "Cuemon.Management.ManagementUtility.#ParseWmiObjects(System.String)")]
 
