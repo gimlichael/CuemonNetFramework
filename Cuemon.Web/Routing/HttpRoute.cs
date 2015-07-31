@@ -156,6 +156,7 @@ namespace Cuemon.Web.Routing
         /// <returns>A matching <see cref="MethodInfo"/> that can be invoked with the result of <paramref name="parameters"/>.</returns>
         public MethodInfo ParseMethod(HttpRequest request, out object[] parameters)
         {
+            Validator.ThrowIfNull(request, "request");
             Uri baseUri = HttpRequestUtility.GetHostAuthority(request.Url);
             Uri requestUri = new Uri(baseUri, this.UriPattern); // this causes 404 - change to request url and match start of uripattern
             HttpMethods currentVerb = EnumUtility.Parse<HttpMethods>(request.HttpMethod, true);
