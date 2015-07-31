@@ -47,9 +47,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when the <paramref name="page"/> loads.</remarks>
         protected override void OnLoad(Page page)
         {
-            //HttpMethods currentVerb = EnumUtility.Parse<HttpMethods>(page.Request.HttpMethod, true);
-            //MethodInfo routeMethod = HttpRouteUtility.ParseRouteMethod(page, page.Request.Url, currentVerb, out parameters);
-            //Trace.WriteLine(routeMethod.Name);
+            Validator.ThrowIfNull(page, "page");
             PropertyInfo reflectedContext = page.GetType().GetProperty("Context", ReflectionUtility.BindingInstancePublicAndPrivate);
             if (reflectedContext != null)
             {

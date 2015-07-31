@@ -96,6 +96,7 @@ namespace Cuemon.Web
         /// </remarks>
         protected override bool IsValidForCompression(HttpApplication context)
         {
+            Validator.ThrowIfNull(context, "context");
             return base.IsValidForCompressionCore(MimeUtility.ParseContentType(context.Response.ContentType));
         }
 

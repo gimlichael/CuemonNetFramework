@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Web;
+using Cuemon.Caching;
 
 namespace Cuemon.Web
 {
@@ -55,9 +56,10 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
         /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
-        protected override void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
+        /// <param name="validator">A <see cref="CacheValidator"/> object that represents the content validation of the resource.</param>
+        protected override void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability, CacheValidator validator)
         {
-            base.HandleStaticContentExpiresHeaders(context, expiresInterval, HttpCacheability.Public);
+            base.HandleStaticContentExpiresHeaders(context, expiresInterval, HttpCacheability.Public, validator);
         }
 
         /// <summary>
@@ -66,9 +68,10 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
         /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
-        protected override void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
+        /// <param name="validator">A <see cref="CacheValidator"/> object that represents the content validation of the resource.</param>
+        protected override void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability, CacheValidator validator)
         {
-            base.HandleDynamicContentExpiresHeaders(context, expiresInterval, HttpCacheability.Public);
+            base.HandleDynamicContentExpiresHeaders(context, expiresInterval, HttpCacheability.Public, validator);
         }
 
         /// <summary>

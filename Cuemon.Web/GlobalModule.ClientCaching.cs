@@ -57,48 +57,60 @@ namespace Cuemon.Web
 			this.HandleDynamicContentExpiresHeaders(context, expiresInterval, HttpCacheability.Private);
 		}
 
-		/// <summary>
-		/// Handles the expires headers of dynamic content - as in where an associated <see cref="HttpContext.Handler"/> has been assigned (such as aspx, ashx, asmx and so forth).
-		/// </summary>
-		/// <param name="context">The context of the ASP.NET application.</param>
-		/// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
-		/// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
-        protected virtual void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
-		{
-			if (context == null) throw new ArgumentNullException("context");
+        /// <summary>
+        /// Handles the expires headers of dynamic content - as in where an associated <see cref="HttpContext.Handler"/> has been assigned (such as aspx, ashx, asmx and so forth).
+        /// </summary>
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
+        /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
+        protected void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
+        {
+            Validator.ThrowIfNull(context, "context");
+            this.HandleDynamicContentExpiresHeaders(context, expiresInterval, cacheability, GetCacheValidator(context.Request, context.Context.Handler ?? context.Context.CurrentHandler));
+        }
+
+        /// <summary>
+        /// Handles the expires headers of dynamic content - as in where an associated <see cref="HttpContext.Handler"/> has been assigned (such as aspx, ashx, asmx and so forth).
+        /// </summary>
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
+        /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
+        /// <param name="validator">A <see cref="CacheValidator"/> object that represents the content validation of the resource.</param>
+        protected virtual void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability, CacheValidator validator)
+        {
+            Validator.ThrowIfNull(context, "context");
             if (context.Response.StatusCode >= 400) { return; }
-			if (context.Response.StatusCode == (int)HttpStatusCode.MovedPermanently ||
-				context.Response.StatusCode == (int)HttpStatusCode.Redirect) // do not compute expires headers on 301 or 302's
-			{
-				HttpResponseUtility.DisableClientSideResourceCache(context.Response);
-				return;
-			}
+            if (context.Response.StatusCode == (int)HttpStatusCode.MovedPermanently ||
+                context.Response.StatusCode == (int)HttpStatusCode.Redirect) // do not compute expires headers on 301 or 302's
+            {
+                HttpResponseUtility.DisableClientSideResourceCache(context.Response);
+                return;
+            }
 
-			if (context.Context.Handler == null || context.Context.CurrentHandler == null) { return; }
-			if (context.Request.QueryString.Count == 0 && context.Request.Form.Count == 0 && context.Context.Error == null) // always fetch page if the client has query, form or error data
-			{
+            if (context.Context.Handler == null || context.Context.CurrentHandler == null) { return; }
+            if (context.Request.QueryString.Count == 0 && context.Request.Form.Count == 0 && context.Context.Error == null) // always fetch page if the client has query, form or error data
+            {
                 DateTime expires = DateTime.UtcNow.AddTicks(expiresInterval.Ticks); ;
-				CacheValidator validator = GetCacheValidator(context.Request, context.Context.Handler ?? context.Context.CurrentHandler);
-				ISearchEngineOptimizer optimizer = context.Context.Handler as ISearchEngineOptimizer;
-				if (optimizer != null)
-				{
-					context.Response.AddHeader("X-Change-Frequency", optimizer.ChangeFrequency.ToString());
-					context.Response.AddHeader("X-Crawler-Priority", optimizer.CrawlerPriority.ToString("0.0", CultureInfo.InvariantCulture));
-				}               
-				HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(context.Request, context.Response, validator, expires, cacheability);
-			}
-			else
-			{
-				HttpResponseUtility.DisableClientSideResourceCache(context.Response);
-			}
-		}
+                ISearchEngineOptimizer optimizer = context.Context.Handler as ISearchEngineOptimizer;
+                if (optimizer != null)
+                {
+                    context.Response.AddHeader("X-Change-Frequency", optimizer.ChangeFrequency.ToString());
+                    context.Response.AddHeader("X-Crawler-Priority", optimizer.CrawlerPriority.ToString("0.0", CultureInfo.InvariantCulture));
+                }
+                HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(context.Request, context.Response, validator, expires, cacheability);
+            }
+            else
+            {
+                HttpResponseUtility.DisableClientSideResourceCache(context.Response);
+            }
+        }
 
-		/// <summary>
-		/// Handles the expires headers of static content.
-		/// </summary>
-		/// <param name="context">The context of the ASP.NET application.</param>
-		/// <remarks>Expires on static content is default set to 7 days in the future. Also, since it can be costly to parse last modified on static files these are default cached for a 4-hours sliding cache expiration. <see cref="HttpCacheability.Private"/> is default. You can override this method and change the values to your needs.</remarks>
-		protected void HandleStaticContentExpiresHeaders(HttpApplication context)
+        /// <summary>
+        /// Handles the expires headers of static content.
+        /// </summary>
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <remarks>Expires on static content is default set to 7 days in the future. Also, since it can be costly to parse last modified on static files these are default cached for a 4-hours sliding cache expiration. <see cref="HttpCacheability.Private"/> is default. You can override this method and change the values to your needs.</remarks>
+        protected void HandleStaticContentExpiresHeaders(HttpApplication context)
 		{
 			if (context == null) { throw new ArgumentNullException("context"); }
 			this.HandleStaticContentExpiresHeaders(context, TimeSpan.FromDays(7));
@@ -115,37 +127,45 @@ namespace Cuemon.Web
 			this.HandleStaticContentExpiresHeaders(context, expiresInterval, HttpCacheability.Private);
 		}
 
-		/// <summary>
-		/// Handles the expires headers of static content.
-		/// </summary>
-		/// <param name="context">The context of the ASP.NET application.</param>
-		/// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
-		/// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
-        protected virtual void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
-		{
-			if (context == null) { throw new ArgumentNullException("context"); }
+        /// <summary>
+        /// Handles the expires headers of static content.
+        /// </summary>
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
+        /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
+        protected void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
+        {
+            Validator.ThrowIfNull(context, "context");
+            CacheValidator validator = GetCacheValidator(context.Request, context.Context.CurrentHandler ?? context.Context.Handler);
+            this.HandleStaticContentExpiresHeaders(context, expiresInterval, cacheability, validator);
+        }
+
+        /// <summary>
+        /// Handles the expires headers of static content.
+        /// </summary>
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
+        /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
+        /// <param name="validator">A <see cref="CacheValidator"/> object that represents the content validation of the resource.</param>
+        protected virtual void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability, CacheValidator validator)
+        {
+            Validator.ThrowIfNull(context, "context");
             if (context.Response.StatusCode >= 400) { return; }
-			if (context.Response.StatusCode == (int)HttpStatusCode.MovedPermanently ||
-				context.Response.StatusCode == (int)HttpStatusCode.Redirect) // do not compute expires headers on 301 or 302's
-			{
-				HttpResponseUtility.DisableClientSideResourceCache(context.Response);
-				return;
-			}
+            if (context.Response.StatusCode == (int)HttpStatusCode.MovedPermanently ||
+                context.Response.StatusCode == (int)HttpStatusCode.Redirect) // do not compute expires headers on 301 or 302's
+            {
+                HttpResponseUtility.DisableClientSideResourceCache(context.Response);
+                return;
+            }
 
-			if (context.Context.Handler != null) { return; }
-            KeyValuePair<CacheValidator, DateTime> lastModifiedAndExpiresPair = CachingContentExpiresHeaders(context, expiresInterval);
-            if (Equals(lastModifiedAndExpiresPair.Key, CacheValidator.Default) && lastModifiedAndExpiresPair.Value == DateTime.MinValue) { return; }
-			HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(context.Request, context.Response, lastModifiedAndExpiresPair.Key, lastModifiedAndExpiresPair.Value, cacheability);
-		}
+            IHttpHandler handler = context.Context.CurrentHandler ?? context.Context.Handler;
+            if (handler != null) { return; } // not static content
 
-		private static KeyValuePair<CacheValidator, DateTime> CachingContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval)
-		{
-			if (context == null) { throw new ArgumentNullException("context"); }
-		    DateTime expires = DateTime.UtcNow.AddTicks(expiresInterval.Ticks);
-		    CacheValidator validator = GetCacheValidator(context.Request, context.Context.CurrentHandler ?? context.Context.Handler);
-		    if (Equals(validator, CacheValidator.Default)) { expires = DateTime.MinValue; }
-		    return new KeyValuePair<CacheValidator, DateTime>(validator, expires);
-		}
+            DateTime expires = DateTime.UtcNow.AddTicks(expiresInterval.Ticks);
+            if (Equals(validator, CacheValidator.Default)) { return; }
+
+            HttpResponseUtility.SetClientSideContentCacheExpiresHeaders(context.Request, context.Response, validator, expires, cacheability);
+        }
 
         internal static CacheValidator GetCacheValidator(HttpRequest request, IHttpHandler handler)
 	    {

@@ -11,6 +11,7 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Xml;
 using System.Xml.XPath;
+using Cuemon.Caching;
 using Cuemon.Globalization;
 using Cuemon.Net;
 using Cuemon.Web.Configuration;
@@ -216,7 +217,6 @@ namespace Cuemon.Web
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns><c>true</c> if [is valid for compression] [the specified context]; otherwise, <c>false</c>.</returns>
-        /// <remarks>Two things are done in this method; first we check if Cuemon/Web/Community/Websites/add/@enableCompression is true and handle only the speficied Compression/@fileExtensions.</remarks>
 	    protected override bool IsValidForCompression(HttpApplication context)
 	    {
             Validator.ThrowIfNull(context, "context");
@@ -239,11 +239,11 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
         /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
-        /// <remarks>Two things are done in this method; first we check if Cuemon/Web/Community/Websites/add/@enableClientSideCaching is true and resolves the expires interval from Caching/ExpiresHeaders/add[@expires and @unit] where @fileExtensions matches the current executing handler.</remarks>
-	    protected override void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
-	    {
-            base.HandleDynamicContentExpiresHeaders(context, ResolveIntervalForExpiresHeader(context), cacheability);
-	    }
+        /// <param name="validator">A <see cref="CacheValidator"/> object that represents the content validation of the resource.</param>
+        protected override void HandleDynamicContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability, CacheValidator validator)
+        {
+            base.HandleDynamicContentExpiresHeaders(context, ResolveIntervalForExpiresHeader(context), cacheability, validator);
+        }
 
         /// <summary>
         /// Handles the expires headers of static content.
@@ -251,13 +251,13 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         /// <param name="expiresInterval">The interval added to <see cref="DateTime.UtcNow"/> for a calculated HTTP Expires header.</param>
         /// <param name="cacheability">Sets the <b>Cache-Control</b> header to one of the values of <see cref="HttpCacheability"/>.</param>
-		/// <remarks>Two things are done in this method; first we check if Cuemon/Web/Community/Websites/add/@enableClientSideCaching is true and resolves the expires interval from Caching/ExpiresHeaders/add[@expires and @unit] where @fileExtensions matches the current executing handler.</remarks>
-	    protected override void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability)
-	    {
-            base.HandleStaticContentExpiresHeaders(context, ResolveIntervalForExpiresHeader(context), cacheability);
-	    }
+        /// <param name="validator">A <see cref="CacheValidator"/> object that represents the content validation of the resource.</param>
+	    protected override void HandleStaticContentExpiresHeaders(HttpApplication context, TimeSpan expiresInterval, HttpCacheability cacheability, CacheValidator validator)
+        {
+            base.HandleStaticContentExpiresHeaders(context, ResolveIntervalForExpiresHeader(context), cacheability, validator);
+        }
 
-	    private static TimeSpan ResolveIntervalForExpiresHeader(HttpApplication context)
+        private static TimeSpan ResolveIntervalForExpiresHeader(HttpApplication context)
 		{
 			if (context == null) throw new ArgumentNullException("context");
 			DateTime currentUtcDate = DateTime.UtcNow;
