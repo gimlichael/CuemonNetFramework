@@ -240,7 +240,7 @@ namespace Cuemon
         {
             if (node == null) { throw new ArgumentNullException("node"); }
             IList<IHierarchy<T>> result = new List<IHierarchy<T>>(HierarchyUtility.WhileSourceTraversalIsNotNull(node, HierarchyUtility.AncestorsAndSelf));
-            return result.Count > 0 ? EnumerableUtility.Reverse(result) : ConvertUtility.ToEnumerable(node);
+            return result.Count > 0 ? EnumerableUtility.Reverse(result) : EnumerableUtility.Yield(node);
         }
 
         /// <summary>
