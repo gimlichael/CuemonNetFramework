@@ -180,6 +180,7 @@
     <Compile Include="TimeUnit.cs" />
     <Compile Include="Transactions\TransactionUtility.cs" />
     <Compile Include="TypeArgumentException.cs" />
+    <Compile Include="TypeArgumentOutOfRangeException.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="Wrapper.cs" />
     <Compile Include="IWrapper.cs" />
