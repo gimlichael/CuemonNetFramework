@@ -1231,17 +1231,6 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="source"/> to an <see cref="IEnumerable{T}"/> sequence with one element.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the element of <paramref name="source"/>.</typeparam>
-        /// <param name="source">The value to convert into an <see cref="IEnumerable{T}"/> sequence.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> sequence with <paramref name="source"/> as the only element.</returns>
-        public static IEnumerable<TSource> ToEnumerable<TSource>(TSource source)
-        {
-            yield return source;
-        }
-
-        /// <summary>
         /// Converts the specified <paramref name="values"/> to a one-dimensional array of the specified type, with zero-based indexing.
         /// </summary>
         /// <typeparam name="TSource">The type of the array of <paramref name="values"/>.</typeparam>
