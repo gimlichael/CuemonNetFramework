@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Cuemon.Security.Cryptography;
 
 namespace Cuemon
 {
@@ -10,6 +9,24 @@ namespace Cuemon
     /// </summary>
     public static class Validator
     {
+        /// <summary>
+        /// Validates from the provided <paramref name="condition"/>.
+        /// An <paramref name="exception"/> is resolved and thrown if the <paramref name="condition"/> evaluates <c>true</c>.
+        /// </summary>
+        /// <param name="condition">The function delegate that determines if an <paramref name="exception"/> is thrown.</param>
+        /// <param name="exception">The function delegate that resolves the <see cref="Exception"/> to be thrown.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="condition"/> is null -or- <paramref name="exception"/> is null.
+        /// </exception>
+        public static void ThrowIf(Doer<bool> condition, Doer<string, string, Exception> exception, string paramName, string message)
+        {
+            if (condition == null) { throw new ArgumentNullException("condition"); }
+            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition()) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method); }
+        }
+
         /// <summary>
         /// Validates the specified <paramref name="value"/> from the provided <paramref name="condition"/>.
         /// An <paramref name="exception"/> is resolved and thrown if the <paramref name="condition"/> evaluates <c>true</c>.
@@ -158,6 +175,24 @@ namespace Cuemon
             if (condition == null) { throw new ArgumentNullException("condition"); }
             if (exception == null) { throw new ArgumentNullException("exception"); }
             if (condition(value, arg1, arg2, arg3, arg4, arg5)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3, arg4, arg5); }
+        }
+
+        /// <summary>
+        /// Validates from the provided <paramref name="condition"/>.
+        /// An <paramref name="exception"/> is resolved and thrown if the <paramref name="condition"/> evaluates <c>false</c>.
+        /// </summary>
+        /// <param name="condition">The function delegate that determines if an <paramref name="exception"/> is thrown.</param>
+        /// <param name="exception">The function delegate that resolves the <see cref="Exception"/> to be thrown.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="condition"/> is null -or- <paramref name="exception"/> is null.
+        /// </exception>
+        public static void ThrowIfNot(Doer<bool> condition, Doer<string, string, Exception> exception, string paramName, string message)
+        {
+            if (condition == null) { throw new ArgumentNullException("condition"); }
+            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (!condition()) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method); }
         }
 
         /// <summary>
@@ -506,7 +541,7 @@ namespace Cuemon
         /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> cannot be null.
         /// </exception>
-        public static void ThrowIfNull<TInstance>(TInstance value, string paramName) where TInstance : class
+        public static void ThrowIfNull<T>(T value, string paramName) where T : class
         {
             ThrowIfNull(value, paramName, "Value cannot be null.");
         }
@@ -520,7 +555,7 @@ namespace Cuemon
         /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> cannot be null.
         /// </exception>
-        public static void ThrowIfNull<TInstance>(TInstance value, string paramName, string message) where TInstance : class
+        public static void ThrowIfNull<T>(T value, string paramName, string message) where T : class
         {
             try
             {
@@ -1310,6 +1345,245 @@ namespace Cuemon
                 ThrowIfNot(value, Condition.IsGuid, format, ExceptionUtility.CreateArgumentException, paramName, message);
             }
             catch (ArgumentException ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentOutOfRangeException"/> if the specified <paramref name="value"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <paramref name="value"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is null - or - <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="value"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfTypeOf(object value, string paramName, params Type[] types)
+        {
+            ThrowIfTypeOf(value, paramName, "Specified argument was out of the range of valid values.", types);
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentOutOfRangeException"/> if the specified <paramref name="value"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <paramref name="value"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is null - or - <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="value"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfTypeOf(object value, string paramName, string message, params Type[] types)
+        {
+            ThrowIfNull(value, "value");
+            ThrowIfNull(types, "types");
+            try
+            {
+                ThrowIf(value, TypeUtility.ContainsType, types, ExceptionUtility.CreateArgumentOutOfRangeException, paramName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentOutOfRangeException"/> if the specified <paramref name="value"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <paramref name="value"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is null - or - <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="value"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfNotTypeOf(object value, string paramName, params Type[] types)
+        {
+            ThrowIfNotTypeOf(value, paramName, "Specified argument was out of the range of valid values.", types);
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentOutOfRangeException"/> if the specified <paramref name="value"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <paramref name="value"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is null - or - <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="value"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfNotTypeOf(object value, string paramName, string message, params Type[] types)
+        {
+            ThrowIfNull(value, "value");
+            ThrowIfNull(types, "types");
+            try
+            {
+                ThrowIfNot(value, TypeUtility.ContainsType, types, ExceptionUtility.CreateArgumentOutOfRangeException, paramName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentOutOfRangeException"/> if the specified <typeparamref name="T"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <typeparamref name="T"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="TypeArgumentOutOfRangeException">
+        /// <typeparamref name="T"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfTypeOf<T>(string typeParamName, params Type[] types)
+        {
+            ThrowIfTypeOf<T>(typeParamName, "Specified type argument was out of the range of valid values.", types);
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentOutOfRangeException"/> if the specified <typeparamref name="T"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <typeparamref name="T"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="TypeArgumentOutOfRangeException">
+        /// <typeparamref name="T"/> is contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfTypeOf<T>(string typeParamName, string message, params Type[] types)
+        {
+            ThrowIfNull(types, "types");
+            try
+            {
+                ThrowIf(typeof(T), TypeUtility.ContainsType, types, ExceptionUtility.CreateTypeArgumentOutOfRangeException, typeParamName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentOutOfRangeException"/> if the specified <typeparamref name="T"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <typeparamref name="T"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="TypeArgumentOutOfRangeException">
+        /// <typeparamref name="T"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfNotTypeOf<T>(string typeParamName, params Type[] types)
+        {
+            ThrowIfNotTypeOf<T>(typeParamName, "Specified type argument was out of the range of valid values.", types);
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentOutOfRangeException"/> if the specified <typeparamref name="T"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </summary>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <param name="types">A variable number of <see cref="Type"/> arguments to match with the type of <typeparamref name="T"/>.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="types"/> is null.
+        /// </exception>
+        /// <exception cref="TypeArgumentOutOfRangeException">
+        /// <typeparamref name="T"/> is not contained within at least one of the specified <paramref name="types"/>.
+        /// </exception>
+        public static void ThrowIfNotTypeOf<T>(string typeParamName, string message, params Type[] types)
+        {
+            ThrowIfNull(types, "types");
+            try
+            {
+                ThrowIfNot(typeof(T), TypeUtility.ContainsType, types, ExceptionUtility.CreateTypeArgumentException, typeParamName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentException"/> if the specified <typeparamref name="TEnum"/> represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type to check is an enumeration.</typeparam>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <exception cref="TypeArgumentException">
+        /// <typeparamref name="TEnum"/> represents an enumeration.
+        /// </exception>
+        public static void ThrowIfEnum<TEnum>(string typeParamName)
+        {
+            ThrowIfEnum<TEnum>(typeParamName, "Value represents an enumeration.");
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentException"/> if the specified <typeparamref name="TEnum"/> represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type to check is an enumeration.</typeparam>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="TypeArgumentException">
+        /// <typeparamref name="TEnum"/> represents an enumeration.
+        /// </exception>
+        public static void ThrowIfEnum<TEnum>(string typeParamName, string message)
+        {
+            try
+            {
+                bool isEnum = typeof(TEnum).IsEnum;
+                ThrowIf(isEnum, Condition.IsTrue, ExceptionUtility.CreateTypeArgumentException, typeParamName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentException"/> if the specified <typeparamref name="TEnum"/> does not represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type to check is not an enumeration.</typeparam>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <exception cref="TypeArgumentException">
+        /// <typeparamref name="TEnum"/> does not represents an enumeration.
+        /// </exception>
+        public static void ThrowIfNotEnum<TEnum>(string typeParamName)
+        {
+            ThrowIfNotEnum<TEnum>(typeParamName, "Value does not represents an enumeration.");
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="TypeArgumentException"/> if the specified <typeparamref name="TEnum"/> does not represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type to check is not an enumeration.</typeparam>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="TypeArgumentException">
+        /// <typeparamref name="TEnum"/> does not represents an enumeration.
+        /// </exception>
+        public static void ThrowIfNotEnum<TEnum>(string typeParamName, string message)
+        {
+            try
+            {
+                ThrowIfNot(DelegateUtility.DynamicWrap(typeof(TEnum).IsEnum), ExceptionUtility.CreateTypeArgumentException, typeParamName, message);
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
