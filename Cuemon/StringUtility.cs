@@ -544,7 +544,7 @@ namespace Cuemon
         {
             if (oldValue == null) { throw new ArgumentNullException("oldValue"); }
             if (newValue == null) { throw new ArgumentNullException("newValue"); }
-            return Replace(value, ConvertUtility.ToEnumerable(new StringReplacePair(oldValue, newValue)), comparison);
+            return Replace(value, EnumerableUtility.Yield(new StringReplacePair(oldValue, newValue)), comparison);
         }
 
         /// <summary>
