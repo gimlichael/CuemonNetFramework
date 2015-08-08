@@ -256,7 +256,7 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Creates and returns a chunked <see cref="IEnumerable{T}"/> sequence with a maximum of 128 elements.
+        /// Returns a chunked <see cref="IEnumerable{T}"/> sequence with a maximum of 128 elements.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
         /// <param name="source">An <see cref="IEnumerable{T}" /> to chunk into smaller slices for a batch run or similar.</param>
@@ -1023,6 +1023,17 @@ namespace Cuemon.Collections.Generic
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns an <see cref="IEnumerable{T}"/> sequence with the specified <paramref name="source"/> as the only element.
+        /// </summary>
+        /// <typeparam name="TSource">The type of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The value to yield into an <see cref="IEnumerable{T}"/> sequence.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> sequence with the specified <paramref name="source"/> as the only element.</returns>
+        public static IEnumerable<TSource> Yield<TSource>(TSource source)
+        {
+            yield return source;
         }
     }
 }
