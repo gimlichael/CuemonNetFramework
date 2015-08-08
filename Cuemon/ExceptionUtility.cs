@@ -179,5 +179,27 @@ namespace Cuemon
         {
             return new ArgumentException(message, paramName, innerException);
         }
-	}
+
+        /// <summary>
+        /// Creates and returns a new <see cref="TypeArgumentException"/> initialized to the provided parameters.
+        /// </summary>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <returns>A new instance of <see cref="TypeArgumentException"/> initialized to the provided parameters.</returns>
+        public static TypeArgumentException CreateTypeArgumentException(string typeParamName, string message)
+        {
+            return new TypeArgumentException(typeParamName, message);
+        }
+
+        /// <summary>
+        /// Creates and returns a new <see cref="TypeArgumentOutOfRangeException"/> initialized to the provided parameters.
+        /// </summary>
+        /// <param name="typeParamName">The name of the type parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <returns>A new instance of <see cref="TypeArgumentOutOfRangeException"/> initialized to the provided parameters.</returns>
+        public static TypeArgumentOutOfRangeException CreateTypeArgumentOutOfRangeException(string typeParamName, string message)
+        {
+            return new TypeArgumentOutOfRangeException(typeParamName, message);
+        }
+    }
 }
