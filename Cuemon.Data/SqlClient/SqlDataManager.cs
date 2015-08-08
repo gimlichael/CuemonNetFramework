@@ -528,7 +528,7 @@ namespace Cuemon.Data.SqlClient
 
         private static SqlException ParseException(Exception exception)
         {
-            IEnumerable<Exception> exceptions = EnumerableUtility.Concat(ConvertUtility.ToEnumerable(exception), ExceptionUtility.Flatten(exception));
+            IEnumerable<Exception> exceptions = EnumerableUtility.Concat(EnumerableUtility.Yield(exception), ExceptionUtility.Flatten(exception));
             return EnumerableUtility.FirstOrDefault(EnumerableUtility.Cast<SqlException>(EnumerableUtility.FindAll(exceptions, MatchSqlException)));
         }
 
