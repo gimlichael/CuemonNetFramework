@@ -62,7 +62,7 @@ namespace Cuemon.Data.Entity
             T validEntity = null;
             if (!TypeUtility.ContainsType(derived, typeof(BusinessEntity))) { return null; }
 
-            List<Type> derivedTypes = new List<Type>(adapter.Settings.EnableDerivedEntityLookup ? TypeUtility.GetAncestorAndDescendantsOrSelfTypes(derived) : ConvertUtility.ToEnumerable(derived));
+            List<Type> derivedTypes = new List<Type>(adapter.Settings.EnableDerivedEntityLookup ? TypeUtility.GetAncestorAndDescendantsOrSelfTypes(derived) : EnumerableUtility.Yield(derived));
 		    bool enableRowVerification = (derivedTypes.Count > 1);
             foreach (Type derivedType in derivedTypes)
             {
