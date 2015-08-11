@@ -1596,40 +1596,6 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="source"/> to its <see cref="IDictionary{TKey,TValue}"/> equivalent.
-        /// </summary>
-        /// <typeparam name="TKey">The <see cref="Type"/> of the key in the resulting <see cref="IDictionary{TKey,TValue}"/>.</typeparam>
-        /// <typeparam name="TValue">The <see cref="Type"/> of the value in the resulting <see cref="IDictionary{TKey,TValue}"/>.</typeparam>
-        /// <param name="source">A sequence of <see cref="KeyValuePair{TKey,TValue}"/> values to convert into a <see cref="IDictionary{TKey,TValue}"/> equivalent.</param>
-        /// <returns>A <see cref="IDictionary{TKey,TValue}"/> equivalent of <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="source"/> is null.
-        /// </exception>
-        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> source)
-        {
-            return ToDictionary(source, null);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="source"/> to its <see cref="IDictionary{TKey,TValue}"/> equivalent.
-        /// </summary>
-        /// <typeparam name="TKey">The <see cref="Type"/> of the key in the resulting <see cref="IDictionary{TKey,TValue}"/>.</typeparam>
-        /// <typeparam name="TValue">The <see cref="Type"/> of the value in the resulting <see cref="IDictionary{TKey,TValue}"/>.</typeparam>
-        /// <param name="source">A sequence of <see cref="KeyValuePair{TKey,TValue}"/> values to convert into a <see cref="IDictionary{TKey,TValue}"/> equivalent.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}"/> implementation to use when comparing keys, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/> for the type of the key.</param>
-        /// <returns>A <see cref="IDictionary{TKey,TValue}"/> equivalent of <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="source"/> is null.
-        /// </exception>
-        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer)
-        {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            IDictionary<TKey, TValue> result = new Dictionary<TKey, TValue>(comparer ?? EqualityComparer<TKey>.Default);
-            foreach (KeyValuePair<TKey, TValue> keyValuePair in source) { result.Add(keyValuePair.Key, keyValuePair.Value); }
-            return result;
-        }
-
-        /// <summary>
         /// Attempts to converts the specified <paramref name="value"/> to a given type. If the conversion is not possible the result is set to <b>default(TResult)</b>.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

@@ -223,7 +223,7 @@ namespace Cuemon.Data.Entity
                     if (reader.Read())
                     {
                         this.Source.HasValue = true;
-                        InvokeBusinessEntityFromRepository(ConvertUtility.ToDictionary<string, object>(DataManager.GetReaderColumns(reader)), this.Source, chainedType, mapper.Columns);
+                        InvokeBusinessEntityFromRepository(DictionaryUtility.ToDictionary<string, object>(DataManager.GetReaderColumns(reader)), this.Source, chainedType, mapper.Columns);
                     }
                     else if (this.Source.DataAdapter.Settings.EnableThrowOnNoRowsReturned)
                     {
@@ -379,7 +379,7 @@ namespace Cuemon.Data.Entity
                 int primaryKeyIndex = 0;
                 foreach (ColumnAttribute column in primaryKeyColumns)
                 {
-                    object matchingColumn = DictionaryUtility.FirstMatchOrDefault(ConvertUtility.ToDictionary(DataManager.GetReaderColumns(reader)), column.Name, column.NameAlias);
+                    object matchingColumn = DictionaryUtility.FirstMatchOrDefault(DictionaryUtility.ToDictionary(DataManager.GetReaderColumns(reader)), column.Name, column.NameAlias);
                     if (matchingColumn == null) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Unable to find a matching column from {0} (or alias {1}) mapped to storage field {2}.", column.Name ?? "null", column.NameAlias ?? "null", column.ResolveStorage() ?? "null"), argName); }
                     if (!primaryKeyValues.ContainsKey(index))
                     {

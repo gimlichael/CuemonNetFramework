@@ -250,7 +250,7 @@ namespace Cuemon.Data
 		{
 			if (reader == null) { throw new ArgumentNullException("reader"); }
 			if (reader.IsClosed) { throw new ArgumentException("Reader is closed.", "reader"); }
-			return ConvertUtility.ToDictionary<string, object>(GetReaderColumns(reader));
+			return DictionaryUtility.ToDictionary<string, object>(GetReaderColumns(reader));
 		}
 
 		/// <summary>

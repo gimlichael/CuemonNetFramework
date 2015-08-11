@@ -25,7 +25,7 @@ namespace Cuemon
                 {
                     try
                     {
-                        IDictionary<string, object> compositeProcessorInfo = ConvertUtility.ToDictionary(ProcessorInfo);
+                        IDictionary<string, object> compositeProcessorInfo = DictionaryUtility.ToDictionary(ProcessorInfo);
                         IReadOnlyDictionary<string, object> computerSystem = ManagementUtility.GetComputerSystemInfo();
                         if (computerSystem.ContainsKey("NumberOfProcessors")) { compositeProcessorInfo.Add("NumberOfProcessors", computerSystem["NumberOfProcessors"]); }
                         if (!compositeProcessorInfo.ContainsKey("NumberOfCores")) { compositeProcessorInfo.Add("NumberOfCores", coreCount); }
