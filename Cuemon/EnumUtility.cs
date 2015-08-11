@@ -129,7 +129,7 @@ namespace Cuemon
         public static IEnumerable<KeyValuePair<T, string>> ToEnumerable<T, TEnum>() where TEnum : struct, IConvertible where T : struct, IConvertible
         {
             Validator.ThrowIfNotEnum<TEnum>("TEnum");
-            Validator.ThrowIfNotTypeOf<T>("T", typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64));
+            Validator.ThrowIfNotContainsType<T>("T", typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64));
 
             Array values = Enum.GetValues(typeof(TEnum));
             foreach (var value in values)
