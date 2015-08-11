@@ -1362,9 +1362,9 @@ namespace Cuemon
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfTypeOf(object value, string paramName, params Type[] types)
+        public static void ThrowIfContainsType(object value, string paramName, params Type[] types)
         {
-            ThrowIfTypeOf(value, paramName, "Specified argument was out of the range of valid values.", types);
+            ThrowIfContainsType(value, paramName, "Specified argument was out of the range of valid values.", types);
         }
 
         /// <summary>
@@ -1380,7 +1380,7 @@ namespace Cuemon
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfTypeOf(object value, string paramName, string message, params Type[] types)
+        public static void ThrowIfContainsType(object value, string paramName, string message, params Type[] types)
         {
             ThrowIfNull(value, "value");
             ThrowIfNull(types, "types");
@@ -1406,9 +1406,9 @@ namespace Cuemon
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is not contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfNotTypeOf(object value, string paramName, params Type[] types)
+        public static void ThrowIfNotContainsType(object value, string paramName, params Type[] types)
         {
-            ThrowIfNotTypeOf(value, paramName, "Specified argument was out of the range of valid values.", types);
+            ThrowIfNotContainsType(value, paramName, "Specified argument was out of the range of valid values.", types);
         }
 
         /// <summary>
@@ -1424,7 +1424,7 @@ namespace Cuemon
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is not contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfNotTypeOf(object value, string paramName, string message, params Type[] types)
+        public static void ThrowIfNotContainsType(object value, string paramName, string message, params Type[] types)
         {
             ThrowIfNull(value, "value");
             ThrowIfNull(types, "types");
@@ -1449,9 +1449,9 @@ namespace Cuemon
         /// <exception cref="TypeArgumentOutOfRangeException">
         /// <typeparamref name="T"/> is contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfTypeOf<T>(string typeParamName, params Type[] types)
+        public static void ThrowIfContainsType<T>(string typeParamName, params Type[] types)
         {
-            ThrowIfTypeOf<T>(typeParamName, "Specified type argument was out of the range of valid values.", types);
+            ThrowIfContainsType<T>(typeParamName, "Specified type argument was out of the range of valid values.", types);
         }
 
         /// <summary>
@@ -1466,7 +1466,7 @@ namespace Cuemon
         /// <exception cref="TypeArgumentOutOfRangeException">
         /// <typeparamref name="T"/> is contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfTypeOf<T>(string typeParamName, string message, params Type[] types)
+        public static void ThrowIfContainsType<T>(string typeParamName, string message, params Type[] types)
         {
             ThrowIfNull(types, "types");
             try
@@ -1490,9 +1490,9 @@ namespace Cuemon
         /// <exception cref="TypeArgumentOutOfRangeException">
         /// <typeparamref name="T"/> is not contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfNotTypeOf<T>(string typeParamName, params Type[] types)
+        public static void ThrowIfNotContainsType<T>(string typeParamName, params Type[] types)
         {
-            ThrowIfNotTypeOf<T>(typeParamName, "Specified type argument was out of the range of valid values.", types);
+            ThrowIfNotContainsType<T>(typeParamName, "Specified type argument was out of the range of valid values.", types);
         }
 
         /// <summary>
@@ -1507,7 +1507,7 @@ namespace Cuemon
         /// <exception cref="TypeArgumentOutOfRangeException">
         /// <typeparamref name="T"/> is not contained within at least one of the specified <paramref name="types"/>.
         /// </exception>
-        public static void ThrowIfNotTypeOf<T>(string typeParamName, string message, params Type[] types)
+        public static void ThrowIfNotContainsType<T>(string typeParamName, string message, params Type[] types)
         {
             ThrowIfNull(types, "types");
             try
@@ -1546,8 +1546,7 @@ namespace Cuemon
         {
             try
             {
-                bool isEnum = typeof(TEnum).IsEnum;
-                ThrowIf(isEnum, Condition.IsTrue, ExceptionUtility.CreateTypeArgumentException, typeParamName, message);
+                ThrowIf(DelegateUtility.DynamicWrap(typeof(TEnum).IsEnum), ExceptionUtility.CreateTypeArgumentException, typeParamName, message);
             }
             catch (Exception ex)
             {
