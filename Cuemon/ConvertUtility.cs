@@ -87,7 +87,7 @@ namespace Cuemon
                     if (value < long.MinValue || value > long.MaxValue) { throw new OverflowException(string.Format(CultureInfo.InvariantCulture, "The specified value, {0}, having a time unit specified as Ticks cannot be less than {1} or be greater than {2}.", value, long.MinValue, long.MaxValue)); }
                     return TimeSpan.FromTicks((long)value);
                 default:
-                    throw new ArgumentOutOfRangeException("timeUnit");
+                    throw new InvalidEnumArgumentException("timeUnit", (int)timeUnit, typeof(TimeUnit));
             }
         }
 
