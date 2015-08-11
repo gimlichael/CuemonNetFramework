@@ -105,6 +105,7 @@
     <Compile Include="ActivatorUtility.cs" />
     <Compile Include="DataPairDictionary.cs" />
     <Compile Include="Globalization\CulturalRegion.cs" />
+    <Compile Include="HorizontalDirection.cs" />
     <Compile Include="IO\InternalStreamWriter.cs" />
     <Compile Include="IO\StreamWriterSettings.cs" />
     <Compile Include="IO\StreamWriterUtility.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="TypeArgumentException.cs" />
     <Compile Include="TypeArgumentOutOfRangeException.cs" />
     <Compile Include="Validator.cs" />
+    <Compile Include="VerticalDirection.cs" />
     <Compile Include="Wrapper.cs" />
     <Compile Include="IWrapper.cs" />
     <Compile Include="ExceptionUtility.cs" />

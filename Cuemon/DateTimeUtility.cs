@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Cuemon.Collections.Generic;
 
 namespace Cuemon
@@ -9,17 +10,6 @@ namespace Cuemon
     /// </summary>
     public static class DateTimeUtility
     {
-        //public static long GetSequentialTicks()
-        //{
-        //    return GetSequentialTicks(SortOrder.Ascending);
-        //}
-
-        //public static long GetSequentialTicks(DateTime instant, SortOrder sortOrder)
-        //{
-        //    DateTime timestamp = sortOrder == SortOrder.Ascending ? new DateTime(DateTime.MinValue) : instant : new DateTime(DateTime.MaxValue.Subtract(instant).Ticks);
-        //    return timestamp.Ticks;
-        //}
-
         /// <summary>
         /// Gets the lowest <see cref="DateTime"/> value of the specified <see cref="DateTime"/> values.
         /// </summary>
@@ -70,6 +60,99 @@ namespace Cuemon
         public static DateTime GetHighestValue(IEnumerable<DateTime> source)
         {
             return GetHighestValue(EnumerableUtility.ToArray(source));
+        }
+
+        /// <summary>
+        /// Returns a <see cref="DateTime"/> value that is rounded towards negative infinity.
+        /// </summary>
+        /// <param name="value">A <see cref="DateTime"/> value to be rounded.</param>
+        /// <param name="interval">The <see cref="TimeSpan"/> value that specifies the rounding of <paramref name="value"/>.</param>
+        /// <returns>A <see cref="DateTime"/> value that is rounded towards negative infinity.</returns>
+        public static DateTime Floor(DateTime value, TimeSpan interval)
+        {
+            return Round(value, interval, VerticalDirection.Down);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="DateTime"/> value that is rounded towards positive infinity.
+        /// </summary>
+        /// <param name="value">A <see cref="DateTime"/> value to be rounded.</param>
+        /// <param name="interval">The <see cref="TimeSpan"/> value that specifies the rounding of <paramref name="value"/>.</param>
+        /// <returns>A <see cref="DateTime"/> value that is rounded towards positive infinity.</returns>
+        public static DateTime Ceiling(DateTime value, TimeSpan interval)
+        {
+            return Round(value, interval, VerticalDirection.Up);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="DateTime"/> value that is rounded towards negative infinity.
+        /// </summary>
+        /// <param name="value">A <see cref="DateTime"/> value to be rounded.</param>
+        /// <param name="interval">The <see cref="double"/> value that in combination with <paramref name="timeUnit"/> specifies the rounding of <paramref name="value"/>.</param>
+        /// <param name="timeUnit">One of the enumeration values that specifies the time unit of <paramref name="interval"/>.</param>
+        /// <returns>A <see cref="DateTime"/> value that is rounded towards negative infinity.</returns>
+        public static DateTime Floor(DateTime value, double interval, TimeUnit timeUnit)
+        {
+            return Round(value, interval, timeUnit, VerticalDirection.Down);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="DateTime"/> value that is rounded towards positive infinity.
+        /// </summary>
+        /// <param name="value">A <see cref="DateTime"/> value to be rounded.</param>
+        /// <param name="interval">The <see cref="double"/> value that in combination with <paramref name="timeUnit"/> specifies the rounding of <paramref name="value"/>.</param>
+        /// <param name="timeUnit">One of the enumeration values that specifies the time unit of <paramref name="interval"/>.</param>
+        /// <returns>A <see cref="DateTime"/> value that is rounded towards positive infinity.</returns>
+        public static DateTime Ceiling(DateTime value, double interval, TimeUnit timeUnit)
+        {
+            return Round(value, interval, timeUnit, VerticalDirection.Up);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="DateTime"/> value that is rounded either towards negative infinity or positive infinity.
+        /// </summary>
+        /// <param name="value">A <see cref="DateTime"/> value to be rounded.</param>
+        /// <param name="interval">The <see cref="double"/> value that in combination with <paramref name="timeUnit"/> specifies the rounding of <paramref name="value"/>.</param>
+        /// <param name="timeUnit">One of the enumeration values that specifies the time unit of <paramref name="interval"/>.</param>
+        /// <param name="direction">One of the enumeration values that specifies the direction of the rounding.</param>
+        /// <returns>A <see cref="DateTime"/> value that is rounded either towards negative infinity or positive infinity.</returns>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <paramref name="direction"/> is an invalid enumeration value.
+        /// </exception>
+        public static DateTime Round(DateTime value, double interval, TimeUnit timeUnit, VerticalDirection direction)
+        {
+            return Round(value, ConvertUtility.ToTimeSpan(interval, timeUnit), direction);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="DateTime"/> value that is rounded either towards negative infinity or positive infinity.
+        /// </summary>
+        /// <param name="value">A <see cref="DateTime"/> value to be rounded.</param>
+        /// <param name="interval">The <see cref="TimeSpan"/> value that specifies the rounding of <paramref name="value"/>.</param>
+        /// <param name="direction">One of the enumeration values that specifies the direction of the rounding.</param>
+        /// <returns>A <see cref="DateTime"/> value that is rounded either towards negative infinity or positive infinity.</returns>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// <paramref name="direction"/> is an invalid enumeration value.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="interval"/> is <see cref="TimeSpan.Zero"/>.
+        /// </exception>
+        public static DateTime Round(DateTime value, TimeSpan interval, VerticalDirection direction)
+        {
+            Validator.ThrowIfEqual(interval, TimeSpan.Zero, "interval");
+            long datetTimeTicks = interval < TimeSpan.Zero ? value.Add(interval).Ticks : value.Ticks;
+            long absoluteIntervalTicks = Math.Abs(interval.Ticks);
+            long remainder = datetTimeTicks % absoluteIntervalTicks;
+            switch (direction)
+            {
+                case VerticalDirection.Up:
+                    long adjustment = (absoluteIntervalTicks - (remainder)) % absoluteIntervalTicks;
+                    return new DateTime(datetTimeTicks + adjustment, value.Kind);
+                case VerticalDirection.Down:
+                    return new DateTime(datetTimeTicks - remainder, value.Kind);
+                default:
+                    throw new InvalidEnumArgumentException("direction", (int)direction, typeof(VerticalDirection));
+            }
         }
     }
 
