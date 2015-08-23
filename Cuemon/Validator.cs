@@ -1521,6 +1521,110 @@ namespace Cuemon
         }
 
         /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> represents an enumeration.
+        /// </exception>
+        public static void ThrowIfEnum<TEnum>(string value, string paramName) where TEnum : struct, IConvertible
+        {
+            ThrowIfEnum<TEnum>(value, true, paramName);
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> represents an enumeration.
+        /// </exception>
+        public static void ThrowIfEnum<TEnum>(string value, bool ignoreCase, string paramName) where TEnum : struct, IConvertible
+        {
+            ThrowIfEnum<TEnum>(value, ignoreCase, paramName, "Value represents an enumeration.");
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> represents an enumeration.
+        /// </exception>
+        public static void ThrowIfEnum<TEnum>(string value, bool ignoreCase, string paramName, string message) where TEnum : struct, IConvertible
+        {
+            try
+            {
+                ThrowIf(value, EnumUtility.IsStringOf<TEnum>, ignoreCase, ExceptionUtility.CreateArgumentException, paramName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> does not represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> does not represents an enumeration.
+        /// </exception>
+        public static void ThrowIfNotEnum<TEnum>(string value, string paramName) where TEnum : struct, IConvertible
+        {
+            ThrowIfNotEnum<TEnum>(value, true, paramName);
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> does not represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> does not represents an enumeration.
+        /// </exception>
+        public static void ThrowIfNotEnum<TEnum>(string value, bool ignoreCase, string paramName) where TEnum : struct, IConvertible
+        {
+            ThrowIfNotEnum<TEnum>(value, ignoreCase, paramName, "Value does not represents an enumeration.");
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> does not represents an enumeration.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> does not represents an enumeration.
+        /// </exception>
+        public static void ThrowIfNotEnum<TEnum>(string value, bool ignoreCase, string paramName, string message) where TEnum : struct, IConvertible
+        {
+            try
+            {
+                ThrowIfNot(value, EnumUtility.IsStringOf<TEnum>, ignoreCase, ExceptionUtility.CreateArgumentException, paramName, message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Validates and throws an <see cref="TypeArgumentException"/> if the specified <typeparamref name="TEnum"/> represents an enumeration.
         /// </summary>
         /// <typeparam name="TEnum">The type to check is an enumeration.</typeparam>
@@ -1528,9 +1632,9 @@ namespace Cuemon
         /// <exception cref="TypeArgumentException">
         /// <typeparamref name="TEnum"/> represents an enumeration.
         /// </exception>
-        public static void ThrowIfEnum<TEnum>(string typeParamName)
+        public static void ThrowIfEnumType<TEnum>(string typeParamName)
         {
-            ThrowIfEnum<TEnum>(typeParamName, "Value represents an enumeration.");
+            ThrowIfEnumType<TEnum>(typeParamName, "Value represents an enumeration.");
         }
 
         /// <summary>
@@ -1542,7 +1646,7 @@ namespace Cuemon
         /// <exception cref="TypeArgumentException">
         /// <typeparamref name="TEnum"/> represents an enumeration.
         /// </exception>
-        public static void ThrowIfEnum<TEnum>(string typeParamName, string message)
+        public static void ThrowIfEnumType<TEnum>(string typeParamName, string message)
         {
             try
             {
@@ -1562,9 +1666,9 @@ namespace Cuemon
         /// <exception cref="TypeArgumentException">
         /// <typeparamref name="TEnum"/> does not represents an enumeration.
         /// </exception>
-        public static void ThrowIfNotEnum<TEnum>(string typeParamName)
+        public static void ThrowIfNotEnumType<TEnum>(string typeParamName)
         {
-            ThrowIfNotEnum<TEnum>(typeParamName, "Value does not represents an enumeration.");
+            ThrowIfNotEnumType<TEnum>(typeParamName, "Value does not represents an enumeration.");
         }
 
         /// <summary>
@@ -1576,7 +1680,7 @@ namespace Cuemon
         /// <exception cref="TypeArgumentException">
         /// <typeparamref name="TEnum"/> does not represents an enumeration.
         /// </exception>
-        public static void ThrowIfNotEnum<TEnum>(string typeParamName, string message)
+        public static void ThrowIfNotEnumType<TEnum>(string typeParamName, string message)
         {
             try
             {
