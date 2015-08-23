@@ -17,9 +17,21 @@ namespace Cuemon
         /// <returns><c>true</c> if the <paramref name="value"/> parameter is an equivalent of <typeparamref name="TEnum"/>; otherwise, <c>false</c>.</returns>
         public static bool IsStringOf<TEnum>(string value) where TEnum : struct, IConvertible
         {
+            return IsStringOf<TEnum>(value, true);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="value"/> is an equivalent of <typeparamref name="TEnum"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to validate.</typeparam>
+        /// <param name="value">A string containing the name or value to validate.</param>
+        /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
+        /// <returns><c>true</c> if the <paramref name="value"/> parameter is an equivalent of <typeparamref name="TEnum"/>; otherwise, <c>false</c>.</returns>
+        public static bool IsStringOf<TEnum>(string value, bool ignoreCase) where TEnum : struct, IConvertible
+        {
             TEnum result;
             if (string.IsNullOrEmpty(value)) { return false; }
-            return typeof(TEnum).IsEnum && TryParse(value, true, out result);
+            return typeof(TEnum).IsEnum && TryParse(value, ignoreCase, out result);
         }
 
         /// <summary>
@@ -49,12 +61,6 @@ namespace Cuemon
             return TesterDoerUtility.TryExecuteFunction(Parse<TEnum>, value, ignoreCase, out result);
         }
 
-        private static void ThrowIfNullOrEmptyOrNotEnum<TEnum>(string value) where TEnum : struct, IConvertible
-        {
-            Validator.ThrowIfNotEnum<TEnum>("TEnum");
-            Validator.ThrowIfNullOrEmpty(value, "value");
-        }
-
         /// <summary>
         /// Converts the string representation of the name or numeric <paramref name="value"/> of one or more enumerated constants to an equivalent enumerated <typeparamref name="TEnum"/>.
         /// </summary>
@@ -81,7 +87,9 @@ namespace Cuemon
         /// </exception>
         public static TEnum Parse<TEnum>(string value, bool ignoreCase) where TEnum : struct, IConvertible
         {
-            ThrowIfNullOrEmptyOrNotEnum<TEnum>(value);
+            Validator.ThrowIfNotEnumType<TEnum>("TEnum");
+            Validator.ThrowIfNullOrEmpty(value, "value");
+            Validator.ThrowIfNotEnum<TEnum>(value, "value");
             return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
         }
 
@@ -94,7 +102,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the bit field or bit fields that are set in <paramref name="source"/> are also set in the <paramref name="value"/>; otherwise, <c>false</c>.</returns>
         public static bool HasFlag<TEnum>(TEnum source, TEnum value) where TEnum : struct, IConvertible
         {
-            Validator.ThrowIfNotEnum<TEnum>("TEnum");
+            Validator.ThrowIfNotEnumType<TEnum>("TEnum");
 
             try
             {
@@ -128,7 +136,7 @@ namespace Cuemon
         /// <returns>An <see cref="IEnumerable{T}"/> sequence equivalent to <typeparamref name="TEnum"/>.</returns>
         public static IEnumerable<KeyValuePair<T, string>> ToEnumerable<T, TEnum>() where TEnum : struct, IConvertible where T : struct, IConvertible
         {
-            Validator.ThrowIfNotEnum<TEnum>("TEnum");
+            Validator.ThrowIfNotEnumType<TEnum>("TEnum");
             Validator.ThrowIfNotContainsType<T>("T", typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64));
 
             Array values = Enum.GetValues(typeof(TEnum));
