@@ -89,7 +89,6 @@ namespace Cuemon
         {
             Validator.ThrowIfNotEnumType<TEnum>("TEnum");
             Validator.ThrowIfNullOrEmpty(value, "value");
-            Validator.ThrowIfNotEnum<TEnum>(value, ignoreCase, "value");
             return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
         }
 
