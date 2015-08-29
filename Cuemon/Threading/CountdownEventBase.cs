@@ -76,6 +76,7 @@ namespace Cuemon.Threading
                         }
                         else
                         {
+                            this.Set();
                             break;
                         }
                     }
@@ -130,6 +131,7 @@ namespace Cuemon.Threading
                     }
                     else
                     {
+                        this.Set();
                         break;
                     }
                 }
