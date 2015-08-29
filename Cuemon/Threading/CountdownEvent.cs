@@ -9,9 +9,6 @@ namespace Cuemon.Threading
     /// <remarks>This class was inspired by the newly introduced CountdownEvent in .NET 4.0, and I think .NET 2.0 users should benefit from this lightweight implementation.</remarks>
     public sealed class CountdownEvent : CountdownEventBase, IDisposable
     {
-        private ManualResetEvent _resetEvent;
-        private bool _isDisposed;
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CountdownEvent"/> class.
@@ -19,22 +16,15 @@ namespace Cuemon.Threading
         /// <param name="initialCount">The number of signals initially required to set the <see cref="CountdownEvent"/>.</param>
         public CountdownEvent(int initialCount) : base(initialCount)
         {
-            _resetEvent = new ManualResetEvent(false);
+            ResetEvent = new ManualResetEvent(false);
         }
         #endregion
 
         #region Properties
-        private bool IsDisposed
-        {
-            get { return _isDisposed; }
-            set { _isDisposed = value; }
-        }
+        private bool IsDisposed { get; set; }
 
-        private ManualResetEvent ResetEvent
-        {
-            get { return _resetEvent; }
-            set { _resetEvent = value; }
-        }
+        private ManualResetEvent ResetEvent { get; set; }
+
         #endregion
 
         #region Methods
@@ -43,8 +33,7 @@ namespace Cuemon.Threading
         /// </summary>
         protected override void Set()
         {
-            if (this.ResetEvent == null) { return; }
-            this.ResetEvent.Set();
+            if (this.ResetEventHasValidState) { this.ResetEvent.Set(); }
         }
 
         /// <summary>
@@ -54,7 +43,7 @@ namespace Cuemon.Threading
         public override void Wait(TimeSpan timeout)
         {
             if (this.IsSet) { return; }
-            this.ResetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false);
+            if (this.ResetEventHasValidState) { this.ResetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false); }
             if (this.ElapsedTime > timeout) { throw new TimeoutException(); }
         }
 
@@ -76,13 +65,21 @@ namespace Cuemon.Threading
             }
         }
 
+        private bool ResetEventHasValidState
+        {
+            get
+            {
+                return (this.ResetEvent != null &&
+                       !this.ResetEvent.SafeWaitHandle.IsClosed);
+            }
+        }
+
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
         #endregion
     }
