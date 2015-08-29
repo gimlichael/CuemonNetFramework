@@ -82,7 +82,6 @@ namespace Cuemon.Threading
 
         private static void DefaultProcessWorkCallback(ISortedDoerWorkItem<TKey, TResult> work)
 		{
-            if (work == null) { return; }
             SortedDoerWorkItemPool<TKey, TResult> workItemPoolReference = null;
             try
             {

@@ -93,7 +93,6 @@ namespace Cuemon.Threading
 
 		private static void DefaultProcessWorkCallback(IActWorkItem work)
 		{
-			if (work == null) { return; }
             ActWorkItemPool workWorkItemPoolReference = null;
 			try
 			{

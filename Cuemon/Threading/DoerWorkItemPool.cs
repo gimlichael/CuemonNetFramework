@@ -74,7 +74,6 @@ namespace Cuemon.Threading
 
         private static void DefaultProcessWorkCallback(IDoerWorkItem<TResult> work)
 		{
-			if (work == null) { return; }
             DoerWorkItemPool<TResult> workItemPoolReference = null;
 			try
 			{
