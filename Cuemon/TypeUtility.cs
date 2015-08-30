@@ -555,8 +555,9 @@ namespace Cuemon
 	                 (source.IsClass && source == typeof(object)) ||
 	                 (source.IsValueType ||
 	                  source.IsPrimitive ||
-	                  source.IsEnum));
-	    }
+	                  source.IsEnum ||
+                      source.GetConstructor(Type.EmptyTypes) == null));
+        }
 
         /// <summary>
         /// Gets the default value of the specified <paramref name="type"/>.
