@@ -34,6 +34,16 @@ namespace Cuemon.Data
 
         #region Properties
         /// <summary>
+        /// Determines whether this instance contains a column with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the column to find.</param>
+        /// <returns><c>true</c> if this instance contains a column with the specified name; otherwise, <c>false</c>.</returns>
+        public bool Contains(string name)
+        {
+            return this.Fields.Contains(name);
+        }
+
+        /// <summary>
         /// Gets the column with the specified name.
         /// </summary>
         /// <param name="name">The name of the column to find.</param>
