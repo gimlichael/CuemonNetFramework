@@ -63,6 +63,7 @@ namespace Cuemon.ServiceModel
         /// <returns>A <see cref="DataPairCollection"/> equivalent to the input parameters of this instance.</returns>
         public DataPairCollection Parse(Doer<EndpointInputParser, DataPairCollection> entityBodyDeserializer)
         {
+            Validator.ThrowIfNull(entityBodyDeserializer, "entityBodyDeserializer");
             return entityBodyDeserializer(this);
         }
 
@@ -122,7 +123,7 @@ namespace Cuemon.ServiceModel
                         }
                         else
                         {
-                            property.SetValue(instance, ConvertUtility.ChangeType(propertyValue, property.PropertyType), null);
+                            property.SetValue(instance, ConvertUtility.ChangeType(propertyValue, CultureInfo.InvariantCulture), null);
                         }
                     }
                     result.Add(endpointParameterName, instance);
@@ -135,7 +136,7 @@ namespace Cuemon.ServiceModel
             string value = resolver(endpointParameterName);
             byte[] valueAsByteArray;
             bool isBase64 = StringUtility.TryParseBase64(value, out valueAsByteArray);
-            result.Add(endpointParameterName, isBase64 ? valueAsByteArray : ConvertUtility.ChangeType(value), endpointParameterType);
+            result.Add(endpointParameterName, isBase64 ? valueAsByteArray : ConvertUtility.ChangeType(value, CultureInfo.InvariantCulture), endpointParameterType);
         }
 
         private static DataPairCollection FormUrlEncodedMessageBodyDeserializer(EndpointInputParser parser)
