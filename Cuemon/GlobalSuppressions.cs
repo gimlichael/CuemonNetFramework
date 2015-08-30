@@ -1893,4 +1893,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope = "member", Target = "Cuemon.Validator.#ThrowIfNotEnumType`1(System.String,System.String)")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param", Scope = "member", Target = "Cuemon.Validator.#ThrowIfNotEnumType`1(System.String,System.String)")]
 [assembly: SuppressMessage("Microsoft.Usage", "CA2200:RethrowToPreserveStackDetails", Scope = "member", Target = "Cuemon.Validator.#ThrowIfNotEnumType`1(System.String,System.String)")]
+[assembly: SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope = "member", Target = "Cuemon.Threading.CountdownEvent.#ResetEventHasValidState")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Cuemon.StringUtility.#TryParseBase64(System.String,Cuemon.Doer`2<System.String,System.Boolean>,System.Byte[]&)")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope = "member", Target = "Cuemon.EnumUtility.#IsStringOf`1(System.String,System.Boolean)")]
 
