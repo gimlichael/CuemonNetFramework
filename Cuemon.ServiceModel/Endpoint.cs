@@ -56,11 +56,6 @@ namespace Cuemon.ServiceModel
 		#endregion
 
 		#region Methods
-		//public T EnqueueToCache<T>(string key, T item)
-		//{
-		//    return item;
-		//}
-
 		/// <summary>
 		/// Gets a reference to the <see cref="CachingManager.Cache"/> object.
 		/// </summary>
@@ -120,9 +115,10 @@ namespace Cuemon.ServiceModel
                     Stream requestStream = context.Request.InputStream;
                     if (requestStream.Length > 0)
                     {
-                        if (string.IsNullOrEmpty(contentType.MediaType)) { throw new HttpException((int)HttpStatusCode.BadRequest, "The HTTP Content-Type header is missing from the request; unable to proceed with parsing of the HTTP message entity-body."); }
-                        IEnumerable<object> entityBodyParameters = this.ParseInputStream(httpMethodToInvoke, requestStream, contentType, encoding);
-                        parameters = EnumerableUtility.ToArray(EnumerableUtility.Concat(parameters, entityBodyParameters));
+                        if (contentType == null ||
+                            string.IsNullOrEmpty(contentType.MediaType)) { throw new HttpException((int)HttpStatusCode.BadRequest, "The HTTP Content-Type header is missing from the request; unable to proceed with parsing of the HTTP message entity-body."); }
+                        IEnumerable<DataPair> entityBodyParameters = this.ParseInputStream(httpMethodToInvoke, requestStream, contentType, encoding);
+                        parameters = EnumerableUtility.ToArray(EnumerableUtility.Concat(parameters, ConvertUtility.ParseSequenceWith(entityBodyParameters, pair => pair.Value)));
                     }
                 }
                 
@@ -169,114 +165,25 @@ namespace Cuemon.ServiceModel
         /// <param name="entityBody">A <see cref="Stream"/> object representing the contents of the incoming HTTP content body.</param>
         /// <param name="mimeType">A <see cref="ContentType"/> object representing the MIME type of the <paramref name="entityBody"/>.</param>
         /// <param name="encoding">An <see cref="Encoding"/> object representing the encoding of the <paramref name="entityBody"/>.</param>
-        /// <returns>An <see cref="IEnumerable{Object}"/> sequence of the parsed content of <paramref name="entityBody"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <returns>An <see cref="DataPairCollection"/> of the parsed content of <paramref name="entityBody"/>.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="method"/> is null -or- <paramref name="entityBody"/> is null -or- <paramref name="mimeType"/> is null -or- <paramref name="encoding"/> is null.
         /// </exception>
-        /// <exception cref="System.InvalidOperationException">
+        /// <exception cref="InvalidOperationException">
         /// <paramref name="method"/> is not valid for deserialization.
         /// </exception>
-        /// <exception cref="System.NotSupportedException">
-        /// <paramref name="mimeType"/> is not supported for deserialization.
-        /// </exception>
-        protected virtual IEnumerable<object> ParseInputStream(MethodInfo method, Stream entityBody, ContentType mimeType, Encoding encoding)
+        protected virtual DataPairCollection ParseInputStream(MethodInfo method, Stream entityBody, ContentType mimeType, Encoding encoding)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (entityBody == null) { throw new ArgumentNullException("entityBody"); }
-            if (mimeType == null) { throw new ArgumentNullException("mimeType", "The HTTP Content-Type header is missing from the request; unable to proceed with parsing."); }
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
+            Validator.ThrowIfNull(method, "method");
+            Validator.ThrowIfNull(entityBody, "entityBody");
+            Validator.ThrowIfNull(mimeType, "mimeType", "The HTTP Content-Type header is missing from the request; unable to proceed with parsing.");
+            Validator.ThrowIfNull(encoding, "encoding");
 
-            Type messageType = HttpMessageBody.Parse(mimeType, encoding);
-            string messageTypeName = TypeUtility.SanitizeTypeName(messageType);
-            ParameterInfo parameter = EnumerableUtility.LastOrDefault(method.GetParameters());
-            object instance = null;
-            switch (messageTypeName)
-            {
-                case "FormUrlEncodedMessageBody":
-                    FormUrlEncodedMessageBody formUrlEncodedMessage = new FormUrlEncodedMessageBody(mimeType, encoding);
-                    NameValueCollection form = formUrlEncodedMessage.Deserialize(entityBody);
-                    if (TypeUtility.IsComplex(parameter.ParameterType))
-                    {
-                        ConstructorInfo constructor = null;
-                        IEnumerable<ConstructorInfo> constructors = ReflectionUtility.GetConstructors(parameter.ParameterType);
-                        foreach (ConstructorInfo ctor in constructors)
-                        {
-                            if (ctor.GetParameters().Length == 0)
-                            {
-                                constructor = ctor;
-                                break;
-                            }
-                        }
-
-                        if (constructor == null) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unable to deserialize {0} as no default constructor could be found.", parameter.ParameterType.Name)); }
-                        instance = constructor.Invoke(null);
-                        Type instanceType = instance.GetType();
-                        IEnumerable<PropertyInfo> properties = ReflectionUtility.GetProperties(instanceType, ReflectionUtility.BindingInstancePublicAndPrivate);
-                        foreach (PropertyInfo property in properties)
-                        {
-                            string propertyValue = form[property.Name];
-                            if (property.CanWrite)
-                            {
-                                property.SetValue(instance, ConvertUtility.ChangeType(propertyValue, property.PropertyType), null);
-                            }
-                        }
-                        yield return instance;
-                    }
-                    else
-                    {
-                        for (int i = 0; i < form.AllKeys.Length; i++)
-                        {
-                            yield return ConvertUtility.ChangeType(form[i]);
-                        }
-                    }
-                    break;
-                case "MultipartFormDataMessageBody":
-                    MultipartFormDataMessageBody multipartFormDataMessage = new MultipartFormDataMessageBody(mimeType, encoding);
-                    IList<HttpMultipartContent> parts = new List<HttpMultipartContent>(multipartFormDataMessage.Deserialize(entityBody));
-
-                    if (TypeUtility.IsComplex(parameter.ParameterType))
-                    {
-                        ConstructorInfo constructor = null;
-                        IEnumerable<ConstructorInfo> constructors = ReflectionUtility.GetConstructors(parameter.ParameterType);
-                        foreach (ConstructorInfo ctor in constructors)
-                        {
-                            if (ctor.GetParameters().Length == 0)
-                            {
-                                constructor = ctor;
-                                break;
-                            }
-                        }
-
-                        if (constructor == null) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unable to deserialize {0} as no default constructor could be found.", parameter.ParameterType.Name)); }
-                        instance = constructor.Invoke(null);
-                        Type instanceType = instance.GetType();
-                        IList<PropertyInfo> properties = new List<PropertyInfo>(ReflectionUtility.GetProperties(instanceType, ReflectionUtility.BindingInstancePublicAndPrivate));
-                        ParseMultipart(encoding, parts, properties, ref instance);
-                        yield return instance;
-                    }
-                    else
-                    {
-                        foreach (HttpMultipartContent part in parts)
-                        {
-                            if (part.IsFormItem)
-                            {
-                                yield return ConvertUtility.ChangeType(part.GetPartAsString(encoding));
-                            }
-                        }
-                    }
-                    break;
-                case "XmlMessageBody<TBody>":
-                    Type genericMessageType = messageType.MakeGenericType(parameter.ParameterType);
-                    instance = Activator.CreateInstance(genericMessageType, mimeType, encoding);
-                    MethodInfo deserialize = ReflectionUtility.GetMethod(instance.GetType(), "Deserialize", new Type[] { typeof(Stream) });
-                    if (deserialize != null)
-                    {
-                        yield return deserialize.Invoke(instance, new object[] { entityBody });
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Deserialization of {0} is not supported in this version.", mimeType));
-            }
+            EndpointInputParser parser = new EndpointInputParser(ConvertUtility.ParseSequenceWith(method.GetParameters(), info => new KeyValuePair<string, Type>(info.Name, info.ParameterType)),
+                entityBody,
+                mimeType,
+                encoding);
+            return parser.Parse();
         }
 
 	    private static void ParseMultipart(Encoding encoding, IEnumerable<HttpMultipartContent> parts, IEnumerable<PropertyInfo> properties, ref object instance)
@@ -394,15 +301,6 @@ namespace Cuemon.ServiceModel
 	            yield return new ContentType("text/plain");
 	        }
 	    }
-
-        //protected virtual IEnumerable<char> SupportedCompoundPathSegments
-        //{
-        //    get
-        //    {
-        //        yield return ',';
-        //        yield return ';';
-        //    }
-        //}
 
 	    /// <summary>
         /// Provides a way to handle exceptions thrown from one of the <c>ExecuteXXX</c> methods.
