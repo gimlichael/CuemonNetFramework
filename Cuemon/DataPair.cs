@@ -45,7 +45,7 @@ namespace Cuemon
         /// Gets the type of the data pair value.
         /// </summary>
         /// <value>The type of the data pair value.</value>
-        public abstract Type Type { get; }
+        public abstract Type Type { get; protected set; }
     }
 
     /// <summary>
@@ -59,18 +59,26 @@ namespace Cuemon
         /// </summary>
         /// <param name="name">The name of the data pair.</param>
         /// <param name="value">The value of the data pair.</param>
-        public DataPair(string name, T value) : base(name, value)
-        {   
+        public DataPair(string name, T value) : this(name, value, typeof(T))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataPair" /> class.
+        /// </summary>
+        /// <param name="name">The name of the data pair.</param>
+        /// <param name="value">The value of the data pair.</param>
+        /// <param name="typeOf">The type of the data pair.</param>
+        public DataPair(string name, T value, Type typeOf) : base(name, value)
+        {
+            this.Type = typeOf;
         }
 
         /// <summary>
         /// Gets the type of the data pair value.
         /// </summary>
         /// <value>The type of the data pair value.</value>
-        public override Type Type
-        {
-            get { return typeof(T); }
-        }
+        public override Type Type { get; protected set; }
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
