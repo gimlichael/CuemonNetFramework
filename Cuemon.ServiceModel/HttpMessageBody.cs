@@ -46,7 +46,7 @@ namespace Cuemon.ServiceModel
     /// Represents the entity-body of an HTTP message.
     /// </summary>
     /// <typeparam name="TBody">The type of the deserialized entity-body of an HTTP message.</typeparam>
-    public abstract class HttpMessageBody<TBody>
+    public abstract class HttpMessageBody<TBody> : IHttpMessageBody
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpMessageBody{TBody}"/> class.
