@@ -63,14 +63,17 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EndpointInputParser.cs" />
     <Compile Include="EntityBody.cs" />
     <Compile Include="HttpMultipartContent.cs" />
     <Compile Include="HttpMultipartContentParser.cs" />
     <Compile Include="HttpMultipartFile.cs" />
+    <Compile Include="IHttpMessageBody.cs" />
     <Compile Include="MultipartFormDataMessageBody.cs" />
     <Compile Include="HttpMessageBody.cs" />
     <Compile Include="FormUrlEncodedMessageBody.cs" />
@@ -85,6 +88,10 @@
     <Compile Include="XmlMessageBody.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cuemon.Data\Cuemon.Data.csproj">
+      <Project>{53a4a935-b2fe-424a-8cf8-46b7f38ef0eb}</Project>
+      <Name>Cuemon.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cuemon.Web\Cuemon.Web.csproj">
       <Project>{3b7c19d2-d09b-4f8a-be18-0a755971c0b3}</Project>
       <Name>Cuemon.Web</Name>
