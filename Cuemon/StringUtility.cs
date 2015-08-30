@@ -82,6 +82,48 @@ namespace Cuemon
 
         #region Methods
         /// <summary>
+        /// Converts the string representation of a Base64 to its equivalent <see cref="T:byte[]"/> array.
+        /// </summary>
+        /// <param name="value">The Base64 to convert.</param>
+        /// <param name="result">The array that will contain the parsed value.</param>
+        /// <returns><c>true</c> if the parse operation was successful; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// This method returns <c>false</c> if <paramref name="value"/> is <c>null</c>, <c>empty</c> or not in a recognized format, and does not throw an exception.<br/>
+        /// <paramref name="result"/> will have a default value of <c>null</c>.
+        /// </remarks>
+        public static bool TryParseBase64(string value, out byte[] result)
+        {
+            return TryParseBase64(value, SkipIfKnownChecksumLength, out result);
+        }
+
+        /// <summary>
+        /// Converts the string representation of a Base64 to its equivalent <see cref="T:byte[]"/> array.
+        /// </summary>
+        /// <param name="value">The Base64 to convert.</param>
+        /// <param name="predicate">A function delegate that provides custom rules for bypassing the Base64 structure check.</param>
+        /// <param name="result">The array that will contain the parsed value.</param>
+        /// <returns><c>true</c> if the parse operation was successful; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// This method returns <c>false</c> if <paramref name="value"/> is <c>null</c>, <c>empty</c> or not in a recognized format, and does not throw an exception.<br/>
+        /// <paramref name="result"/> will have a default value of <c>null</c>.
+        /// </remarks>
+        public static bool TryParseBase64(string value, Doer<string, bool> predicate, out byte[] result)
+        {
+            try
+            {
+                Validator.ThrowIfNullOrEmpty(value, "value");
+                if (predicate != null && predicate(value)) { throw new FormatException(); }
+                result = Convert.FromBase64String(value);
+                return true;
+            }
+            catch (Exception)
+            {
+                result = null;
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified <paramref name="value"/> matches a Base64 structure.
         /// </summary>
         /// <param name="value">The value to test for a Base64 structure.</param>
@@ -90,6 +132,18 @@ namespace Cuemon
         public static bool IsBase64(string value)
         {
             return IsBase64(value, SkipIfKnownChecksumLength);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="value"/> matches a Base64 structure.
+        /// </summary>
+        /// <param name="value">The value to test for a Base64 structure.</param>
+        /// <param name="predicate">A function delegate that provides custom rules for bypassing the Base64 structure check.</param>
+        /// <returns><c>true</c> if the specified <paramref name="value"/> matches a Base64 structure; otherwise, <c>false</c>.</returns>
+        public static bool IsBase64(string value, Doer<string, bool> predicate)
+        {
+            byte[] result;
+            return TryParseBase64(value, predicate, out result);
         }
 
         private static bool SkipIfKnownChecksumLength(string value)
@@ -112,28 +166,6 @@ namespace Cuemon
                 }
             }
             return false;
-        }
-
-        /// <summary>
-        /// Determines whether the specified <paramref name="value"/> matches a Base64 structure.
-        /// </summary>
-        /// <param name="value">The value to test for a Base64 structure.</param>
-        /// <param name="predicate">A function delegate that provides custom rules for bypassing the Base64 structure check.</param>
-        /// <returns><c>true</c> if the specified <paramref name="value"/> matches a Base64 structure; otherwise, <c>false</c>.</returns>
-        public static bool IsBase64(string value, Doer<string, bool> predicate)
-        {
-            if (string.IsNullOrEmpty(value)) { return false; }
-            if (predicate != null &&
-                predicate(value)) { return false; }
-            try
-            {
-                Convert.FromBase64String(value);
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
         }
 
         /// <summary>
