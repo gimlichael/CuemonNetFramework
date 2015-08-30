@@ -31,13 +31,19 @@ namespace Cuemon.ServiceModel
         /// <remarks>This method is invoked only once as the first event in the HTTP pipeline chain of execution when ASP.NET responds to a request.</remarks>
         protected override void OnApplicationStart(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            Validator.ThrowIfNull(context, "context");
 
             EnableExceptionToXmlInterception = true;
             EnableCompression = true;
             EnableStaticClientCaching = false;
             EnableDynamicClientCaching = false;
 
+            ParseEndpointRoutes();
+            ParseEndpointHandlers();
+        }
+
+        private static void ParseEndpointRoutes()
+        {
             IReadOnlyCollection<Type> endpoints = GetReferencedTypes(typeof(Endpoint));
             foreach (Type endpoint in endpoints)
             {
@@ -51,14 +57,18 @@ namespace Cuemon.ServiceModel
                 }
                 if (httpAttributes.Count > 0) { EndpointRoutes.Add(endpoint, httpAttributes); }
             }
+        }
 
+        private static void ParseEndpointHandlers()
+        {
             IXPathNavigable webConfig = WebConfigurationUtility.OpenWebConfiguration("~/Web.config");
             IEnumerable<HttpHandlerAction> handlers = WebConfigurationUtility.GetHandlers(webConfig);
             foreach (Type endpointType in EndpointRoutes.Keys)
             {
                 foreach (HttpHandlerAction handler in handlers)
                 {
-                    if (endpointType == endpointType.Assembly.GetType(handler.Type))
+                    Type handlerType = endpointType.Assembly.GetType(handler.Type);
+                    if (TypeUtility.ContainsType(endpointType, handlerType))
                     {
                         EndpointHandlers.Add(endpointType, handler);
                     }
@@ -82,7 +92,14 @@ namespace Cuemon.ServiceModel
 
         internal static HttpHandlerAction GetHandlerAction(Type handlerType)
         {
-            return EndpointHandlers[handlerType];
+            try
+            {
+                return EndpointHandlers[handlerType];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw ExceptionUtility.Refine(new HttpException(404, "The specified endpoint was not found."), MethodBase.GetCurrentMethod(), handlerType);
+            }
         }
 
         /// <summary>
@@ -118,6 +135,14 @@ namespace Cuemon.ServiceModel
             return null;
         }
 
+        private static string ParseContentType(Exception exception)
+        {
+            return (exception == null || !exception.Data.Contains("contentType")) ||
+                   (exception.InnerException == null || !exception.InnerException.Data.Contains("contentType"))
+                        ? "text/plain"
+                        : Convert.ToString(exception.Data["contentType"] ?? exception.InnerException.Data["contentType"], CultureInfo.InvariantCulture);
+        }
+
         /// <summary>
         /// Handles the exception interception. Especially useful for XML web services.
         /// </summary>
@@ -136,9 +161,10 @@ namespace Cuemon.ServiceModel
             includeStackTrace = this.IncludeStackTraceOnException;
             HttpException lastHttpException = lastException as HttpException;
 
-            string contentType = lastException.Data["contentType"] == null && lastException.InnerException.Data["contentType"] == null ? "text/plain" : Convert.ToString(lastException.Data["contentType"] ?? lastException.InnerException.Data["contentType"]);
-            lastException.Data.Remove("contentType");
-            if (lastException.InnerException != null) { lastException.InnerException.Data.Remove("contentType"); }
+            string contentType = ParseContentType(lastException);
+            if (lastException.Data.Contains("contentType")) { lastException.Data.Remove("contentType"); }
+            if (lastException.InnerException != null &&
+                lastException.InnerException.Data.Contains("contentType")) { lastException.InnerException.Data.Remove("contentType"); }
 
             int statusCode = 500;
             if (lastHttpException != null)
@@ -152,7 +178,7 @@ namespace Cuemon.ServiceModel
                     }
                     else
                     {
-                        lastException = lastHttpException.InnerException;    
+                        lastException = lastHttpException.InnerException;
                     }
                 }
             }
