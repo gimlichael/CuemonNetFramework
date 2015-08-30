@@ -2266,7 +2266,7 @@ namespace Cuemon.ServiceModel
 
         private HttpCachingAttribute GetCachingAttribute(MethodBase caller)
         {
-            HttpCachingAttribute cachingClassAttribute = ReflectionUtility.GetAttribute<HttpCachingAttribute>(this.GetType());
+            HttpCachingAttribute cachingClassAttribute = ReflectionUtility.GetAttribute<HttpCachingAttribute>(this.GetType(), true);
             HttpCachingAttribute cachingMethodAttribute = ReflectionUtility.GetAttribute<HttpCachingAttribute>(caller);
             if (cachingMethodAttribute != null) { return cachingMethodAttribute; }
             if (cachingClassAttribute != null) { return cachingClassAttribute; }
