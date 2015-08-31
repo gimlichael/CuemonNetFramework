@@ -555,8 +555,28 @@ namespace Cuemon
 	                 (source.IsClass && source == typeof(object)) ||
 	                 (source.IsValueType ||
 	                  source.IsPrimitive ||
-	                  source.IsEnum ||
-                      source.GetConstructor(Type.EmptyTypes) == null));
+	                  source.IsEnum));
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="source"/> has a default constructor.
+        /// </summary>
+        /// <param name="source">The <see cref="Type"/> to determine is with default constructor.</param>
+        /// <returns><c>true</c> if the specified <paramref name="source"/> has a default constructor; otherwise, <c>false</c>.</returns>
+        public static bool IsWithDefaultConstructor(Type source)
+        {
+            return !IsWithoutDefaultConstructor(source);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="source"/> does not have a default constructor.
+        /// </summary>
+        /// <param name="source">The <see cref="Type"/> to determine is without a default constructor.</param>
+        /// <returns><c>true</c> if the specified <paramref name="source"/> does not have a default constructor; otherwise, <c>false</c>.</returns>
+        public static bool IsWithoutDefaultConstructor(Type source)
+        {
+            Validator.ThrowIfNull(source, "source");
+            return (!source.IsValueType || source.GetConstructor(Type.EmptyTypes) == null);
         }
 
         /// <summary>
