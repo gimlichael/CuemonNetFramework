@@ -146,7 +146,7 @@ namespace Cuemon.ServiceModel
             NameValueCollection form = formUrlEncodedBody.Deserialize(parser.Body);
             foreach (KeyValuePair<string, Type> endpointParameterType in parser.EndpointParameterTypes)
             {
-                if (TypeUtility.IsComplex(endpointParameterType.Value))
+                if (IsComplexWithDefaultConstructor(endpointParameterType.Value))
                 {
                     ParseComplexTypes(result, 
                         endpointParameterType.Key, 
@@ -172,7 +172,7 @@ namespace Cuemon.ServiceModel
             IList<HttpMultipartContent> dataParts = new List<HttpMultipartContent>(multipartFormDataBody.Deserialize(parser.Body));
             foreach (KeyValuePair<string, Type> endpointParameterType in parser.EndpointParameterTypes)
             {
-                if (TypeUtility.IsComplex(endpointParameterType.Value))
+                if (IsComplexWithDefaultConstructor(endpointParameterType.Value))
                 {
                     foreach (HttpMultipartContent dataPart in dataParts)
                     {
@@ -206,7 +206,7 @@ namespace Cuemon.ServiceModel
             DataPairCollection result = new DataPairCollection();
             foreach (KeyValuePair<string, Type> endpointParameterType in parser.EndpointParameterTypes)
             {
-                if (TypeUtility.IsComplex(endpointParameterType.Value))
+                if (IsComplexWithDefaultConstructor(endpointParameterType.Value))
                 {
                     Type genericEntityBodyType = entityBodyType.MakeGenericType(endpointParameterType.Value);
                     object instance = Activator.CreateInstance(genericEntityBodyType, parser.ContentType, parser.Encoding);
@@ -243,6 +243,11 @@ namespace Cuemon.ServiceModel
                 }
             }
             return result;
+        }
+
+        private static bool IsComplexWithDefaultConstructor(Type value)
+        {
+            return (TypeUtility.IsComplex(value) && TypeUtility.IsWithDefaultConstructor(value));
         }
     }
 }
