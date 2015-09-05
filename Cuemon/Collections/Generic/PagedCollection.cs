@@ -72,6 +72,7 @@ namespace Cuemon.Collections.Generic
     /// <typeparam name="T">The type of the elements of this instance.</typeparam>
     public class PagedCollection<T> : PagedCollection, IEnumerable<T>
     {
+        private int _lastHashCodeForSettings;
         private IList<T> _pageableCollection;
 
         #region Constructors
@@ -164,7 +165,16 @@ namespace Cuemon.Collections.Generic
 
         private IList<T> PagedSource
         {
-            get { return _pageableCollection ?? (_pageableCollection = GetPageableCollection(this.OriginalSource)); }
+            get
+            {
+                int currentHashCodeForSettings = Settings.GetHashCode();
+                if (_pageableCollection == null || _lastHashCodeForSettings != currentHashCodeForSettings)
+                {
+                    _pageableCollection = GetPageableCollection(this.OriginalSource);
+                    _lastHashCodeForSettings = currentHashCodeForSettings;
+                }
+                return _pageableCollection;
+            }
             set { _pageableCollection = value; }
         }
 
@@ -209,10 +219,21 @@ namespace Cuemon.Collections.Generic
         {
             get { return (this.Settings.PageNumber > 1 && this.Settings.PageNumber <= this.PageCount); }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is on the first paged data sequence.
+        /// </summary>
+        /// <value><c>true</c> if this instance is on the first paged data sequence; otherwise, <c>false</c>.</value>
+        public bool FirstPage { get { return this.Settings.PageNumber == 1; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is on the last paged data sequence.
+        /// </summary>
+        /// <value><c>true</c> if this instance is on the last paged data sequence; otherwise, <c>false</c>.</value>
+        public bool LastPage { get { return this.Settings.PageNumber == this.PageCount; } }
         #endregion
 
         #region Methods
-
         /// <summary>
         /// Gets the first number of the next page range relative to the specified <paramref name="page"/>.
         /// </summary>

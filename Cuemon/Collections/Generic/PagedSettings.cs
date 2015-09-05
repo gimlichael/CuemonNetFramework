@@ -32,6 +32,19 @@ namespace Cuemon.Collections.Generic
         }
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+        public override int GetHashCode()
+        {
+            return StructUtility.GetHashCode32(EnumerableUtility.AsEnumerable(this.PageSize, this.PageNumber, (int)this.SortOrderDirection, this.Data.GetHashCode())) ^ StringUtility.GetHashCode(string.Concat(this.SearchCriteria, this.SortOrderBy));
+        }
+
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets a value indicating whether this instance was invoked with a search operation.
