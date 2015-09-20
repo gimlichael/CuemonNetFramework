@@ -479,5 +479,119 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
             Validator.ThrowIfNull(secondExpression, "secondExpression");
             return condition ? firstExpression(arg1, arg2, arg3, arg4, arg5) : secondExpression(arg1, arg2, arg3, arg4, arg5);
         }
+
+        /// <summary>
+        /// Invokes one of two expressions depending on the value of <paramref name="condition"/>.
+        /// </summary>
+        /// <param name="condition">When <c>true</c>, the <paramref name="firstExpression"/> is invoked; when <c>false</c>, the <paramref name="secondExpression"/> is invoked.</param>
+        /// <param name="firstExpression">The delegate that is invoked when <paramref name="condition"/> is <c>true</c>.</param>
+        /// <param name="secondExpression">The delegate that is invoked when <paramref name="condition"/> is <c>false</c>.</param>
+        public static void FlipFlop(bool condition, Act firstExpression, Act secondExpression)
+        {
+            Validator.ThrowIfNull(firstExpression, "firstExpression");
+            Validator.ThrowIfNull(secondExpression, "secondExpression");
+            if (IsTrue(condition)) { firstExpression(); }
+            if (IsFalse(condition)) { secondExpression(); }
+        }
+
+        /// <summary>
+        /// Invokes one of two expressions depending on the value of <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <param name="condition">When <c>true</c>, the <paramref name="firstExpression"/> is invoked; when <c>false</c>, the <paramref name="secondExpression"/> is invoked.</param>
+        /// <param name="firstExpression">The delegate that is invoked when <paramref name="condition"/> is <c>true</c>.</param>
+        /// <param name="secondExpression">The delegate that is invoked when <paramref name="condition"/> is <c>false</c>.</param>
+        /// <param name="arg">The parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        public static void FlipFlop<T>(bool condition, Act<T> firstExpression, Act<T> secondExpression, T arg)
+        {
+            Validator.ThrowIfNull(firstExpression, "firstExpression");
+            Validator.ThrowIfNull(secondExpression, "secondExpression");
+            if (IsTrue(condition)) { firstExpression(arg); }
+            if (IsFalse(condition)) { secondExpression(arg); }
+        }
+
+        /// <summary>
+        /// Invokes one of two expressions depending on the value of <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <param name="condition">When <c>true</c>, the <paramref name="firstExpression"/> is invoked; when <c>false</c>, the <paramref name="secondExpression"/> is invoked.</param>
+        /// <param name="firstExpression">The delegate that is invoked when <paramref name="condition"/> is <c>true</c>.</param>
+        /// <param name="secondExpression">The delegate that is invoked when <paramref name="condition"/> is <c>false</c>.</param>
+        /// <param name="arg1">The first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg2">The second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        public static void FlipFlop<T1, T2>(bool condition, Act<T1, T2> firstExpression, Act<T1, T2> secondExpression, T1 arg1, T2 arg2)
+        {
+            Validator.ThrowIfNull(firstExpression, "firstExpression");
+            Validator.ThrowIfNull(secondExpression, "secondExpression");
+            if (IsTrue(condition)) { firstExpression(arg1, arg2); }
+            if (IsFalse(condition)) { secondExpression(arg1, arg2); }
+        }
+
+        /// <summary>
+        /// Invokes one of two expressions depending on the value of <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <param name="condition">When <c>true</c>, the <paramref name="firstExpression"/> is invoked; when <c>false</c>, the <paramref name="secondExpression"/> is invoked.</param>
+        /// <param name="firstExpression">The delegate that is invoked when <paramref name="condition"/> is <c>true</c>.</param>
+        /// <param name="secondExpression">The delegate that is invoked when <paramref name="condition"/> is <c>false</c>.</param>
+        /// <param name="arg1">The first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg2">The second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg3">The third parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        public static void FlipFlop<T1, T2, T3>(bool condition, Act<T1, T2, T3> firstExpression, Act<T1, T2, T3> secondExpression, T1 arg1, T2 arg2, T3 arg3)
+        {
+            Validator.ThrowIfNull(firstExpression, "firstExpression");
+            Validator.ThrowIfNull(secondExpression, "secondExpression");
+            if (IsTrue(condition)) { firstExpression(arg1, arg2, arg3); }
+            if (IsFalse(condition)) { secondExpression(arg1, arg2, arg3); }
+        }
+
+        /// <summary>
+        /// Invokes one of two expressions depending on the value of <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <param name="condition">When <c>true</c>, the <paramref name="firstExpression"/> is invoked; when <c>false</c>, the <paramref name="secondExpression"/> is invoked.</param>
+        /// <param name="firstExpression">The delegate that is invoked when <paramref name="condition"/> is <c>true</c>.</param>
+        /// <param name="secondExpression">The delegate that is invoked when <paramref name="condition"/> is <c>false</c>.</param>
+        /// <param name="arg1">The first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg2">The second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg3">The third parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg4">The fourth parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        public static void FlipFlop<T1, T2, T3, T4>(bool condition, Act<T1, T2, T3, T4> firstExpression, Act<T1, T2, T3, T4> secondExpression, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            Validator.ThrowIfNull(firstExpression, "firstExpression");
+            Validator.ThrowIfNull(secondExpression, "secondExpression");
+            if (IsTrue(condition)) { firstExpression(arg1, arg2, arg3, arg4); }
+            if (IsFalse(condition)) { secondExpression(arg1, arg2, arg3, arg4); }
+        }
+
+        /// <summary>
+        /// Invokes one of two expressions depending on the value of <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</typeparam>
+        /// <param name="condition">When <c>true</c>, the <paramref name="firstExpression"/> is invoked; when <c>false</c>, the <paramref name="secondExpression"/> is invoked.</param>
+        /// <param name="firstExpression">The delegate that is invoked when <paramref name="condition"/> is <c>true</c>.</param>
+        /// <param name="secondExpression">The delegate that is invoked when <paramref name="condition"/> is <c>false</c>.</param>
+        /// <param name="arg1">The first parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg2">The second parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg3">The third parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg4">The fourth parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        /// <param name="arg5">The fifth parameter of the delegates <paramref name="firstExpression"/> and <paramref name="secondExpression"/>.</param>
+        public static void FlipFlop<T1, T2, T3, T4, T5>(bool condition, Act<T1, T2, T3, T4, T5> firstExpression, Act<T1, T2, T3, T4, T5> secondExpression, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            Validator.ThrowIfNull(firstExpression, "firstExpression");
+            Validator.ThrowIfNull(secondExpression, "secondExpression");
+            if (IsTrue(condition)) { firstExpression(arg1, arg2, arg3, arg4, arg5); }
+            if (IsFalse(condition)) { secondExpression(arg1, arg2, arg3, arg4, arg5); }
+        }
     }
 }
