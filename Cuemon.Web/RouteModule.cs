@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using Cuemon.Collections.Generic;
 using Cuemon.Reflection;
+using Cuemon.Web.Compilation;
 using Cuemon.Web.Routing;
 
 namespace Cuemon.Web
@@ -17,7 +18,6 @@ namespace Cuemon.Web
     {
         private static IEnumerable<string> PhysicalFileNames = null;
         private static readonly IDictionary<Type, IEnumerable<HttpRouteAttribute>> HandlerRoutes = new Dictionary<Type, IEnumerable<HttpRouteAttribute>>();
-        //internal static readonly IDictionary<Type, HttpHandlerAction> HandlerActions = new Dictionary<Type, HttpHandlerAction>();
 
         /// <summary>
         /// Provides access to the ApplicationStart event that occurs when an AppPool is first started.
@@ -37,7 +37,6 @@ namespace Cuemon.Web
 
             this.DiscoverHandlerRoutes(typeof(IHttpHandler));
             base.OnApplicationStart(context);
-            //this.DiscoverHandlerActions();
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace Cuemon.Web
         {
             Validator.ThrowIfNull(routeHandler, "routeHandler");
             Validator.ThrowIfNot(routeHandler, HasHttpHandlerInterface, ExceptionUtility.CreateArgumentException, "routeHandler", "The specified type does not implement the IHttpHandler interface.");
-            IReadOnlyCollection<Type> routeHandlerTypes = GetReferencedTypes(routeHandler);
+            IReadOnlyCollection<Type> routeHandlerTypes = CompilationUtility.GetReferencedTypes(routeHandler);
             foreach (Type routeHandlerType in routeHandlerTypes)
             {
                 List<HttpRouteAttribute> httpAttributes = new List<HttpRouteAttribute>();
@@ -143,22 +142,6 @@ namespace Cuemon.Web
                 if (httpAttributes.Count > 0) { HandlerRoutes.Add(routeHandlerType, httpAttributes); }
             }
         }
-
-        //protected virtual void DiscoverHandlerActions()
-        //{
-        //    IXPathNavigable webConfig = WebConfigurationUtility.OpenWebConfiguration("~/Web.config");
-        //    IEnumerable<HttpHandlerAction> handlerActions = WebConfigurationUtility.GetHandlers(webConfig);
-        //    foreach (Type routeHandlerType in HandlerRoutes.Keys)
-        //    {
-        //        foreach (HttpHandlerAction handlerAction in handlerActions)
-        //        {
-        //            if (routeHandlerType == routeHandlerType.Assembly.GetType(handlerAction.Type))
-        //            {
-        //                HandlerActions.Add(routeHandlerType, handlerAction);
-        //            }
-        //        }
-        //    }
-        //}
 
         private bool HasHttpHandlerInterface(Type routeHandler)
         {

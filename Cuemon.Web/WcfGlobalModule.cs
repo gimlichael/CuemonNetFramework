@@ -5,6 +5,7 @@ using System.Web;
 using System.Xml.XPath;
 using Cuemon.Collections.Generic;
 using Cuemon.IO.Compression;
+using Cuemon.Web.Compilation;
 using Cuemon.Xml;
 using Cuemon.Xml.XPath;
 
@@ -236,7 +237,7 @@ namespace Cuemon.Web
             if (wcfHandler != null && suggestWcfHelpPage)
             {
                 Type typeOfHandler = wcfHandler.GetType();
-                IReadOnlyCollection<Type> knownHandlerTypes = GetReferencedHandlerTypes();
+                IReadOnlyCollection<Type> knownHandlerTypes = CompilationUtility.GetReferencedHandlerTypes();
                 suggestWcfHelpPage &= !knownHandlerTypes.Contains(typeOfHandler);
                 suggestWcfHelpPage = (typeOfHandler.Name.Equals("AspNetRouteServiceHttpHandler", StringComparison.OrdinalIgnoreCase) && suggestWcfHelpPage);
             }
