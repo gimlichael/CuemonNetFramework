@@ -4,22 +4,22 @@ using Cuemon.Collections.Generic;
 
 namespace Cuemon.Threading
 {
-	/// <summary>
-	/// Provides a pool of threads to execute work items implementing the <see cref="IActWorkItem"/> interface.
-	/// </summary>
-	public class ActWorkItemPool : IActWorkItemPool
-	{
-	    private EventHandler<WorkItemExceptionEventArgs> _worktItemException = null;
+    /// <summary>
+    /// Provides a pool of threads to execute work items implementing the <see cref="IActWorkItem"/> interface.
+    /// </summary>
+    public class ActWorkItemPool : IActWorkItemPool
+    {
+        private EventHandler<WorkItemExceptionEventArgs> _worktItemException = null;
 
-		#region Constructors
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ActWorkItemPool"/> class.
-		/// </summary>
-		public ActWorkItemPool()
-		{
-            this.ExceptionsCore = new List<Exception>();
-		}
-		#endregion
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActWorkItemPool"/> class.
+        /// </summary>
+        public ActWorkItemPool()
+        {
+            PreliminaryExceptions = new List<Exception>();
+        }
+        #endregion
 
         #region Events
         /// <summary>
@@ -44,14 +44,22 @@ namespace Cuemon.Threading
         /// </summary>
         /// <value>The exceptions.</value>
 	    public IReadOnlyCollection<Exception> Exceptions
-	    {
-	        get{ return new ReadOnlyCollection<Exception>(this.ExceptionsCore); }
-	    }
+        {
+            get { return new ReadOnlyCollection<Exception>(PreliminaryExceptions); }
+        }
 
-        internal IList<Exception> ExceptionsCore { get; set; }
-		#endregion
+        private IList<Exception> PreliminaryExceptions { get; set; }
 
-		#region Methods
+        internal void AddException(Exception ex)
+        {
+            lock (PreliminaryExceptions)
+            {
+                PreliminaryExceptions.Add(ex);
+            }
+        }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Raises the <see cref="WorkItemException"/> event.
         /// </summary>
@@ -67,41 +75,41 @@ namespace Cuemon.Threading
 
         internal void RaiseWorkItemException(Exception exception)
         {
-            this.OnWorkItemException(exception);
+            OnWorkItemException(exception);
         }
-		#endregion
+        #endregion
 
-		#region Methods
-		/// <summary>
-		/// The work to be processed one thread at a time.
-		/// </summary>
-		/// <param name="work">The work item to execute one thread at a time.</param>
-		public virtual void ProcessWork(IActWorkItem work)
-		{
-			if (work == null) { throw new ArgumentNullException("work"); }
-		    ActWorkItem concreteWork = work as ActWorkItem;
+        #region Methods
+        /// <summary>
+        /// The work to be processed one thread at a time.
+        /// </summary>
+        /// <param name="work">The work item to execute one thread at a time.</param>
+        public virtual void ProcessWork(IActWorkItem work)
+        {
+            if (work == null) { throw new ArgumentNullException("work"); }
+            ActWorkItem concreteWork = work as ActWorkItem;
             if (concreteWork != null)
             {
                 concreteWork.PoolReference = this;
             }
             else
             {
-                work.Data.Add("wippReference", this);    
+                work.Data.Add("wippReference", this);
             }
             ThreadPoolUtility.QueueWork(DefaultProcessWorkCallback, work);
-		}
+        }
 
-		private static void DefaultProcessWorkCallback(IActWorkItem work)
-		{
+        private static void DefaultProcessWorkCallback(IActWorkItem work)
+        {
             ActWorkItemPool workWorkItemPoolReference = null;
-			try
-			{
-			    ActWorkItem concreteWork = work as ActWorkItem;
-			    FactoryActWorkItem factoryConcreteWork = work as FactoryActWorkItem;
-			    if (concreteWork != null)
-			    {
-			        workWorkItemPoolReference = concreteWork.PoolReference;
-			    }
+            try
+            {
+                ActWorkItem concreteWork = work as ActWorkItem;
+                FactoryActWorkItem factoryConcreteWork = work as FactoryActWorkItem;
+                if (concreteWork != null)
+                {
+                    workWorkItemPoolReference = concreteWork.PoolReference;
+                }
 
                 if (factoryConcreteWork != null)
                 {
@@ -109,25 +117,25 @@ namespace Cuemon.Threading
                 }
 
                 if (workWorkItemPoolReference == null)
-			    {
-			        workWorkItemPoolReference = work.Data["wippReference"] as ActWorkItemPool;
-			    }
+                {
+                    workWorkItemPoolReference = work.Data["wippReference"] as ActWorkItemPool;
+                }
 
-			    if (workWorkItemPoolReference == null) { throw new ArgumentException("Unable to establish a reference to the ActWorkItemPool.", "work"); }
-			    work.ProcessWork();
-			}
-			catch (Exception ex)
-			{
+                if (workWorkItemPoolReference == null) { throw new ArgumentException("Unable to establish a reference to the ActWorkItemPool.", "work"); }
+                work.ProcessWork();
+            }
+            catch (Exception ex)
+            {
                 if (workWorkItemPoolReference == null) { return; }
                 workWorkItemPoolReference.RaiseWorkItemException(ex);
-			    workWorkItemPoolReference.ExceptionsCore.Add(ex);
-			}
-			finally
-			{
-				work.Synchronization.Signal();
-			    work = null;
-			}
-		}
-		#endregion
-	}
+                workWorkItemPoolReference.AddException(ex);
+            }
+            finally
+            {
+                work.Synchronization.Signal();
+                work = null;
+            }
+        }
+        #endregion
+    }
 }

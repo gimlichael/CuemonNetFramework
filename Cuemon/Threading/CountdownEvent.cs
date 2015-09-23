@@ -9,6 +9,9 @@ namespace Cuemon.Threading
     /// <remarks>This class was inspired by the newly introduced CountdownEvent in .NET 4.0, and I think .NET 2.0 users should benefit from this lightweight implementation.</remarks>
     public sealed class CountdownEvent : CountdownEventBase, IDisposable
     {
+        private readonly object _padLock = new object();
+        private volatile bool _isDisposed;
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CountdownEvent"/> class.
@@ -21,10 +24,7 @@ namespace Cuemon.Threading
         #endregion
 
         #region Properties
-        private bool IsDisposed { get; set; }
-
         private ManualResetEvent ResetEvent { get; set; }
-
         #endregion
 
         #region Methods
@@ -33,7 +33,7 @@ namespace Cuemon.Threading
         /// </summary>
         protected override void Set()
         {
-            if (this.ResetEventHasValidState) { this.ResetEvent.Set(); }
+            if (ResetEventHasValidState) { ResetEvent.Set(); }
         }
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace Cuemon.Threading
         /// <param name="timeout">A <see cref="T:System.TimeSpan"/> that represents the time to wait.</param>
         public override void Wait(TimeSpan timeout)
         {
-            if (this.IsSet) { return; }
-            if (this.ResetEventHasValidState) { this.ResetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false); }
-            if (this.ElapsedTime > timeout) { throw new TimeoutException(); }
+            if (IsSet) { return; }
+            if (ResetEventHasValidState) { ResetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false); }
+            if (ElapsedTime > timeout) { throw new TimeoutException(); }
         }
 
         /// <summary>
@@ -53,15 +53,18 @@ namespace Cuemon.Threading
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         private void Dispose(bool disposing)
         {
-            if (this.IsDisposed) { return; }
-            this.IsDisposed = true;
-            if (disposing)
+            if (_isDisposed || !disposing) { return; }
+            _isDisposed = true;
+            if (ResetEventHasValidState)
             {
-                if (this.ResetEvent != null)
+                lock (_padLock)
                 {
-                    this.ResetEvent.Close();
+                    if (ResetEventHasValidState)
+                    {
+                        ResetEvent.Close();
+                    }
+                    ResetEvent = null;
                 }
-                this.ResetEvent = null;
             }
         }
 
@@ -69,8 +72,8 @@ namespace Cuemon.Threading
         {
             get
             {
-                return (this.ResetEvent != null &&
-                       !this.ResetEvent.SafeWaitHandle.IsClosed);
+                return (ResetEvent != null &&
+                       !ResetEvent.SafeWaitHandle.IsClosed);
             }
         }
 
