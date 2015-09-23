@@ -95,10 +95,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, TResult> body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, TResult> factory = new DoerFactory<TSource, TResult>(body, default(TSource));
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource));
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -177,10 +175,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T, TResult> body, T arg)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T, TResult> factory = new DoerFactory<TSource, T, TResult>(body, default(TSource), arg);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -267,10 +263,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, TResult> body, T1 arg1, T2 arg2)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, TResult> factory = new DoerFactory<TSource, T1, T2, TResult>(body, default(TSource), arg1, arg2);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -365,10 +359,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, TResult> body, T1 arg1, T2 arg2, T3 arg3)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, TResult> factory = new DoerFactory<TSource, T1, T2, T3, TResult>(body, default(TSource), arg1, arg2, arg3);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -471,10 +463,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, TResult>(body, default(TSource), arg1, arg2, arg3, arg4);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -585,10 +575,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, T5, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -707,10 +695,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, T5, T6, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -837,10 +823,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -975,10 +959,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -1121,10 +1103,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -1275,14 +1255,19 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForEachTask<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            ValidateForEachTask(settings, source, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return ForEachTaskCore(factory, source, partitionSize, timeout, settings);
         }
 
-        private static IReadOnlyCollection<TResult> ForEachTaskCore<TSource, TResult>(DoerFactory<TSource, TResult> factory, IEnumerable<TSource> source, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings)
+        private static void ValidateForEachTask<TSource>(ThreadPoolSettings settings, IEnumerable<TSource> source, object body)
+        {
+            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(body, "body");
+        }
+
+        private static IReadOnlyCollection<TResult> ForEachTaskCore<TTuple, TSource, TResult>(DoerFactory<TTuple, TResult> factory, IEnumerable<TSource> source, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TTuple : Template<TSource>
         {
             CountdownEvent sync = null;
             SortedDoerWorkItemPool<long, TResult> pool = new SortedDoerWorkItemPool<long, TResult>();
@@ -1298,17 +1283,20 @@ namespace Cuemon.Threading
                         sync = new CountdownEvent(currentPartitionSize);
                         foreach (TSource element in partition)
                         {
-                            factory.Arg1 = element;
+                            factory.GenericArguments.Arg1 = element;
                             ISortedDoerWorkItem<long, TResult> work = SortedDoerWorkItem.Create(sorter, sync, ForEachElementTaskCore, factory.Clone());
                             pool.ProcessWork(work);
                             sorter++;
                         }
+                        sync.Wait(timeout);
                     }
                     finally
                     {
-                        sync.Wait(timeout);
-                        sync.Dispose();
-                        sync = null;
+                        if (sync != null)
+                        {
+                            sync.Dispose();
+                            sync = null;
+                        }
                     }
                 }
             }
@@ -1320,7 +1308,7 @@ namespace Cuemon.Threading
             return pool.Result;
         }
 
-        private static TResult ForEachElementTaskCore<TResult>(DoerFactory<TResult> factory)
+        private static TResult ForEachElementTaskCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory) where TTuple : Template
         {
             try
             {

@@ -946,10 +946,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> of delimited values from the by parameter specified delimiter.</returns>
         public static string ToDelimitedString<TSource>(IEnumerable<TSource> source, string delimiter, string format, Doer<TSource, string> converter)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (delimiter == null) { throw new ArgumentNullException("delimiter"); }
-            if (delimiter.Length == 0) { throw new ArgumentEmptyException("delimiter"); }
-            DoerFactory<TSource, string> factory = new DoerFactory<TSource, string>(converter, default(TSource));
+            ValidateToDelimitedString(source, delimiter);
+            var factory = DoerFactory.Create(converter, default(TSource));
             return ToDelimitedStringCore(factory, source, delimiter, format);
         }
 
@@ -966,10 +964,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> of delimited values from the by parameter specified delimiter.</returns>
         public static string ToDelimitedString<TSource, T>(IEnumerable<TSource> source, string delimiter, string format, Doer<TSource, T, string> converter, T arg)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (delimiter == null) { throw new ArgumentNullException("delimiter"); }
-            if (delimiter.Length == 0) { throw new ArgumentEmptyException("delimiter"); }
-            DoerFactory<TSource, T, string> factory = new DoerFactory<TSource, T, string>(converter, default(TSource), arg);
+            ValidateToDelimitedString(source, delimiter);
+            var factory = DoerFactory.Create(converter, default(TSource), arg);
             return ToDelimitedStringCore(factory, source, delimiter, format);
         }
 
@@ -988,10 +984,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> of delimited values from the by parameter specified delimiter.</returns>
         public static string ToDelimitedString<TSource, T1, T2>(IEnumerable<TSource> source, string delimiter, string format, Doer<TSource, T1, T2, string> converter, T1 arg1, T2 arg2)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (delimiter == null) { throw new ArgumentNullException("delimiter"); }
-            if (delimiter.Length == 0) { throw new ArgumentEmptyException("delimiter"); }
-            DoerFactory<TSource, T1, T2, string> factory = new DoerFactory<TSource, T1, T2, string>(converter, default(TSource), arg1, arg2);
+            ValidateToDelimitedString(source, delimiter);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2);
             return ToDelimitedStringCore(factory, source, delimiter, format);
         }
 
@@ -1012,10 +1006,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> of delimited values from the by parameter specified delimiter.</returns>
         public static string ToDelimitedString<TSource, T1, T2, T3>(IEnumerable<TSource> source, string delimiter, string format, Doer<TSource, T1, T2, T3, string> converter, T1 arg1, T2 arg2, T3 arg3)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (delimiter == null) { throw new ArgumentNullException("delimiter"); }
-            if (delimiter.Length == 0) { throw new ArgumentEmptyException("delimiter"); }
-            DoerFactory<TSource, T1, T2, T3, string> factory = new DoerFactory<TSource, T1, T2, T3, string>(converter, default(TSource), arg1, arg2, arg3);
+            ValidateToDelimitedString(source, delimiter);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3);
             return ToDelimitedStringCore(factory, source, delimiter, format);
         }
 
@@ -1038,10 +1030,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> of delimited values from the by parameter specified delimiter.</returns>
         public static string ToDelimitedString<TSource, T1, T2, T3, T4>(IEnumerable<TSource> source, string delimiter, string format, Doer<TSource, T1, T2, T3, T4, string> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (delimiter == null) { throw new ArgumentNullException("delimiter"); }
-            if (delimiter.Length == 0) { throw new ArgumentEmptyException("delimiter"); }
-            DoerFactory<TSource, T1, T2, T3, T4, string> factory = new DoerFactory<TSource, T1, T2, T3, T4, string>(converter, default(TSource), arg1, arg2, arg3, arg4);
+            ValidateToDelimitedString(source, delimiter);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4);
             return ToDelimitedStringCore(factory, source, delimiter, format);
         }
 
@@ -1066,14 +1056,18 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> of delimited values from the by parameter specified delimiter.</returns>
         public static string ToDelimitedString<TSource, T1, T2, T3, T4, T5>(IEnumerable<TSource> source, string delimiter, string format, Doer<TSource, T1, T2, T3, T4, T5, string> converter, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (delimiter == null) { throw new ArgumentNullException("delimiter"); }
-            if (delimiter.Length == 0) { throw new ArgumentEmptyException("delimiter"); }
-            DoerFactory<TSource, T1, T2, T3, T4, T5, string> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, string>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            ValidateToDelimitedString(source, delimiter);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
             return ToDelimitedStringCore(factory, source, delimiter, format);
         }
 
-        private static string ToDelimitedStringCore<TSource>(DoerFactory<TSource, string> factory, IEnumerable<TSource> source, string delimiter, string format)
+        private static void ValidateToDelimitedString<TSource>(IEnumerable<TSource> source, string delimiter)
+        {
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNullOrEmpty(delimiter, "delimiter");
+        }
+
+        private static string ToDelimitedStringCore<TTuple, TSource>(DoerFactory<TTuple, string> factory, IEnumerable<TSource> source, string delimiter, string format) where TTuple : Template<TSource>
         {
             bool hasCustomFormat = !String.IsNullOrEmpty(format);
             if (hasCustomFormat)
@@ -1087,7 +1081,7 @@ namespace Cuemon
             {
                 while (enumerator.MoveNext())
                 {
-                    factory.Arg1 = enumerator.Current;
+                    factory.GenericArguments.Arg1 = enumerator.Current;
                     delimitedValues.AppendFormat(format, factory.ExecuteMethod(), delimiter);
                 }
             }
@@ -1143,7 +1137,7 @@ namespace Cuemon
         /// <exception cref="NotSupportedException">
         /// The conversion cannot be performed.
         /// </exception>
-        public static T ParseString<T>(string value, CultureInfo culture, ITypeDescriptorContext context)
+	    public static T ParseString<T>(string value, CultureInfo culture, ITypeDescriptorContext context)
         {
             try
             {
@@ -1171,7 +1165,7 @@ namespace Cuemon
         /// <param name="value">The string value to convert.</param>
         /// <param name="result">When this method returns, contains the equivalent to <typeparamref name="T"/> of <paramref name="value"/>, or <b>default</b>(<typeparamref name="T"/>) if an exception is thrown.</param>
         /// <returns><c>true</c> if the <paramref name="value"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
-        public static bool TryParseString<T>(string value, out T result)
+	    public static bool TryParseString<T>(string value, out T result)
         {
             return TryParseString(value, CultureInfo.InvariantCulture, out result);
         }
@@ -1198,7 +1192,7 @@ namespace Cuemon
         /// <param name="context">The type-specific formatting information about <paramref name="value" />.</param>
         /// <param name="result">When this method returns, contains the equivalent to <typeparamref name="T"/> of <paramref name="value"/>, as specified by <paramref name="culture"/> and <paramref name="context"/>, or <b>default</b>(<typeparamref name="T"/>) if an exception is thrown.</param>
         /// <returns><c>true</c> if the <paramref name="value"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
-        public static bool TryParseString<T>(string value, CultureInfo culture, ITypeDescriptorContext context, out T result)
+	    public static bool TryParseString<T>(string value, CultureInfo culture, ITypeDescriptorContext context, out T result)
         {
             try
             {
@@ -1291,7 +1285,7 @@ namespace Cuemon
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Boolean"/>, <see cref="Char"/>, <see cref="double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="ushort"/>, <see cref="UInt32"/> and <see cref="UInt64"/>.
         /// </exception>
-        public static T FromByteArray<T>(byte[] value) where T : struct, IConvertible
+	    public static T FromByteArray<T>(byte[] value) where T : struct, IConvertible
         {
             if (value == null) { throw new ArgumentNullException("value"); }
             if (BitConverter.IsLittleEndian) { Array.Reverse(value); }
@@ -1602,7 +1596,7 @@ namespace Cuemon
         /// <param name="value">The object to convert the underlying type.</param>
         /// <returns>The <paramref name="value"/> converted to the specified <typeparamref name="TResult"/>.</returns>
         /// <remarks>This method first checks if <paramref name="value"/> is compatible with <typeparamref name="TResult"/>; if not compatible the method continues with <see cref="ChangeType(object,System.Type,IFormatProvider)"/> for the operation.</remarks>
-        public static TResult As<TResult>(object value)
+	    public static TResult As<TResult>(object value)
         {
             return As(value, default(TResult));
         }
@@ -1723,7 +1717,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, TResult> factory = new DoerFactory<TSource, TResult>(converter, default(TSource));
+            var factory = DoerFactory.Create(converter, default(TSource));
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1745,7 +1739,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T, TResult> factory = new DoerFactory<TSource, T, TResult>(converter, default(TSource), arg);
+            var factory = DoerFactory.Create(converter, default(TSource), arg);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1769,7 +1763,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, TResult> factory = new DoerFactory<TSource, T1, T2, TResult>(converter, default(TSource), arg1, arg2);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1795,7 +1789,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, TResult> factory = new DoerFactory<TSource, T1, T2, T3, TResult>(converter, default(TSource), arg1, arg2, arg3);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1823,7 +1817,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1853,7 +1847,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1885,7 +1879,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1919,7 +1913,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1955,7 +1949,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -1993,7 +1987,7 @@ namespace Cuemon
             Validator.ThrowIfNull(source, "source");
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ParseSequenceWithCore(factory, source);
         }
 
@@ -2012,7 +2006,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, TResult> factory = new DoerFactory<TSource, TResult>(converter, default(TSource));
+            var factory = DoerFactory.Create(converter, default(TSource));
             return ParseWithCore(factory, source);
         }
 
@@ -2033,7 +2027,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T, TResult> factory = new DoerFactory<TSource, T, TResult>(converter, default(TSource), arg);
+            var factory = DoerFactory.Create(converter, default(TSource), arg);
             return ParseWithCore(factory, source);
         }
 
@@ -2056,7 +2050,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, TResult> factory = new DoerFactory<TSource, T1, T2, TResult>(converter, default(TSource), arg1, arg2);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2);
             return ParseWithCore(factory, source);
         }
 
@@ -2081,7 +2075,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, TResult> factory = new DoerFactory<TSource, T1, T2, T3, TResult>(converter, default(TSource), arg1, arg2, arg3);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3);
             return ParseWithCore(factory, source);
         }
 
@@ -2108,7 +2102,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4);
             return ParseWithCore(factory, source);
         }
 
@@ -2137,7 +2131,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5);
             return ParseWithCore(factory, source);
         }
 
@@ -2168,7 +2162,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             return ParseWithCore(factory, source);
         }
 
@@ -2201,7 +2195,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ParseWithCore(factory, source);
         }
 
@@ -2236,7 +2230,7 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ParseWithCore(factory, source);
         }
 
@@ -2273,11 +2267,11 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(converter, "converter");
 
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = DoerFactory.Create(converter, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ParseWithCore(factory, source);
         }
 
-        private static IEnumerable<TResult> ParseSequenceWithCore<TSource, TResult>(DoerFactory<TSource, TResult> factory, IEnumerable<TSource> source)
+        private static IEnumerable<TResult> ParseSequenceWithCore<TTuple, TSource, TResult>(DoerFactory<TTuple, TResult> factory, IEnumerable<TSource> source) where TTuple : Template<TSource>
         {
             foreach (TSource obj in source)
             {
@@ -2285,9 +2279,9 @@ namespace Cuemon
             }
         }
 
-        private static TResult ParseWithCore<TSource, TResult>(DoerFactory<TSource, TResult> factory, TSource source)
+        private static TResult ParseWithCore<TTuple, TSource, TResult>(DoerFactory<TTuple, TResult> factory, TSource source) where TTuple : Template<TSource>
         {
-            factory.Arg1 = source;
+            factory.GenericArguments.Arg1 = source;
             return factory.ExecuteMethod();
         }
     }

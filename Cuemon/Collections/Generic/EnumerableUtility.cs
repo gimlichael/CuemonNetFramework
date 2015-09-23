@@ -43,12 +43,12 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the input typed as <see cref="IEnumerable{TSource}"/>.
+        /// Returns the input typed as <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">The array to type as <see cref="IEnumerable{TSource}"/>.</param>
-        /// <returns>The input <paramref name="source"/> typed as <see cref="IEnumerable{TSource}"/>.</returns>
-        public static IEnumerable<TSource> AsEnumerable<TSource>(params TSource[] source)
+        /// <param name="source">The array to type as <see cref="IEnumerable{T}"/>.</param>
+        /// <returns>The input <paramref name="source"/> typed as <see cref="IEnumerable{T}"/>.</returns>
+	    public static IEnumerable<TSource> AsEnumerable<TSource>(params TSource[] source)
         {
             return source;
         }
@@ -60,7 +60,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">The sequence to return elements from.</param>
         /// <param name="count">The number of elements to skip before returning the remaining elements.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> that contains the elements that occur after the specified index in the input <paramref name="source"/>.</returns>
-        public static IEnumerable<TSource> Skip<TSource>(IEnumerable<TSource> source, int count)
+	    public static IEnumerable<TSource> Skip<TSource>(IEnumerable<TSource> source, int count)
         {
             Validator.ThrowIfNull(source, "source");
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
@@ -86,7 +86,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">The sequence to return elements from.</param>
         /// <param name="count">The number of elements to return.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> that contains the specified number of elements from the start of the input <paramref name="source"/>.</returns>
-        public static IEnumerable<TSource> Take<TSource>(IEnumerable<TSource> source, int count)
+	    public static IEnumerable<TSource> Take<TSource>(IEnumerable<TSource> source, int count)
         {
             Validator.ThrowIfNull(source, "source");
             if (count > 0)
@@ -155,7 +155,7 @@ namespace Cuemon.Collections.Generic
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.
         /// </exception>
-        public static IEnumerable<TResult> Select<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, int, TResult> selector)
+	    public static IEnumerable<TResult> Select<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, int, TResult> selector)
         {
             if (source == null) { throw new ArgumentNullException("source"); }
             if (selector == null) { throw new ArgumentNullException("selector"); }
@@ -227,7 +227,7 @@ namespace Cuemon.Collections.Generic
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// <paramref name="count"/> is less than 0.
         /// </exception>
-        public static IEnumerable<T> RangeOf<T>(int count, Doer<int, T> resolver)
+	    public static IEnumerable<T> RangeOf<T>(int count, Doer<int, T> resolver)
         {
             if (count < 0) { throw new ArgumentOutOfRangeException("count"); }
             for (int i = 0; i < count; i++) { yield return resolver(i); }
@@ -367,7 +367,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T>(IEnumerable<TSource> source, Doer<TSource, T, bool> match, T arg)
         {
-            DoerFactory<TSource, T, bool> factory = new DoerFactory<TSource, T, bool>(match, default(TSource), arg);
+            var factory = DoerFactory.Create(match, default(TSource), arg);
             return FindAllCore(factory, source);
         }
 
@@ -384,7 +384,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2>(IEnumerable<TSource> source, Doer<TSource, T1, T2, bool> match, T1 arg1, T2 arg2)
         {
-            DoerFactory<TSource, T1, T2, bool> factory = new DoerFactory<TSource, T1, T2, bool>(match, default(TSource), arg1, arg2);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2);
             return FindAllCore(factory, source);
         }
 
@@ -403,7 +403,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, bool> match, T1 arg1, T2 arg2, T3 arg3)
         {
-            DoerFactory<TSource, T1, T2, T3, bool> factory = new DoerFactory<TSource, T1, T2, T3, bool>(match, default(TSource), arg1, arg2, arg3);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3);
             return FindAllCore(factory, source);
         }
 
@@ -424,7 +424,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3, T4>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, bool> match, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            DoerFactory<TSource, T1, T2, T3, T4, bool> factory = new DoerFactory<TSource, T1, T2, T3, T4, bool>(match, default(TSource), arg1, arg2, arg3, arg4);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3, arg4);
             return FindAllCore(factory, source);
         }
 
@@ -447,7 +447,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3, T4, T5>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, bool> match, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            DoerFactory<TSource, T1, T2, T3, T4, T5, bool> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, bool>(match, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3, arg4, arg5);
             return FindAllCore(factory, source);
         }
 
@@ -472,7 +472,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3, T4, T5, T6>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, bool> match, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, bool> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, bool>(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             return FindAllCore(factory, source);
         }
 
@@ -499,7 +499,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3, T4, T5, T6, T7>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, bool> match, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, bool> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, bool>(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return FindAllCore(factory, source);
         }
 
@@ -528,7 +528,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3, T4, T5, T6, T7, T8>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, bool> match, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, bool> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, bool>(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return FindAllCore(factory, source);
         }
 
@@ -559,11 +559,11 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9>(IEnumerable<TSource> source, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, bool> match, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, bool> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, bool>(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = DoerFactory.Create(match, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return FindAllCore(factory, source);
         }
 
-        private static IEnumerable<TSource> FindAllCore<TSource>(DoerFactory<TSource, bool> factory, IEnumerable<TSource> source)
+        private static IEnumerable<TSource> FindAllCore<TTuple, TSource>(DoerFactory<TTuple, bool> factory, IEnumerable<TSource> source) where TTuple : Template<TSource>
         {
             List<TSource> temp = new List<TSource>();
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
@@ -571,7 +571,7 @@ namespace Cuemon.Collections.Generic
                 while (enumerator.MoveNext())
                 {
                     TSource current = enumerator.Current;
-                    factory.Arg1 = current;
+                    factory.GenericArguments.Arg1 = current;
                     if (factory.ExecuteMethod()) { temp.Add(current); }
                 }
             }
@@ -652,7 +652,7 @@ namespace Cuemon.Collections.Generic
             if (list != null) { return list[index]; }
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
             {
-            iteration:
+                iteration:
                 if (!enumerator.MoveNext()) { throw new ArgumentOutOfRangeException("index"); }
                 if (index == 0) { current = enumerator.Current; }
                 else

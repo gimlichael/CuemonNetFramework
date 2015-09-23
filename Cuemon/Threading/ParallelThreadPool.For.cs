@@ -16,7 +16,7 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <remarks>
-        /// The following table shows the initial overloaded arguments for <see cref="For{TSource}(TSource,TSource,Cuemon.Act{TSource})"/>.
+        /// The following table shows the initial overloaded arguments for <see cref="For{TSource}(TSource,TSource,Act{TSource})"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Argument</term>
@@ -48,10 +48,10 @@ namespace Cuemon.Threading
         ///     </item>
         /// </list>
         /// </remarks>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -68,10 +68,10 @@ namespace Cuemon.Threading
         /// <param name="initial">The initial value of the <c>counter</c> in the parallel for-loop.</param>
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -89,10 +89,10 @@ namespace Cuemon.Threading
         /// <param name="initial">The initial value of the <c>counter</c> in the parallel for-loop.</param>
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -111,10 +111,10 @@ namespace Cuemon.Threading
         /// <param name="initial">The initial value of the <c>counter</c> in the parallel for-loop.</param>
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -134,10 +134,10 @@ namespace Cuemon.Threading
         /// <param name="relational">One of the enumeration values that specifies the rules to apply for the <c>condition</c> relational operator of the parallel for-loop.</param>
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -158,10 +158,10 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="assignment">One of the enumeration values that specifies the rules to apply for the <c>iterator</c> assignment operator of the parallel for-loop.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -183,19 +183,18 @@ namespace Cuemon.Threading
         /// <param name="assignment">One of the enumeration values that specifies the rules to apply for the <c>iterator</c> assignment operator of the parallel for-loop.</param>
         /// <param name="step">The value to assign the <c>counter</c> according to the rule specified by <paramref name="assignment"/>.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource> body) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource> factory = new ActFactory<TSource>(body, default(TSource));
+            var factory = ActFactory.Create(body, default(TSource));
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -208,10 +207,10 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -230,10 +229,10 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -253,10 +252,10 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -277,10 +276,10 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -302,10 +301,10 @@ namespace Cuemon.Threading
         /// <param name="repeats">The amount of repeats to do.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -328,10 +327,10 @@ namespace Cuemon.Threading
         /// <param name="assignment">One of the enumeration values that specifies the rules to apply for the <c>iterator</c> assignment operator of the parallel for-loop.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -355,19 +354,18 @@ namespace Cuemon.Threading
         /// <param name="step">The value to assign the <c>counter</c> according to the rule specified by <paramref name="assignment"/>.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg">The parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T> body, T arg) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T> factory = new ActFactory<TSource, T>(body, default(TSource), arg);
+            var factory = ActFactory.Create(body, default(TSource), arg);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -382,10 +380,10 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -406,10 +404,10 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -431,10 +429,10 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -457,10 +455,10 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -484,10 +482,10 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -512,10 +510,10 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -541,19 +539,18 @@ namespace Cuemon.Threading
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2> body, T1 arg1, T2 arg2) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2> factory = new ActFactory<TSource, T1, T2>(body, default(TSource), arg1, arg2);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -570,10 +567,10 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -596,10 +593,10 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -623,10 +620,10 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -651,10 +648,10 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -680,10 +677,10 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -710,10 +707,10 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -741,19 +738,18 @@ namespace Cuemon.Threading
         /// <param name="arg1">The first parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3> factory = new ActFactory<TSource, T1, T2, T3>(body, default(TSource), arg1, arg2, arg3);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -772,10 +768,10 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -800,10 +796,10 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -829,10 +825,10 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -859,10 +855,10 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -890,10 +886,10 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -922,10 +918,10 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -955,19 +951,18 @@ namespace Cuemon.Threading
         /// <param name="arg2">The second parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4> factory = new ActFactory<TSource, T1, T2, T3, T4>(body, default(TSource), arg1, arg2, arg3, arg4);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -988,10 +983,10 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1018,10 +1013,10 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1049,10 +1044,10 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1081,10 +1076,10 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1114,10 +1109,10 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1148,10 +1143,10 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1183,19 +1178,18 @@ namespace Cuemon.Threading
         /// <param name="arg3">The third parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4, T5> factory = new ActFactory<TSource, T1, T2, T3, T4, T5>(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1218,10 +1212,10 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1250,10 +1244,10 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1283,10 +1277,10 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1317,10 +1311,10 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1352,10 +1346,10 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1388,10 +1382,10 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1425,19 +1419,18 @@ namespace Cuemon.Threading
         /// <param name="arg4">The fourth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4, T5, T6> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1462,10 +1455,10 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1496,10 +1489,10 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1531,10 +1524,10 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1567,10 +1560,10 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1604,10 +1597,10 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1642,10 +1635,10 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1681,19 +1674,18 @@ namespace Cuemon.Threading
         /// <param name="arg5">The fifth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4, T5, T6, T7> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1720,10 +1712,10 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1756,10 +1748,10 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1793,10 +1785,10 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1831,10 +1823,10 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1870,10 +1862,10 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1910,10 +1902,10 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -1951,19 +1943,18 @@ namespace Cuemon.Threading
         /// <param name="arg6">The sixth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7, T8>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1992,10 +1983,10 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2030,10 +2021,10 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2069,10 +2060,10 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2109,10 +2100,10 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2150,10 +2141,10 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2192,10 +2183,10 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2235,19 +2226,18 @@ namespace Cuemon.Threading
         /// <param name="arg7">The seventh parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -2278,10 +2268,10 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2318,10 +2308,10 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2359,10 +2349,10 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2401,10 +2391,10 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2444,10 +2434,10 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2488,10 +2478,10 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -2533,23 +2523,30 @@ namespace Cuemon.Threading
         /// <param name="arg8">The eighth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg9">The ninth parameter of the delegate <paramref name="body" />.</param>
         /// <param name="arg10">The tenth parameter of the delegate <paramref name="body" />.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="settings"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <typeparamref name="TSource"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            ValidateFor(settings, body);
             AssignmentUtility.ValidAsNumericOperand<TSource>();
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             ForCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
-        private static void ForCore<TSource>(ActFactory<TSource> factory, Doer<TSource, RelationalOperator, TSource, bool> condition, TSource initial, RelationalOperator relational, TSource repeats, Doer<TSource, AssignmentOperator, TSource, TSource> iterator, AssignmentOperator assignment, TSource step, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
+        private static void ValidateFor(ThreadPoolSettings settings, object body)
+        {
+            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(body, "body");
+        }
+
+        private static void ForCore<TTuple, TSource>(ActFactory<TTuple> factory, Doer<TSource, RelationalOperator, TSource, bool> condition, TSource initial, RelationalOperator relational, TSource repeats, Doer<TSource, AssignmentOperator, TSource, TSource> iterator, AssignmentOperator assignment, TSource step, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings)
+            where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
+            where TTuple : Template<TSource>
         {
             CountdownEvent sync = null;
             try
@@ -2564,7 +2561,7 @@ namespace Cuemon.Threading
                         ActWorkItemPool pool = new ActWorkItemPool();
                         for (TSource i = initial; condition(i, relational, repeats); i = iterator(i, assignment, step))
                         {
-                            factory.Arg1 = i;
+                            factory.GenericArguments.Arg1 = i;
                             IActWorkItem work = ActWorkItem.Create(sync, ForStepCore, factory.Clone());
                             pool.ProcessWork(work);
                             partitioned--;
@@ -2580,12 +2577,16 @@ namespace Cuemon.Threading
                             sync.Signal(partitioned);
                             breakout = true;
                         }
+
+                        sync.Wait(timeout);
                     }
                     finally
                     {
-                        sync.Wait(timeout);
-                        sync.Dispose();
-                        sync = null;
+                        if (sync != null)
+                        {
+                            sync.Dispose();
+                            sync = null;
+                        }
                     }
 
                     if (breakout) { break; }
@@ -2597,7 +2598,7 @@ namespace Cuemon.Threading
             }
         }
 
-        private static void ForStepCore(ActFactory factory)
+        private static void ForStepCore<TTuple>(ActFactory<TTuple> factory) where TTuple : Template
         {
             try
             {

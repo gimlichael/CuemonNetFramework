@@ -14,7 +14,7 @@ namespace Cuemon.Threading
         /// <param name="source">The object being iterated in the encapsulated while-loop by the <paramref name="condition"/> delegate.</param>
         /// <param name="body">The delegate that is invoked once per iteration.</param>
         /// <remarks>
-        /// The following table shows the initial overloaded arguments for <see cref="While{TSource,TResult}(Cuemon.TesterDoer{TSource,TResult,bool},TSource,Cuemon.Act{TResult})"/>.
+        /// The following table shows the initial overloaded arguments for <see cref="While{TSource,TResult}(TesterDoer{TSource,TResult,bool},TSource,Act{TResult})"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Argument</term>
@@ -93,11 +93,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult> body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult> factory = new ActFactory<TResult>(body, default(TResult));
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult));
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -177,11 +174,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T> body, T arg)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T> factory = new ActFactory<TResult, T>(body, default(TResult), arg);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -269,11 +263,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2> body, T1 arg1, T2 arg2)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2> factory = new ActFactory<TResult, T1, T2>(body, default(TResult), arg1, arg2);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -369,11 +360,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3> factory = new ActFactory<TResult, T1, T2, T3>(body, default(TResult), arg1, arg2, arg3);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -477,11 +465,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4> factory = new ActFactory<TResult, T1, T2, T3, T4>(body, default(TResult), arg1, arg2, arg3, arg4);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -593,11 +578,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4, T5>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4, T5> factory = new ActFactory<TResult, T1, T2, T3, T4, T5>(body, default(TResult), arg1, arg2, arg3, arg4, arg5);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4, arg5);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -717,11 +699,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4, T5, T6>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4, T5, T6> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4, T5, T6> factory = new ActFactory<TResult, T1, T2, T3, T4, T5, T6>(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -849,11 +828,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4, T5, T6, T7>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4, T5, T6, T7> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7> factory = new ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7>(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -989,11 +965,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4, T5, T6, T7, T8>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4, T5, T6, T7, T8> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7, T8> factory = new ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7, T8>(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -1137,11 +1110,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9> factory = new ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9>(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
@@ -1293,16 +1263,20 @@ namespace Cuemon.Threading
         /// </exception>
         public static void While<TSource, TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TesterDoer<TSource, TResult, bool> condition, TSource source, Act<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
-
-            ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> factory = new ActFactory<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            ValidateWhile(settings, condition, body);
+            var factory = ActFactory.Create(body, default(TResult), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             TResult result;
             WhileCore(factory, condition, source, out result, partitionSize, timeout, settings);
         }
 
-        private static void WhileCore<TSource, TResult>(ActFactory<TResult> factory, TesterDoer<TSource, TResult, bool> condition, TSource source, out TResult result, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings)
+        private static void ValidateWhile<TSource, TResult>(ThreadPoolSettings settings, TesterDoer<TSource, TResult, bool> condition, object body)
+        {
+            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(condition, "condition");
+            Validator.ThrowIfNull(body, "body");
+        }
+
+        private static void WhileCore<TTuple, TSource, TResult>(ActFactory<TTuple> factory, TesterDoer<TSource, TResult, bool> condition, TSource source, out TResult result, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TTuple : Template<TResult>
         {
             CountdownEvent sync = null;
             try
@@ -1316,7 +1290,7 @@ namespace Cuemon.Threading
                         sync = new CountdownEvent(partitionSize);
                         while (condition(source, out result))
                         {
-                            factory.Arg1 = result;
+                            factory.GenericArguments.Arg1 = result;
                             ThreadPoolUtility.QueueWork(WhileEnumeratorCore, factory.Clone(), sync);
                             partitioned--;
                             if (partitioned == 0) { break; }
@@ -1327,12 +1301,16 @@ namespace Cuemon.Threading
                             sync.Signal(partitioned);
                             breakout = true;
                         }
+
+                        sync.Wait(timeout);
                     }
                     finally
                     {
-                        sync.Wait(timeout);
-                        sync.Dispose();
-                        sync = null;
+                        if (sync != null)
+                        {
+                            sync.Dispose();
+                            sync = null;
+                        }
                     }
 
                     if (breakout) { break; }
@@ -1344,7 +1322,7 @@ namespace Cuemon.Threading
             }
         }
 
-        private static void WhileEnumeratorCore(ActFactory factory, ISynchronization sync)
+        private static void WhileEnumeratorCore<TTuple>(ActFactory<TTuple> factory, ISynchronization sync) where TTuple : Template
         {
             try
             {

@@ -355,7 +355,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream(Act<StreamWriter> writer, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter> factory = new ActFactory<StreamWriter>(writer, null);
+            var factory = ActFactory.Create(writer, null);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -369,7 +369,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T>(Act<StreamWriter, T> writer, T arg, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T> factory = new ActFactory<StreamWriter, T>(writer, null, arg);
+            var factory = ActFactory.Create(writer, null, arg);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -385,7 +385,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2>(Act<StreamWriter, T1, T2> writer, T1 arg1, T2 arg2, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2> factory = new ActFactory<StreamWriter, T1, T2>(writer, null, arg1, arg2);
+            var factory = ActFactory.Create(writer, null, arg1, arg2);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -403,7 +403,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3>(Act<StreamWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3> factory = new ActFactory<StreamWriter, T1, T2, T3>(writer, null, arg1, arg2, arg3);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -423,7 +423,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4>(Act<StreamWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4> factory = new ActFactory<StreamWriter, T1, T2, T3, T4>(writer, null, arg1, arg2, arg3, arg4);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -445,7 +445,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4, T5>(Act<StreamWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4, T5> factory = new ActFactory<StreamWriter, T1, T2, T3, T4, T5>(writer, null, arg1, arg2, arg3, arg4, arg5);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -469,7 +469,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6>(Act<StreamWriter, T1, T2, T3, T4, T5, T6> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6> factory = new ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -495,7 +495,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7> factory = new ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -523,7 +523,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7, T8>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8> factory = new ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -553,7 +553,7 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> factory = new ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -585,11 +585,11 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> holding the content created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateStream<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Act<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, StreamWriterSettings settings)
         {
-            ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> factory = new ActFactory<StreamWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return CreateCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
-        private static Stream CreateCore(ActFactory<StreamWriter> factory, StreamWriterSettings settings, MethodBase caller)
+        private static Stream CreateCore<TTuple>(ActFactory<TTuple> factory, StreamWriterSettings settings, MethodBase caller) where TTuple : Template<StreamWriter>
         {
             if (settings == null) { throw new ArgumentNullException("settings"); }
             Stream output = null;
@@ -599,7 +599,7 @@ namespace Cuemon.IO
                 tempOutput = new MemoryStream(settings.BufferSize);
                 StreamWriter writer = new InternalStreamWriter(tempOutput, settings);
                 {
-                    factory.Arg1 = writer;
+                    factory.GenericArguments.Arg1 = writer;
                     factory.ExecuteMethod();
                     writer.Flush();
                 }
@@ -611,7 +611,7 @@ namespace Cuemon.IO
             catch (Exception ex)
             {
                 List<object> parameters = new List<object>();
-                parameters.AddRange(factory.GetGenericArguments());
+                parameters.AddRange(factory.GenericArguments.ToArray());
                 parameters.Add(settings);
                 throw ExceptionUtility.Refine(new InvalidOperationException("There is an error in the Stream being written.", ex), caller, parameters.ToArray());
             }

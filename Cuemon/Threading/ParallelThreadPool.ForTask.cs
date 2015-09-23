@@ -204,10 +204,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, TResult> body) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, TResult> factory = new DoerFactory<TSource, TResult>(body, default(TSource));
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource));
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -390,10 +388,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T, TResult> body, T arg) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T, TResult> factory = new DoerFactory<TSource, T, TResult>(body, default(TSource), arg);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -590,10 +586,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, TResult> body, T1 arg1, T2 arg2) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, TResult> factory = new DoerFactory<TSource, T1, T2, TResult>(body, default(TSource), arg1, arg2);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -804,10 +798,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, TResult> body, T1 arg1, T2 arg2, T3 arg3) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, TResult> factory = new DoerFactory<TSource, T1, T2, T3, TResult>(body, default(TSource), arg1, arg2, arg3);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1032,10 +1024,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, TResult>(body, default(TSource), arg1, arg2, arg3, arg4);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1274,10 +1264,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, T5, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, T5, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1530,10 +1518,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, T5, T6, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, T5, T6, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -1800,10 +1786,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -2084,10 +2068,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -2382,10 +2364,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
@@ -2694,14 +2674,21 @@ namespace Cuemon.Threading
         /// </exception>
         public static IReadOnlyCollection<TResult> ForTask<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, TSource step, Doer<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
-            AssignmentUtility.ValidAsNumericOperand<TSource>();
-            DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> factory = new DoerFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            ValidateForTask<TSource>(settings, body);
+            var factory = DoerFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return ForTaskCore(factory, LoopUtility.Condition, initial, relational, repeats, LoopUtility.Iterator, assignment, step, partitionSize, timeout, settings);
         }
 
-        private static IReadOnlyCollection<TResult> ForTaskCore<TSource, TResult>(DoerFactory<TSource, TResult> factory, Doer<TSource, RelationalOperator, TSource, bool> condition, TSource initial, RelationalOperator relational, TSource repeats, Doer<TSource, AssignmentOperator, TSource, TSource> iterator, AssignmentOperator assignment, TSource step, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
+        private static void ValidateForTask<TSource>(ThreadPoolSettings settings, object body) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
+        {
+            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(body, "body");
+            AssignmentUtility.ValidAsNumericOperand<TSource>();
+        }
+
+        private static IReadOnlyCollection<TResult> ForTaskCore<TTuple, TSource, TResult>(DoerFactory<TTuple, TResult> factory, Doer<TSource, RelationalOperator, TSource, bool> condition, TSource initial, RelationalOperator relational, TSource repeats, Doer<TSource, AssignmentOperator, TSource, TSource> iterator, AssignmentOperator assignment, TSource step, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings)
+            where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
+            where TTuple : Template<TSource>
         {
             CountdownEvent sync = null;
             SortedDoerWorkItemPool<TSource, TResult> pool = new SortedDoerWorkItemPool<TSource, TResult>();
@@ -2716,7 +2703,7 @@ namespace Cuemon.Threading
                         sync = new CountdownEvent(partitionSize);
                         for (TSource i = initial; condition(i, relational, repeats); i = iterator(i, assignment, step))
                         {
-                            factory.Arg1 = i;
+                            factory.GenericArguments.Arg1 = i;
                             ISortedDoerWorkItem<TSource, TResult> work = SortedDoerWorkItem.Create(i, sync, ForStepTaskCore, factory.Clone());
                             pool.ProcessWork(work);
                             partitioned--;
@@ -2732,12 +2719,16 @@ namespace Cuemon.Threading
                             sync.Signal(partitioned);
                             breakout = true;
                         }
+
+                        sync.Wait(timeout);
                     }
                     finally
                     {
-                        sync.Wait(timeout);
-                        sync.Dispose();
-                        sync = null;
+                        if (sync != null)
+                        {
+                            sync.Dispose();
+                            sync = null;
+                        }
                     }
 
                     if (breakout) { break; }
@@ -2751,7 +2742,7 @@ namespace Cuemon.Threading
             return pool.Result;
         }
 
-        private static TResult ForStepTaskCore<TResult>(DoerFactory<TResult> factory)
+        private static TResult ForStepTaskCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory) where TTuple : Template
         {
             try
             {

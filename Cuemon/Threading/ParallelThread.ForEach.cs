@@ -8,7 +8,7 @@ namespace Cuemon.Threading
     /// <summary>
     /// Provides ways to encapsulate and re-use existing code while adding support for parallel loops and regions using <see cref="Thread"/> backing strategy.
     /// </summary>
-    public static partial class ParallelThread
+    public static class ParallelThread
     {
         /// <summary>
         /// Provides a generic way of executing a parallel foreach-loop while providing ways to encapsulate and re-use existing code.
@@ -20,7 +20,7 @@ namespace Cuemon.Threading
         /// <paramref name="source"/> is null -or- <paramref name="body"/> is null.
         /// </exception>
         /// <remarks>
-        /// The following table shows the initial overloaded arguments for <see cref="ForEach{TSource}(System.Collections.Generic.IEnumerable{TSource},Cuemon.Act{TSource})"/>.
+        /// The following table shows the initial overloaded arguments for <see cref="ForEach{TSource}(IEnumerable{TSource},Act{TSource})"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Argument</term>
@@ -90,10 +90,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource> body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource> factory = new ActFactory<TSource>(body, default(TSource));
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource));
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -164,10 +162,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T> body, T arg)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T> factory = new ActFactory<TSource, T>(body, default(TSource), arg);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -246,10 +242,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2> body, T1 arg1, T2 arg2)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2> factory = new ActFactory<TSource, T1, T2>(body, default(TSource), arg1, arg2);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -336,10 +330,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3> factory = new ActFactory<TSource, T1, T2, T3>(body, default(TSource), arg1, arg2, arg3);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -434,10 +426,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4> factory = new ActFactory<TSource, T1, T2, T3, T4>(body, default(TSource), arg1, arg2, arg3, arg4);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -540,10 +530,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4, T5>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4, T5> factory = new ActFactory<TSource, T1, T2, T3, T4, T5>(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -654,10 +642,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4, T5, T6>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4, T5, T6> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -776,10 +762,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4, T5, T6, T7>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4, T5, T6, T7> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -906,10 +890,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4, T5, T6, T7, T8>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -1044,10 +1026,8 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
@@ -1190,20 +1170,25 @@ namespace Cuemon.Threading
         /// </exception>
         public static void ForEach<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(int partitionSize, ThreadSettings settings, TimeSpan timeout, IEnumerable<TSource> source, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
-            ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> factory = new ActFactory<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            ValidateForEach(settings, source, body);
+            var factory = ActFactory.Create(body, default(TSource), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             ForEachCore(factory, source, partitionSize, timeout, settings);
         }
 
-        private static void ForEachCore<T>(ActFactory<T> factory, IEnumerable<T> source, int partitionSize, TimeSpan timeout, ThreadSettings settings)
+        private static void ValidateForEach<TSource>(ThreadSettings settings, IEnumerable<TSource> source, object body)
+        {
+            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(body, "body");
+        }
+
+        private static void ForEachCore<TTuple, TSource>(ActFactory<TTuple> factory, IEnumerable<TSource> source, int partitionSize, TimeSpan timeout, ThreadSettings settings) where TTuple : Template<TSource>
         {
             List<Thread> threads = new List<Thread>();
-            PartitionCollection<T> partition = new PartitionCollection<T>(source, partitionSize);
+            PartitionCollection<TSource> partition = new PartitionCollection<TSource>(source, partitionSize);
             while (partition.HasPartitions)
             {
-                foreach (T element in partition)
+                foreach (TSource element in partition)
                 {
                     threads.Add(ThreadUtility.StartNew(settings, StartCore, factory.Clone(), element));
                 }
@@ -1224,10 +1209,10 @@ namespace Cuemon.Threading
             }
         }
 
-        private static void StartCore<T>(ActFactory factory, T value)
+        private static void StartCore<TTuple, TSource>(ActFactory<TTuple> factory, TSource value) where TTuple : Template<TSource>
         {
             if (factory == null) { return; }
-            ((ActFactory<T>)factory).Arg1 = value;
+            factory.GenericArguments.Arg1 = value;
             factory.ExecuteMethod();
         }
     }

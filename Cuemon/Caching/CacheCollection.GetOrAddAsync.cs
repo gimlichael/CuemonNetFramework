@@ -14,7 +14,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<TResult>(string key, Doer<TResult> resolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver);
+            return GetOrAddAsync(key, NoGroup, resolver);
         }
 
         /// <summary>
@@ -29,15 +29,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
                         resolver.BeginInvoke(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
-                        this.Add(key, result, group);
+                        Add(key, result, group);
                     }
                 }
             }
@@ -54,7 +54,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<TResult>(string key, Doer<TResult> resolver, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, absoluteExpiration);
         }
 
         /// <summary>
@@ -70,15 +70,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
                         resolver.BeginInvoke(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
-                        this.Add(key, result, group, absoluteExpiration);
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<TResult>(string key, Doer<TResult> resolver, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, slidingExpiration);
         }
 
         /// <summary>
@@ -111,15 +111,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
                         resolver.BeginInvoke(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
-                        this.Add(key, result, group, slidingExpiration);
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -136,7 +136,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<TResult>(string key, Doer<TResult> resolver, Doer<IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, dependencyResolver);
         }
 
         /// <summary>
@@ -153,15 +153,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
                         resolver.BeginInvoke(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
-                        this.Add(key, result, group, dependencyResolver());
+                        Add(key, result, group, dependencyResolver());
                     }
                 }
             }
@@ -179,7 +179,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T, TResult>(string key, Doer<T, TResult> resolver, T arg)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg);
+            return GetOrAddAsync(key, NoGroup, resolver, arg);
         }
 
         /// <summary>
@@ -196,15 +196,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -223,7 +223,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T, TResult>(string key, Doer<T, TResult> resolver, T arg, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg, absoluteExpiration);
         }
 
         /// <summary>
@@ -241,15 +241,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -268,7 +268,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T, TResult>(string key, Doer<T, TResult> resolver, T arg, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg, slidingExpiration);
         }
 
         /// <summary>
@@ -286,15 +286,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -313,7 +313,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T, TResult>(string key, Doer<T, TResult> resolver, T arg, Doer<T, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg, dependencyResolver);
         }
 
         /// <summary>
@@ -332,15 +332,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg));
-                        this.Add(key, result, group, dependencyResolver(arg));
+                        resolver.BeginInvoke(arg, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg));
                     }
                 }
             }
@@ -360,7 +360,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, TResult>(string key, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2);
         }
 
         /// <summary>
@@ -379,15 +379,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -408,7 +408,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, TResult>(string key, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, absoluteExpiration);
         }
 
         /// <summary>
@@ -428,15 +428,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -457,7 +457,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, TResult>(string key, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, slidingExpiration);
         }
 
         /// <summary>
@@ -477,15 +477,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -506,7 +506,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, TResult>(string key, Doer<T1, T2, TResult> resolver, T1 arg1, T2 arg2, Doer<T1, T2, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, dependencyResolver);
         }
 
         /// <summary>
@@ -527,15 +527,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2));
+                        resolver.BeginInvoke(arg1, arg2, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2));
                     }
                 }
             }
@@ -557,7 +557,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, TResult>(string key, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -578,15 +578,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -609,7 +609,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, TResult>(string key, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, absoluteExpiration);
         }
 
         /// <summary>
@@ -631,15 +631,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -662,7 +662,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, TResult>(string key, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, slidingExpiration);
         }
 
         /// <summary>
@@ -684,15 +684,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -715,7 +715,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, TResult>(string key, Doer<T1, T2, T3, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, Doer<T1, T2, T3, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, dependencyResolver);
         }
 
         /// <summary>
@@ -738,15 +738,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3));
+                        resolver.BeginInvoke(arg1, arg2, arg3, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3));
                     }
                 }
             }
@@ -770,7 +770,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, TResult>(string key, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -793,15 +793,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -826,7 +826,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, TResult>(string key, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, absoluteExpiration);
         }
 
         /// <summary>
@@ -850,15 +850,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -883,7 +883,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, TResult>(string key, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, slidingExpiration);
         }
 
         /// <summary>
@@ -907,15 +907,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -940,7 +940,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, TResult>(string key, Doer<T1, T2, T3, T4, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Doer<T1, T2, T3, T4, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, dependencyResolver);
         }
 
         /// <summary>
@@ -965,15 +965,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4));
                     }
                 }
             }
@@ -999,7 +999,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, TResult>(string key, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -1024,15 +1024,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -1059,7 +1059,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, TResult>(string key, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, absoluteExpiration);
         }
 
         /// <summary>
@@ -1085,15 +1085,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -1120,7 +1120,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, TResult>(string key, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, slidingExpiration);
         }
 
         /// <summary>
@@ -1146,15 +1146,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -1181,7 +1181,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, TResult>(string key, Doer<T1, T2, T3, T4, T5, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Doer<T1, T2, T3, T4, T5, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, dependencyResolver);
         }
 
         /// <summary>
@@ -1208,15 +1208,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5));
                     }
                 }
             }
@@ -1244,7 +1244,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -1271,15 +1271,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -1308,7 +1308,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, absoluteExpiration);
         }
 
         /// <summary>
@@ -1336,15 +1336,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -1373,7 +1373,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, slidingExpiration);
         }
 
         /// <summary>
@@ -1401,15 +1401,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -1438,7 +1438,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, Doer<T1, T2, T3, T4, T5, T6, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, dependencyResolver);
         }
 
         /// <summary>
@@ -1467,15 +1467,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6));
                     }
                 }
             }
@@ -1505,7 +1505,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -1534,15 +1534,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -1573,7 +1573,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, absoluteExpiration);
         }
 
         /// <summary>
@@ -1603,15 +1603,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -1642,7 +1642,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, slidingExpiration);
         }
 
         /// <summary>
@@ -1672,15 +1672,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -1711,7 +1711,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, Doer<T1, T2, T3, T4, T5, T6, T7, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, dependencyResolver);
         }
 
         /// <summary>
@@ -1742,15 +1742,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
                     }
                 }
             }
@@ -1782,7 +1782,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -1813,15 +1813,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -1854,7 +1854,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, absoluteExpiration);
         }
 
         /// <summary>
@@ -1886,15 +1886,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -1927,7 +1927,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, slidingExpiration);
         }
 
         /// <summary>
@@ -1959,15 +1959,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -2000,7 +2000,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, Doer<T1, T2, T3, T4, T5, T6, T7, T8, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, dependencyResolver);
         }
 
         /// <summary>
@@ -2033,15 +2033,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
                     }
                 }
             }
@@ -2075,7 +2075,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -2108,15 +2108,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -2151,7 +2151,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, absoluteExpiration);
         }
 
         /// <summary>
@@ -2185,15 +2185,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -2228,7 +2228,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, slidingExpiration);
         }
 
         /// <summary>
@@ -2262,15 +2262,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -2305,7 +2305,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, dependencyResolver);
         }
 
         /// <summary>
@@ -2340,15 +2340,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
                     }
                 }
             }
@@ -2384,7 +2384,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -2419,15 +2419,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
-                        this.Add(key, result, group);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group);
                     }
                 }
             }
@@ -2464,7 +2464,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, DateTime absoluteExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, absoluteExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, absoluteExpiration);
         }
 
         /// <summary>
@@ -2500,15 +2500,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
-                        this.Add(key, result, group, absoluteExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, absoluteExpiration);
                     }
                 }
             }
@@ -2545,7 +2545,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, TimeSpan slidingExpiration)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, slidingExpiration);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, slidingExpiration);
         }
 
         /// <summary>
@@ -2581,15 +2581,15 @@ namespace Cuemon.Caching
         {
             Validator.ThrowIfNull(resolver, "resolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
-                        this.Add(key, result, group, slidingExpiration);
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, slidingExpiration);
                     }
                 }
             }
@@ -2626,7 +2626,7 @@ namespace Cuemon.Caching
         /// <returns>The value for the specified <paramref name="key"/>. This will either be the existing value if the <paramref name="key"/> is already in the cache, or the default value of <typeparamref name="TResult"/> (<c>default(TResult)</c>). The actual value returned by <paramref name="resolver"/> is updated asynchronously in the cache.</returns>
         public TResult GetOrAddAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(string key, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resolver, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, IEnumerable<IDependency>> dependencyResolver)
         {
-            return this.GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, dependencyResolver);
+            return GetOrAddAsync(key, NoGroup, resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, dependencyResolver);
         }
 
         /// <summary>
@@ -2663,15 +2663,15 @@ namespace Cuemon.Caching
             Validator.ThrowIfNull(resolver, "resolver");
             Validator.ThrowIfNull(dependencyResolver, "dependencyResolver");
             TResult result;
-            if (!this.TryGetValue(key, group, out result))
+            if (!TryGetValue(key, group, out result))
             {
                 lock (InnerCaches)
                 {
-                    if (!this.TryGetValue(key, group, out result))
+                    if (!TryGetValue(key, group, out result))
                     {
                         result = default(TResult);
-                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
-                        this.Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                        resolver.BeginInvoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(resolver));
+                        Add(key, result, group, dependencyResolver(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
                     }
                 }
             }

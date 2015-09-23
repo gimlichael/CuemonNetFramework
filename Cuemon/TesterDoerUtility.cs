@@ -16,7 +16,7 @@ namespace Cuemon
         /// <returns><c>true</c> if an instance of <typeparamref name="TResult"/> has been created; otherwise <c>false</c>.</returns>
         public static bool TryExecuteFunction<TResult>(Doer<TResult> method, out TResult result)
         {
-            DoerFactory<TResult> factory = new DoerFactory<TResult>(method);
+            var factory = DoerFactory.Create(method);
             return TryExecuteFunctionCore(factory, out result);
         }
 
@@ -31,7 +31,7 @@ namespace Cuemon
         /// <returns><c>true</c> if an instance of <typeparamref name="TResult"/> has been created; otherwise <c>false</c>.</returns>
         public static bool TryExecuteFunction<T, TResult>(Doer<T, TResult> method, T arg, out TResult result)
         {
-            DoerFactory<T, TResult> factory = new DoerFactory<T, TResult>(method, arg);
+            var factory = DoerFactory.Create(method, arg);
             return TryExecuteFunctionCore(factory, out result);
         }
 
@@ -48,7 +48,7 @@ namespace Cuemon
         /// <returns><c>true</c> if an instance of <typeparamref name="TResult"/> has been created; otherwise <c>false</c>.</returns>
         public static bool TryExecuteFunction<T1, T2, TResult>(Doer<T1, T2, TResult> method, T1 arg1, T2 arg2, out TResult result)
         {
-            DoerFactory<T1, T2, TResult> factory = new DoerFactory<T1, T2, TResult>(method, arg1, arg2);
+            var factory = DoerFactory.Create(method, arg1, arg2);
             return TryExecuteFunctionCore(factory, out result);
         }
 
@@ -67,7 +67,7 @@ namespace Cuemon
         /// <returns><c>true</c> if an instance of <typeparamref name="TResult"/> has been created; otherwise <c>false</c>.</returns>
         public static bool TryExecuteFunction<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3, out TResult result)
         {
-            DoerFactory<T1, T2, T3, TResult> factory = new DoerFactory<T1, T2, T3, TResult>(method, arg1, arg2, arg3);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3);
             return TryExecuteFunctionCore(factory, out result);
         }
 
@@ -88,7 +88,7 @@ namespace Cuemon
         /// <returns><c>true</c> if an instance of <typeparamref name="TResult"/> has been created; otherwise <c>false</c>.</returns>
         public static bool TryExecuteFunction<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TResult result)
         {
-            DoerFactory<T1, T2, T3, T4, TResult> factory = new DoerFactory<T1, T2, T3, T4, TResult>(method, arg1, arg2, arg3, arg4);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
             return TryExecuteFunctionCore(factory, out result);
         }
 
@@ -111,7 +111,7 @@ namespace Cuemon
         /// <returns><c>true</c> if an instance of <typeparamref name="TResult"/> has been created; otherwise <c>false</c>.</returns>
         public static bool TryExecuteFunction<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TResult result)
         {
-            DoerFactory<T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, TResult>(method, arg1, arg2, arg3, arg4, arg5);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
             return TryExecuteFunctionCore(factory, out result);
         }
 
@@ -212,7 +212,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the delegate <paramref name="method"/> was invoked without triggering an exception; otherwise <c>false</c>.</returns>
         public static bool TryExecuteAction(Act method)
         {
-            ActFactory factory = new ActFactory(method);
+            var factory = ActFactory.Create(method);
             return TryExecuteActionCore(factory);
         }
 
@@ -225,7 +225,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the delegate <paramref name="method"/> was invoked without triggering an exception; otherwise <c>false</c>.</returns>
         public static bool TryExecuteAction<T>(Act<T> method, T arg)
         {
-            ActFactory<T> factory = new ActFactory<T>(method, arg);
+            var factory = ActFactory.Create(method, arg);
             return TryExecuteActionCore(factory);
         }
 
@@ -240,7 +240,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the delegate <paramref name="method"/> was invoked without triggering an exception; otherwise <c>false</c>.</returns>
         public static bool TryExecuteAction<T1, T2>(Act<T1, T2> method, T1 arg1, T2 arg2)
         {
-            ActFactory<T1, T2> factory = new ActFactory<T1, T2>(method, arg1, arg2);
+            var factory = ActFactory.Create(method, arg1, arg2);
             return TryExecuteActionCore(factory);
         }
 
@@ -257,7 +257,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the delegate <paramref name="method"/> was invoked without triggering an exception; otherwise <c>false</c>.</returns>
         public static bool TryExecuteAction<T1, T2, T3>(Act<T1, T2, T3> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            ActFactory<T1, T2, T3> factory = new ActFactory<T1, T2, T3>(method, arg1, arg2, arg3);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3);
             return TryExecuteActionCore(factory);
         }
 
@@ -276,7 +276,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the delegate <paramref name="method"/> was invoked without triggering an exception; otherwise <c>false</c>.</returns>
         public static bool TryExecuteAction<T1, T2, T3, T4>(Act<T1, T2, T3, T4> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            ActFactory<T1, T2, T3, T4> factory = new ActFactory<T1, T2, T3, T4>(method, arg1, arg2, arg3, arg4);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4);
             return TryExecuteActionCore(factory);
         }
 
@@ -297,11 +297,11 @@ namespace Cuemon
         /// <returns><c>true</c> if the delegate <paramref name="method"/> was invoked without triggering an exception; otherwise <c>false</c>.</returns>
         public static bool TryExecuteAction<T1, T2, T3, T4, T5>(Act<T1, T2, T3, T4, T5> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            ActFactory<T1, T2, T3, T4, T5> factory = new ActFactory<T1, T2, T3, T4, T5>(method, arg1, arg2, arg3, arg4, arg5);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
             return TryExecuteActionCore(factory);
         }
 
-        private static bool TryExecuteActionCore(ActFactory factory)
+        private static bool TryExecuteActionCore<TTuple>(ActFactory<TTuple> factory) where TTuple : Template
         {
             try
             {
@@ -314,7 +314,7 @@ namespace Cuemon
             }
         }
 
-        private static bool TryExecuteFunctionCore<TResult>(DoerFactory<TResult> factory, out TResult result)
+        private static bool TryExecuteFunctionCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory, out TResult result) where TTuple : Template
         {
             try
             {
