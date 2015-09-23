@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using Cuemon.Collections.Generic;
+using Cuemon.Web.Compilation;
 
 namespace Cuemon.Web.Routing
 {
@@ -60,7 +61,7 @@ namespace Cuemon.Web.Routing
             foreach (HttpRoute route in Routes)
             {
                 if (!IsDataEqual(route.Data, data)) { continue; }
-                IReadOnlyCollection<Type> handlers = GlobalModule.GetReferencedHandlerTypes();
+                IReadOnlyCollection<Type> handlers = CompilationUtility.GetReferencedHandlerTypes();
                 if (!handlers.Contains(route.HandlerType)) { continue; }
                 if (currentPath.HasPhysicalFile && currentPath.IsHandler)
                 {

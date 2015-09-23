@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CdnGlobalModule.cs" />
+    <Compile Include="Compilation\CompilationUtility.cs" />
     <Compile Include="Configuration\WebConfigurationUtility.cs" />
     <Compile Include="GlobalModule.Exception.cs" />
     <Compile Include="GlobalModule.Routing.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="HttpContextItemCollection.cs" />
     <Compile Include="HttpRequestUtility.cs" />
     <Compile Include="HttpResponseUtility.cs" />
+    <Compile Include="HttpRuntimeUtility.cs" />
     <Compile Include="ICacheableHttpHandler.cs" />
     <Compile Include="ISearchEngineOptimizer .cs" />
     <Compile Include="MimeUtility.cs" />
