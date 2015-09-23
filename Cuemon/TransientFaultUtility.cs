@@ -280,7 +280,7 @@ namespace Cuemon
         /// <remarks>Defaults to using <see cref="DefaultRetryAttempts"/> for specifying the amount of retry attempts the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<TResult, TSuccess>(Doer<Exception, bool> isTransientFault, TesterDoer<TResult, TSuccess> faultSensitiveMethod, out TResult result)
         {
-            TesterDoerFactory<TResult, TSuccess> factory = new TesterDoerFactory<TResult, TSuccess>(faultSensitiveMethod);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod);
             return TryExecuteFunctionCore(factory, out result, DefaultRetryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -298,7 +298,7 @@ namespace Cuemon
         /// <remarks>Defaults to using <see cref="DefaultRetryAttempts"/> for specifying the amount of retry attempts the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T, TResult, TSuccess>(Doer<Exception, bool> isTransientFault, TesterDoer<T, TResult, TSuccess> faultSensitiveMethod, T arg, out TResult result)
         {
-            TesterDoerFactory<T, TResult, TSuccess> factory = new TesterDoerFactory<T, TResult, TSuccess>(faultSensitiveMethod, arg);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg);
             return TryExecuteFunctionCore(factory, out result, DefaultRetryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -318,7 +318,7 @@ namespace Cuemon
         /// <remarks>Defaults to using <see cref="DefaultRetryAttempts"/> for specifying the amount of retry attempts the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, TResult, TSuccess>(Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, out TResult result)
         {
-            TesterDoerFactory<T1, T2, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2);
             return TryExecuteFunctionCore(factory, out result, DefaultRetryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -340,7 +340,7 @@ namespace Cuemon
         /// <remarks>Defaults to using <see cref="DefaultRetryAttempts"/> for specifying the amount of retry attempts the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, T3, TResult, TSuccess>(Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3);
             return TryExecuteFunctionCore(factory, out result, DefaultRetryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -364,7 +364,7 @@ namespace Cuemon
         /// <remarks>Defaults to using <see cref="DefaultRetryAttempts"/> for specifying the amount of retry attempts the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, T3, T4, TResult, TSuccess>(Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, T4, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, T4, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, T4, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3, arg4);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3, arg4);
             return TryExecuteFunctionCore(factory, out result, DefaultRetryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -390,7 +390,7 @@ namespace Cuemon
         /// <remarks>Defaults to using <see cref="DefaultRetryAttempts"/> for specifying the amount of retry attempts the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, T3, T4, T5, TResult, TSuccess>(Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, T4, T5, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, T4, T5, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, T4, T5, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3, arg4, arg5);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3, arg4, arg5);
             return TryExecuteFunctionCore(factory, out result, DefaultRetryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -407,7 +407,7 @@ namespace Cuemon
         /// <remarks>Defaults to using the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<TResult, TSuccess>(int retryAttempts, Doer<Exception, bool> isTransientFault, TesterDoer<TResult, TSuccess> faultSensitiveMethod, out TResult result)
         {
-            TesterDoerFactory<TResult, TSuccess> factory = new TesterDoerFactory<TResult, TSuccess>(faultSensitiveMethod);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -426,7 +426,7 @@ namespace Cuemon
         /// <remarks>Defaults to using the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T, TResult, TSuccess>(int retryAttempts, Doer<Exception, bool> isTransientFault, TesterDoer<T, TResult, TSuccess> faultSensitiveMethod, T arg, out TResult result)
         {
-            TesterDoerFactory<T, TResult, TSuccess> factory = new TesterDoerFactory<T, TResult, TSuccess>(faultSensitiveMethod, arg);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -447,7 +447,7 @@ namespace Cuemon
         /// <remarks>Defaults to using the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, TResult, TSuccess>(int retryAttempts, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, out TResult result)
         {
-            TesterDoerFactory<T1, T2, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -470,7 +470,7 @@ namespace Cuemon
         /// <remarks>Defaults to using the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, T3, TResult, TSuccess>(int retryAttempts, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -495,7 +495,7 @@ namespace Cuemon
         /// <remarks>Defaults to using the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, T3, T4, TResult, TSuccess>(int retryAttempts, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, T4, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, T4, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, T4, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3, arg4);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3, arg4);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -522,7 +522,7 @@ namespace Cuemon
         /// <remarks>Defaults to using the <see cref="RecoveryWaitTime"/> function implementation for specifying the amount of time to wait for a transient fault to recover gracefully before trying a new attempt.</remarks>
         public static TSuccess TryExecuteFunction<T1, T2, T3, T4, T5, TResult, TSuccess>(int retryAttempts, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, T4, T5, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, T4, T5, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, T4, T5, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3, arg4, arg5);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3, arg4, arg5);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, RecoveryWaitTime, isTransientFault);
         }
 
@@ -659,7 +659,7 @@ namespace Cuemon
         /// <returns>The return value that indicates success of the function delegate <paramref name="faultSensitiveMethod"/>.</returns>
         public static TSuccess TryExecuteFunction<TResult, TSuccess>(int retryAttempts, Doer<int, TimeSpan> recoveryWaitTime, Doer<Exception, bool> isTransientFault, TesterDoer<TResult, TSuccess> faultSensitiveMethod, out TResult result)
         {
-            TesterDoerFactory<TResult, TSuccess> factory = new TesterDoerFactory<TResult, TSuccess>(faultSensitiveMethod);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, recoveryWaitTime, isTransientFault);
         }
 
@@ -678,7 +678,7 @@ namespace Cuemon
         /// <returns>The return value that indicates success of the function delegate <paramref name="faultSensitiveMethod"/>.</returns>
         public static TSuccess TryExecuteFunction<T, TResult, TSuccess>(int retryAttempts, Doer<int, TimeSpan> recoveryWaitTime, Doer<Exception, bool> isTransientFault, TesterDoer<T, TResult, TSuccess> faultSensitiveMethod, T arg, out TResult result)
         {
-            TesterDoerFactory<T, TResult, TSuccess> factory = new TesterDoerFactory<T, TResult, TSuccess>(faultSensitiveMethod, arg);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, recoveryWaitTime, isTransientFault);
         }
 
@@ -699,7 +699,7 @@ namespace Cuemon
         /// <returns>The return value that indicates success of the function delegate <paramref name="faultSensitiveMethod"/>.</returns>
         public static TSuccess TryExecuteFunction<T1, T2, TResult, TSuccess>(int retryAttempts, Doer<int, TimeSpan> recoveryWaitTime, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, out TResult result)
         {
-            TesterDoerFactory<T1, T2, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, recoveryWaitTime, isTransientFault);
         }
 
@@ -722,7 +722,7 @@ namespace Cuemon
         /// <returns>The return value that indicates success of the function delegate <paramref name="faultSensitiveMethod"/>.</returns>
         public static TSuccess TryExecuteFunction<T1, T2, T3, TResult, TSuccess>(int retryAttempts, Doer<int, TimeSpan> recoveryWaitTime, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, recoveryWaitTime, isTransientFault);
         }
 
@@ -747,7 +747,7 @@ namespace Cuemon
         /// <returns>The return value that indicates success of the function delegate <paramref name="faultSensitiveMethod"/>.</returns>
         public static TSuccess TryExecuteFunction<T1, T2, T3, T4, TResult, TSuccess>(int retryAttempts, Doer<int, TimeSpan> recoveryWaitTime, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, T4, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, T4, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, T4, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3, arg4);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3, arg4);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, recoveryWaitTime, isTransientFault);
         }
 
@@ -774,7 +774,7 @@ namespace Cuemon
         /// <returns>The return value that indicates success of the function delegate <paramref name="faultSensitiveMethod"/>.</returns>
         public static TSuccess TryExecuteFunction<T1, T2, T3, T4, T5, TResult, TSuccess>(int retryAttempts, Doer<int, TimeSpan> recoveryWaitTime, Doer<Exception, bool> isTransientFault, TesterDoer<T1, T2, T3, T4, T5, TResult, TSuccess> faultSensitiveMethod, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TResult result)
         {
-            TesterDoerFactory<T1, T2, T3, T4, T5, TResult, TSuccess> factory = new TesterDoerFactory<T1, T2, T3, T4, T5, TResult, TSuccess>(faultSensitiveMethod, arg1, arg2, arg3, arg4, arg5);
+            var factory = TesterDoerFactory.Create(faultSensitiveMethod, arg1, arg2, arg3, arg4, arg5);
             return TryExecuteFunctionCore(factory, out result, retryAttempts, recoveryWaitTime, isTransientFault);
         }
 
@@ -1190,7 +1190,7 @@ namespace Cuemon
             }
         }
 
-        private static TSuccess TryExecuteFunctionCore<TSuccess, TResult>(TesterDoerFactory<TResult, TSuccess> factory, out TResult result, int retryAttempts, Doer<int, TimeSpan> recoveryWaitTimeCallback, Doer<Exception, bool> isTransientFaultCallback)
+        private static TSuccess TryExecuteFunctionCore<TTuple, TSuccess, TResult>(TesterDoerFactory<TTuple, TResult, TSuccess> factory, out TResult result, int retryAttempts, Doer<int, TimeSpan> recoveryWaitTimeCallback, Doer<Exception, bool> isTransientFaultCallback) where TTuple : Template
         {
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;

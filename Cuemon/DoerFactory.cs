@@ -11,6 +11,7 @@ namespace Cuemon
         /// <summary>
         /// Creates a new <see cref="DoerFactory{TTuple,TResult}"/> instance encapsulating the specified <paramref name="method"/>.
         /// </summary>
+        /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
         /// <param name="method">The function delegate to invoke.</param>
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/>.</returns>
         public static DoerFactory<Template, TResult> Create<TResult>(Doer<TResult> method)
@@ -659,12 +660,13 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Invokes the specified delegate <paramref name="method"/> with a n-<paramref name="tuple"/> argument.
+        /// Invokes the specified delegate <paramref name="method" /> with a n-<paramref name="tuple" /> argument.
         /// </summary>
-        /// <typeparam name="TTuple">The type of the n-tuple representation of a <see cref="Template"/>.</typeparam>
-        /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method"/>.</typeparam>
+        /// <typeparam name="TTuple">The type of the n-tuple representation of a <see cref="Template" />.</typeparam>
+        /// <typeparam name="TResult">The type of the return value of the function delegate <paramref name="method" />.</typeparam>
         /// <param name="method">The function delegate to invoke.</param>
-        /// <param name="tuple">The n-tuple argument of <paramref name="method"/>.</param>
+        /// <param name="tuple">The n-tuple argument of <paramref name="method" />.</param>
+        /// <returns>The result of the the function delegate <paramref name="method"/>.</returns>
         public static TResult Invoke<TTuple, TResult>(Doer<TTuple, TResult> method, TTuple tuple) where TTuple : Template
         {
             DoerFactory<TTuple, TResult> factory = new DoerFactory<TTuple, TResult>(method, tuple);
@@ -747,7 +749,7 @@ namespace Cuemon
         /// </summary>
         /// <returns>A new <see cref="DoerFactory{TTuple,TResult}"/> that is a copy of this instance.</returns>
         /// <remarks>When thread safety is required this is the method to invoke.</remarks>
-        public virtual DoerFactory<TTuple, TResult> Clone()
+        public DoerFactory<TTuple, TResult> Clone()
         {
             return new DoerFactory<TTuple, TResult>(Method, GenericArguments.Clone() as TTuple);
         }
