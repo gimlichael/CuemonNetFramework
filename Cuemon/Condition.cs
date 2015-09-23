@@ -25,7 +25,7 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// </remarks>
         public static bool IsEmailAddress(string value)
         {
-            if (String.IsNullOrEmpty(value)) { return false; }
+            if (string.IsNullOrEmpty(value)) { return false; }
             return (RegExEmailAddressValidator.Match(value).Length > 0);
         }
 
@@ -51,7 +51,7 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// <returns><c>true</c> if the specified <paramref name="value"/> has a format of a <see cref="Guid"/>; otherwise, <c>false</c>.</returns>
         public static bool IsGuid(string value, GuidFormats format)
         {
-            if (String.IsNullOrEmpty(value)) { return false; }
+            if (string.IsNullOrEmpty(value)) { return false; }
             Guid result;
             return GuidUtility.TryParse(value, format, out result);
         }
@@ -91,8 +91,8 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// <returns><c>true</c> if the specified value can be evaluated as a number; otherwise, <c>false</c>.</returns>
         public static bool IsNumeric(string value, NumberStyles styles, IFormatProvider provider)
         {
-            if (String.Equals(value, "NaN", StringComparison.OrdinalIgnoreCase)) { return false; }
-            if (String.Equals(value, "Infinity", StringComparison.OrdinalIgnoreCase)) { return false; }
+            if (string.Equals(value, "NaN", StringComparison.OrdinalIgnoreCase)) { return false; }
+            if (string.Equals(value, "Infinity", StringComparison.OrdinalIgnoreCase)) { return false; }
             double outValue;
             return Double.TryParse(value, styles, provider, out outValue);
         }
@@ -239,7 +239,7 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// <returns><c>true</c> if the specified <paramref name="value"/> is hexadecimal; otherwise, <c>false</c>.</returns>
         public static bool IsHex(string value)
         {
-            if (String.IsNullOrEmpty(value)) { return false; }
+            if (string.IsNullOrEmpty(value)) { return false; }
             if (!NumberUtility.IsEven(value.Length)) { return false; }
             using (StringReader reader = new StringReader(value))
             {
@@ -592,6 +592,33 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
             Validator.ThrowIfNull(secondExpression, "secondExpression");
             if (IsTrue(condition)) { firstExpression(arg1, arg2, arg3, arg4, arg5); }
             if (IsFalse(condition)) { secondExpression(arg1, arg2, arg3, arg4, arg5); }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConditionBuilder{TTuple}" /> with the specified argument <paramref name="tuple" /> and the result of the starting <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="TTuple">The type of the n-tuple representation of a <see cref="Template"/>.</typeparam>
+        /// <typeparam name="TValue">The type of the value for <paramref name="condition"/>.</typeparam>
+        /// <param name="value">The argument for <paramref name="condition"/>.</param>
+        /// <param name="condition">The delegate that will evaluate <paramref name="value"/>.</param>
+        /// <param name="tuple">The argument for the invoker methods of <see cref="ConditionBuilder{TTuple}"/>.</param>
+        /// <returns>A new instance of the <see cref="ConditionBuilder{TTuple}" /> initialized with the specified argument <paramref name="tuple" /> and the result of the starting <paramref name="condition"/>.</returns>
+        public static ConditionBuilder<TTuple> Initialize<TTuple, TValue>(TTuple tuple, TValue value, Doer<TValue, bool> condition) where TTuple : Template
+        {
+            Validator.ThrowIfNull(condition, "condition");
+            return Initialize(tuple, condition(value));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConditionBuilder{TTuple}" /> with the specified argument <paramref name="tuple" /> and the boolean <paramref name="value"/>.
+        /// </summary>
+        /// <typeparam name="TTuple">The type of the n-tuple representation of a <see cref="Template"/>.</typeparam>
+        /// <param name="tuple">The argument for the invoker methods of <see cref="ConditionBuilder{TTuple}"/>.</param>
+        /// <param name="value">The value of a condition that can be either <c>true</c> or <c>false</c>.</param>
+        /// <returns>A new instance of the <see cref="ConditionBuilder{TTuple}" /> initialized with the specified argument <paramref name="tuple" /> and the boolean <paramref name="value"/>.</returns>
+        public static ConditionBuilder<TTuple> Initialize<TTuple>(TTuple tuple, bool value) where TTuple : Template
+        {
+            return new ConditionBuilder<TTuple>(tuple).When(value);
         }
     }
 }

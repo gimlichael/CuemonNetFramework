@@ -103,6 +103,7 @@
     <Compile Include="ComparisonUtility.cs" />
     <Compile Include="Condition.cs" />
     <Compile Include="ActivatorUtility.cs" />
+    <Compile Include="ConditionBuilder.cs" />
     <Compile Include="DataPairDictionary.cs" />
     <Compile Include="Diagnostics\ITimeMeasuring.cs" />
     <Compile Include="Globalization\CulturalRegion.cs" />
