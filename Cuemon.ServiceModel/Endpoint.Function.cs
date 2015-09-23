@@ -22,8 +22,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string,object})"/>.</remarks>
         public TResult ExecuteFunction<TResult>(MethodBase caller, Doer<TResult> method)
         {
-            DoerFactory<TResult> factory = new DoerFactory<TResult>(method);
-            return ExecuteFunctionCore(caller, factory, null, null);;
+            var factory = DoerFactory.Create(method);
+            return ExecuteFunctionCore(caller, factory, null, null);
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<TResult>(MethodBase caller, CacheValidator validator, Doer<TResult> method)
         {
-            DoerFactory<TResult> factory = new DoerFactory<TResult>(method);
-            return ExecuteFunctionCore(caller, factory, validator, null);;
+            var factory = DoerFactory.Create(method);
+            return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<TResult> method)
         {
-            DoerFactory<TResult> factory = new DoerFactory<TResult>(method);
+            var factory = DoerFactory.Create(method);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -69,8 +69,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T, TResult>(MethodBase caller, Doer<T, TResult> method, T arg)
         {
-            DoerFactory<T, TResult> factory = new DoerFactory<T, TResult>(method, arg);
-            return ExecuteFunctionCore(caller, factory, null, null);;
+            var factory = DoerFactory.Create(method, arg);
+            return ExecuteFunctionCore(caller, factory, null, null);
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T, TResult>(MethodBase caller, CacheValidator validator, Doer<T, TResult> method, T arg)
         {
-            DoerFactory<T, TResult> factory = new DoerFactory<T, TResult>(method, arg);
-            return ExecuteFunctionCore(caller, factory, validator, null);;
+            var factory = DoerFactory.Create(method, arg);
+            return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T, TResult> method, T arg)
         {
-            DoerFactory<T, TResult> factory = new DoerFactory<T, TResult>(method, arg);
+            var factory = DoerFactory.Create(method, arg);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -122,8 +122,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, TResult>(MethodBase caller, Doer<T1, T2, TResult> method, T1 arg1, T2 arg2)
         {
-            DoerFactory<T1, T2, TResult> factory = new DoerFactory<T1, T2, TResult>(method, arg1, arg2);
-            return ExecuteFunctionCore(caller, factory, null, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2);
+            return ExecuteFunctionCore(caller, factory, null, null);
         }
 
         /// <summary>
@@ -141,8 +141,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, TResult> method, T1 arg1, T2 arg2)
         {
-            DoerFactory<T1, T2, TResult> factory = new DoerFactory<T1, T2, TResult>(method, arg1, arg2);
-            return ExecuteFunctionCore(caller, factory, validator, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2);
+            return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, TResult> method, T1 arg1, T2 arg2)
         {
-            DoerFactory<T1, T2, TResult> factory = new DoerFactory<T1, T2, TResult>(method, arg1, arg2);
+            var factory = DoerFactory.Create(method, arg1, arg2);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -181,8 +181,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, TResult>(MethodBase caller, Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            DoerFactory<T1, T2, T3, TResult> factory = new DoerFactory<T1, T2, T3, TResult>(method, arg1, arg2, arg3);
-            return ExecuteFunctionCore(caller, factory, null, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3);
+            return ExecuteFunctionCore(caller, factory, null, null);
         }
 
         /// <summary>
@@ -202,8 +202,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            DoerFactory<T1, T2, T3, TResult> factory = new DoerFactory<T1, T2, T3, TResult>(method, arg1, arg2, arg3);
-            return ExecuteFunctionCore(caller, factory, validator, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3);
+            return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            DoerFactory<T1, T2, T3, TResult> factory = new DoerFactory<T1, T2, T3, TResult>(method, arg1, arg2, arg3);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -246,8 +246,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            DoerFactory<T1, T2, T3, T4, TResult> factory = new DoerFactory<T1, T2, T3, T4, TResult>(method, arg1, arg2, arg3, arg4);
-            return ExecuteFunctionCore(caller, factory, null, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
+            return ExecuteFunctionCore(caller, factory, null, null);
         }
 
         /// <summary>
@@ -269,8 +269,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            DoerFactory<T1, T2, T3, T4, TResult> factory = new DoerFactory<T1, T2, T3, T4, TResult>(method, arg1, arg2, arg3, arg4);
-            return ExecuteFunctionCore(caller, factory, validator, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
+            return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            DoerFactory<T1, T2, T3, T4, TResult> factory = new DoerFactory<T1, T2, T3, T4, TResult>(method, arg1, arg2, arg3, arg4);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -317,8 +317,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            DoerFactory<T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, TResult>(method, arg1, arg2, arg3, arg4, arg5);
-            return ExecuteFunctionCore(caller, factory, null, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
+            return ExecuteFunctionCore(caller, factory, null, null);
         }
 
         /// <summary>
@@ -342,8 +342,8 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            DoerFactory<T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, TResult>(method, arg1, arg2, arg3, arg4, arg5);
-            return ExecuteFunctionCore(caller, factory, validator, null);;
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
+            return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            DoerFactory<T1, T2, T3, T4, T5, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, TResult>(method, arg1, arg2, arg3, arg4, arg5);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -394,7 +394,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -421,7 +421,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -449,7 +449,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -477,7 +477,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -506,7 +506,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -536,7 +536,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -566,7 +566,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -597,7 +597,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -629,7 +629,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -661,7 +661,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -694,7 +694,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -728,7 +728,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -762,7 +762,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -797,7 +797,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -833,7 +833,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -869,7 +869,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -906,7 +906,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -944,7 +944,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -982,7 +982,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1021,7 +1021,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1061,7 +1061,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1101,7 +1101,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1142,7 +1142,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1184,7 +1184,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1226,7 +1226,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1269,7 +1269,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1313,7 +1313,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1357,7 +1357,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1402,7 +1402,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1448,7 +1448,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1494,7 +1494,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1541,7 +1541,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1589,7 +1589,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1637,7 +1637,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1686,7 +1686,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1736,7 +1736,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1786,7 +1786,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1837,7 +1837,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -1889,7 +1889,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -1941,7 +1941,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -1994,7 +1994,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -2048,7 +2048,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
@@ -2102,7 +2102,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
             return ExecuteFunctionCore(caller, factory, null, null);
         }
 
@@ -2157,7 +2157,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
             return ExecuteFunctionCore(caller, factory, validator, null);
         }
 
@@ -2213,21 +2213,21 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20)
         {
-            DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> factory = new DoerFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
+            var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
             return ExecuteFunctionCore(caller, factory, validator, cacheability);
         }
 
-        private TResult ExecuteFunctionCore<TResult>(MethodBase caller, DoerFactory<TResult> factory, CacheValidator validator, HttpCacheability? cacheability)
+        private TResult ExecuteFunctionCore<TTuple, TResult>(MethodBase caller, DoerFactory<TTuple, TResult> factory, CacheValidator validator, HttpCacheability? cacheability) where TTuple : Template
         {
             Guid threadSafeId = Guid.NewGuid();
             DateTime utcNow = DateTime.UtcNow;
             DateTime expires = DateTime.MinValue;
             try
             {
-                this.OnMethodEntered(caller, threadSafeId);
+                OnMethodEntered(caller, threadSafeId);
 
                 HttpCacheability resolvedCacheability = cacheability.HasValue ? cacheability.Value : HttpCacheability.NoCache;
-                HttpCachingAttribute cachingAttribute = this.GetCachingAttribute(caller);
+                HttpCachingAttribute cachingAttribute = GetCachingAttribute(caller);
                 HttpResponseAttribute responseAttribute = ReflectionUtility.GetAttribute<HttpResponseAttribute>(caller);
                 if (cachingAttribute != null)
                 {
@@ -2238,35 +2238,35 @@ namespace Cuemon.ServiceModel
                     }
                 }
 
-                
+
                 bool suppressContent;
-                this.ClientSideCachingHandler(validator, expires, resolvedCacheability, out suppressContent);
+                ClientSideCachingHandler(validator, expires, resolvedCacheability, out suppressContent);
                 if (suppressContent)
                 {
-                    this.StatusCodeHandler(HttpStatusCode.NotModified);
+                    StatusCodeHandler(HttpStatusCode.NotModified);
                     return default(TResult);
                 }
 
                 HttpStatusCode successStatusCode = responseAttribute == null ? HttpStatusCode.OK : responseAttribute.SuccessStatusCode;
                 string successStatusDescription = responseAttribute == null ? null : responseAttribute.SuccessStatusDescription;
-                this.StatusCodeHandler(successStatusCode, successStatusDescription);
+                StatusCodeHandler(successStatusCode, successStatusDescription);
 
                 return factory.ExecuteMethod();
             }
             catch (Exception ex)
             {
-                this.ExceptionHandler(caller, ex, factory.GetGenericArguments());
+                ExceptionHandler(caller, ex, factory.GenericArguments.ToArray());
                 return default(TResult);
             }
             finally
             {
-                this.OnMethodExited(caller, threadSafeId, factory.GetGenericArguments());
+                OnMethodExited(caller, threadSafeId, factory.GenericArguments.ToArray());
             }
         }
 
         private HttpCachingAttribute GetCachingAttribute(MethodBase caller)
         {
-            HttpCachingAttribute cachingClassAttribute = ReflectionUtility.GetAttribute<HttpCachingAttribute>(this.GetType(), true);
+            HttpCachingAttribute cachingClassAttribute = ReflectionUtility.GetAttribute<HttpCachingAttribute>(GetType(), true);
             HttpCachingAttribute cachingMethodAttribute = ReflectionUtility.GetAttribute<HttpCachingAttribute>(caller);
             if (cachingMethodAttribute != null) { return cachingMethodAttribute; }
             if (cachingClassAttribute != null) { return cachingClassAttribute; }

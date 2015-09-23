@@ -18,7 +18,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string,object})"/>.</remarks>
         public void ExecuteAction(MethodBase caller, Act method)
         {
-            ActFactory factory = new ActFactory(method);
+            var factory = ActFactory.Create(method);
             ExecuteActionCore(caller, factory);
         }
 
@@ -32,7 +32,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T>(MethodBase caller, Act<T> method, T arg)
         {
-            ActFactory<T> factory = new ActFactory<T>(method, arg);
+            var factory = ActFactory.Create(method, arg);
             ExecuteActionCore(caller, factory);
         }
 
@@ -48,7 +48,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2>(MethodBase caller, Act<T1, T2> method, T1 arg1, T2 arg2)
         {
-            ActFactory<T1, T2> factory = new ActFactory<T1, T2>(method, arg1, arg2);
+            var factory = ActFactory.Create(method, arg1, arg2);
             ExecuteActionCore(caller, factory);
         }
 
@@ -66,7 +66,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3>(MethodBase caller, Act<T1, T2, T3> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            ActFactory<T1, T2, T3> factory = new ActFactory<T1, T2, T3>(method, arg1, arg2, arg3);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3);
             ExecuteActionCore(caller, factory);
         }
 
@@ -86,7 +86,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4>(MethodBase caller, Act<T1, T2, T3, T4> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            ActFactory<T1, T2, T3, T4> factory = new ActFactory<T1, T2, T3, T4>(method, arg1, arg2, arg3, arg4);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4);
             ExecuteActionCore(caller, factory);
         }
 
@@ -108,7 +108,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5>(MethodBase caller, Act<T1, T2, T3, T4, T5> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            ActFactory<T1, T2, T3, T4, T5> factory = new ActFactory<T1, T2, T3, T4, T5>(method, arg1, arg2, arg3, arg4, arg5);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
             ExecuteActionCore(caller, factory);
         }
 
@@ -132,7 +132,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6> factory = new ActFactory<T1, T2, T3, T4, T5, T6>(method, arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
             ExecuteActionCore(caller, factory);
         }
 
@@ -158,7 +158,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             ExecuteActionCore(caller, factory);
         }
 
@@ -186,7 +186,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             ExecuteActionCore(caller, factory);
         }
 
@@ -216,7 +216,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             ExecuteActionCore(caller, factory);
         }
 
@@ -248,7 +248,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             ExecuteActionCore(caller, factory);
         }
 
@@ -282,7 +282,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
             ExecuteActionCore(caller, factory);
         }
 
@@ -318,7 +318,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
             ExecuteActionCore(caller, factory);
         }
 
@@ -356,7 +356,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
             ExecuteActionCore(caller, factory);
         }
 
@@ -396,7 +396,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
             ExecuteActionCore(caller, factory);
         }
 
@@ -438,7 +438,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
             ExecuteActionCore(caller, factory);
         }
 
@@ -482,7 +482,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
             ExecuteActionCore(caller, factory);
         }
 
@@ -528,7 +528,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
             ExecuteActionCore(caller, factory);
         }
 
@@ -576,7 +576,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
             ExecuteActionCore(caller, factory);
         }
 
@@ -626,7 +626,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
             ExecuteActionCore(caller, factory);
         }
 
@@ -678,31 +678,30 @@ namespace Cuemon.ServiceModel
         /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="Instrumentation.TimeMeasureCompletedHandling(string,TimeSpan,IDictionary{string, object})"/>.</remarks>
         public void ExecuteAction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(MethodBase caller, Act<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20)
         {
-            ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> factory = new ActFactory<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
+            var factory = ActFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
             ExecuteActionCore(caller, factory);
         }
 
-        private void ExecuteActionCore(MethodBase caller, ActFactory factory)
+        private void ExecuteActionCore<TTuple>(MethodBase caller, ActFactory<TTuple> factory) where TTuple : Template
         {
             Guid threadSafeId = Guid.NewGuid();
             try
             {
-                this.OnMethodEntered(caller, threadSafeId);
-
+                OnMethodEntered(caller, threadSafeId);
                 HttpResponseAttribute responseAttribute = ReflectionUtility.GetAttribute<HttpResponseAttribute>(caller);
                 HttpStatusCode successStatusCode = responseAttribute == null ? HttpStatusCode.OK : responseAttribute.SuccessStatusCode;
                 string successStatusDescription = responseAttribute == null ? null : responseAttribute.SuccessStatusDescription;
-                this.StatusCodeHandler(successStatusCode, successStatusDescription);
+                StatusCodeHandler(successStatusCode, successStatusDescription);
 
                 factory.ExecuteMethod();
             }
             catch (Exception ex)
             {
-                this.ExceptionHandler(caller, ex, factory.GetGenericArguments());
+                ExceptionHandler(caller, ex, factory.GenericArguments.ToArray());
             }
             finally
             {
-                this.OnMethodExited(caller, threadSafeId, factory.GetGenericArguments());
+                OnMethodExited(caller, threadSafeId, factory.GenericArguments.ToArray());
             }
         }
     }
