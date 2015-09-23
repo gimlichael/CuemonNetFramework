@@ -272,7 +272,7 @@ namespace Cuemon.Web
             if (response == null) { throw new ArgumentNullException("response"); }
             if (name == null) { throw new ArgumentNullException("name"); }
             if (name.Length == 0) { throw new ArgumentEmptyException("name"); }
-            if (GlobalModule.HasIisIntegratedPipelineMode)
+            if (HttpRuntimeUtility.SupportsIisIntegratedPipelineMode)
             {
                 if (response.Headers[name] != null) { response.Headers.Remove(name); }
             }
@@ -294,7 +294,7 @@ namespace Cuemon.Web
                                 if (headerNameInfo != null)
                                 {
                                     string headerName = headerNameInfo.GetValue(header, null) as string;
-                                    if (headerName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                                    if (headerName != null && headerName.Equals(name, StringComparison.OrdinalIgnoreCase))
                                     {
                                         indexesToRemove.Add(i);
                                     }
@@ -483,7 +483,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static WebHeaderCollection CreateClientSideContentCacheExpiresHeaders(CacheValidator validator, DateTime expires, HttpCacheability cacheability, Doer<CacheValidator, NameValueCollection, bool> isClientSideResourceCached, NameValueCollection headers, out HttpStatusCode statusCode)
         {
-            DoerFactory<CacheValidator, NameValueCollection, bool> factory = new DoerFactory<CacheValidator, NameValueCollection, bool>(isClientSideResourceCached, validator, headers);
+            var factory = DoerFactory.Create(isClientSideResourceCached, validator, headers);
             return CreateClientSideContentCacheExpiresHeadersCore(factory, validator, expires, cacheability, out statusCode);
         }
 
@@ -509,7 +509,7 @@ namespace Cuemon.Web
         public static WebHeaderCollection CreateClientSideContentCacheExpiresHeaders(DateTime lastModified, DateTime expires, HttpCacheability cacheability, Doer<DateTime, NameValueCollection, bool> isClientSideResourceCached, NameValueCollection headers, out HttpStatusCode statusCode)
         {
             CacheValidator validator = new CacheValidator(lastModified);
-            DoerFactory<DateTime, NameValueCollection, bool> factory = new DoerFactory<DateTime, NameValueCollection, bool>(isClientSideResourceCached, lastModified, headers);
+            var factory = DoerFactory.Create(isClientSideResourceCached, lastModified, headers);
             return CreateClientSideContentCacheExpiresHeadersCore(factory, validator, expires, cacheability, out statusCode);
         }
 
@@ -539,11 +539,11 @@ namespace Cuemon.Web
         public static WebHeaderCollection CreateClientSideContentCacheExpiresHeaders(DateTime lastModified, DateTime expires, HttpCacheability cacheability, Doer<DateTime, NameValueCollection, string, bool> isClientSideResourceCached, NameValueCollection headers, string entityTag, out HttpStatusCode statusCode)
         {
             CacheValidator validator = new CacheValidator(lastModified, lastModified, entityTag);
-            DoerFactory<DateTime, NameValueCollection, string, bool> factory = new DoerFactory<DateTime, NameValueCollection, string, bool>(isClientSideResourceCached, validator.GetMostSignificant(), headers, validator.Checksum);
+            var factory = DoerFactory.Create(isClientSideResourceCached, validator.GetMostSignificant(), headers, validator.Checksum);
             return CreateClientSideContentCacheExpiresHeadersCore(factory, validator, expires, cacheability, out statusCode);
         }
 
-        private static WebHeaderCollection CreateClientSideContentCacheExpiresHeadersCore(DoerFactory<bool> factory, CacheValidator validator, DateTime expires, HttpCacheability cacheability, out HttpStatusCode statusCode)
+        private static WebHeaderCollection CreateClientSideContentCacheExpiresHeadersCore<TTuple>(DoerFactory<TTuple, bool> factory, CacheValidator validator, DateTime expires, HttpCacheability cacheability, out HttpStatusCode statusCode) where TTuple : Template
         {
             WebHeaderCollection headers = new WebHeaderCollection();
             DateTime currentUtcDate = DateTime.UtcNow;
@@ -552,9 +552,9 @@ namespace Cuemon.Web
 
             if (validator.Strength != ChecksumStrength.None)
             {
-                entityTag = (validator.Strength == ChecksumStrength.Weak && !validator.Checksum.StartsWith("W/", StringComparison.OrdinalIgnoreCase)) ? string.Concat("W/", "\"", validator.Checksum, "\"") : string.Concat("\"", validator.Checksum, "\"");    
+                entityTag = (validator.Strength == ChecksumStrength.Weak && !validator.Checksum.StartsWith("W/", StringComparison.OrdinalIgnoreCase)) ? string.Concat("W/", "\"", validator.Checksum, "\"") : string.Concat("\"", validator.Checksum, "\"");
             }
-            
+
             bool suppressContent = factory.ExecuteMethod();
 
             StringBuilder cacheControl = new StringBuilder();
