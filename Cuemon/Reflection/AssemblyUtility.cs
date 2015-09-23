@@ -6,7 +6,7 @@ using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.IO;
 
-namespace Cuemon
+namespace Cuemon.Reflection
 {
     /// <summary>
     /// This utility class is designed to make common <see cref="Assembly"/> related operations easier to work with.
