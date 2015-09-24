@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Cuemon.Reflection;
 using Cuemon.Security.Cryptography;
 
 namespace Cuemon.Caching
