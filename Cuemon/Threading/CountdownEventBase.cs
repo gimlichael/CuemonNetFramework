@@ -30,7 +30,7 @@ namespace Cuemon.Threading
         /// </returns>
         public bool IsSet
         {
-            get { return this.CurrentCount <= 0; }
+            get { return CurrentCount <= 0; }
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Cuemon.Threading
                         }
                         else
                         {
-                            this.Set();
+                            if (_currentCount == 0) { Set(); }
                             break;
                         }
                     }
@@ -102,7 +102,7 @@ namespace Cuemon.Threading
         {
             if (Interlocked.Decrement(ref _currentCount) == 0)
             {
-                this.Set();
+                Set();
             }
         }
 
@@ -131,7 +131,7 @@ namespace Cuemon.Threading
                     }
                     else
                     {
-                        this.Set();
+                        if (_currentCount == 0) { Set(); }
                         break;
                     }
                 }
@@ -152,7 +152,7 @@ namespace Cuemon.Threading
         /// </summary>
         public void Wait()
         {
-            this.Wait(TimeSpan.FromSeconds(30));
+            Wait(TimeSpan.FromSeconds(30));
         }
 
         /// <summary>
