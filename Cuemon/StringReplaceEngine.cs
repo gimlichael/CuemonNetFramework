@@ -1,58 +1,120 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Cuemon
 {
     internal class StringReplaceEngine
     {
-        internal StringReplaceEngine(string value) : base()
+        internal StringReplaceEngine(string value, IEnumerable<StringReplacePair> replacePairs, StringComparison comparison)
         {
-            this.Value = value;
-            this.LastStartIndex = -1;
-            this.LastLength = -1;
-            this.ReplaceCoordinates = new List<StringReplaceCoordinate>();
+            Value = value;
+            ReplacePairs = replacePairs;
+            Comparison = comparison;
+            LastStartIndex = -1;
+            LastLength = -1;
+            ReplaceCoordinates = new List<StringReplaceCoordinate>();
         }
 
-        internal string RenderReplacement()
+        private RegexOptions ToRegExOptions(StringComparison comparison)
         {
-            int startIndex = 0;
-            int currentIndex;
-            int currentLength;
-            if (this.ReplaceCoordinates.Count == 0) { return this.Value; }
-            StringBuilder builder = new StringBuilder();
-            foreach (StringReplaceCoordinate replaceCoordinate in this.ReplaceCoordinates)
+            RegexOptions options = RegexOptions.None;
+            switch (comparison)
             {
-                currentIndex = replaceCoordinate.StartIndex;
-                currentLength = replaceCoordinate.Length;
+                case StringComparison.CurrentCulture:
+                    break;
+                case StringComparison.InvariantCulture:
+                case StringComparison.Ordinal:
+                    options = RegexOptions.CultureInvariant;
+                    break;
+                case StringComparison.CurrentCultureIgnoreCase:
+                case StringComparison.InvariantCultureIgnoreCase:
+                case StringComparison.OrdinalIgnoreCase:
+                    options = RegexOptions.IgnoreCase;
+                    break;
+            }
+            return options;
+        }
 
-                if (this.LastStartIndex == -1)
+        private string ToRegExPattern(IEnumerable<StringReplacePair> replacePairs, out IDictionary<string, string> lookupTable)
+        {
+            lookupTable = new Dictionary<string, string>();
+            StringBuilder pattern = new StringBuilder();
+            foreach (StringReplacePair replacePair in replacePairs)
+            {
+                char[] characters = replacePair.OldValue.ToCharArray();
+                foreach (char character in characters)
                 {
-                    builder.Append(this.Value.Substring(startIndex, currentIndex));
+                    pattern.AppendFormat(CultureInfo.InvariantCulture, @"\u{0:x4}", (uint)character);
+                }
+                pattern.Append("|");
+                lookupTable.Add(replacePair.OldValue.ToUpperInvariant(), replacePair.NewValue);
+            }
+            pattern.Remove(pattern.Length - 1, 1);
+            return pattern.ToString();
+        }
+
+        private string RenderReplacement()
+        {
+            IDictionary<string, string> lookupTable;
+            Regex regex = new Regex(ToRegExPattern(ReplacePairs, out lookupTable), ToRegExOptions(Comparison));
+            MatchCollection matches = regex.Matches(Value);
+            foreach (Match match in matches)
+            {
+                ReplaceCoordinates.Add(new StringReplaceCoordinate(match.Index, match.Length, lookupTable[match.Value.ToUpperInvariant()]));
+            }
+
+            int startIndex = 0;
+            if (ReplaceCoordinates.Count == 0) { return Value; }
+            StringBuilder builder = new StringBuilder();
+            foreach (StringReplaceCoordinate replaceCoordinate in ReplaceCoordinates)
+            {
+                var currentIndex = replaceCoordinate.StartIndex;
+                var currentLength = replaceCoordinate.Length;
+
+                if (LastStartIndex == -1)
+                {
+                    builder.Append(Value.Substring(startIndex, currentIndex));
                 }
                 else
                 {
-                    if (currentIndex > this.LastStartIndex)
+                    if (currentIndex > LastStartIndex)
                     {
-                        int lastPosition = this.LastStartIndex + this.LastLength;
-                        builder.Append(this.Value.Substring(lastPosition, currentIndex - lastPosition));
+                        int lastPosition = LastStartIndex + LastLength;
+                        builder.Append(Value.Substring(lastPosition, currentIndex - lastPosition));
                     }
                 }
                 builder.Append(replaceCoordinate.Value);
-                this.LastLength = currentLength;
-                this.LastStartIndex = currentIndex;
+                LastLength = currentLength;
+                LastStartIndex = currentIndex;
             }
 
-            if (builder.Length < this.Value.Length)
+            startIndex = LastStartIndex + LastLength;
+            if (startIndex < Value.Length)
             {
-                builder.Append(this.Value.Substring(this.LastStartIndex + this.LastLength));
+                builder.Append(Value.Substring(LastStartIndex + LastLength));
             }
 
             return builder.ToString();
         }
 
-        internal List<StringReplaceCoordinate> ReplaceCoordinates { get; set; }
-        internal int LastStartIndex { get; set; }
-        internal int LastLength { get; set; }
-        internal string Value { get; set; }
+        private StringComparison Comparison { get; set; }
+
+        private IEnumerable<StringReplacePair> ReplacePairs { get; set; }
+
+        private List<StringReplaceCoordinate> ReplaceCoordinates { get; set; }
+
+        private int LastStartIndex { get; set; }
+
+        private int LastLength { get; set; }
+
+        private string Value { get; set; }
+
+        public override string ToString()
+        {
+            return RenderReplacement();
+        }
     }
 }

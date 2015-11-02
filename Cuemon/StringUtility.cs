@@ -574,8 +574,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> equivalent to <paramref name="value"/> but with all instances of <paramref name="oldValue"/> replaced with <paramref name="newValue"/>.</returns>
         public static string Replace(string value, string oldValue, string newValue, StringComparison comparison)
         {
-            if (oldValue == null) { throw new ArgumentNullException("oldValue"); }
-            if (newValue == null) { throw new ArgumentNullException("newValue"); }
+            Validator.ThrowIfNull(oldValue, "oldValue");
+            Validator.ThrowIfNull(newValue, "newValue");
             return Replace(value, EnumerableUtility.Yield(new StringReplacePair(oldValue, newValue)), comparison);
         }
 
@@ -588,44 +588,10 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> equivalent to <paramref name="value"/> but with all instances of <see cref="StringReplacePair.OldValue"/> replaced with <see cref="StringReplacePair.NewValue"/>.</returns>
         public static string Replace(string value, IEnumerable<StringReplacePair> replacePairs, StringComparison comparison)
         {
-            if (value == null) { throw new ArgumentNullException("value"); }
-            if (replacePairs == null) throw new ArgumentNullException("replacePairs");
-
-            Dictionary<string, string> lookup = new Dictionary<string, string>();
-            StringBuilder pattern = new StringBuilder();
-            foreach (StringReplacePair replacePair in replacePairs)
-            {
-                char[] characters = replacePair.OldValue.ToCharArray();
-                foreach (char character in characters)
-                {
-                    pattern.AppendFormat(CultureInfo.InvariantCulture, @"\u{0:x4}", (uint)character);
-                }
-                pattern.Append("|");
-                lookup.Add(replacePair.OldValue.ToUpperInvariant(), replacePair.NewValue);
-            }
-            pattern.Remove(pattern.Length - 1, 1);
-
-            RegexOptions options = RegexOptions.None;
-            switch (comparison)
-            {
-                case StringComparison.CurrentCulture:
-                    break;
-                case StringComparison.InvariantCulture:
-                case StringComparison.Ordinal:
-                    options = RegexOptions.CultureInvariant;
-                    break;
-                case StringComparison.CurrentCultureIgnoreCase:
-                case StringComparison.InvariantCultureIgnoreCase:
-                case StringComparison.OrdinalIgnoreCase:
-                    options = RegexOptions.IgnoreCase;
-                    break;
-            }
-
-            Regex regex = new Regex(pattern.ToString(), options);
-            MatchCollection matches = regex.Matches(value);
-            StringReplaceEngine replaceEngine = new StringReplaceEngine(value);
-            foreach (Match match in matches) { replaceEngine.ReplaceCoordinates.Add(new StringReplaceCoordinate(match.Index, match.Length, lookup[match.Value.ToUpperInvariant()])); }
-            return replaceEngine.RenderReplacement();
+            Validator.ThrowIfNull(value, "value");
+            Validator.ThrowIfNull(replacePairs, "replacePairs");
+            StringReplaceEngine replaceEngine = new StringReplaceEngine(value, replacePairs, comparison);
+            return replaceEngine.ToString();
         }
 
         /// <summary>
