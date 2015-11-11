@@ -272,6 +272,51 @@ namespace Cuemon
         }
 
         /// <summary>
+        /// Returns a sequence that is chunked into string-slices having a length of 1024 that is equivalent to <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">A <see cref="string" /> to chunk into a sequence of smaller string-slices for partitioned storage or similar.</param>
+        /// <returns>A sequence that is chunked into string-slices having a length of 1024 that is equivalent to <paramref name="value"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is null.
+        /// </exception>
+        public static IEnumerable<string> Chunk(string value)
+        {
+            return Chunk(value, 1024);
+        }
+
+        /// <summary>
+        /// Returns a sequence that is chunked into string-slices of the specified <paramref name="length"/> that is equivalent to <paramref name="value"/>. Default is 1024.
+        /// </summary>
+        /// <param name="value">A <see cref="string" /> to chunk into a sequence of smaller string-slices for partitioned storage or similar.</param>
+        /// <param name="length">The desired length of each string-slice in the sequence.</param>
+        /// <returns>A sequence that is chunked into string-slices of the specified <paramref name="length"/> that is equivalent to <paramref name="value"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="length"/> is less or equal to 0.
+        /// </exception>
+        public static IEnumerable<string> Chunk(string value, int length)
+        {
+            Validator.ThrowIfNull(value, "value");
+            Validator.ThrowIfLowerThanOrEqual(length, 0, "length");
+            if (value.Length <= length)
+            {
+                yield return value;
+            }
+            else
+            {
+                int index = 0;
+                while (index < value.Length)
+                {
+                    int smallestLength = Math.Min(length, value.Length - index);
+                    yield return value.Substring(index, smallestLength);
+                    index += smallestLength;
+                }
+            }
+        }
+
+        /// <summary>
         /// Determines whether the elements of the specified <paramref name="source"/> is equivalent to the specified <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the expected values contained within the sequence of <paramref name="source"/>.</typeparam>
