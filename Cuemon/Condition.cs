@@ -270,7 +270,7 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The object to verify is null.</param>
         /// <returns><c>true</c> if the specified <paramref name="value"/> is null; otherwise, <c>false</c>.</returns>
-        public static bool IsNull<T>(T value) where T : class
+        public static bool IsNull<T>(T value)
         {
             return (value == null);
         }
@@ -281,7 +281,7 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The object to verify is not null.</param>
         /// <returns><c>true</c> if the specified <paramref name="value"/> is not null; otherwise, <c>false</c>.</returns>
-        public static bool IsNotNull<T>(T value) where T : class
+        public static bool IsNotNull<T>(T value)
         {
             return !IsNull(value);
         }
