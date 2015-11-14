@@ -29,22 +29,32 @@ namespace Cuemon.Web
             Validator.ThrowIfNull(context, "context");
 
             string path = context.Context.Request.PhysicalApplicationPath;
-            string[] extensions = this.RouteExtensions.Split('|');
+            string[] extensions = RouteExtensions.Split('|');
             if (path != null)
             {
                 PhysicalFileNames = EnumerableUtility.FindAll(Directory.GetFiles(path, "*.*", SearchOption.AllDirectories), Match, extensions);
             }
-
-            this.DiscoverHandlerRoutes(typeof(IHttpHandler));
+            DiscoverHandlerRoutes(typeof(IHttpHandler));
             base.OnApplicationStart(context);
+            //this.DiscoverHandlerActions();
         }
 
         /// <summary>
-        /// Provides access to the Load event of the currently executing <see cref="Page"/> control.
+        /// Provides access to the PreRequestHandlerExecute event of the <see cref="HttpApplication" />.
         /// </summary>
-        /// <param name="page">The page handler of the current request.</param>
-        /// <remarks>This method is invoked when the <paramref name="page"/> loads.</remarks>
-        protected override void OnLoad(Page page)
+        /// <param name="context">The context of the ASP.NET application.</param>
+        /// <remarks>This method is invoked just before ASP.NET starts executing an event handler.</remarks>
+        protected override void OnPreRequestHandlerExecute(HttpApplication context)
+        {
+            base.OnPreRequestHandlerExecute(context);
+            Page pageHandler = CurrentHandler as Page;
+            if (pageHandler == null) { return; }
+            PageHandlerEventBinder binder = new PageHandlerEventBinder(pageHandler);
+            binder.EnableTimeMeasuring = EnableTimeMeasuring;
+            binder.OnLoad = OnLoad;
+        }
+
+        private void OnLoad(Page page)
         {
             Validator.ThrowIfNull(page, "page");
             PropertyInfo reflectedContext = page.GetType().GetProperty("Context", ReflectionUtility.BindingInstancePublicAndPrivate);
@@ -65,8 +75,6 @@ namespace Cuemon.Web
                     }
                 }
             }
-
-            base.OnLoad(page);
         }
 
         private bool Match(string file, string[] extensions)
@@ -138,7 +146,7 @@ namespace Cuemon.Web
                         HttpRouteTable.Routes.Add(new HttpRoute(attribute.UriPattern, handlerVirtualPath, handler, attribute.Methods));
                     }
                 }
-                
+
                 if (httpAttributes.Count > 0) { HandlerRoutes.Add(routeHandlerType, httpAttributes); }
             }
         }
