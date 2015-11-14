@@ -509,7 +509,7 @@ namespace Cuemon
         {
             ThrowIfNotNumber(value, paramName, message, styles, CultureInfo.InvariantCulture);
         }
-        
+
         /// <summary>
         /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> is not a number.
         /// </summary>
@@ -541,7 +541,7 @@ namespace Cuemon
         /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> cannot be null.
         /// </exception>
-        public static void ThrowIfNull<T>(T value, string paramName) where T : class
+        public static void ThrowIfNull<T>(T value, string paramName)
         {
             ThrowIfNull(value, paramName, "Value cannot be null.");
         }
@@ -555,7 +555,7 @@ namespace Cuemon
         /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> cannot be null.
         /// </exception>
-        public static void ThrowIfNull<T>(T value, string paramName, string message) where T : class
+        public static void ThrowIfNull<T>(T value, string paramName, string message)
         {
             try
             {
