@@ -90,7 +90,7 @@
     <Compile Include="Annotations\RequiredSequenceValidationAttribute.cs" />
     <Compile Include="Annotations\ValidationUtility.cs" />
     <Compile Include="ArrayUtility.cs" />
-    <Compile Include="AssemblyUtility.cs" />
+    <Compile Include="Reflection\AssemblyUtility.cs" />
     <Compile Include="Caching\CacheAsyncState.cs" />
     <Compile Include="Caching\CacheCollection.GetOrAdd.cs" />
     <Compile Include="Caching\CacheCollection.GetOrAddAsync.cs" />

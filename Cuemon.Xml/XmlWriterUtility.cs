@@ -732,7 +732,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml(Act<XmlWriter> writer, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter> factory = new ActFactory<XmlWriter>(writer, null);
+            var factory = ActFactory.Create(writer, null);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -759,7 +759,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T>(Act<XmlWriter, T> writer, T arg, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T> factory = new ActFactory<XmlWriter, T>(writer, null, arg);
+            var factory = ActFactory.Create(writer, null, arg);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -790,7 +790,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2>(Act<XmlWriter, T1, T2> writer, T1 arg1, T2 arg2, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2> factory = new ActFactory<XmlWriter, T1, T2>(writer, null, arg1, arg2);
+            var factory = ActFactory.Create(writer, null, arg1, arg2);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -825,7 +825,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3>(Act<XmlWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3> factory = new ActFactory<XmlWriter, T1, T2, T3>(writer, null, arg1, arg2, arg3);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -864,7 +864,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4>(Act<XmlWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4> factory = new ActFactory<XmlWriter, T1, T2, T3, T4>(writer, null, arg1, arg2, arg3, arg4);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -907,7 +907,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4, T5>(Act<XmlWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4, T5> factory = new ActFactory<XmlWriter, T1, T2, T3, T4, T5>(writer, null, arg1, arg2, arg3, arg4, arg5);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -954,7 +954,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6>(Act<XmlWriter, T1, T2, T3, T4, T5, T6> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6> factory = new ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -1005,7 +1005,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7> factory = new ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -1060,7 +1060,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7, T8>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8> factory = new ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -1119,7 +1119,7 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> factory = new ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
@@ -1182,11 +1182,11 @@ namespace Cuemon.Xml
         /// <returns>A <see cref="Stream"/> holding the XML created by the delegate <paramref name="writer"/>.</returns>
         public static Stream CreateXml<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, XmlWriterSettings settings)
         {
-            ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> factory = new ActFactory<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return CreateXmlCore(factory, settings, MethodBase.GetCurrentMethod());
         }
 
-        private static Stream CreateXmlCore(ActFactory<XmlWriter> factory, XmlWriterSettings settings, MethodBase caller)
+        private static Stream CreateXmlCore<TTuple>(ActFactory<TTuple> factory, XmlWriterSettings settings, MethodBase caller) where TTuple : Template<XmlWriter>
         {
             if (settings == null) { throw new ArgumentNullException("settings"); }
             Stream output = null;
@@ -1196,7 +1196,7 @@ namespace Cuemon.Xml
                 tempOutput = new MemoryStream();
                 using (XmlWriter writer = XmlWriter.Create(tempOutput, settings))
                 {
-                    factory.Arg1 = writer;
+                    factory.GenericArguments.Arg1 = writer;
                     factory.ExecuteMethod();
                     writer.Flush();
                 }
@@ -1208,7 +1208,7 @@ namespace Cuemon.Xml
             catch (Exception ex)
             {
                 List<object> parameters = new List<object>();
-                parameters.AddRange(factory.GetGenericArguments());
+                parameters.AddRange(factory.GenericArguments.ToArray());
                 parameters.Add(settings);
                 throw ExceptionUtility.Refine(new InvalidOperationException("There is an error in the XML document.", ex), caller, parameters.ToArray());
             }
