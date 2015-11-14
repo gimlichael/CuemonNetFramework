@@ -2017,4 +2017,5 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Cuemon.TesterDoerFactory.#Create`22(Cuemon.TesterDoer`22<!!0,!!1,!!2,!!3,!!4,!!5,!!6,!!7,!!8,!!9,!!10,!!11,!!12,!!13,!!14,!!15,!!16,!!17,!!18,!!19,!!20,!!21>,!!0,!!1,!!2,!!3,!!4,!!5,!!6,!!7,!!8,!!9,!!10,!!11,!!12,!!13,!!14,!!15,!!16,!!17,!!18,!!19)")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Scope = "member", Target = "Cuemon.TesterDoerFactory.#Invoke`3(Cuemon.TesterDoer`3<!!0,!!1,!!2>,!!0,!!1&)")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Scope = "member", Target = "Cuemon.TesterDoerFactory`3.#ExecuteMethod(!1&)")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Scope = "member", Target = "Cuemon.Condition.#Initialize`2(!!0,!!1,Cuemon.Doer`2<!!1,System.Boolean>)")]
 

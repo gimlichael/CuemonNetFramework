@@ -163,3 +163,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "cdata", Scope = "member", Target = "Cuemon.Xml.XmlUtility.#SanitizeElementText(System.String,System.Boolean)")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate", Scope = "member", Target = "Cuemon.Xml.Xsl.XsltOutput.#CacheGroupName")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames")]
+[assembly: SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "Cuemon.Xml.XmlWriterUtility.#CreateXmlCore`1(Cuemon.ActFactory`1<!!0>,System.Xml.XmlWriterSettings,System.Reflection.MethodBase)")]
+[assembly: SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "Cuemon.Xml.Serialization.XmlSerializationUtility.#SerializeCore`1(Cuemon.ActFactory`1<!!0>,System.Object,Cuemon.Xml.Serialization.SerializableOrder,System.Boolean,Cuemon.Xml.Serialization.XmlQualifiedEntity)")]
+
