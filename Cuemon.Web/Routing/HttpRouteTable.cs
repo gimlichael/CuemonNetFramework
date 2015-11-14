@@ -76,8 +76,8 @@ namespace Cuemon.Web.Routing
                     if (currentPath.Url.AbsolutePath.Equals(endpointUri.AbsolutePath, StringComparison.OrdinalIgnoreCase))
                     {
                         return route;
-                    } 
-                }   
+                    }
+                }
             }
             return null;
         }

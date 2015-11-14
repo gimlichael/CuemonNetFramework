@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEventBinderModule.cs" />
     <Compile Include="CdnGlobalModule.cs" />
     <Compile Include="Compilation\CompilationUtility.cs" />
     <Compile Include="Configuration\WebConfigurationUtility.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="HttpResponseFilter.cs" />
     <Compile Include="GlobalModule.ClientCaching.cs" />
     <Compile Include="GlobalModule.Compression.cs" />
-    <Compile Include="GlobalModule.Init.cs" />
     <Compile Include="GlobalModule.TokenParsing.cs" />
     <Compile Include="Configuration\ApplicationSection.cs" />
     <Compile Include="Configuration\WebsiteCompressionElement.cs" />
@@ -127,8 +127,11 @@
     <Compile Include="HttpResponseUtility.cs" />
     <Compile Include="HttpRuntimeUtility.cs" />
     <Compile Include="ICacheableHttpHandler.cs" />
+    <Compile Include="IHandlerEventBinder.cs" />
+    <Compile Include="Infrastructure.cs" />
     <Compile Include="ISearchEngineOptimizer .cs" />
     <Compile Include="MimeUtility.cs" />
+    <Compile Include="PageHandlerEventBinder.cs" />
     <Compile Include="RouteModule.cs" />
     <Compile Include="Routing\HttpRouteNotFoundException.cs" />
     <Compile Include="Routing\HttpRoute.cs" />
@@ -138,6 +141,10 @@
     <Compile Include="Routing\HttpRoutePath.cs" />
     <Compile Include="Routing\HttpRouteTable.cs" />
     <Compile Include="Routing\HttpRouteUtility.cs" />
+    <Compile Include="Security\AuthenticationUtility.cs" />
+    <Compile Include="Security\BasicAuthenticationModule.cs" />
+    <Compile Include="Security\DigestAccessAuthenticationModule.cs" />
+    <Compile Include="Security\DigestAuthenticationUtility.cs" />
     <Compile Include="Security\WebSecurityUtility.cs" />
     <Compile Include="SessionState\HttpFastSessionState.cs" />
     <Compile Include="SiteMapProtocolHandler.cs" />
