@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using Cuemon.Collections.Generic;
 using Cuemon.Reflection;
-using Cuemon.Web;
+using Cuemon.Web.Compilation;
 
 namespace Cuemon.ServiceModel
 {
@@ -24,7 +24,7 @@ namespace Cuemon.ServiceModel
         /// <returns>The <see cref="Type"/> of the <see cref="HttpMessageBody{TBody}"/> implemented class having a <paramref name="mimeType"/> that is part of the <see cref="HttpMessageBody{TBody}.SupportedMimeTypes"/>; otherwise null.</returns>
         public static Type Parse(ContentType mimeType, Encoding encoding)
         {
-            IReadOnlyCollection<Type> messageBodies = GlobalModule.GetReferencedTypes(typeof(HttpMessageBody<>), "System", "Microsoft");
+            IReadOnlyCollection<Type> messageBodies = CompilationUtility.GetReferencedTypes(typeof(HttpMessageBody<>), "System", "Microsoft");
             foreach (Type messageBody in messageBodies)
             {
                 if (messageBody.IsAbstract) { continue; }
@@ -69,10 +69,10 @@ namespace Cuemon.ServiceModel
             if (encoding == null) { throw new ArgumentNullException("encoding"); }
             if (deserializer == null) { throw new ArgumentNullException("deserializer"); }
 
-            this.MimeType = mimeType;
-            this.Encoding = encoding;
-            this.HasSupportedMimeType = this.SupportedMimeTypes == null ? false : EnumerableUtility.Contains(this.SupportedMimeTypes, mimeType, new PropertyEqualityComparer<ContentType>("MediaType", StringComparer.OrdinalIgnoreCase));
-            this.Deserializer = deserializer;
+            MimeType = mimeType;
+            Encoding = encoding;
+            HasSupportedMimeType = SupportedMimeTypes == null ? false : EnumerableUtility.Contains(SupportedMimeTypes, mimeType, new PropertyEqualityComparer<ContentType>("MediaType", StringComparer.OrdinalIgnoreCase));
+            Deserializer = deserializer;
         }
 
         /// <summary>
@@ -115,13 +115,13 @@ namespace Cuemon.ServiceModel
         /// </exception>
         public virtual TBody Deserialize(Stream entityBody)
         {
-            if (!this.HasSupportedMimeType)
+            if (!HasSupportedMimeType)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The MIME type of this instance is not supported. Expected MIME type of this instance must be one of the following: {0}. Actually MIME type was: {1}.",
-                    ConvertUtility.ToDelimitedString(this.SupportedMimeTypes, ", "),
-                    this.MimeType == null ? "<unspecified>" : this.MimeType.MediaType));
+                    ConvertUtility.ToDelimitedString(SupportedMimeTypes, ", "),
+                    MimeType == null ? "<unspecified>" : MimeType.MediaType));
             }
-            return this.Deserializer(entityBody, this.MimeType, this.Encoding);
+            return Deserializer(entityBody, MimeType, Encoding);
         }
     }
 }

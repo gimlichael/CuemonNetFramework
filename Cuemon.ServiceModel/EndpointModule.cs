@@ -10,6 +10,7 @@ using Cuemon.Collections.Generic;
 using Cuemon.IO.Compression;
 using Cuemon.Reflection;
 using Cuemon.Web;
+using Cuemon.Web.Compilation;
 using Cuemon.Web.Configuration;
 using Cuemon.Web.Routing;
 using Cuemon.Xml;
@@ -44,7 +45,7 @@ namespace Cuemon.ServiceModel
 
         private static void ParseEndpointRoutes()
         {
-            IReadOnlyCollection<Type> endpoints = GetReferencedTypes(typeof(Endpoint));
+            IReadOnlyCollection<Type> endpoints = CompilationUtility.GetReferencedTypes(typeof(Endpoint));
             foreach (Type endpoint in endpoints)
             {
                 List<HttpRouteAttribute> httpAttributes = new List<HttpRouteAttribute>();
@@ -164,7 +165,8 @@ namespace Cuemon.ServiceModel
             string contentType = ParseContentType(lastException);
             if (lastException.Data.Contains("contentType")) { lastException.Data.Remove("contentType"); }
             if (lastException.InnerException != null &&
-                lastException.InnerException.Data.Contains("contentType")) { lastException.InnerException.Data.Remove("contentType"); }
+                lastException.InnerException.Data.Contains("contentType"))
+            { lastException.InnerException.Data.Remove("contentType"); }
 
             int statusCode = 500;
             if (lastHttpException != null)
