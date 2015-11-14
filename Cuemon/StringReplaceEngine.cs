@@ -18,7 +18,7 @@ namespace Cuemon
             ReplaceCoordinates = new List<StringReplaceCoordinate>();
         }
 
-        private RegexOptions ToRegExOptions(StringComparison comparison)
+        private static RegexOptions ToRegExOptions(StringComparison comparison)
         {
             RegexOptions options = RegexOptions.None;
             switch (comparison)
@@ -38,7 +38,7 @@ namespace Cuemon
             return options;
         }
 
-        private string ToRegExPattern(IEnumerable<StringReplacePair> replacePairs, out IDictionary<string, string> lookupTable)
+        private static string ToRegExPattern(IEnumerable<StringReplacePair> replacePairs, out IDictionary<string, string> lookupTable)
         {
             lookupTable = new Dictionary<string, string>();
             StringBuilder pattern = new StringBuilder();
