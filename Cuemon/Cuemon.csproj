@@ -118,6 +118,7 @@
     <Compile Include="DataPair.cs" />
     <Compile Include="DataPairCollection.cs" />
     <Compile Include="ObjectUtility.cs" />
+    <Compile Include="SearchType.cs" />
     <Compile Include="Security\SecurityTokenSettings.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="TemplateFactory.cs" />
