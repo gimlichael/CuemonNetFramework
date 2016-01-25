@@ -199,13 +199,13 @@ namespace Cuemon
                         isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttps, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.Mailto:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeMailto, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.NetPipe:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNetPipe, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith("net.pipe://", StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.NetTcp:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNetTcp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        isValid = uriString.StartsWith("net.tcp://", StringComparison.OrdinalIgnoreCase);
                         break;
                     case UriScheme.News:
                         isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNews, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
