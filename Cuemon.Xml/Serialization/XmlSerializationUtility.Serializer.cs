@@ -109,7 +109,7 @@ namespace Cuemon.Xml.Serialization
         {
             if (node == null) { throw new ArgumentNullException("node"); }
             if (qualifiedRootEntity != null && !string.IsNullOrEmpty(qualifiedRootEntity.LocalName)) { return qualifiedRootEntity; }
-            bool hasRootAttribute = TypeUtility.ContainsAttributeType(node.InstanceType, typeof(XmlRootAttribute));
+            bool hasRootAttribute = TypeUtility.ContainsAttributeType(node.InstanceType, true, typeof(XmlRootAttribute));
             bool hasElementAttribute = node.HasMemberReference && TypeUtility.ContainsAttributeType(node.MemberReference, typeof(XmlElementAttribute));
             bool hasWrapperAttribute = TypeUtility.ContainsAttributeType(Hierarchy.Root(node).InstanceType, true, typeof(XmlWrapperAttribute));
             string rootOrElementName = XmlUtility.SanitizeElementName(node.HasMemberReference ? node.MemberReference.Name : TypeUtility.SanitizeTypeName(node.InstanceType, false, true));
@@ -120,7 +120,7 @@ namespace Cuemon.Xml.Serialization
                 string elementName = null;
                 if (hasRootAttribute)
                 {
-                    XmlRootAttribute rootAttribute = ReflectionUtility.GetAttribute<XmlRootAttribute>(node.InstanceType);
+                    XmlRootAttribute rootAttribute = ReflectionUtility.GetAttribute<XmlRootAttribute>(node.InstanceType, true);
                     elementName = rootAttribute.ElementName;
                     ns = rootAttribute.Namespace;
                 }
@@ -165,7 +165,7 @@ namespace Cuemon.Xml.Serialization
         {
             if (writer == null) { throw new ArgumentNullException("writer"); }
             if (node == null) { throw new ArgumentNullException("node"); }
-            if (parser == null) { throw new ArgumentNullException("parser");}
+            if (parser == null) { throw new ArgumentNullException("parser"); }
             if (IsEnumerable(node)) { return; }
 
             bool hasAttributeAttribute = node.HasMemberReference && TypeUtility.ContainsAttributeType(node.MemberReference, typeof(XmlAttributeAttribute));
@@ -217,9 +217,9 @@ namespace Cuemon.Xml.Serialization
                 {
                     IHierarchy<object> itemNode = new Hierarchy<object>();
                     itemNode.Add(node.Instance);
-                    WriteXml(writer, itemNode);   
+                    WriteXml(writer, itemNode);
                 }
-                return;    
+                return;
             }
 
             if (hasAttributeAttribute)
@@ -228,7 +228,7 @@ namespace Cuemon.Xml.Serialization
             }
             else if (hasElementAttribute)
             {
-                writer.WriteElementString(attributeOrElementName, hasWrapperAttribute ? parser(node.Instance as IWrapper<object>) : parser(node));    
+                writer.WriteElementString(attributeOrElementName, hasWrapperAttribute ? parser(node.Instance as IWrapper<object>) : parser(node));
             }
             else if (hasTextAttribute)
             {
@@ -259,7 +259,7 @@ namespace Cuemon.Xml.Serialization
                     if (!skipStartElement && !current.HasChildren && !hasWrapperAttribute)
                     {
                         XmlQualifiedEntity qualifiedEntity = null;
-                        if (!TypeUtility.ContainsAttributeType(current.InstanceType, typeof (XmlRootAttribute)) && current.MemberReference == null)
+                        if (!TypeUtility.ContainsAttributeType(current.InstanceType, typeof(XmlRootAttribute)) && current.MemberReference == null)
                         {
                             qualifiedEntity = new XmlQualifiedEntity(TypeUtility.SanitizeTypeName(current.InstanceType, false, true));
                         }
