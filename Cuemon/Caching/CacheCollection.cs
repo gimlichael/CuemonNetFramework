@@ -325,8 +325,6 @@ namespace Cuemon.Caching
             if ((slidingExpiration < TimeSpan.Zero) || (slidingExpiration > TimeSpan.FromDays(365))) { throw new ArgumentOutOfRangeException("slidingExpiration", "The given argument cannot be set to less than TimeSpan.Zero or more than one year."); }
 
             long groupKey = GenerateGroupKey(key, group);
-            int tries = 0;
-        Retry:
             try
             {
                 lock (InnerCaches)
@@ -343,9 +341,6 @@ namespace Cuemon.Caching
             }
             catch (IndexOutOfRangeException)
             {
-                tries++;
-                Thread.Sleep(NumberUtility.GetRandomNumber(25, 250));
-                if (tries < 10) { goto Retry; }
             }
         }
 
