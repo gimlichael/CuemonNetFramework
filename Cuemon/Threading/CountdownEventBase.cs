@@ -62,33 +62,15 @@ namespace Cuemon.Threading
         public void AddCount(int signalCount)
         {
             if (signalCount < 1) { throw new ArgumentOutOfRangeException("signalCount"); }
+
             Spinner wait = new Spinner();
             while (true)
             {
-                int currentCount = _currentCount;
-                if (currentCount > 0)
-                {
-                    if (currentCount <= (int.MaxValue - signalCount))
-                    {
-                        if (Interlocked.CompareExchange(ref _currentCount, currentCount + signalCount, currentCount) != currentCount)
-                        {
-                            wait.SpinOnce();
-                        }
-                        else
-                        {
-                            if (_currentCount == 0) { Set(); }
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("The increment operation would cause the CurrentCount to overflow.");
-                    }
-                }
-                else
-                {
-                    break;
-                }
+                var comparand = _currentCount;
+                if (comparand < 1) { return; }
+                if (comparand > (int.MaxValue - signalCount)) { throw new InvalidOperationException("The increment operation would cause the CurrentCount to overflow."); }
+                if (Interlocked.CompareExchange(ref _currentCount, comparand + signalCount, comparand) == comparand) { break; }
+                wait.SpinOnce();
             }
         }
         #endregion
@@ -119,27 +101,17 @@ namespace Cuemon.Threading
         public void Signal(int count)
         {
             if (count < 1) { throw new ArgumentOutOfRangeException("count"); }
+            int comparand;
             Spinner wait = new Spinner();
             while (true)
             {
-                int comparand = _currentCount;
-                if (comparand >= count)
-                {
-                    if (Interlocked.CompareExchange(ref _currentCount, comparand - count, comparand) != comparand)
-                    {
-                        wait.SpinOnce();
-                    }
-                    else
-                    {
-                        if (_currentCount == 0) { Set(); }
-                        break;
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Invalid attempt made to decrement the event's count below zero.");
-                }
+                comparand = _currentCount;
+                if (comparand < count) { throw new InvalidOperationException("Invalid attempt made to decrement the event's count below zero."); }
+                if (Interlocked.CompareExchange(ref _currentCount, comparand - count, comparand) == comparand) { break; }
+                wait.SpinOnce();
             }
+
+            if (comparand == count) { Set(); }
         }
 
         /// <summary>

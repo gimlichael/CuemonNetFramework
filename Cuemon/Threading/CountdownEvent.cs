@@ -9,8 +9,8 @@ namespace Cuemon.Threading
     /// <remarks>This class was inspired by the newly introduced CountdownEvent in .NET 4.0, and I think .NET 2.0 users should benefit from this lightweight implementation.</remarks>
     public sealed class CountdownEvent : CountdownEventBase, IDisposable
     {
-        private readonly object _padLock = new object();
         private volatile bool _isDisposed;
+        private readonly ManualResetEvent _resetEvent;
 
         #region Constructors
         /// <summary>
@@ -19,12 +19,20 @@ namespace Cuemon.Threading
         /// <param name="initialCount">The number of signals initially required to set the <see cref="CountdownEvent"/>.</param>
         public CountdownEvent(int initialCount) : base(initialCount)
         {
-            ResetEvent = new ManualResetEvent(false);
+            _resetEvent = new ManualResetEvent(false);
         }
         #endregion
 
         #region Properties
-        private ManualResetEvent ResetEvent { get; set; }
+
+        private ManualResetEvent ResetEvent
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _resetEvent;
+            }
+        }
         #endregion
 
         #region Methods
@@ -33,6 +41,7 @@ namespace Cuemon.Threading
         /// </summary>
         protected override void Set()
         {
+            ThrowIfDisposed();
             if (ResetEventHasValidState) { ResetEvent.Set(); }
         }
 
@@ -42,6 +51,7 @@ namespace Cuemon.Threading
         /// <param name="timeout">A <see cref="T:System.TimeSpan"/> that represents the time to wait.</param>
         public override void Wait(TimeSpan timeout)
         {
+            ThrowIfDisposed();
             if (IsSet) { return; }
             if (ResetEventHasValidState) { ResetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false); }
             if (ElapsedTime > timeout) { throw new TimeoutException(); }
@@ -55,17 +65,7 @@ namespace Cuemon.Threading
         {
             if (_isDisposed || !disposing) { return; }
             _isDisposed = true;
-            if (ResetEventHasValidState)
-            {
-                lock (_padLock)
-                {
-                    if (ResetEventHasValidState)
-                    {
-                        ResetEvent.Close();
-                    }
-                    ResetEvent = null;
-                }
-            }
+            _resetEvent.Close();
         }
 
         private bool ResetEventHasValidState
@@ -75,6 +75,11 @@ namespace Cuemon.Threading
                 return (ResetEvent != null &&
                        !ResetEvent.SafeWaitHandle.IsClosed);
             }
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_isDisposed) { throw new ObjectDisposedException("CountdownEvent"); }
         }
 
         /// <summary>
