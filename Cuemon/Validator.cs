@@ -612,7 +612,7 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfFalse(bool value, string paramName)
         {
-            ThrowIfTrue(value, paramName, "Value must be true.");
+            ThrowIfFalse(value, paramName, "Value must be true.");
         }
 
         /// <summary>
