@@ -199,7 +199,7 @@ namespace Cuemon
                 {
                     char firstChar = (char)reader.Read();
                     char secondChar = (char)reader.Read();
-                    if (!Uri.IsHexDigit(firstChar) || !Uri.IsHexDigit(secondChar)) { throw new ArgumentException("One or more characters is not a valid hexadecimal value.", "value"); }
+                    if (!Condition.IsHex(firstChar) || !Condition.IsHex(secondChar)) { throw new ArgumentException("One or more characters is not a valid hexadecimal value.", "value"); }
                     converted.Add(Convert.ToByte(new string(new[] { firstChar, secondChar }), 16));
                 }
             }
