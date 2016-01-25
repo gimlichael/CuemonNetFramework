@@ -27,7 +27,19 @@ namespace Cuemon.Reflection
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="method"/> is null.
         /// </exception>
-        public MethodSignature(MethodBase method)
+        public MethodSignature(MethodBase method) : this(method == null ? null : method.ReflectedType, method)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MethodSignature" /> class.
+        /// </summary>
+        /// <param name="caller">The class on which the <paramref name="method"/> resides.</param>
+        /// <param name="method">The method to extract a signature for.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="method"/> is null.
+        /// </exception>
+        public MethodSignature(Type caller, MethodBase method)
         {
             if (method == null) { throw new ArgumentNullException("method"); }
             string methodName = string.IsNullOrEmpty(method.Name) ? "NotAvailable" : method.Name;
@@ -35,7 +47,7 @@ namespace Cuemon.Reflection
 
             _isProperty = isPresumedProperty;
             _methodName = isPresumedProperty ? methodName.Remove(0, 4) : methodName;
-            _className = method.ReflectedType == null ? "NotAvailable" : method.ReflectedType.Name;
+            _className = caller == null ? "NotAvailable" : TypeUtility.SanitizeTypeName(caller);
             _parameters = ParameterSignature.Parse(method);
             _hasParameters = EnumerableUtility.Any(_parameters);
         }
