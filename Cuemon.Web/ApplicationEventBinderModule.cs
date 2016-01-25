@@ -106,91 +106,91 @@ namespace Cuemon.Web
         {
             HttpApplication application = sender as HttpApplication;
             OnAuthenticateRequest(application);
-            ApplicationLifecycleTracer("OnAuthenticateRequest");
+            ApplicationLifecycleTracer(application, "OnAuthenticateRequest");
         }
 
         private void OnPostAuthenticateRequestWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostAuthenticateRequest(application);
-            ApplicationLifecycleTracer("OnPostAuthenticateRequest");
+            ApplicationLifecycleTracer(application, "OnPostAuthenticateRequest");
         }
 
         private void OnAuthorizeRequestWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnAuthorizeRequest(application);
-            ApplicationLifecycleTracer("OnAuthorizeRequest");
+            ApplicationLifecycleTracer(application, "OnAuthorizeRequest");
         }
 
         private void OnPostAuthorizeRequestWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostAuthorizeRequest(application);
-            ApplicationLifecycleTracer("OnPostAuthorizeRequest");
+            ApplicationLifecycleTracer(application, "OnPostAuthorizeRequest");
         }
 
         private void OnResolveRequestCacheWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnResolveRequestCache(application);
-            ApplicationLifecycleTracer("OnResolveRequestCache");
+            ApplicationLifecycleTracer(application, "OnResolveRequestCache");
         }
 
         private void OnPostMapRequestHandlerWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostMapRequestHandler(application);
-            ApplicationLifecycleTracer("OnPostMapRequestHandler");
+            ApplicationLifecycleTracer(application, "OnPostMapRequestHandler");
         }
 
         private void OnAcquireRequestStateWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnAcquireRequestState(application);
-            ApplicationLifecycleTracer("OnAcquireRequestState");
+            ApplicationLifecycleTracer(application, "OnAcquireRequestState");
         }
 
         private void OnPostAcquireRequestStateWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostAcquireRequestState(application);
-            ApplicationLifecycleTracer("OnPostAcquireRequestState");
+            ApplicationLifecycleTracer(application, "OnPostAcquireRequestState");
         }
 
         private void OnPostRequestHandlerExecuteWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostRequestHandlerExecute(application);
-            ApplicationLifecycleTracer("OnPostRequestHandlerExecute");
+            ApplicationLifecycleTracer(application, "OnPostRequestHandlerExecute");
         }
 
         private void OnPostReleaseRequestStateWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostReleaseRequestState(application);
-            ApplicationLifecycleTracer("OnPostReleaseRequestState");
+            ApplicationLifecycleTracer(application, "OnPostReleaseRequestState");
         }
 
         private void OnUpdateRequestCacheWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnUpdateRequestCache(application);
-            ApplicationLifecycleTracer("OnUpdateRequestCache");
+            ApplicationLifecycleTracer(application, "OnUpdateRequestCache");
         }
 
         private void OnPreSendRequestHeadersWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPreSendRequestHeaders(application);
-            ApplicationLifecycleTracer("OnPreSendRequestHeaders");
+            ApplicationLifecycleTracer(application, "OnPreSendRequestHeaders");
         }
 
         private void OnPreSendRequestContentWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPreSendRequestContent(application);
-            ApplicationLifecycleTracer("OnPreSendRequestContent");
+            ApplicationLifecycleTracer(application, "OnPreSendRequestContent");
             EventUtility.Raise(_sendRequestContent, application, new EventArgs());
         }
 
@@ -198,14 +198,14 @@ namespace Cuemon.Web
         {
             HttpApplication application = sender as HttpApplication;
             if (application != null) { OnError(application, application.Server.GetLastError()); }
-            ApplicationLifecycleTracer("OnError");
+            ApplicationLifecycleTracer(application, "OnError");
         }
 
         private void OnDisposedWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnDisposed(application);
-            ApplicationLifecycleTracer("OnDisposed");
+            ApplicationLifecycleTracer(application, "OnDisposed");
         }
 
         private void OnMapRequestHandlerWrapper(object sender, EventArgs e)
@@ -213,7 +213,7 @@ namespace Cuemon.Web
             if (!HttpRuntimeUtility.SupportsIisIntegratedPipelineMode) { return; }
             HttpApplication application = sender as HttpApplication;
             OnMapRequestHandler(application);
-            ApplicationLifecycleTracer("OnMapRequestHandler");
+            ApplicationLifecycleTracer(application, "OnMapRequestHandler");
         }
 
         private void OnLogRequestWrapper(object sender, EventArgs e)
@@ -221,7 +221,7 @@ namespace Cuemon.Web
             if (!HttpRuntimeUtility.SupportsIisIntegratedPipelineMode) { return; }
             HttpApplication application = sender as HttpApplication;
             OnLogRequest(application);
-            ApplicationLifecycleTracer("OnLogRequest");
+            ApplicationLifecycleTracer(application, "OnLogRequest");
         }
 
         private void OnPostLogRequestWrapper(object sender, EventArgs e)
@@ -229,28 +229,28 @@ namespace Cuemon.Web
             if (!HttpRuntimeUtility.SupportsIisIntegratedPipelineMode) { return; }
             HttpApplication application = sender as HttpApplication;
             OnPostLogRequest(application);
-            ApplicationLifecycleTracer("OnPostLogRequest");
+            ApplicationLifecycleTracer(application, "OnPostLogRequest");
         }
 
         private void OnPostUpdateRequestCacheWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostUpdateRequestCache(application);
-            ApplicationLifecycleTracer("OnPostUpdateRequestCache");
+            ApplicationLifecycleTracer(application, "OnPostUpdateRequestCache");
         }
 
         private void OnEndRequestWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnEndRequest(application);
-            ApplicationLifecycleTracer("OnEndRequest");
+            ApplicationLifecycleTracer(application, "OnEndRequest");
         }
 
         private void OnPostResolveRequestCacheWrapper(object sender, EventArgs e)
         {
             HttpApplication application = sender as HttpApplication;
             OnPostResolveRequestCache(application);
-            ApplicationLifecycleTracer("OnPostResolveRequestCache");
+            ApplicationLifecycleTracer(application, "OnPostResolveRequestCache");
         }
 
         private void OnReleaseRequestStateWrapper(object sender, EventArgs e)
@@ -258,7 +258,7 @@ namespace Cuemon.Web
             HttpApplication application = sender as HttpApplication;
             OnReleaseRequestState(application);
             DetectIisAdaptiveErrorViolation(application);
-            ApplicationLifecycleTracer("OnReleaseRequestState");
+            ApplicationLifecycleTracer(application, "OnReleaseRequestState");
         }
 
         private void OnPreRequestHandlerExecuteWrapper(object sender, EventArgs e)
@@ -266,10 +266,9 @@ namespace Cuemon.Web
             HttpApplication application = sender as HttpApplication;
             if (application != null &&
                 application.Context != null &&
-                application.Context.CurrentHandler != null)
-            { CurrentHandler = application.Context.CurrentHandler; }
+                application.Context.CurrentHandler != null) { CurrentHandler = application.Context.CurrentHandler; }
             OnPreRequestHandlerExecute(application);
-            ApplicationLifecycleTracer("OnPreRequestHandlerExecute");
+            ApplicationLifecycleTracer(application, "OnPreRequestHandlerExecute");
         }
 
         private void OnBeginRequestWrapper(object sender, EventArgs e)
@@ -294,7 +293,7 @@ namespace Cuemon.Web
                 }
             }
             OnBeginRequest(application);
-            ApplicationLifecycleTracer("OnBeginRequest");
+            ApplicationLifecycleTracer(application, "OnBeginRequest");
         }
 
         private void OnDomainUnloadWrapper(object sender, EventArgs eventArgs)
@@ -310,7 +309,7 @@ namespace Cuemon.Web
                         try
                         {
                             OnApplicationEnd(domain);
-                            ApplicationLifecycleTracer("OnApplicationEnd");
+                            ApplicationLifecycleTracer(HttpContext.Current.ApplicationInstance, "OnApplicationEnd");
                         }
                         finally
                         {
@@ -326,13 +325,18 @@ namespace Cuemon.Web
             HttpApplication application = sender as HttpApplication;
             SendRequestContent -= OnSendRequestContentWrapper;
             OnSendRequestContent(application);
-            ApplicationLifecycleTracer("OnSendRequestContent");
+
+            ApplicationLifecycleTracer(application, "OnSendRequestContent");
         }
 
-        private void ApplicationLifecycleTracer(string lifecycleEvent)
+        private void ApplicationLifecycleTracer(HttpApplication application, string lifecycleEvent)
         {
             if (!EnableTimeMeasuring) { return; }
-            Condition.Initialize(TupleUtility.CreateTwo(string.Format(CultureInfo.InvariantCulture, "Application:{0}", lifecycleEvent), Timer.Elapsed), TimeMeasuringCallback, Condition.IsNull)
+            IHttpHandler httpHandler = application == null ? null : application.Context.CurrentHandler ?? application.Context.Handler;
+            string handler = string.Format(CultureInfo.InvariantCulture, "{0}", httpHandler == null ? "" : TypeUtility.SanitizeTypeName(httpHandler.GetType(), true));
+            string location = string.Format(CultureInfo.InvariantCulture, "{0} [{1}]", application.Request.CurrentExecutionFilePath, HttpRequestUtility.RawUrl(application.Request).AbsolutePath);
+            string optionalHandlerWithLocation = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", handler, handler.Length == 0 ? "" : " -> ", location);
+            Condition.Initialize(TupleUtility.CreateTwo(string.Format(CultureInfo.InvariantCulture, "Application:{0} -> {1}", lifecycleEvent, optionalHandlerWithLocation), Timer.Elapsed), TimeMeasuringCallback, Condition.IsNull)
                 .Invoke(tuple => Infrastructure.TraceWriteLifecycleEvent(tuple.Arg1, tuple.Arg2), tuple => TimeMeasuringCallback(tuple.Arg1, tuple.Arg2));
         }
 

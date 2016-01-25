@@ -8,7 +8,7 @@ namespace Cuemon.Web
     {
         internal static void TraceWriteLifecycleEvent(string lifecycleEvent, TimeSpan elapsed)
         {
-            Trace.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} milliseconds have elapsed up till {1} event.", elapsed.TotalMilliseconds, lifecycleEvent));
+            Trace.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} milliseconds elapsed: {1}.", elapsed.TotalMilliseconds, lifecycleEvent));
         }
     }
 }
