@@ -8,11 +8,11 @@ using Cuemon.Reflection;
 
 namespace Cuemon
 {
-	/// <summary>
-	/// This utility class is designed to make <see cref="Type"/> operations easier to work with.
-	/// </summary>
-	public static class TypeUtility
-	{
+    /// <summary>
+    /// This utility class is designed to make <see cref="Type"/> operations easier to work with.
+    /// </summary>
+    public static class TypeUtility
+    {
         /// <summary>
         /// Determines whether the specified <paramref name="source"/> is of <typeparamref name="T"/>.
         /// </summary>
@@ -129,13 +129,13 @@ namespace Cuemon
         {
             Validator.ThrowIfNull(source, "source");
 
-            string typeName = String.Format(CultureInfo.InvariantCulture, "{0}", fullName ? source.FullName : source.Name);
+            string typeName = SanitizeTypeNameConverter(source, fullName);
             if (!source.IsGenericType) { return typeName; }
 
             Type[] parameters = source.GetGenericArguments();
             int indexOfGraveAccent = typeName.IndexOf('`');
             typeName = indexOfGraveAccent >= 0 ? typeName.Remove(indexOfGraveAccent) : typeName;
-            return excludeGenericArguments ? typeName : String.Format(CultureInfo.InvariantCulture, "{0}<{1}>", typeName, ConvertUtility.ToDelimitedString(parameters, ", ", SanitizeTypeNameConverter, fullName));
+            return excludeGenericArguments ? typeName : string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", typeName, ConvertUtility.ToDelimitedString(parameters, ", ", SanitizeTypeNameConverter, fullName));
         }
 
         private static string SanitizeTypeNameConverter(Type source, bool fullName)
@@ -143,72 +143,72 @@ namespace Cuemon
             return fullName ? source.FullName : source.Name;
         }
 
-		/// <summary>
-		/// Determines whether the specified source is a nullable <see cref="ValueType"/>.
-		/// </summary>
-		/// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
-		/// <returns>
-		///   <c>true</c> if the specified source is nullable; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsNullable(Type source)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			if (!source.IsValueType) { return false; }
-			return Nullable.GetUnderlyingType(source) != null;
-		}
+        /// <summary>
+        /// Determines whether the specified source is a nullable <see cref="ValueType"/>.
+        /// </summary>
+        /// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified source is nullable; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNullable(Type source)
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
+            if (!source.IsValueType) { return false; }
+            return Nullable.GetUnderlyingType(source) != null;
+        }
 
-		/// <summary>
-		/// Determines whether the specified source is a nullable <see cref="ValueType"/>.
-		/// </summary>
-		/// <typeparam name="T">The type of the <paramref name="source"/> of <typeparamref name="T"/>.</typeparam>
-		/// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
-		/// <returns>
-		///   <c>true</c> if the specified source is nullable; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsNullable<T>(T source) { return false; }
+        /// <summary>
+        /// Determines whether the specified source is a nullable <see cref="ValueType"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the <paramref name="source"/> of <typeparamref name="T"/>.</typeparam>
+        /// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified source is nullable; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNullable<T>(T source) { return false; }
 
-		/// <summary>
-		/// Determines whether the specified source is a nullable <see cref="ValueType"/>.
-		/// </summary>
-		/// <typeparam name="T">The type of the <paramref name="source"/> of <typeparamref name="T"/>.</typeparam>
-		/// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
-		/// <returns>
-		///   <c>true</c> if the specified source is nullable; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsNullable<T>(T? source) where T : struct { return true; }
+        /// <summary>
+        /// Determines whether the specified source is a nullable <see cref="ValueType"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the <paramref name="source"/> of <typeparamref name="T"/>.</typeparam>
+        /// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified source is nullable; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNullable<T>(T? source) where T : struct { return true; }
 
-		/// <summary>
-		/// Gets a sequence of derived types from the <paramref name="source"/> an it's associated <see cref="Assembly"/>.
-		/// </summary>
-		/// <param name="source">The source type to locate derived types from.</param>
-		/// <returns>An <see cref="IEnumerable{Type}"/> holding the derived types from the <paramref name="source"/>.</returns>
-		public static IEnumerable<Type> GetDescendantOrSelfTypes(Type source)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			return GetDescendantOrSelfTypes(source, source.Assembly);
-		}
+        /// <summary>
+        /// Gets a sequence of derived types from the <paramref name="source"/> an it's associated <see cref="Assembly"/>.
+        /// </summary>
+        /// <param name="source">The source type to locate derived types from.</param>
+        /// <returns>An <see cref="IEnumerable{Type}"/> holding the derived types from the <paramref name="source"/>.</returns>
+        public static IEnumerable<Type> GetDescendantOrSelfTypes(Type source)
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
+            return GetDescendantOrSelfTypes(source, source.Assembly);
+        }
 
-		/// <summary>
-		/// Gets a sequence of derived types from the <paramref name="source"/>.
-		/// </summary>
-		/// <param name="source">The source type to locate derived types from.</param>
-		/// <param name="assemblies">The assemblies to search for the <paramref name="source"/>.</param>
-		/// <returns>An <see cref="IEnumerable{Type}"/> holding the derived types from the <paramref name="source"/>.</returns>
-		public static IEnumerable<Type> GetDescendantOrSelfTypes(Type source, params Assembly[] assemblies)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			if (assemblies == null) { throw new ArgumentNullException("assemblies"); }
-			List<Type> derivedTypes = new List<Type>();
-			foreach (Assembly assembly in assemblies)
-			{
-				IEnumerable<Type> assemblyDerivedTypes = ReflectionUtility.GetAssemblyTypes(assembly, null, source);
-				foreach (Type derivedType in assemblyDerivedTypes)
-				{
-					derivedTypes.Add(derivedType);
-				}
-			}
-			return derivedTypes;
-		}
+        /// <summary>
+        /// Gets a sequence of derived types from the <paramref name="source"/>.
+        /// </summary>
+        /// <param name="source">The source type to locate derived types from.</param>
+        /// <param name="assemblies">The assemblies to search for the <paramref name="source"/>.</param>
+        /// <returns>An <see cref="IEnumerable{Type}"/> holding the derived types from the <paramref name="source"/>.</returns>
+        public static IEnumerable<Type> GetDescendantOrSelfTypes(Type source, params Assembly[] assemblies)
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
+            if (assemblies == null) { throw new ArgumentNullException("assemblies"); }
+            List<Type> derivedTypes = new List<Type>();
+            foreach (Assembly assembly in assemblies)
+            {
+                IEnumerable<Type> assemblyDerivedTypes = ReflectionUtility.GetAssemblyTypes(assembly, null, source);
+                foreach (Type derivedType in assemblyDerivedTypes)
+                {
+                    derivedTypes.Add(derivedType);
+                }
+            }
+            return derivedTypes;
+        }
 
         /// <summary>
         /// Gets the ancestor-or-self <see cref="Type"/> from the specified <paramref name="source"/>.
@@ -234,134 +234,134 @@ namespace Cuemon
             return sourceBase;
         }
 
-		/// <summary>
-		/// Gets a sequence of ancestor-or-self types from the <paramref name="source"/>.
-		/// </summary>
-		/// <param name="source">The source type to locate ancestor-or-self types from.</param>
-		/// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-or-self types from the <paramref name="source"/>.</returns>
-		public static IEnumerable<Type> GetAncestorOrSelfTypes(Type source)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			List<Type> parentTypes = new List<Type>();
-			Type currentType = source;
-			while (currentType != null)
-			{
-				parentTypes.Add(currentType);
-				currentType = currentType.BaseType;
-			}
-			return parentTypes;
-		}
+        /// <summary>
+        /// Gets a sequence of ancestor-or-self types from the <paramref name="source"/>.
+        /// </summary>
+        /// <param name="source">The source type to locate ancestor-or-self types from.</param>
+        /// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-or-self types from the <paramref name="source"/>.</returns>
+        public static IEnumerable<Type> GetAncestorOrSelfTypes(Type source)
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
+            List<Type> parentTypes = new List<Type>();
+            Type currentType = source;
+            while (currentType != null)
+            {
+                parentTypes.Add(currentType);
+                currentType = currentType.BaseType;
+            }
+            return parentTypes;
+        }
 
-		/// <summary>
-		/// Gets a sorted (base-to-derived) sequence of ancestor-and-descendant-or-self types from the <paramref name="source"/>.
-		/// </summary>
-		/// <param name="source">The source type to locate ancestor-and-descendant-or-self types from.</param>
-		/// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-and-descendant-or-self types from the <paramref name="source"/>.</returns>
-		public static IEnumerable<Type> GetAncestorAndDescendantsOrSelfTypes(Type source)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			return GetAncestorAndDescendantsOrSelfTypes(source, source.Assembly);
-		}
+        /// <summary>
+        /// Gets a sorted (base-to-derived) sequence of ancestor-and-descendant-or-self types from the <paramref name="source"/>.
+        /// </summary>
+        /// <param name="source">The source type to locate ancestor-and-descendant-or-self types from.</param>
+        /// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-and-descendant-or-self types from the <paramref name="source"/>.</returns>
+        public static IEnumerable<Type> GetAncestorAndDescendantsOrSelfTypes(Type source)
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
+            return GetAncestorAndDescendantsOrSelfTypes(source, source.Assembly);
+        }
 
-		/// <summary>
-		/// Gets a sorted (base-to-derived) sequence of ancestor-and-descendant-or-self types from the <paramref name="source"/>.
-		/// </summary>
-		/// <param name="source">The source type to locate ancestor-and-descendant-or-self types from.</param>
-		/// <param name="assemblies">The assemblies to search for the <paramref name="source"/>.</param>
-		/// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-and-descendant-or-self types from the <paramref name="source"/>.</returns>
-		public static IEnumerable<Type> GetAncestorAndDescendantsOrSelfTypes(Type source, params Assembly[] assemblies)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			if (assemblies == null) { throw new ArgumentNullException("assemblies"); }
-			IEnumerable<Type> ancestorOrSelfTypes = GetAncestorOrSelfTypes(source);
-			IEnumerable<Type> derivedOrSelfTypes = GetDescendantOrSelfTypes(source, assemblies);
-			return EnumerableUtility.SortDescending(EnumerableUtility.Distinct(EnumerableUtility.Concat(derivedOrSelfTypes, ancestorOrSelfTypes)), new ReferenceComparer<Type>());
-		}
+        /// <summary>
+        /// Gets a sorted (base-to-derived) sequence of ancestor-and-descendant-or-self types from the <paramref name="source"/>.
+        /// </summary>
+        /// <param name="source">The source type to locate ancestor-and-descendant-or-self types from.</param>
+        /// <param name="assemblies">The assemblies to search for the <paramref name="source"/>.</param>
+        /// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-and-descendant-or-self types from the <paramref name="source"/>.</returns>
+        public static IEnumerable<Type> GetAncestorAndDescendantsOrSelfTypes(Type source, params Assembly[] assemblies)
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
+            if (assemblies == null) { throw new ArgumentNullException("assemblies"); }
+            IEnumerable<Type> ancestorOrSelfTypes = GetAncestorOrSelfTypes(source);
+            IEnumerable<Type> derivedOrSelfTypes = GetDescendantOrSelfTypes(source, assemblies);
+            return EnumerableUtility.SortDescending(EnumerableUtility.Distinct(EnumerableUtility.Concat(derivedOrSelfTypes, ancestorOrSelfTypes)), new ReferenceComparer<Type>());
+        }
 
-		/// <summary>
-		/// Determines whether the specified source contains one or more of the target types specified throughout this member's inheritance chain.
-		/// </summary>
-		/// <param name="source">The source type to match against.</param>
-		/// <param name="targets">The target interface types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the target types specified throughout this member's inheritance chain; otherwise, <c>false</c>.
-		/// </returns>
+        /// <summary>
+        /// Determines whether the specified source contains one or more of the target types specified throughout this member's inheritance chain.
+        /// </summary>
+        /// <param name="source">The source type to match against.</param>
+        /// <param name="targets">The target interface types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the target types specified throughout this member's inheritance chain; otherwise, <c>false</c>.
+        /// </returns>
         public static bool ContainsInterface(Type source, params Type[] targets)
-		{
+        {
             return ContainsInterface(source, true, targets);
-		}
+        }
 
-		/// <summary>
-		/// Determines whether the specified source contains one or more of the target types specified throughout this member's inheritance chain.
-		/// </summary>
-		/// <param name="source">The source object to match against.</param>
-		/// <param name="targets">The target interface types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the target types specified throughout this member's inheritance chain; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsInterface(object source, params Type[] targets)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			return ContainsInterface(source.GetType(), targets);
-		}
+        /// <summary>
+        /// Determines whether the specified source contains one or more of the target types specified throughout this member's inheritance chain.
+        /// </summary>
+        /// <param name="source">The source object to match against.</param>
+        /// <param name="targets">The target interface types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the target types specified throughout this member's inheritance chain; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsInterface(object source, params Type[] targets)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            return ContainsInterface(source.GetType(), targets);
+        }
 
-		/// <summary>
-		/// Determines whether the specified source contains one or more of the target types specified.
-		/// </summary>
-		/// <param name="source">The source object to match against.</param>
-		/// <param name="inherit">Specifies whether to search this member's inheritance chain to find the interfaces.</param>
-		/// <param name="targets">The target interface types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the target types specified; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsInterface(object source, bool inherit, params Type[] targets)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			return ContainsInterface(source.GetType(), inherit, targets);
-		}
+        /// <summary>
+        /// Determines whether the specified source contains one or more of the target types specified.
+        /// </summary>
+        /// <param name="source">The source object to match against.</param>
+        /// <param name="inherit">Specifies whether to search this member's inheritance chain to find the interfaces.</param>
+        /// <param name="targets">The target interface types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the target types specified; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsInterface(object source, bool inherit, params Type[] targets)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            return ContainsInterface(source.GetType(), inherit, targets);
+        }
 
-		/// <summary>
-		/// Determines whether the specified source contains one or more of the target types specified.
-		/// </summary>
-		/// <param name="source">The source type to match against.</param>
-		/// <param name="inherit">Specifies whether to search this member's inheritance chain to find the interfaces.</param>
-		/// <param name="targets">The target interface types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the target types specified; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsInterface(Type source, bool inherit, params Type[] targets)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			if (targets == null) throw new ArgumentNullException("targets");
-			foreach (Type targetType in targets)
-			{
-				if (inherit) // search all inheritance chains
-				{
-					foreach (Type interfaceType in source.GetInterfaces())
-					{
-						if (interfaceType.IsGenericType)
-						{
-							if (targetType == interfaceType.GetGenericTypeDefinition()) { return true; }
-							continue;
-						}
-						if (targetType == interfaceType) { return true; }
-					}
-				}
-				else // search this type only
-				{
-					Type interfaceType = source.GetInterface(targetType.Name, true);
-					if (interfaceType != null)
-					{
-						if (interfaceType.IsGenericType)
-						{
-							if (targetType == interfaceType.GetGenericTypeDefinition()) { return true; }
-						}
-						if (targetType == interfaceType) { return true; }
-					}
-				}
-			}
-			return false;
-		}
+        /// <summary>
+        /// Determines whether the specified source contains one or more of the target types specified.
+        /// </summary>
+        /// <param name="source">The source type to match against.</param>
+        /// <param name="inherit">Specifies whether to search this member's inheritance chain to find the interfaces.</param>
+        /// <param name="targets">The target interface types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the target types specified; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsInterface(Type source, bool inherit, params Type[] targets)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (targets == null) throw new ArgumentNullException("targets");
+            foreach (Type targetType in targets)
+            {
+                if (inherit) // search all inheritance chains
+                {
+                    foreach (Type interfaceType in source.GetInterfaces())
+                    {
+                        if (interfaceType.IsGenericType)
+                        {
+                            if (targetType == interfaceType.GetGenericTypeDefinition()) { return true; }
+                            continue;
+                        }
+                        if (targetType == interfaceType) { return true; }
+                    }
+                }
+                else // search this type only
+                {
+                    Type interfaceType = source.GetInterface(targetType.Name, true);
+                    if (interfaceType != null)
+                    {
+                        if (interfaceType.IsGenericType)
+                        {
+                            if (targetType == interfaceType.GetGenericTypeDefinition()) { return true; }
+                        }
+                        if (targetType == interfaceType) { return true; }
+                    }
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Determines whether the specified source object contains one or more of the specified attribute target types.
@@ -376,20 +376,20 @@ namespace Cuemon
             return ContainsAttributeType(source, false, targets);
         }
 
-		/// <summary>
-		/// Determines whether the specified source object contains one or more of the specified attribute target types.
-		/// </summary>
-		/// <param name="source">The source object to match against.</param>
+        /// <summary>
+        /// Determines whether the specified source object contains one or more of the specified attribute target types.
+        /// </summary>
+        /// <param name="source">The source object to match against.</param>
         /// <param name="inherit"><c>true</c> to search the <paramref name="source"/>  inheritance chain to find the attributes; otherwise, <c>false</c>.</param>
         /// <param name="targets">The attribute target types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source object contains one or more of the specified attribute target types; otherwise, <c>false</c>.
-		/// </returns>
+        /// <returns>
+        /// 	<c>true</c> if the specified source object contains one or more of the specified attribute target types; otherwise, <c>false</c>.
+        /// </returns>
         public static bool ContainsAttributeType(object source, bool inherit, params Type[] targets)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
+        {
+            if (source == null) { throw new ArgumentNullException("source"); }
             return ContainsAttributeType(source.GetType(), inherit, targets);
-		}
+        }
 
         /// <summary>
         /// Determines whether the specified source type contains one or more of the specified attribute target types.
@@ -404,31 +404,31 @@ namespace Cuemon
             return ContainsAttributeType(source, false, targets);
         }
 
-		/// <summary>
-		/// Determines whether the specified source type contains one or more of the specified attribute target types.
-		/// </summary>
-		/// <param name="source">The source type to match against.</param>
+        /// <summary>
+        /// Determines whether the specified source type contains one or more of the specified attribute target types.
+        /// </summary>
+        /// <param name="source">The source type to match against.</param>
         /// <param name="inherit"><c>true</c> to search the <paramref name="source"/> inheritance chain to find the attributes; otherwise, <c>false</c>.</param>
-		/// <param name="targets">The attribute target types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source type contains one or more of the specified attribute target types; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsAttributeType(Type source, bool inherit, params Type[] targets)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			if (targets == null) throw new ArgumentNullException("targets");
-			foreach (Type targetType in targets)
-			{
-				if (source.GetCustomAttributes(targetType, inherit).Length > 0) { return true; }
-			}
+        /// <param name="targets">The attribute target types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source type contains one or more of the specified attribute target types; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsAttributeType(Type source, bool inherit, params Type[] targets)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (targets == null) throw new ArgumentNullException("targets");
+            foreach (Type targetType in targets)
+            {
+                if (source.GetCustomAttributes(targetType, inherit).Length > 0) { return true; }
+            }
 
-			foreach (MemberInfo member in source.GetMembers())
-			{
+            foreach (MemberInfo member in source.GetMembers())
+            {
                 if (ContainsAttributeType(member, inherit, targets)) { return true; }
-			}
+            }
 
-			return false;
-		}
+            return false;
+        }
 
         /// <summary>
         /// Determines whether the specified source type contains one or more of the specified attribute target types.
@@ -463,82 +463,82 @@ namespace Cuemon
             return false;
         }
 
-		/// <summary>
-		/// Determines whether the specified collection of source objects contains one or more of the specified target types.
-		/// </summary>
-		/// <param name="sources">The collection of source objects to match against.</param>
-		/// <param name="targets">The target types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified collection of source objects contains one more of the target types specified; otherwise, <c>false</c>.
-		/// </returns>
-		private static bool ContainsType(IEnumerable sources, params Type[] targets)
-		{
-			if (sources == null) throw new ArgumentNullException("sources");
-			foreach (object source in sources)
-			{
-				if (ContainsType(source.GetType(), targets)) { return true; }
-			}
-			return false;
-		}
+        /// <summary>
+        /// Determines whether the specified collection of source objects contains one or more of the specified target types.
+        /// </summary>
+        /// <param name="sources">The collection of source objects to match against.</param>
+        /// <param name="targets">The target types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified collection of source objects contains one more of the target types specified; otherwise, <c>false</c>.
+        /// </returns>
+        private static bool ContainsType(IEnumerable sources, params Type[] targets)
+        {
+            if (sources == null) throw new ArgumentNullException("sources");
+            foreach (object source in sources)
+            {
+                if (ContainsType(source.GetType(), targets)) { return true; }
+            }
+            return false;
+        }
 
-		/// <summary>
-		/// Determines whether the specified source type contains one or more of the specified target types.
-		/// </summary>
-		/// <param name="source">The source type to match against.</param>
-		/// <param name="targets">The target types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the specified target types; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsType(Type source, params Type[] targets)
-		{
-			if (targets == null) throw new ArgumentNullException("targets");
-			foreach (Type targetType in targets)
-			{
-				Type sourceTypeCopy = source;
-				while (sourceTypeCopy != typeof(object) && sourceTypeCopy != null) // recursively loop through all inheritance types of the source
-				{
-					if (sourceTypeCopy.IsGenericType)
-					{
-						if (targetType == sourceTypeCopy.GetGenericTypeDefinition()) { return true; }
-					}
-					if (sourceTypeCopy == targetType) // we have a matching type as specified in parameter targetTypes
-					{
-						return true;
-					}
-					sourceTypeCopy = sourceTypeCopy.BaseType; // get the inheriting type
-				}
-			}
-			return false;
-		}
+        /// <summary>
+        /// Determines whether the specified source type contains one or more of the specified target types.
+        /// </summary>
+        /// <param name="source">The source type to match against.</param>
+        /// <param name="targets">The target types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the specified target types; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsType(Type source, params Type[] targets)
+        {
+            if (targets == null) throw new ArgumentNullException("targets");
+            foreach (Type targetType in targets)
+            {
+                Type sourceTypeCopy = source;
+                while (sourceTypeCopy != typeof(object) && sourceTypeCopy != null) // recursively loop through all inheritance types of the source
+                {
+                    if (sourceTypeCopy.IsGenericType)
+                    {
+                        if (targetType == sourceTypeCopy.GetGenericTypeDefinition()) { return true; }
+                    }
+                    if (sourceTypeCopy == targetType) // we have a matching type as specified in parameter targetTypes
+                    {
+                        return true;
+                    }
+                    sourceTypeCopy = sourceTypeCopy.BaseType; // get the inheriting type
+                }
+            }
+            return false;
+        }
 
-		/// <summary>
-		/// Determines whether the specified source contains one or more of the specified target types.
-		/// </summary>
-		/// <param name="source">The source object to match against.</param>
-		/// <param name="targets">The target types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the specified target types; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsType(object source, params Type[] targets)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			return ContainsType(source.GetType(), targets);
-		}
+        /// <summary>
+        /// Determines whether the specified source contains one or more of the specified target types.
+        /// </summary>
+        /// <param name="source">The source object to match against.</param>
+        /// <param name="targets">The target types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the specified target types; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsType(object source, params Type[] targets)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            return ContainsType(source.GetType(), targets);
+        }
 
-		/// <summary>
-		/// Determines whether the specified source/collection of source object(s) contains one or more of the specified target types.
-		/// </summary>
-		/// <param name="source">The source object to match against.</param>
-		/// <param name="treatSourceAsEnumerable">if set to <c>true</c> the source object is cast as an <see cref="IEnumerable"/> object, and the actual matching is now done against the source objects within the collection against the target types specified.</param>
-		/// <param name="targets">The target types to be matched against.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified source contains one or more of the specified target types; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool ContainsType(object source, bool treatSourceAsEnumerable, params Type[] targets)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			return treatSourceAsEnumerable ? ContainsType((source as IEnumerable), targets) : ContainsType(source.GetType(), targets);
-		}
+        /// <summary>
+        /// Determines whether the specified source/collection of source object(s) contains one or more of the specified target types.
+        /// </summary>
+        /// <param name="source">The source object to match against.</param>
+        /// <param name="treatSourceAsEnumerable">if set to <c>true</c> the source object is cast as an <see cref="IEnumerable"/> object, and the actual matching is now done against the source objects within the collection against the target types specified.</param>
+        /// <param name="targets">The target types to be matched against.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified source contains one or more of the specified target types; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ContainsType(object source, bool treatSourceAsEnumerable, params Type[] targets)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            return treatSourceAsEnumerable ? ContainsType((source as IEnumerable), targets) : ContainsType(source.GetType(), targets);
+        }
 
         /// <summary>
         /// Determines whether the specified <paramref name="source"/> is a complex <see cref="Type"/>.
@@ -549,13 +549,13 @@ namespace Cuemon
         /// <paramref name="source"/> is null.
         /// </exception>
 	    public static bool IsComplex(Type source)
-	    {
+        {
             if (source == null) { throw new ArgumentNullException("source"); }
-	        return !((source.IsClass && source == typeof(string)) ||
-	                 (source.IsClass && source == typeof(object)) ||
-	                 (source.IsValueType ||
-	                  source.IsPrimitive ||
-	                  source.IsEnum));
+            return !((source.IsClass && source == typeof(string)) ||
+                     (source.IsClass && source == typeof(object)) ||
+                     (source.IsValueType ||
+                      source.IsPrimitive ||
+                      source.IsEnum));
         }
 
         /// <summary>
@@ -585,10 +585,10 @@ namespace Cuemon
         /// <param name="type">The <see cref="Type"/> to retrieve its default value from.</param>
         /// <returns>The default value of <paramref name="type"/>.</returns>
 	    public static object GetDefaultValue(Type type)
-	    {
+        {
             Validator.ThrowIfNull(type, "type");
-	        if (type.IsValueType && Nullable.GetUnderlyingType(type) == null) { return Activator.CreateInstance(type); }
-	        return null;
-	    }
-	}
+            if (type.IsValueType && Nullable.GetUnderlyingType(type) == null) { return Activator.CreateInstance(type); }
+            return null;
+        }
+    }
 }
