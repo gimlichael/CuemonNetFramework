@@ -26,8 +26,7 @@ namespace Cuemon.Web
         /// </value>
         public static bool EnableCompression
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -228,7 +227,7 @@ namespace Cuemon.Web
                 string newExtension = GetCompressedFileExtension(pathToResource, compression);
                 pathToTempFile = Path.ChangeExtension(pathToResource.PhysicalFilePath, newExtension).ToLowerInvariant();
                 virtualPathToTempFile = Path.ChangeExtension(pathToResource.VirtualFilePath, newExtension).ToLowerInvariant();
-                ThreadPoolUtility.QueueWork(WriteFileQueued, pathToResource, pathToTempFile, compression, virtualPathToTempFile);
+                WriteFileQueued(pathToResource, pathToTempFile, compression, virtualPathToTempFile);
                 return pathToResource.VirtualFilePath;
             }
 
@@ -291,7 +290,8 @@ namespace Cuemon.Web
                         }
                         string directory = Path.GetDirectoryName(path.PhysicalFilePath);
                         string filename = Path.GetFileName(path.PhysicalFilePath);
-                        CachingManager.Cache.Add(path.VirtualFilePath, virtualPathToTempFile, CompressionCacheGroup, new FileDependency(directory, filename));
+                        string compressedFilename = Path.GetFileName(pathToTempFile);
+                        CachingManager.Cache.Add(path.VirtualFilePath, virtualPathToTempFile, CompressionCacheGroup, new FileDependency(directory, filename), new FileDependency(directory, compressedFilename));
                     }
                     finally
                     {
