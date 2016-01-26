@@ -22,7 +22,6 @@ namespace Cuemon.Web
         /// </summary>
         protected static readonly object Locker = new object();
 
-        internal static WindowsIdentity AppPoolIdentity;
         private static readonly DateTime ModuleCreated = DateTime.UtcNow;
         internal const string CacheGroup = "Cuemon.GlobalModule";
 
@@ -77,7 +76,6 @@ namespace Cuemon.Web
         protected override void OnApplicationStart(HttpApplication context)
         {
             base.OnApplicationStart(context);
-            AppPoolIdentity = WindowsIdentity.GetCurrent();
             DiscoverWebEntryAssembly();
         }
 

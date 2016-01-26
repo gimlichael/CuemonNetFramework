@@ -30,14 +30,14 @@ namespace Cuemon.Web.Configuration
         /// </exception>
         public static IXPathNavigable OpenWebConfiguration(string path)
         {
-            return OpenWebConfiguration(path, GlobalModule.AppPoolIdentity ?? WindowsIdentity.GetCurrent());
+            return OpenWebConfiguration(path, WindowsIdentity.GetCurrent);
         }
 
         /// <summary>
         /// Opens the Web-application configuration file as an object that implements the <see cref="IXPathNavigable"/> interface using the specified virtual path to allow read or write operations.
         /// </summary>
         /// <param name="path">The virtual path to the configuration file.</param>
-        /// <param name="identity">The Windows identity that will open the specified <paramref name="path"/>.</param>
+        /// <param name="identityResolver">The function delegate that can resolve a Windows identity that will open the specified <paramref name="path"/>.</param>
         /// <returns>An object that implements the <see cref="IXPathNavigable"/> interface.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="path"/> is null.
@@ -45,26 +45,25 @@ namespace Cuemon.Web.Configuration
         /// <exception cref="Cuemon.ArgumentEmptyException">
         /// <paramref name="path"/> is empty.
         /// </exception>
-        public static IXPathNavigable OpenWebConfiguration(string path, WindowsIdentity identity)
+        public static IXPathNavigable OpenWebConfiguration(string path, Doer<WindowsIdentity> identityResolver)
         {
             Validator.ThrowIfNullOrEmpty(path, "path");
-            Validator.ThrowIfNull(identity, "identity");
+            return Infrastructure.InvokeWitImpersonationContextOrDefault(identityResolver, OpenWebConfigurationCore, path);
+        }
 
-            using (WindowsImpersonationContext wic = identity.Impersonate())
+        private static IXPathNavigable OpenWebConfigurationCore(string path)
+        {
+            string webConfigLocation = GetWebConfigLocation(path);
+            string cacheKey = HashUtility.ComputeHash(webConfigLocation);
+            if (!CachingManager.Cache.ContainsKey(cacheKey))
             {
-                string webConfigLocation = GetWebConfigLocation(path);
-                string cacheKey = HashUtility.ComputeHash(webConfigLocation);
-                if (!CachingManager.Cache.ContainsKey(cacheKey))
-                {
-                    Uri fileUri = new Uri(webConfigLocation);
-                    IXPathNavigable document = XPathUtility.CreateXPathNavigableDocument(fileUri);
-                    string directory = Path.GetDirectoryName(webConfigLocation);
-                    string filter = Path.GetFileName(webConfigLocation);
-                    CachingManager.Cache.Add(cacheKey, document, new FileDependency(directory, filter));
-                }
-                wic.Undo();
-                return CachingManager.Cache.Get<IXPathNavigable>(cacheKey);
+                Uri fileUri = new Uri(webConfigLocation);
+                IXPathNavigable document = XPathUtility.CreateXPathNavigableDocument(fileUri);
+                string directory = Path.GetDirectoryName(webConfigLocation);
+                string filter = Path.GetFileName(webConfigLocation);
+                CachingManager.Cache.Add(cacheKey, document, new FileDependency(directory, filter));
             }
+            return CachingManager.Cache.Get<IXPathNavigable>(cacheKey);
         }
 
         private static string GetWebConfigLocation(string path)
@@ -88,61 +87,60 @@ namespace Cuemon.Web.Configuration
         /// <returns>A sequence of <see cref="HttpHandlerAction"/> elements.</returns>
         public static IEnumerable<HttpHandlerAction> GetSystemHandlers(string path)
         {
-            return GetSystemHandlers(path, GlobalModule.AppPoolIdentity ?? WindowsIdentity.GetCurrent());
+            return GetSystemHandlers(path, WindowsIdentity.GetCurrent);
         }
 
         /// <summary>
         /// Returns all system handlers of the default (root) Web-application configuration file and derived.
         /// </summary>
         /// <param name="path">The virtual path to the configuration file.</param>
-        /// <param name="identity">The Windows identity that will open the specified <paramref name="path"/>.</param>
+        /// <param name="identityResolver">The function delegate that can resolve a Windows identity that will open the specified <paramref name="path"/>.</param>
         /// <returns>A sequence of <see cref="HttpHandlerAction"/> elements.</returns>
-        public static IEnumerable<HttpHandlerAction> GetSystemHandlers(string path, WindowsIdentity identity)
+        public static IEnumerable<HttpHandlerAction> GetSystemHandlers(string path, Doer<WindowsIdentity> identityResolver)
         {
             Validator.ThrowIfNullOrEmpty(path, "path");
-            Validator.ThrowIfNull(identity, "identity");
+            return Infrastructure.InvokeWitImpersonationContextOrDefault(identityResolver, GetSystemHandlersCore, path);
+        }
 
-            using (WindowsImpersonationContext wic = identity.Impersonate())
+        private static IEnumerable<HttpHandlerAction> GetSystemHandlersCore(string path)
+        {
+            System.Configuration.Configuration config = WebConfigurationManager.OpenWebConfiguration(path);
+            HttpHandlersSection iis6HandlerSection = config.GetSection("system.web/httpHandlers") as HttpHandlersSection;
+            HttpHandlersSection iis7HandlerSection = config.GetSection("system.webServer/handlers") as HttpHandlersSection;
+            List<HttpHandlerAction> customHandlers = new List<HttpHandlerAction>(GetHandlers(OpenWebConfiguration(path)));
+
+            if (iis6HandlerSection != null)
             {
-                System.Configuration.Configuration config = WebConfigurationManager.OpenWebConfiguration(path);
-                HttpHandlersSection iis6HandlerSection = config.GetSection("system.web/httpHandlers") as HttpHandlersSection;
-                HttpHandlersSection iis7HandlerSection = config.GetSection("system.webServer/handlers") as HttpHandlersSection;
-                List<HttpHandlerAction> customHandlers = new List<HttpHandlerAction>(GetHandlers(OpenWebConfiguration(path)));
-
-                if (iis6HandlerSection != null)
+                foreach (HttpHandlerAction handler in iis6HandlerSection.Handlers)
                 {
-                    foreach (HttpHandlerAction handler in iis6HandlerSection.Handlers)
+                    bool identical = false;
+                    foreach (HttpHandlerAction customHandler in customHandlers)
                     {
-                        bool identical = false;
-                        foreach (HttpHandlerAction customHandler in customHandlers)
+                        if (IsIdentical(handler, customHandler))
                         {
-                            if (IsIdentical(handler, customHandler))
-                            {
-                                identical = true;
-                                break;
-                            }
+                            identical = true;
+                            break;
                         }
-                        if (!identical) { yield return handler; }
                     }
+                    if (!identical) { yield return handler; }
                 }
+            }
 
-                if (iis7HandlerSection != null)
+            if (iis7HandlerSection != null)
+            {
+                foreach (HttpHandlerAction handler in iis7HandlerSection.Handlers)
                 {
-                    foreach (HttpHandlerAction handler in iis7HandlerSection.Handlers)
+                    bool identical = false;
+                    foreach (HttpHandlerAction customHandler in customHandlers)
                     {
-                        bool identical = false;
-                        foreach (HttpHandlerAction customHandler in customHandlers)
+                        if (IsIdentical(handler, customHandler))
                         {
-                            if (IsIdentical(handler, customHandler))
-                            {
-                                identical = true;
-                                break;
-                            }
+                            identical = true;
+                            break;
                         }
-                        if (!identical) { yield return handler; }
                     }
+                    if (!identical) { yield return handler; }
                 }
-                wic.Undo();
             }
         }
 
@@ -176,7 +174,7 @@ namespace Cuemon.Web.Configuration
         public static IEnumerable<HttpHandlerAction> GetHandlers(IXPathNavigable webConfiguration)
         {
             if (webConfiguration == null) { throw new ArgumentNullException("webConfiguration"); }
-            
+
             XPathNavigator navigator = webConfiguration.CreateNavigator();
             XPathNavigator root = navigator.SelectSingleNode("/configuration");
             if (root == null) { throw new ArgumentException("The content of the provided IXPathNavigable does not appear to be from a web.config file.", "webConfiguration"); }

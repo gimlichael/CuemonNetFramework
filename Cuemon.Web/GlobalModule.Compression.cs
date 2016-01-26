@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
@@ -200,9 +201,23 @@ namespace Cuemon.Web
         /// <param name="pathToResource">The HTTP route path to a resource.</param>
         /// <param name="compression">The compression to apply to the <paramref name="pathToResource"/>.</param>
         /// <returns>A virtual file path of the specified <paramref name="pathToResource"/>.</returns>
-        protected virtual string ParseResourceCompression(HttpRoutePath pathToResource, CompressionMethodScheme compression)
+        protected string ParseResourceCompression(HttpRoutePath pathToResource, CompressionMethodScheme compression)
+        {
+            return ParseResourceCompression(pathToResource, compression, DefaultVirtualPathResolver);
+        }
+
+        /// <summary>
+        /// Returns a virtual file path of the specified <paramref name="pathToResource"/> while determining if a compressed equivalent can and should be written to the file system.
+        /// </summary>
+        /// <param name="pathToResource">The HTTP route path to a resource.</param>
+        /// <param name="compression">The compression to apply to the <paramref name="pathToResource"/>.</param>
+        /// <param name="virtualPathResolver">The function delegate that will resolve the virtual file path from the specified <paramref name="pathToResource"/>.</param>
+        /// <returns>A virtual file path of the specified <paramref name="pathToResource"/>.</returns>
+        protected virtual string ParseResourceCompression(HttpRoutePath pathToResource, CompressionMethodScheme compression, Doer<HttpRoutePath, CompressionMethodScheme, string> virtualPathResolver)
         {
             Validator.ThrowIfNull(pathToResource, "pathToResource");
+            Validator.ThrowIfNull(virtualPathResolver, "virtualPathResolver");
+
             Doer<string, bool> canWriteFileToDisk = CachingManager.Cache.Memoize<string, bool>(CanWriteFileToDisk);
             bool enableResourceCompression = canWriteFileToDisk(Path.GetDirectoryName(pathToResource.PhysicalFilePath));
 
@@ -219,7 +234,11 @@ namespace Cuemon.Web
             }
 
             if (!enableResourceCompression) { return pathToResource.VirtualFilePath; }
+            return virtualPathResolver(pathToResource, compression);
+        }
 
+        private static string DefaultVirtualPathResolver(HttpRoutePath pathToResource, CompressionMethodScheme compression)
+        {
             string pathToTempFile;
             string virtualPathToTempFile;
             if (!CachingManager.Cache.TryGetValue(pathToResource.VirtualFilePath, CompressionCacheGroup, out virtualPathToTempFile))
@@ -240,6 +259,44 @@ namespace Cuemon.Web
                 return pathToResource.VirtualFilePath;
             }
             return virtualPathToTempFile;
+        }
+
+        private static void WriteFileQueued(HttpRoutePath path, string pathToTempFile, CompressionMethodScheme compression, string virtualPathToTempFile)
+        {
+            Infrastructure.InvokeWitImpersonationContextOrDefault(WindowsIdentity.GetCurrent, WriteFileQueuedCore, TupleUtility.CreateFour(path, pathToTempFile, compression, virtualPathToTempFile));
+        }
+
+        private static void WriteFileQueuedCore(Template<HttpRoutePath, string, CompressionMethodScheme, string> parameters)
+        {
+            HttpRoutePath path = parameters.Arg1;
+            string pathToTempFile = parameters.Arg2;
+            CompressionMethodScheme compression = parameters.Arg3;
+            string virtualPathToTempFile = parameters.Arg4;
+
+            string lockpath = string.Concat(path.PhysicalFilePath, ".locked");
+            if (File.Exists(lockpath)) { return; }
+            if (CachingManager.Cache.ContainsKey(path.VirtualFilePath, CompressionCacheGroup)) { return; }
+            using (Mutex mutex = new Mutex(false, string.Concat(virtualPathToTempFile, "_mutex")))
+            {
+                try
+                {
+                    mutex.WaitOne();
+                    using (FileStream temp = File.Create(lockpath)) { temp.Flush(); }
+                    using (FileStream temp = File.OpenRead(path.PhysicalFilePath))
+                    {
+                        File.WriteAllBytes(pathToTempFile, CompressBytes(temp, compression));
+                    }
+                    string directory = Path.GetDirectoryName(path.PhysicalFilePath);
+                    string filename = Path.GetFileName(path.PhysicalFilePath);
+                    string compressedFilename = Path.GetFileName(pathToTempFile);
+                    CachingManager.Cache.Add(path.VirtualFilePath, virtualPathToTempFile, CompressionCacheGroup, new FileDependency(directory, filename), new FileDependency(directory, compressedFilename));
+                }
+                finally
+                {
+                    File.Delete(lockpath);
+                    mutex.ReleaseMutex();
+                }
+            }
         }
 
         /// <summary>
@@ -268,38 +325,6 @@ namespace Cuemon.Web
             finally
             {
                 if (!hadException && tempFile != null) { File.Delete(tempFile); }
-            }
-        }
-
-        private static void WriteFileQueued(HttpRoutePath path, string pathToTempFile, CompressionMethodScheme compression, string virtualPathToTempFile)
-        {
-            using (WindowsImpersonationContext wic = AppPoolIdentity.Impersonate())
-            {
-                string lockpath = string.Concat(path.PhysicalFilePath, ".locked");
-                if (File.Exists(lockpath)) { return; }
-                if (CachingManager.Cache.ContainsKey(path.VirtualFilePath, CompressionCacheGroup)) { return; }
-                using (Mutex mutex = new Mutex(false, string.Concat(virtualPathToTempFile, "_mutex")))
-                {
-                    try
-                    {
-                        mutex.WaitOne();
-                        using (FileStream temp = File.Create(lockpath)) { temp.Flush(); }
-                        using (FileStream temp = File.OpenRead(path.PhysicalFilePath))
-                        {
-                            File.WriteAllBytes(pathToTempFile, CompressBytes(temp, compression));
-                        }
-                        string directory = Path.GetDirectoryName(path.PhysicalFilePath);
-                        string filename = Path.GetFileName(path.PhysicalFilePath);
-                        string compressedFilename = Path.GetFileName(pathToTempFile);
-                        CachingManager.Cache.Add(path.VirtualFilePath, virtualPathToTempFile, CompressionCacheGroup, new FileDependency(directory, filename), new FileDependency(directory, compressedFilename));
-                    }
-                    finally
-                    {
-                        File.Delete(lockpath);
-                        mutex.ReleaseMutex();
-                    }
-                }
-                wic.Undo();
             }
         }
 
