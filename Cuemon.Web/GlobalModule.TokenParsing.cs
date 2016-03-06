@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.IO;
 
 namespace Cuemon.Web
@@ -51,7 +51,7 @@ namespace Cuemon.Web
         /// </remarks>
         protected void HandleHtmlRelatedContentParsing(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             CacheValidator validator = GetCacheValidator(context.Request, context.Context.Handler ?? context.Context.CurrentHandler);
             MostSignificantValidator = CacheValidator.GetMostSignificant(MostSignificantValidator, validator);
             HandleHtmlRelatedContentParsing(context, MostSignificantValidator, DefaultHtmlOutputParser);
@@ -65,9 +65,9 @@ namespace Cuemon.Web
         /// <param name="htmlOutputParser">The function delegate that will apply the checksum of <paramref name="validator"/> to the output of a HTML related HTTP response.</param>
         protected virtual void HandleHtmlRelatedContentParsing(HttpApplication context, CacheValidator validator, Doer<Stream, Encoding, CacheValidator, Stream> htmlOutputParser)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            if (validator == null) { throw new ArgumentNullException("validator"); }
-            if (htmlOutputParser == null) { throw new ArgumentNullException("htmlOutputParser"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
+            if (htmlOutputParser == null) { throw new ArgumentNullException(nameof(htmlOutputParser)); }
             if (context.Response.StatusCode == (int)HttpStatusCode.MovedPermanently ||
                 context.Response.StatusCode == (int)HttpStatusCode.Redirect)
             {
@@ -108,7 +108,7 @@ namespace Cuemon.Web
         {
             if (content == null) { return null; }
             if (content.Length == 0) { return content; }
-            string contentAsString = ConvertUtility.ToString(content, PreambleSequence.Remove, encoding, true);
+            string contentAsString = StringConverter.FromStream(content, PreambleSequence.Remove, encoding, true);
             int arguments;
             if (StringUtility.ParseFormat(contentAsString, out arguments))
             {
@@ -134,7 +134,7 @@ namespace Cuemon.Web
         /// </returns>
         protected virtual bool IsHtmlRelatedContent(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (context.Response.ContentType == null) { return false; }
             FileMapping mimeType = MimeUtility.ParseContentType(HttpResponseContentFilter.MimeTypesFilter, context.Response.ContentType);
             return (mimeType != null);

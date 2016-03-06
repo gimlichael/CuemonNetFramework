@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.Collections.Generic;
+using Cuemon.Runtime;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.IO
 {
@@ -24,7 +26,7 @@ namespace Cuemon.IO
         /// <remarks>Should the specified <paramref name="fileName"/> not contain any file version number, a <see cref="Version"/> initialized to 0.0.0.0 is returned.</remarks>
         public static Version GetFileVersion(string fileName)
         {
-            if (fileName == null) { throw new ArgumentNullException("fileName"); }
+            if (fileName == null) { throw new ArgumentNullException(nameof(fileName)); }
             Doer<string, FileVersionInfo> getVersionInfo = CachingManager.Cache.Memoize<string, FileVersionInfo>(GetVersionInfoCore, FileVersionDependencies);
             FileVersionInfo fileVersion = getVersionInfo(fileName);
             return new Version(string.IsNullOrEmpty(fileVersion.FileVersion) ? "0.0.0.0" : fileVersion.FileVersion);
@@ -42,7 +44,7 @@ namespace Cuemon.IO
         /// <remarks>Should the specified <paramref name="fileName"/> not contain any version of the product this file is distributed with, a <see cref="Version"/> initialized to 0.0.0.0 is returned.</remarks>
         public static Version GetProductVersion(string fileName)
         {
-            if (fileName == null) { throw new ArgumentNullException("fileName"); }
+            if (fileName == null) { throw new ArgumentNullException(nameof(fileName)); }
             Doer<string, FileVersionInfo> getVersionInfo = CachingManager.Cache.Memoize<string, FileVersionInfo>(GetVersionInfoCore, FileVersionDependencies);
             FileVersionInfo fileVersion = getVersionInfo(fileName);
             return new Version(string.IsNullOrEmpty(fileVersion.ProductVersion) ? "0.0.0.0" : fileVersion.ProductVersion);
@@ -79,7 +81,7 @@ namespace Cuemon.IO
         /// <remarks>Should the specified <paramref name="fileName"/> trigger any sort of exception, a <see cref="CacheValidator.Default"/> is returned.</remarks>
         public static CacheValidator GetCacheValidator(string fileName, int bytesToRead)
         {
-            if (fileName == null) { throw new ArgumentNullException("fileName"); }
+            if (fileName == null) { throw new ArgumentNullException(nameof(fileName)); }
             Doer<string, int, CacheValidator> getCacheValidator = CachingManager.Cache.Memoize<string, int, CacheValidator>(GetCacheValidatorCore, FileVersionDependencies);
             return getCacheValidator(fileName.ToUpperInvariant(), bytesToRead).Clone();
         }
@@ -111,7 +113,7 @@ namespace Cuemon.IO
                     {
                         openFile.Read(checksumBytes, 0, (int)buffer);
                     }
-                    return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, ByteUtility.GetHashCode(checksumBytes));
+                    return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, StructUtility.GetHashCode32(checksumBytes));
                 }
                 return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, ChecksumMethod.Combined);
             }
@@ -128,9 +130,9 @@ namespace Cuemon.IO
         /// <returns>A <see cref="String"/> cleansed for possible invalid characters in regards to a file location.</returns>
         public static string ParseFileName(string fileName)
         {
-            if (fileName == null) throw new ArgumentNullException("fileName");
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
             StringBuilder parsedFileName = new StringBuilder(fileName.Length);
-            char[] invalidCharacters = EnumerableUtility.ToArray(EnumerableUtility.Distinct(EnumerableUtility.Concat(Path.GetInvalidFileNameChars(), Path.GetInvalidPathChars())));
+            char[] invalidCharacters = EnumerableConverter.ToArray(EnumerableUtility.Distinct(EnumerableUtility.Concat(Path.GetInvalidFileNameChars(), Path.GetInvalidPathChars())));
             foreach (char character in fileName)
             {
                 bool isValid = true;
@@ -158,8 +160,8 @@ namespace Cuemon.IO
         /// </returns>
         public static bool CanAccess(string path, FileAccess access)
         {
-            if (path == null) { throw new ArgumentNullException("path"); }
-            if (path.Length == 0) { throw new ArgumentException("The path of the file cannot be empty.", "path"); }
+            if (path == null) { throw new ArgumentNullException(nameof(path)); }
+            if (path.Length == 0) { throw new ArgumentException("The path of the file cannot be empty.", nameof(path)); }
             switch (access)
             {
                 case FileAccess.Read:
@@ -167,7 +169,7 @@ namespace Cuemon.IO
                 case FileAccess.ReadWrite:
                     return CanAccessCore(path, access);
                 default:
-                    throw new ArgumentOutOfRangeException("access");
+                    throw new ArgumentOutOfRangeException(nameof(access));
             }
         }
 

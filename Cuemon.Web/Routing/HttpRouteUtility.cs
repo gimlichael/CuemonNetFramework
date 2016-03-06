@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.Net.Http;
 using Cuemon.Reflection;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Web.Routing
 {
@@ -27,7 +27,7 @@ namespace Cuemon.Web.Routing
         /// </exception>
         public static IEnumerable<string> ParseRoute(string uriPattern)
         {
-            if (uriPattern == null) { throw new ArgumentNullException("uriPattern"); }
+            if (uriPattern == null) { throw new ArgumentNullException(nameof(uriPattern)); }
 
             Regex rx = new Regex(@"{[\w]*?[^\d][\w]*?}");
             MatchCollection matches = rx.Matches(uriPattern);
@@ -44,9 +44,9 @@ namespace Cuemon.Web.Routing
         /// <returns>A sequence of <see cref="KeyValuePair{HttpRouteAttribute,MethodInfo}"/> structs.</returns>
         public static IEnumerable<KeyValuePair<HttpRouteAttribute, MethodInfo>> ParseRouteMethods(IHttpHandler routeHandler)
         {
-            Validator.ThrowIfNull(routeHandler, "routeHandler");
+            Validator.ThrowIfNull(routeHandler, nameof(routeHandler));
             Type routeHandlerType = routeHandler.GetType();
-            return CachingManager.Cache.GetOrAdd(routeHandlerType.FullName, () => 
+            return CachingManager.Cache.GetOrAdd(routeHandlerType.FullName, () =>
             {
                 List<KeyValuePair<HttpRouteAttribute, MethodInfo>> httpMethods = new List<KeyValuePair<HttpRouteAttribute, MethodInfo>>();
                 IEnumerable<MethodInfo> methods = ReflectionUtility.GetMethods(routeHandlerType, ReflectionUtility.BindingInstancePublic);
@@ -139,11 +139,11 @@ namespace Cuemon.Web.Routing
                         if (parameter == null) { continue; }
                         if (IsRouteHexString(routeAttribute, parameter.Name))
                         {
-                            result.Add(ConvertUtility.FromHexString(compoundRequestParameters[i], PreambleSequence.Remove, Encoding.UTF8)); // todo: support dynamic encoding from request
+                            result.Add(StringConverter.FromHexadecimal(compoundRequestParameters[i], PreambleSequence.Remove, Encoding.UTF8)); // todo: support dynamic encoding from request
                         }
                         else
                         {
-                            result.Add(ConvertUtility.ChangeType(compoundRequestParameters[i], parameter.ParameterType));
+                            result.Add(ObjectConverter.ChangeType(compoundRequestParameters[i], parameter.ParameterType));
                         }
                     }
 
@@ -158,11 +158,11 @@ namespace Cuemon.Web.Routing
                             if (parameter == null) { continue; }
                             if (IsRouteHexString(routeAttribute, parameter.Name))
                             {
-                                result.Add(ConvertUtility.FromHexString(requestQuerystring[key], PreambleSequence.Remove, Encoding.UTF8)); // todo: support dynamic encoding from request
+                                result.Add(StringConverter.FromHexadecimal(requestQuerystring[key], PreambleSequence.Remove, Encoding.UTF8)); // todo: support dynamic encoding from request
                             }
                             else
                             {
-                                result.Add(ConvertUtility.ChangeType(requestQuerystring[key], parameter.ParameterType));
+                                result.Add(ObjectConverter.ChangeType(requestQuerystring[key], parameter.ParameterType));
                             }
                             expectedQuerystringParameters++;
                         }
@@ -243,8 +243,8 @@ namespace Cuemon.Web.Routing
 
         private static bool IsRelated(Uri request, Uri attribute, MethodInfo httpMethod)
         {
-            if (request == null) { throw new ArgumentNullException("request"); }
-            if (attribute == null) { throw new ArgumentNullException("attribute"); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            if (attribute == null) { throw new ArgumentNullException(nameof(attribute)); }
 
             if (attribute.Segments.Length != request.Segments.Length) { return false; }
 
@@ -261,7 +261,7 @@ namespace Cuemon.Web.Routing
 
             int maxLength = NumberUtility.GetLowestValue(attribute.Segments.Length, request.Segments.Length) - 1;
 
-            ParameterInfo[] attributeParameters = EnumerableUtility.ToArray(EnumerableUtility.Reverse(httpMethod.GetParameters()));
+            ParameterInfo[] attributeParameters = EnumerableConverter.ToArray(EnumerableUtility.Reverse(httpMethod.GetParameters()));
             StringBuilder attributeAbsolutePath = new StringBuilder();
             int attributeParametersIndex = 0;
             for (int i = maxLength; i >= 0; i--)

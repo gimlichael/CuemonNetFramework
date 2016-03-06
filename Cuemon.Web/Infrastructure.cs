@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO.Compression;
 using System.Security.Principal;
+using System.Web;
 
 namespace Cuemon.Web
 {
@@ -42,10 +44,6 @@ namespace Cuemon.Web
                     identity.Dispose();
                 }
             }
-            else
-            {
-                body(arg);
-            }
         }
 
         internal static TResult InvokeWitImpersonationContextOrDefault<T, TResult>(Doer<WindowsIdentity> identityResolver, Doer<T, TResult> body, T arg)
@@ -78,6 +76,26 @@ namespace Cuemon.Web
                 result = body(arg);
             }
             return result;
+        }
+
+        internal static void ApplyCompression(HttpApplication context, GlobalModule module, CompressionMethodScheme compression, Doer<bool> compressWhenTrue)
+        {
+            switch (compression)
+            {
+                case CompressionMethodScheme.Deflate:
+                    if (compressWhenTrue()) { context.Response.Filter = new DeflateStream(context.Response.Filter, CompressionMode.Compress); }
+                    module.ParseCompressionHeaders = true;
+                    break;
+                case CompressionMethodScheme.GZip:
+                    if (compressWhenTrue()) { context.Response.Filter = new GZipStream(context.Response.Filter, CompressionMode.Compress); }
+                    module.ParseCompressionHeaders = true;
+                    break;
+                case CompressionMethodScheme.Identity:
+                case CompressionMethodScheme.Compress:
+                case CompressionMethodScheme.None:
+                    module.ParseCompressionHeaders = true;
+                    break;
+            }
         }
     }
 }

@@ -18,9 +18,11 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.IO;
 using Cuemon.Net;
+using Cuemon.Runtime;
+using Cuemon.Runtime.Caching;
 using Cuemon.Security.Cryptography;
 using Cuemon.Text;
 using Cuemon.Web.Configuration;
@@ -129,12 +131,12 @@ namespace Cuemon.Web.UI
         /// Gets or sets the default XSLT extension value. Default is <c>.xslt</c>.
         /// </summary>
         /// <value>The default XSLT extension value.</value>
-        public static string DefaultXsltExtension
+	    public static string DefaultXsltExtension
         {
             get { return _defaultXsltExtension; }
             set
             {
-                if (value == null) { throw new ArgumentNullException("value"); }
+                if (value == null) { throw new ArgumentNullException(nameof(value)); }
                 string defaultXsltExtension = value.IndexOf('.') >= 0 ? value : string.Concat(".", value);
                 _defaultXsltExtension = defaultXsltExtension;
             }
@@ -185,8 +187,7 @@ namespace Cuemon.Web.UI
         /// </value>
         public static bool EnableStyleSheetCaching
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -197,8 +198,7 @@ namespace Cuemon.Web.UI
         /// </value>
         public static bool EnableMetadataCaching
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -207,8 +207,7 @@ namespace Cuemon.Web.UI
         /// <value><c>true</c> if debug information is displayed on the rendered UI for instances of <see cref="XsltPage"/>; otherwise, <c>false</c>.</value>
         public static bool EnableDebug
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -217,8 +216,7 @@ namespace Cuemon.Web.UI
         /// <value><c>true</c> if render cache is enabled for instances of <see cref="XsltPage"/>; otherwise, <c>false</c>.</value>
         public static bool EnableRenderCache
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -546,7 +544,7 @@ namespace Cuemon.Web.UI
         /// </exception>
         public virtual bool HasClientSideResource(CacheValidator validator)
         {
-            if (validator == null) { throw new ArgumentNullException("validator"); }
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
             return HttpRequestUtility.IsClientSideResourceCached(validator, this.Request.Headers);
         }
 
@@ -554,15 +552,15 @@ namespace Cuemon.Web.UI
         /// Gets a <see cref="CacheValidator"/> object that represents the content of the resource.
         /// </summary>
         /// <returns>A <see cref="CacheValidator" /> object that represents the content of the resource.</returns>
-        /// <remarks>The default implementation of this method check for created, last modified and checksum by the following criterias:
-        /// 1.: the associated XSLT file (if present), 
-        /// 2.: the page itself (typically name.aspx), 
-        /// 3.: the configuration file of the website (web.config),
-        /// 4.: the associated site map file,
-        /// 5.: the associated phrase file.
-        /// Any of the above who has the highest value, is the one returned.
-        /// </remarks>
-        public virtual CacheValidator GetCacheValidator()
+		/// <remarks>The default implementation of this method check for created, last modified and checksum by the following criterias:
+		/// 1.: the associated XSLT file (if present), 
+		/// 2.: the page itself (typically name.aspx), 
+		/// 3.: the configuration file of the website (web.config),
+		/// 4.: the associated site map file,
+		/// 5.: the associated phrase file.
+		/// Any of the above who has the highest value, is the one returned.
+		/// </remarks>
+		public virtual CacheValidator GetCacheValidator()
         {
             if (_cacheValidator == null)
             {
@@ -672,7 +670,7 @@ namespace Cuemon.Web.UI
         /// <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"></see> that receives the page content.</param>
         protected override void Render(HtmlTextWriter writer)
         {
-            if (writer == null) throw new ArgumentNullException("writer");
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
             this.Response.SuppressContent = this.HasClientSideResource(this.GetCacheValidator());
             if (this.Response.SuppressContent) // only render, if suppress content is false
             {
@@ -761,7 +759,7 @@ namespace Cuemon.Web.UI
         {
             using (Stream stream = ReadXmlInputFromPageCore(page))
             {
-                return ConvertUtility.ToByteArray(stream);
+                return ByteConverter.FromStream(stream);
             }
         }
 
@@ -783,9 +781,9 @@ namespace Cuemon.Web.UI
 
             byte[] cachedResult = CachingManager.Cache.GetOrAdd(cacheKey, CacheGroupName, () =>
             {
-                return ConvertUtility.ToByteArray(this.Transform(this.XmlForRendering));
+                return ByteConverter.FromStream(this.Transform(this.XmlForRendering));
             });
-            return ConvertUtility.ToString(cachedResult, PreambleSequence.Remove, this.Response.ContentEncoding);
+            return StringConverter.FromBytes(cachedResult, PreambleSequence.Remove, this.Response.ContentEncoding);
         }
 
         private void ParseRender()
@@ -912,7 +910,7 @@ namespace Cuemon.Web.UI
         /// Gets an <see cref="XmlResolver"/> object used by the <see cref="Transform"/> method.
         /// </summary>
         /// <value>The <see cref="XmlResolver"/> to associate with the XSL Transformation..</value>
-        public virtual XmlResolver Resolver
+	    public virtual XmlResolver Resolver
         {
             get { return new XmlUriResolver(EnableLocalResolver ? new Uri(HttpContext.Current.Server.MapPath(".")) : HttpRequestUtility.GetHostAuthority(HttpContext.Current.Request)); }
         }
@@ -1007,7 +1005,7 @@ namespace Cuemon.Web.UI
         {
             using (Stream stream = ReadStyleSheetFromUriCore(stylesheet))
             {
-                return ConvertUtility.ToByteArray(stream);
+                return ByteConverter.FromStream(stream);
             }
         }
 
@@ -1065,7 +1063,7 @@ namespace Cuemon.Web.UI
         /// </returns>
         public string ToString(Stream value, PreambleSequence sequence)
         {
-            return ConvertUtility.ToString(value, sequence);
+            return StringConverter.FromStream(value, sequence);
         }
 
         /// <summary>
@@ -1079,7 +1077,7 @@ namespace Cuemon.Web.UI
         /// </returns>
         public virtual string ToString(Stream value, PreambleSequence sequence, Encoding encoding)
         {
-            return ConvertUtility.ToString(value, sequence, encoding);
+            return StringConverter.FromStream(value, sequence, encoding);
         }
 
         /// <summary>
@@ -1142,7 +1140,7 @@ namespace Cuemon.Web.UI
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public virtual void WriteXml(XmlWriter writer)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             writer.WriteAttributeString("name", this.Name);
             writer.WriteAttributeString("nameAndQuery", HttpContext.Current.Request.Url.PathAndQuery);
             writer.WriteAttributeString("friendlyName", this.GetFriendlyName());
@@ -1160,7 +1158,7 @@ namespace Cuemon.Web.UI
             XPathNodeIterator iterator = this.GetCustomXmlNodes();
             while (iterator.MoveNext()) { writer.WriteRaw(iterator.Current.OuterXml); }
 
-            char[] chars = ConvertUtility.ToCharArray(BuildControls(), PreambleSequence.Remove);
+            char[] chars = CharConverter.FromStream(BuildControls(), PreambleSequence.Remove);
             writer.WriteRaw(chars, 0, chars.Length);
 
             writer.WriteStartElement("HttpContext");

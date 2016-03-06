@@ -32,8 +32,8 @@ namespace Cuemon.Data.Entity
         /// <param name="entityType">The specific type of the entity to parse.</param>
         public EntityMapper(Entity entity, Type entityType)
         {
-            Validator.ThrowIfNull(entity, "entity");
-            Validator.ThrowIfNull(entityType, "entityType");
+            Validator.ThrowIfNull(entity, nameof(entity));
+            Validator.ThrowIfNull(entityType, nameof(entityType));
 
             this.Source = entity;
             this.SourceType = entityType;
@@ -67,7 +67,7 @@ namespace Cuemon.Data.Entity
         /// <param name="deleter">The delegate that performs a delete operation on a data source.</param>
         public void ParseDeleteStatement(Act<IDataCommand, IDataParameter[]> deleter)
         {
-            Validator.ThrowIfNull(deleter, "deleter");
+            Validator.ThrowIfNull(deleter, nameof(deleter));
             foreach (Type chainedType in EnumerableUtility.Reverse(this.GetInheritanceChain()))
             {
                 DataMapper mapper = new DataMapper(chainedType);
@@ -84,7 +84,7 @@ namespace Cuemon.Data.Entity
         /// <param name="newRank">The <see cref="Type"/> of the demoted <see cref="Source"/>.</param>
         public void ParseDemoteStatement(Act<IDataCommand, IDataParameter[]> demoter, Type newRank)
         {
-            Validator.ThrowIfNull(demoter, "demoter");
+            Validator.ThrowIfNull(demoter, nameof(demoter));
             foreach (Type chainedType in EnumerableUtility.Reverse(this.GetInheritanceChain()))
             {
                 if (chainedType == newRank) { return; }
@@ -102,16 +102,16 @@ namespace Cuemon.Data.Entity
         /// <param name="newRank">The <paramref name="newRank"/> of the promoted <see cref="Source"/>.</param>
         public void ParsePromoteStatement(Doer<IDataCommand, IDataParameter[], object> promoter, Entity newRank)
         {
-            Validator.ThrowIfNull(promoter, "promoter");
+            Validator.ThrowIfNull(promoter, nameof(promoter));
             IDataParameter[] parameters = new IDataParameter[0];
             foreach (Type chainedType in this.GetInheritanceChain())
             {
-                parameters = EnumerableUtility.ToArray(EnumerableUtility.Concat(parameters, this.GetDataParameters(chainedType, this.Source.GetDataMappedColumns(chainedType))));
+                parameters = EnumerableConverter.ToArray(EnumerableUtility.Concat(parameters, this.GetDataParameters(chainedType, this.Source.GetDataMappedColumns(chainedType))));
             }
 
             Type newRankType = newRank.GetType();
             DataMapper mapper = new DataMapper(newRankType);
-            parameters = EnumerableUtility.ToArray(EnumerableUtility.Distinct(EnumerableUtility.Concat(parameters, this.GetDataParametersForObjectRanking(newRank, mapper.Columns)), new DataParameterEqualityComparer()));
+            parameters = EnumerableConverter.ToArray(EnumerableUtility.Distinct(EnumerableUtility.Concat(parameters, this.GetDataParametersForObjectRanking(newRank, mapper.Columns)), new DataParameterEqualityComparer()));
 
             IDataCommand command = this.Source.DataAdapter.GetDataMappedQuery(QueryType.Insert, mapper);
             promoter(command, parameters);
@@ -123,7 +123,7 @@ namespace Cuemon.Data.Entity
         /// <param name="updater">The delegate that performs an update operation on a data source.</param>
         public void ParseUpdateStatement(Act<IDataCommand, IDataParameter[]> updater)
         {
-            Validator.ThrowIfNull(updater, "updater");
+            Validator.ThrowIfNull(updater, nameof(updater));
             foreach (Type chainedType in this.GetInheritanceChain())
             {
                 DataMapper mapper = new DataMapper(chainedType);
@@ -143,7 +143,7 @@ namespace Cuemon.Data.Entity
         /// <param name="predicateSelector">The function delegate that performs a select operation on a data source.</param>
         public bool ParseSelectExistsStatement(Doer<IDataCommand, IDataParameter[], bool> predicateSelector)
         {
-            Validator.ThrowIfNull(predicateSelector, "predicateSelector");
+            Validator.ThrowIfNull(predicateSelector, nameof(predicateSelector));
             DataMapper mapper = new DataMapper(this.SourceType);
             IDataParameter[] parameters = this.GetDataParameters(this.SourceType, mapper.Columns);
             IDataCommand command = this.Source.DataAdapter.GetDataMappedQuery(QueryType.Exists, mapper);
@@ -156,7 +156,7 @@ namespace Cuemon.Data.Entity
         /// <param name="inserter">The function delegate that performs an insert operation on a data source.</param>
         public void ParseInsertStatement(Doer<IDataCommand, QueryInsertAction, IDataParameter[], object> inserter)
         {
-            Validator.ThrowIfNull(inserter, "inserter");
+            Validator.ThrowIfNull(inserter, nameof(inserter));
             IDictionary<Type, ColumnAttribute> persistedTypes = new Dictionary<Type, ColumnAttribute>();
             foreach (Type chainedType in this.GetInheritanceChain())
             {
@@ -212,7 +212,7 @@ namespace Cuemon.Data.Entity
         /// <param name="selector">The function delegate that performs a select operation on a data source.</param>
         public void ParseSelectStatement(Doer<IDataCommand, IDataParameter[], IDataReader> selector)
         {
-            Validator.ThrowIfNull(selector, "selector");
+            Validator.ThrowIfNull(selector, nameof(selector));
             foreach (Type chainedType in this.GetInheritanceChain())
             {
                 DataMapper mapper = new DataMapper(chainedType);
@@ -223,7 +223,7 @@ namespace Cuemon.Data.Entity
                     if (reader.Read())
                     {
                         this.Source.HasValue = true;
-                        InvokeBusinessEntityFromRepository(DictionaryUtility.ToDictionary<string, object>(DataManager.GetReaderColumns(reader)), this.Source, chainedType, mapper.Columns);
+                        InvokeBusinessEntityFromRepository(DictionaryConverter.FromEnumerable<string, object>(DataManager.GetReaderColumns(reader)), this.Source, chainedType, mapper.Columns);
                     }
                     else if (this.Source.DataAdapter.Settings.EnableThrowOnNoRowsReturned)
                     {
@@ -247,7 +247,7 @@ namespace Cuemon.Data.Entity
         /// <param name="manySelector">The function delegate that performs a select operation on a data source.</param>
         public void ParseSelectManyStatement<T>(Doer<IDataCommand, IDataParameter[], IDataReader> manySelector) where T : Entity
         {
-            Validator.ThrowIfNull(manySelector, "manySelector");
+            Validator.ThrowIfNull(manySelector, nameof(manySelector));
             Type entitiesEntityType = typeof(T);
             foreach (Type chainedType in this.GetInheritanceChain())
             {
@@ -287,7 +287,7 @@ namespace Cuemon.Data.Entity
                             foreach (KeyValuePair<int, SortedList<int, object>> item in primaryKeyValues)
                             {
                                 this.Source.HasValue = true;
-                                Entity resolvedEntity = BusinessEntityUtility.CreateDescendantOrSelfEntity<Entity>(entitiesEntityType, this.Source.DataAdapter, EnumerableUtility.ToArray(item.Value.Values));
+                                Entity resolvedEntity = BusinessEntityUtility.CreateDescendantOrSelfEntity<Entity>(entitiesEntityType, this.Source.DataAdapter, EnumerableConverter.ToArray(item.Value.Values));
                                 this.InvokeEntitiesAdd(chainedType, entitiesEntityType, resolvedEntity);
                             }
                         }
@@ -309,7 +309,7 @@ namespace Cuemon.Data.Entity
             List<IDataParameter> parameters = new List<IDataParameter>();
             parameters.Add(this.Source.DataAdapter.GetDataParameter(column, uniqueValue));
             IEnumerable<ColumnAttribute> entityColumns = this.Source.GetDataMappedColumns(entityType);
-            ColumnAttribute[] primaryKeyEntityColumns = EnumerableUtility.ToArray(MappingUtility.GetPrimaryKeyColumns(entityColumns));
+            ColumnAttribute[] primaryKeyEntityColumns = EnumerableConverter.ToArray(MappingUtility.GetPrimaryKeyColumns(entityColumns));
 
             StringBuilder whereClause = new StringBuilder("AND NOT (");
             byte i = 1;
@@ -354,8 +354,8 @@ namespace Cuemon.Data.Entity
         /// <returns>An array of <see cref="IDataParameter"/> compatible objects.</returns>
         protected virtual IDataParameter[] GetDataParametersForObjectRanking(Entity entity, IEnumerable<ColumnAttribute> columns)
         {
-            if (columns == null) { throw new ArgumentNullException("columns"); }
-            if (entity == null) { throw new ArgumentNullException("entity"); }
+            if (columns == null) { throw new ArgumentNullException(nameof(columns)); }
+            if (entity == null) { throw new ArgumentNullException(nameof(entity)); }
             List<IDataParameter> parameters = new List<IDataParameter>();
             Type entityType = entity.GetType();
             foreach (ColumnAttribute column in columns)
@@ -379,7 +379,7 @@ namespace Cuemon.Data.Entity
                 int primaryKeyIndex = 0;
                 foreach (ColumnAttribute column in primaryKeyColumns)
                 {
-                    object matchingColumn = DictionaryUtility.FirstMatchOrDefault(DictionaryUtility.ToDictionary(DataManager.GetReaderColumns(reader)), column.Name, column.NameAlias);
+                    object matchingColumn = DictionaryUtility.FirstMatchOrDefault(DictionaryConverter.FromEnumerable(DataManager.GetReaderColumns(reader)), column.Name, column.NameAlias);
                     if (matchingColumn == null) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Unable to find a matching column from {0} (or alias {1}) mapped to storage field {2}.", column.Name ?? "null", column.NameAlias ?? "null", column.ResolveStorage() ?? "null"), argName); }
                     if (!primaryKeyValues.ContainsKey(index))
                     {
@@ -401,7 +401,7 @@ namespace Cuemon.Data.Entity
                             break;
                         }
                     }
-                    primaryKeyValues[index].Add(matchingPrimaryKeyIndex, ConvertUtility.ChangeType(matchingColumn, matchingColumnFieldType));
+                    primaryKeyValues[index].Add(matchingPrimaryKeyIndex, ObjectConverter.ChangeType(matchingColumn, matchingColumnFieldType));
                     #endregion
                     primaryKeyIndex++;
                 }
@@ -430,8 +430,8 @@ namespace Cuemon.Data.Entity
         /// <returns>The <see cref="Type"/> to fill a <see cref="BusinessEntityCollection{T}"/> with.</returns>
         protected static Type ParseEntityTypeForOpenList(Entity entity, Type entitiesType)
         {
-            if (entity == null) { throw new ArgumentNullException("entity"); }
-            if (entitiesType == null) { throw new ArgumentNullException("entitiesType"); }
+            if (entity == null) { throw new ArgumentNullException(nameof(entity)); }
+            if (entitiesType == null) { throw new ArgumentNullException(nameof(entitiesType)); }
             MethodInfo entitiesMethod = entitiesType.GetMethod("GetEntityType");
             return (Type)entitiesMethod.Invoke(entity, null); // get the generic element from the entities object, eg.: BusinessEntityCollection<T>, where T equals the element type ;)
         }
@@ -441,7 +441,7 @@ namespace Cuemon.Data.Entity
             foreach (ColumnAttribute column in attributes)
             {
                 object matchingColumn = DictionaryUtility.FirstMatchOrDefault(columns, column.Name, column.NameAlias);
-                if (matchingColumn == null) { throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "Unable to find a matching column from {0} (or alias {1}) mapped to storage field {2}.", column.Name ?? "null", column.NameAlias ?? "null", column.ResolveStorage() ?? "null"), "columns"); }
+                if (matchingColumn == null) { throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "Unable to find a matching column from {0} (or alias {1}) mapped to storage field {2}.", column.Name ?? "null", column.NameAlias ?? "null", column.ResolveStorage() ?? "null"), nameof(columns)); }
                 object value = matchingColumn == DBNull.Value ? null : matchingColumn;
                 SetStorageValue(entity, entityType, column.ResolveStorage(), value);
             }
@@ -469,7 +469,7 @@ namespace Cuemon.Data.Entity
 
         private static Type ValidateEntity(Entity entity)
         {
-            Validator.ThrowIfNull(entity, "entity");
+            Validator.ThrowIfNull(entity, nameof(entity));
             return entity.GetType();
         }
 
@@ -481,8 +481,8 @@ namespace Cuemon.Data.Entity
         /// <returns>An array of <see cref="IDataParameter"/> compatible objects.</returns>
         protected IDataParameter[] GetDataParameters(Type entityType, IEnumerable<ColumnAttribute> columns)
         {
-            Validator.ThrowIfNull(entityType, "entityType");
-            Validator.ThrowIfNull(columns, "columns");
+            Validator.ThrowIfNull(entityType, nameof(entityType));
+            Validator.ThrowIfNull(columns, nameof(columns));
             List<IDataParameter> parameters = new List<IDataParameter>();
             foreach (ColumnAttribute column in columns)
             {
@@ -529,7 +529,7 @@ namespace Cuemon.Data.Entity
                             if (properties.Count == 0)
                             {
                                 Type fieldType = fieldInfo.FieldType;
-                                fieldInfo.SetValue(entity, value == null ? null : ConvertUtility.ChangeType(value, fieldType));
+                                fieldInfo.SetValue(entity, value == null ? null : ObjectConverter.ChangeType(value, fieldType));
                             }
                             else
                             {

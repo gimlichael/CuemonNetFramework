@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Cuemon.Caching;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Globalization
 {
@@ -31,9 +31,9 @@ namespace Cuemon.Globalization
         /// <exception cref="System.ArgumentException">The specified <paramref name="culture"/> is either an invariant, custom, or neutral culture.</exception>
         public CulturalRegion(CultureInfo culture)
         {
-            Validator.ThrowIfNull(culture, "culture");
+            Validator.ThrowIfNull(culture, nameof(culture));
             if (culture.IsNeutralCulture ||
-                culture.LCID == 127) { throw new ArgumentException("The specified culture is either an invariant, custom, or neutral culture.", "culture"); }
+                culture.LCID == 127) { throw new ArgumentException("The specified culture is either an invariant, custom, or neutral culture.", nameof(culture)); }
             this.Region = new RegionInfo(culture.LCID);
         }
         #endregion

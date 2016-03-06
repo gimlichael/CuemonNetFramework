@@ -15,7 +15,7 @@ namespace Cuemon
         /// <param name="x">The first value to add.</param>
         /// <param name="y">The second value to add.</param>
         /// <returns>The sum of <paramref name="x"/> and <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -34,7 +34,7 @@ namespace Cuemon
         /// <param name="x">The first value to AND.</param>
         /// <param name="y">The second value to AND.</param>
         /// <returns>The result of <paramref name="x"/> AND <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -50,7 +50,7 @@ namespace Cuemon
         /// <param name="x">The left-hand operand.</param>
         /// <param name="y">The right-hand operand.</param>
         /// <returns>The value of <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -66,7 +66,7 @@ namespace Cuemon
         /// <param name="x">The dividend.</param>
         /// <param name="y">The divisor.</param>
         /// <returns>The result of dividing <paramref name="x"/> by <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -88,7 +88,7 @@ namespace Cuemon
         /// <param name="x">The first value to XOR.</param>
         /// <param name="y">The second value to XOR.</param>
         /// <returns>The result of <paramref name="x"/> XOR <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -104,7 +104,7 @@ namespace Cuemon
         /// <param name="x">The bit pattern to be shifted.</param>
         /// <param name="y">The number of bits to shift the bit pattern.</param>
         /// <returns>The result of shifting the bit pattern.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="SByte"/>, <see cref="UInt16"/>.
         /// </exception>
@@ -120,7 +120,7 @@ namespace Cuemon
         /// <param name="x">The multiplicand.</param>
         /// <param name="y">The multiplier.</param>
         /// <returns>The result of multiplying <paramref name="x"/> and <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -139,7 +139,7 @@ namespace Cuemon
         /// <param name="x">The first value to OR.</param>
         /// <param name="y">The second value to OR.</param>
         /// <returns>The result of <paramref name="x"/> OR <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -155,7 +155,7 @@ namespace Cuemon
         /// <param name="x">The dividend.</param>
         /// <param name="y">The divisor.</param>
         /// <returns>The remainder after dividing <paramref name="x"/> by <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -177,7 +177,7 @@ namespace Cuemon
         /// <param name="x">The bit pattern to be shifted.</param>
         /// <param name="y">The number of bits to shift the bit pattern.</param>
         /// <returns>The result of shifting the bit pattern.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="SByte"/>, <see cref="UInt16"/>.
         /// </exception>
@@ -193,7 +193,7 @@ namespace Cuemon
         /// <param name="x">The minuend.</param>
         /// <param name="y">The subtrahend.</param>
         /// <returns>The result of subtracting <paramref name="y"/> from <paramref name="x"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -213,7 +213,7 @@ namespace Cuemon
         /// <param name="assignment">One of the enumeration values that specifies the rules to apply for the assignment operator of <paramref name="x"/> and <paramref name="y"/>.</param>
         /// <param name="y">The value to calculate with <paramref name="x"/>.</param>
         /// <returns>The result of the <paramref name="assignment"/> for <paramref name="x"/> and <paramref name="y"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="T"/> is outside the range of allowed types.<br/>
         /// Allowed types are: <see cref="Byte"/>, <see cref="Decimal"/>, <see cref="Double"/>, <see cref="Int16"/>, <see cref="Int32"/>, <see cref="Int64"/>, <see cref="SByte"/>, <see cref="Single"/>, <see cref="UInt16"/>, <see cref="UInt32"/> or <see cref="UInt64"/>.
         /// </exception>
@@ -244,7 +244,7 @@ namespace Cuemon
                 case AssignmentOperator.Subtraction:
                     return Subtract(x, y);
                 default:
-                    throw new ArgumentOutOfRangeException("assignment");
+                    throw new ArgumentOutOfRangeException(nameof(assignment));
             }
         }
 
@@ -259,312 +259,312 @@ namespace Cuemon
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) + y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) + y.ToByte(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) & y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) & y.ToByte(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) / y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) / y.ToByte(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) ^ y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) ^ y.ToByte(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) << y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) << y.ToByte(provider), assignmentType);
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) * y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) * y.ToByte(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) | y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) | y.ToByte(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) % y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) % y.ToByte(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) >> y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) >> y.ToByte(provider), assignmentType);
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToByte(provider) - y.ToByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToByte(provider) - y.ToByte(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.Decimal:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToDecimal(provider) + y.ToDecimal(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDecimal(provider) + y.ToDecimal(provider), assignmentType);
                         case AssignmentOperator.And:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x &= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x &= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToDecimal(provider) / y.ToDecimal(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDecimal(provider) / y.ToDecimal(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x ^= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x ^= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.LeftShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToDecimal(provider) * y.ToDecimal(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDecimal(provider) * y.ToDecimal(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x |= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x |= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToDecimal(provider) % y.ToDecimal(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDecimal(provider) % y.ToDecimal(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToDecimal(provider) - y.ToDecimal(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDecimal(provider) - y.ToDecimal(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.Double:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToDouble(provider) + y.ToDouble(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDouble(provider) + y.ToDouble(provider), assignmentType);
                         case AssignmentOperator.And:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x &= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x &= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToDouble(provider) / y.ToDouble(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDouble(provider) / y.ToDouble(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x ^= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x ^= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.LeftShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToDouble(provider) * y.ToDouble(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDouble(provider) * y.ToDouble(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x |= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x |= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToDouble(provider) % y.ToDouble(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDouble(provider) % y.ToDouble(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToDouble(provider) - y.ToDouble(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToDouble(provider) - y.ToDouble(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.Int16:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) + y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) + y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) & y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) & y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) / y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) / y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) ^ y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) ^ y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) << y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) << y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) * y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) * y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) | y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) | y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) % y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) % y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) >> y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) >> y.ToInt16(provider), assignmentType);
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToInt16(provider) - y.ToInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt16(provider) - y.ToInt16(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.Int32:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) + y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) + y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) & y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) & y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) / y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) / y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) ^ y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) ^ y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) << y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) << y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) * y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) * y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) | y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) | y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) % y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) % y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) >> y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) >> y.ToInt32(provider), assignmentType);
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToInt32(provider) - y.ToInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt32(provider) - y.ToInt32(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.Int64:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) + y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) + y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) & y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) & y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) / y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) / y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) ^ y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) ^ y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) * y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) * y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) | y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) | y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) % y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) % y.ToInt64(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToInt64(provider) - y.ToInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToInt64(provider) - y.ToInt64(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.SByte:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) + y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) + y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) & y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) & y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) / y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) / y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) ^ y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) ^ y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) << y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) << y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) * y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) * y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) | y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) | y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) % y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) % y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) >> y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) >> y.ToSByte(provider), assignmentType);
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToSByte(provider) - y.ToSByte(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSByte(provider) - y.ToSByte(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.Single:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToSingle(provider) + y.ToSingle(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSingle(provider) + y.ToSingle(provider), assignmentType);
                         case AssignmentOperator.And:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x &= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x &= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToSingle(provider) / y.ToSingle(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSingle(provider) / y.ToSingle(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x ^= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x ^= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.LeftShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToSingle(provider) * y.ToSingle(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSingle(provider) * y.ToSingle(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x |= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x |= y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToSingle(provider) % y.ToSingle(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSingle(provider) % y.ToSingle(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToSingle(provider) - y.ToSingle(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToSingle(provider) - y.ToSingle(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.UInt16:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) + y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) + y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) & y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) & y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) / y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) / y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) ^ y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) ^ y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) << y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) << y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) * y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) * y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) | y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) | y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) % y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) % y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) >> y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) >> y.ToUInt16(provider), assignmentType);
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt16(provider) - y.ToUInt16(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt16(provider) - y.ToUInt16(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.UInt32:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) + y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) + y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) & y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) & y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) / y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) / y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) ^ y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) ^ y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) * y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) * y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) | y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) | y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) % y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) % y.ToUInt32(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt32(provider) - y.ToUInt32(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt32(provider) - y.ToUInt32(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 case TypeCode.UInt64:
                     switch (assignment)
                     {
                         case AssignmentOperator.Addition:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) + y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) + y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.And:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) & y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) & y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.Assign:
                             return y;
                         case AssignmentOperator.Division:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) / y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) / y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.ExclusiveOr:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) ^ y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) ^ y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.LeftShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x << y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Multiplication:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) * y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) * y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.Or:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) | y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) | y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.Remainder:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) % y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) % y.ToUInt64(provider), assignmentType);
                         case AssignmentOperator.RightShift:
-                            throw new ArgumentOutOfRangeException("assignment", string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
+                            throw new ArgumentOutOfRangeException(nameof(assignment), string.Format(CultureInfo.InvariantCulture, "Cannot apply assignment operator '{0}' (x >> y) to operands of type '{1}'.", Enum.GetName(typeof(AssignmentOperator), assignment), assignmentType.Name));
                         case AssignmentOperator.Subtraction:
-                            return (T) ConvertUtility.ChangeType(x.ToUInt64(provider) - y.ToUInt64(provider), assignmentType);
+                            return (T)ObjectConverter.ChangeType(x.ToUInt64(provider) - y.ToUInt64(provider), assignmentType);
                         default:
-                            throw new ArgumentOutOfRangeException("assignment");
+                            throw new ArgumentOutOfRangeException(nameof(assignment));
                     }
                 default:
-                    throw new ArgumentOutOfRangeException("T", string.Format(CultureInfo.InvariantCulture, "T appears to contain an invalid type. Expected type is numeric and must be one of the following: Byte, Decimal, Double, Int16, Int32, Int64, SByte, Single, UInt16, UInt32 or UInt64. Actually type was {0}.", assignmentType.Name));
+                    throw new TypeArgumentException("T", string.Format(CultureInfo.InvariantCulture, "T appears to contain an invalid type. Expected type is numeric and must be one of the following: Byte, Decimal, Double, Int16, Int32, Int64, SByte, Single, UInt16, UInt32 or UInt64. Actually type was {0}.", assignmentType.Name));
             }
         }
 
@@ -595,7 +595,7 @@ namespace Cuemon
                 case TypeCode.UInt64:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("T", string.Format(CultureInfo.InvariantCulture, "T appears to contain an invalid type. Expected type is numeric and must be one of the following: Byte, Decimal, Double, Int16, Int32, Int64, SByte, Single, UInt16, UInt32 or UInt64. Actually type was {0}.", valueType.Name));
+                    throw new TypeArgumentOutOfRangeException("T", string.Format(CultureInfo.InvariantCulture, "T appears to contain an invalid type. Expected type is numeric and must be one of the following: Byte, Decimal, Double, Int16, Int32, Int64, SByte, Single, UInt16, UInt32 or UInt64. Actually type was {0}.", valueType.Name));
             }
         }
     }

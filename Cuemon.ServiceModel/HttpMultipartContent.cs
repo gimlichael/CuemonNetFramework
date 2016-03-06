@@ -13,10 +13,10 @@ namespace Cuemon.ServiceModel
     {
         internal HttpMultipartContent(string name, string fileName, ContentType mimeType, Stream data)
         {
-            this.Name = name;
-            this.FileName = fileName;
-            this.MimeType = mimeType;
-            this.Data = ConvertUtility.ToByteArray(data);
+            Name = name;
+            FileName = fileName;
+            MimeType = mimeType;
+            Data = ByteConverter.FromStream(data);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Cuemon.ServiceModel
         /// <value><c>true</c> if this <see cref="HttpMultipartContent"/> suggest a file; otherwise, <c>false</c>.</value>
         public bool IsFile
         {
-            get { return !this.IsFormItem; }
+            get { return !IsFormItem; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Cuemon.ServiceModel
         /// <value><c>true</c> if this <see cref="HttpMultipartContent"/> suggest a form item; otherwise, <c>false</c>.</value>
         public bool IsFormItem
         {
-            get { return string.IsNullOrEmpty(this.FileName); }
+            get { return string.IsNullOrEmpty(FileName); }
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Cuemon.ServiceModel
         /// <returns>An instance of a <see cref="HttpMultipartFile"/> object.</returns>
         public HttpMultipartFile GetPartAsFile()
         {
-            return new HttpMultipartFile(this.FileName, this.MimeType, new MemoryStream(this.Data));
+            return new HttpMultipartFile(FileName, MimeType, new MemoryStream(Data));
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace Cuemon.ServiceModel
         /// </exception>
         public string GetPartAsString(Encoding encoding)
         {
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
-            return this.Data.Length > 0 ? encoding.GetString(this.Data) : string.Empty;
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
+            return Data.Length > 0 ? encoding.GetString(Data) : string.Empty;
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace Cuemon.ServiceModel
         /// </exception>
         public static IEnumerable<HttpMultipartContent> Parse(Stream entityBody, int length, string boundary, Encoding encoding)
         {
-            if (entityBody == null) { throw new ArgumentNullException("entityBody"); }
-            if (boundary == null) { throw new ArgumentNullException("boundary"); }
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
+            if (entityBody == null) { throw new ArgumentNullException(nameof(entityBody)); }
+            if (boundary == null) { throw new ArgumentNullException(nameof(boundary)); }
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
 
             HttpMultipartContentParser parser = new HttpMultipartContentParser(entityBody, length, boundary, encoding);
             return parser.ToEnumerable();
@@ -118,9 +118,9 @@ namespace Cuemon.ServiceModel
         /// </exception>
         public static IEnumerable<HttpMultipartContent> Parse(Stream entityBody, int length, byte[] boundary, Encoding encoding)
         {
-            if (entityBody == null) { throw new ArgumentNullException("entityBody"); }
-            if (boundary == null) { throw new ArgumentNullException("boundary"); }
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
+            if (entityBody == null) { throw new ArgumentNullException(nameof(entityBody)); }
+            if (boundary == null) { throw new ArgumentNullException(nameof(boundary)); }
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
 
             HttpMultipartContentParser parser = new HttpMultipartContentParser(entityBody, length, boundary, encoding);
             return parser.ToEnumerable();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using Cuemon.Diagnostics;
+using Cuemon.IO;
 
 namespace Cuemon.Xml.Diagnostics
 {
@@ -61,7 +62,7 @@ namespace Cuemon.Xml.Diagnostics
         /// <param name="computerName">The name of the computer to associate the <paramref name="exception"/> with.</param>
         public override void WriteEntry(Exception exception, LogEntrySeverity severity, string computerName)
         {
-            if (exception == null) throw new ArgumentNullException("exception");
+            if (exception == null) throw new ArgumentNullException(nameof(exception));
             MemoryStream output = null;
             try
             {
@@ -71,11 +72,11 @@ namespace Cuemon.Xml.Diagnostics
                     writer.WriteRaw(XmlConvertUtility.ToXmlElement(exception, this.Encoding, true).OuterXml);
                     writer.Flush();
                     output.Position = 0;
-                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, ConvertUtility.ToString(output, PreambleSequence.Remove, this.Encoding, true), severity, computerName);
+                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, PreambleSequence.Remove, this.Encoding, true), severity, computerName);
                     output = null;
                 }
             }
-            finally 
+            finally
             {
                 if (output != null) { output.Dispose(); }
             }
@@ -102,7 +103,7 @@ namespace Cuemon.Xml.Diagnostics
                     foreach (LogEntry entry in this.Entries)
                     {
                         writer.WriteStartElement("Entry");
-                        writer.WriteAttributeString("created", StringUtility.FormatDateTime(entry.Created, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeExtended));
+                        writer.WriteAttributeString("created", StringFormatter.FromDateTime(entry.Created, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeExtended));
                         writer.WriteElementString("Computer", entry.ComputerName);
                         writer.WriteElementString("Severity", entry.Severity.ToString());
                         writer.WriteElementString("Title", entry.Title);
@@ -118,7 +119,7 @@ namespace Cuemon.Xml.Diagnostics
                     tempOutput = null;
                 }
             }
-            finally 
+            finally
             {
                 if (tempOutput != null) { tempOutput.Dispose(); }
             }

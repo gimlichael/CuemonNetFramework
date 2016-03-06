@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Web;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 
 namespace Cuemon.Web
 {
@@ -39,7 +39,7 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         protected virtual void HandleTokenParsingUrlRouting(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (!IsHtmlRelatedContent(context)) { return; }
             string rawUrl = context.Request.RawUrl;
             Match match = CompiledMd5PatternExpression.Match(rawUrl);
@@ -81,7 +81,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET starts executing an event handler.</remarks>
         protected override void OnPreRequestHandlerExecute(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET sends HTTP headers to the client.</remarks>
         protected override void OnPreSendRequestHeaders(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (EnableDynamicClientCaching)
             {
                 if (!HttpRequestUtility.IsStandaloneServerLocal(context.Request))

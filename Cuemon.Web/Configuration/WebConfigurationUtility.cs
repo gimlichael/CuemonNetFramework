@@ -5,8 +5,8 @@ using System.Security.Principal;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Xml.XPath;
-using Cuemon.Caching;
 using Cuemon.IO;
+using Cuemon.Runtime.Caching;
 using Cuemon.Security.Cryptography;
 using Cuemon.Xml.XPath;
 
@@ -47,7 +47,7 @@ namespace Cuemon.Web.Configuration
         /// </exception>
         public static IXPathNavigable OpenWebConfiguration(string path, Doer<WindowsIdentity> identityResolver)
         {
-            Validator.ThrowIfNullOrEmpty(path, "path");
+            Validator.ThrowIfNullOrEmpty(path, nameof(path));
             return Infrastructure.InvokeWitImpersonationContextOrDefault(identityResolver, OpenWebConfigurationCore, path);
         }
 
@@ -98,7 +98,7 @@ namespace Cuemon.Web.Configuration
         /// <returns>A sequence of <see cref="HttpHandlerAction"/> elements.</returns>
         public static IEnumerable<HttpHandlerAction> GetSystemHandlers(string path, Doer<WindowsIdentity> identityResolver)
         {
-            Validator.ThrowIfNullOrEmpty(path, "path");
+            Validator.ThrowIfNullOrEmpty(path, nameof(path));
             return Infrastructure.InvokeWitImpersonationContextOrDefault(identityResolver, GetSystemHandlersCore, path);
         }
 
@@ -173,11 +173,11 @@ namespace Cuemon.Web.Configuration
         /// </exception>
         public static IEnumerable<HttpHandlerAction> GetHandlers(IXPathNavigable webConfiguration)
         {
-            if (webConfiguration == null) { throw new ArgumentNullException("webConfiguration"); }
+            if (webConfiguration == null) { throw new ArgumentNullException(nameof(webConfiguration)); }
 
             XPathNavigator navigator = webConfiguration.CreateNavigator();
             XPathNavigator root = navigator.SelectSingleNode("/configuration");
-            if (root == null) { throw new ArgumentException("The content of the provided IXPathNavigable does not appear to be from a web.config file.", "webConfiguration"); }
+            if (root == null) { throw new ArgumentException("The content of the provided IXPathNavigable does not appear to be from a web.config file.", nameof(webConfiguration)); }
             XPathNodeIterator handlers = navigator.Select("configuration/system.webServer/handlers/add|configuration/system.web/httpHandlers/add"); // IIS7+ | IIS6
             List<int> hashes = new List<int>();
             while (handlers.MoveNext())
@@ -219,7 +219,7 @@ namespace Cuemon.Web.Configuration
         /// </exception>
         public static HttpHandlerAction GetHandler<T>(IXPathNavigable webConfiguration)
         {
-            if (webConfiguration == null) { throw new ArgumentNullException("webConfiguration"); }
+            if (webConfiguration == null) { throw new ArgumentNullException(nameof(webConfiguration)); }
             Type handlerType = typeof(T);
             IEnumerable<HttpHandlerAction> handlers = GetHandlers(webConfiguration);
             foreach (HttpHandlerAction handler in handlers)

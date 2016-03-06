@@ -29,7 +29,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="partitionSize">The number of elements a partition can hold.</param>
         public PartitionCollection(IEnumerable<T> source, int partitionSize)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             this.Source = source;
             this.Count = EnumerableUtility.Count(source);
             this.PartitionSize = partitionSize;
@@ -71,8 +71,8 @@ namespace Cuemon.Collections.Generic
         /// <returns>The total amount of partitions for the elements in this sequence.</returns>
         public int PartitionCount()
         {
-            double presult = this.Count / ConvertUtility.As<double>(this.PartitionSize);
-            return ConvertUtility.As<int>(Math.Ceiling(presult));
+            double presult = this.Count / Converter.FromObject<double>(this.PartitionSize);
+            return Converter.FromObject<int>(Math.Ceiling(presult));
         }
 
         /// <summary>

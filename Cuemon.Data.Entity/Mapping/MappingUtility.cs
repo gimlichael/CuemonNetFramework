@@ -7,61 +7,61 @@ using Cuemon.Reflection;
 
 namespace Cuemon.Data.Entity.Mapping
 {
-	/// <summary>
-	/// This utility class is designed to make data mapping related operations easier to work with.
-	/// </summary>
-	public static class MappingUtility
-	{
-		/// <summary>
-		/// A predicate for excluding columns having a DB-generated value definition.
-		/// </summary>
-		/// <param name="column">The column to check upon.</param>
-		/// <returns>true if the column is not marked as a DB-generated value; otherwise false.</returns>
-		public static bool ExcludeOnlyDbGeneratedColumns(ColumnAttribute column)
-		{
-			if (column == null) throw new ArgumentNullException("column");
-			if (!column.IsDBGenerated) { return true; }
-			return false;
-		}
+    /// <summary>
+    /// This utility class is designed to make data mapping related operations easier to work with.
+    /// </summary>
+    public static class MappingUtility
+    {
+        /// <summary>
+        /// A predicate for excluding columns having a DB-generated value definition.
+        /// </summary>
+        /// <param name="column">The column to check upon.</param>
+        /// <returns>true if the column is not marked as a DB-generated value; otherwise false.</returns>
+        public static bool ExcludeOnlyDbGeneratedColumns(ColumnAttribute column)
+        {
+            if (column == null) throw new ArgumentNullException(nameof(column));
+            if (!column.IsDBGenerated) { return true; }
+            return false;
+        }
 
-		/// <summary>
-		/// A predicate for excluding columns having a primary key definition.
-		/// </summary>
-		/// <param name="column">The column to check upon.</param>
-		/// <returns>true if the column is not marked as a primary key; otherwise false.</returns>
-		public static bool ExcludeOnlyPrimaryKeyColumns(ColumnAttribute column)
-		{
-			if (!IncludeOnlyPrimaryKeyColumns(column))
-			{
-				return true;
-			}
-			return false;
-		}
+        /// <summary>
+        /// A predicate for excluding columns having a primary key definition.
+        /// </summary>
+        /// <param name="column">The column to check upon.</param>
+        /// <returns>true if the column is not marked as a primary key; otherwise false.</returns>
+        public static bool ExcludeOnlyPrimaryKeyColumns(ColumnAttribute column)
+        {
+            if (!IncludeOnlyPrimaryKeyColumns(column))
+            {
+                return true;
+            }
+            return false;
+        }
 
-		/// <summary>
-		/// A predicate for including only columns having a primary key definition.
-		/// </summary>
-		/// <param name="column">The column to check upon.</param>
-		/// <returns>true if the column is marked as a primary key; otherwise false.</returns>
-		public static bool IncludeOnlyPrimaryKeyColumns(ColumnAttribute column)
-		{
-			if (column == null) { throw new ArgumentNullException("column"); }
-			if (column.IsPrimaryKey) { return true; }
-			return false;
-		}
+        /// <summary>
+        /// A predicate for including only columns having a primary key definition.
+        /// </summary>
+        /// <param name="column">The column to check upon.</param>
+        /// <returns>true if the column is marked as a primary key; otherwise false.</returns>
+        public static bool IncludeOnlyPrimaryKeyColumns(ColumnAttribute column)
+        {
+            if (column == null) { throw new ArgumentNullException(nameof(column)); }
+            if (column.IsPrimaryKey) { return true; }
+            return false;
+        }
 
-		/// <summary>
-		/// A predicate for including only columns having a foreign key definition.
-		/// </summary>
-		/// <param name="column">The column to check upon.</param>
-		/// <returns>true if the column is marked as a foreign key; otherwise false.</returns>
-		public static bool IncludeOnlyForeignKeyColumns(ColumnAttribute column)
-		{
-			if (column == null) { throw new ArgumentNullException("column"); }
-			AssociationAttribute associationColumn = column as AssociationAttribute;
-			if (associationColumn != null) { return associationColumn.IsForeignKey; }
-			return false;
-		}
+        /// <summary>
+        /// A predicate for including only columns having a foreign key definition.
+        /// </summary>
+        /// <param name="column">The column to check upon.</param>
+        /// <returns>true if the column is marked as a foreign key; otherwise false.</returns>
+        public static bool IncludeOnlyForeignKeyColumns(ColumnAttribute column)
+        {
+            if (column == null) { throw new ArgumentNullException(nameof(column)); }
+            AssociationAttribute associationColumn = column as AssociationAttribute;
+            if (associationColumn != null) { return associationColumn.IsForeignKey; }
+            return false;
+        }
 
         /// <summary>
         /// Infrastructure. Gets the data mapped entities associations from the specified <paramref name="entity"/>.
@@ -69,81 +69,81 @@ namespace Cuemon.Data.Entity.Mapping
         /// <param name="entity">The entity to traverse for <see cref="AssociationAttribute"/> decorations.</param>
         /// <returns>A dictionary with the data mapped entities associations.</returns>
         public static IDictionary<Type, AssociationAttribute[]> GetDataMappedEntitiesAssociations(Entity entity)
-	    {
-            if (entity == null) { throw new ArgumentNullException("entity"); }
+        {
+            if (entity == null) { throw new ArgumentNullException(nameof(entity)); }
 
             Type entityType = entity.GetType();
             Dictionary<Type, AssociationAttribute[]> dataMappedEntitiesAssociations = new Dictionary<Type, AssociationAttribute[]>();
             List<AssociationAttribute> associations = new List<AssociationAttribute>();
-	        foreach (Type chainedType in BusinessEntityUtility.GetDataMappedEntities(entityType))
-	        {
-	            foreach (ColumnAttribute column in entity.GetDataMappedColumns(chainedType))
-	            {
-	                AssociationAttribute associationColumn = column as AssociationAttribute;
+            foreach (Type chainedType in BusinessEntityUtility.GetDataMappedEntities(entityType))
+            {
+                foreach (ColumnAttribute column in entity.GetDataMappedColumns(chainedType))
+                {
+                    AssociationAttribute associationColumn = column as AssociationAttribute;
                     if (associationColumn == null) { continue; }
                     associations.Add(associationColumn);
-	            }
+                }
                 dataMappedEntitiesAssociations.Add(chainedType, associations.ToArray());
                 associations.Clear();
-	        }
+            }
             return dataMappedEntitiesAssociations;
-	    }
+        }
 
-		/// <summary>
-		/// Infrastructure. Gets the data mapped entities associations.
-		/// </summary>
-		/// <param name="dataMappedEntitiesColumns">The data mapped entities columns to search for associations.</param>
-		/// <returns>A dictionary with the data mapped entities associations.</returns>
-		public static IDictionary<Type, AssociationAttribute[]> GetDataMappedEntitiesAssociations(IDictionary<Type, ColumnAttribute[]> dataMappedEntitiesColumns)
-		{
-			if (dataMappedEntitiesColumns == null) throw new ArgumentNullException("dataMappedEntitiesColumns");
-			Dictionary<Type, AssociationAttribute[]> dataMappedEntitiesAssociations = new Dictionary<Type, AssociationAttribute[]>();
-			List<AssociationAttribute> associations = new List<AssociationAttribute>();
-			foreach (KeyValuePair<Type, ColumnAttribute[]> entityValuePair in dataMappedEntitiesColumns)
-			{
-				foreach (ColumnAttribute column in entityValuePair.Value)
-				{
-					if (column.GetType() != typeof(AssociationAttribute)) { continue; }
-					associations.Add((AssociationAttribute)column);
-				}
-				dataMappedEntitiesAssociations.Add(entityValuePair.Key, associations.ToArray());
-				associations.Clear();
-			}
-			return dataMappedEntitiesAssociations;
-		}
+        /// <summary>
+        /// Infrastructure. Gets the data mapped entities associations.
+        /// </summary>
+        /// <param name="dataMappedEntitiesColumns">The data mapped entities columns to search for associations.</param>
+        /// <returns>A dictionary with the data mapped entities associations.</returns>
+        public static IDictionary<Type, AssociationAttribute[]> GetDataMappedEntitiesAssociations(IDictionary<Type, ColumnAttribute[]> dataMappedEntitiesColumns)
+        {
+            if (dataMappedEntitiesColumns == null) throw new ArgumentNullException(nameof(dataMappedEntitiesColumns));
+            Dictionary<Type, AssociationAttribute[]> dataMappedEntitiesAssociations = new Dictionary<Type, AssociationAttribute[]>();
+            List<AssociationAttribute> associations = new List<AssociationAttribute>();
+            foreach (KeyValuePair<Type, ColumnAttribute[]> entityValuePair in dataMappedEntitiesColumns)
+            {
+                foreach (ColumnAttribute column in entityValuePair.Value)
+                {
+                    if (column.GetType() != typeof(AssociationAttribute)) { continue; }
+                    associations.Add((AssociationAttribute)column);
+                }
+                dataMappedEntitiesAssociations.Add(entityValuePair.Key, associations.ToArray());
+                associations.Clear();
+            }
+            return dataMappedEntitiesAssociations;
+        }
 
-		/// <summary>
-		/// Infrastructure. This method will parse the provided field name and resolve possible property names (separated by dots, eg. _myField.MyProperty) as well as the actual field name.
-		/// </summary>
-		/// <param name="fieldName">The resolved field name from the original value of this parameter.</param>
-		/// <param name="propertyNames">The resolved property names from the field name parameter; otherwise empty.</param>
-		/// <returns>
-		/// 	<c>true</c> if property names are assumed part of the field name; otherwise, <c>false</c>.
-		/// </returns>
+        /// <summary>
+        /// Infrastructure. This method will parse the provided field name and resolve possible property names (separated by dots, eg. _myField.MyProperty) as well as the actual field name.
+        /// </summary>
+        /// <param name="fieldName">The resolved field name from the original value of this parameter.</param>
+        /// <param name="propertyNames">The resolved property names from the field name parameter; otherwise empty.</param>
+        /// <returns>
+        /// 	<c>true</c> if property names are assumed part of the field name; otherwise, <c>false</c>.
+        /// </returns>
         [Obsolete("This method has been deprecated. Please use ParseStorageField(string fieldName, Type storageType, out IReadOnlyCollection<PropertyInfo> properties) instead.")]
         public static bool ParseStorageField(ref string fieldName, out string[] propertyNames)
-		{
-			if (fieldName == null) { throw new ArgumentNullException("fieldName"); }
-			int indexOfDot = fieldName.IndexOf(".", StringComparison.OrdinalIgnoreCase); // performance friendly
-			bool storageAsProperty = (indexOfDot > 0);
-			if (storageAsProperty) // handle private storage field objects with properties
-			{
-				List<string> filteredPropertyNames = new List<string>();
-				propertyNames = fieldName.Split('.');
-				for (int i = 0; i < propertyNames.Length; i++)
-				{
-					if (i == 0) { continue; }
-					filteredPropertyNames.Add(propertyNames[i]);
-				}
-				propertyNames = filteredPropertyNames.ToArray();
-				fieldName = fieldName.Substring(0, indexOfDot);
-			}
-			else
-			{
-				propertyNames = new string[0];
-			}
-			return storageAsProperty;
-		}
+        {
+            if (fieldName == null) { throw new ArgumentNullException(nameof(fieldName)); }
+            int indexOfDot = fieldName.IndexOf(".", StringComparison.OrdinalIgnoreCase); // performance friendly
+            bool storageAsProperty = (indexOfDot > 0);
+            if (storageAsProperty) // handle private storage field objects with properties
+            {
+                List<string> filteredPropertyNames = new List<string>();
+                propertyNames = fieldName.Split('.');
+                for (int i = 0; i < propertyNames.Length; i++)
+                {
+                    if (i == 0) { continue; }
+                    filteredPropertyNames.Add(propertyNames[i]);
+                }
+                propertyNames = filteredPropertyNames.ToArray();
+                fieldName = fieldName.Substring(0, indexOfDot);
+            }
+            else
+            {
+                propertyNames = new string[0];
+            }
+            return storageAsProperty;
+        }
 
         /// <summary>
         /// Infrastructure. This method will parse the result set of <see cref="ParseStorageField(ref string, Type, out IReadOnlyCollection{PropertyInfo})"/> and return it's associated value.
@@ -154,9 +154,9 @@ namespace Cuemon.Data.Entity.Mapping
         /// <returns>The return value of the field or the chained properties of associated <paramref name="properties"/>.</returns>
         public static object ParseStorageFieldValue(object storage, FieldInfo field, IReadOnlyCollection<PropertyInfo> properties)
         {
-            if (field == null) { throw new ArgumentNullException("field"); }
-            if (storage == null) { throw new ArgumentNullException("storage"); }
-            if (properties == null) { throw new ArgumentNullException("properties"); }
+            if (field == null) { throw new ArgumentNullException(nameof(field)); }
+            if (storage == null) { throw new ArgumentNullException(nameof(storage)); }
+            if (properties == null) { throw new ArgumentNullException(nameof(properties)); }
 
             object lastValue = field.GetValue(storage); ;
             if (properties.Count > 0 && lastValue != null)
@@ -180,9 +180,9 @@ namespace Cuemon.Data.Entity.Mapping
         /// <param name="propertyValue">The new property value to assign the last property in <paramref name="properties"/>.</param>
         public static void SetStorageFieldPropertyValue(object storage, FieldInfo field, IReadOnlyCollection<PropertyInfo> properties, Type propertyType, object propertyValue)
         {
-            if (field == null) { throw new ArgumentNullException("field"); }
-            if (storage == null) { throw new ArgumentNullException("storage"); }
-            if (properties == null) { throw new ArgumentNullException("properties"); }
+            if (field == null) { throw new ArgumentNullException(nameof(field)); }
+            if (storage == null) { throw new ArgumentNullException(nameof(storage)); }
+            if (properties == null) { throw new ArgumentNullException(nameof(properties)); }
 
             object lastValue = field.GetValue(storage); ;
             if (properties.Count > 0 && lastValue != null)
@@ -197,7 +197,7 @@ namespace Cuemon.Data.Entity.Mapping
                     counter++;
                 }
 
-                if (lastProperty != null && lastProperty.CanWrite) { lastProperty.SetValue(lastValue, ConvertUtility.ChangeType(propertyValue, propertyType), null); }
+                if (lastProperty != null && lastProperty.CanWrite) { lastProperty.SetValue(lastValue, ObjectConverter.ChangeType(propertyValue, propertyType), null); }
             }
         }
 
@@ -224,8 +224,8 @@ namespace Cuemon.Data.Entity.Mapping
         /// <returns>A <see cref="FieldInfo"/> instance matching the result of the parsed <paramref name="fieldName"/>.</returns>
         public static FieldInfo ParseStorageField(ref string fieldName, Type storageType, BindingFlags bindings, out IReadOnlyCollection<PropertyInfo> properties)
         {
-            if (fieldName == null) { throw new ArgumentNullException("fieldName"); }
-            if (storageType == null) { throw new ArgumentNullException("storageType"); }
+            if (fieldName == null) { throw new ArgumentNullException(nameof(fieldName)); }
+            if (storageType == null) { throw new ArgumentNullException(nameof(storageType)); }
 
             string[] propertyNames;
             bool hasProperties = ParseStorageField(ref fieldName, out propertyNames);
@@ -275,84 +275,84 @@ namespace Cuemon.Data.Entity.Mapping
             return field;
         }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing no DB generated columns.</returns>
-		public static ColumnAttribute[] GetNoneDbGeneratedColumns(ColumnAttribute[] columns)
-		{
-			return Array.FindAll<ColumnAttribute>(columns, ExcludeOnlyDbGeneratedColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing no DB generated columns.</returns>
+        public static ColumnAttribute[] GetNoneDbGeneratedColumns(ColumnAttribute[] columns)
+        {
+            return Array.FindAll<ColumnAttribute>(columns, ExcludeOnlyDbGeneratedColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing no DB generated columns.</returns>
-		public static IEnumerable<ColumnAttribute> GetNoneDbGeneratedColumns(IEnumerable<ColumnAttribute> columns)
-		{
-			return EnumerableUtility.FindAll<ColumnAttribute>(columns, ExcludeOnlyDbGeneratedColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing no DB generated columns.</returns>
+        public static IEnumerable<ColumnAttribute> GetNoneDbGeneratedColumns(IEnumerable<ColumnAttribute> columns)
+        {
+            return EnumerableUtility.FindAll<ColumnAttribute>(columns, ExcludeOnlyDbGeneratedColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing no primary key columns.</returns>
-		public static ColumnAttribute[] GetColumns(ColumnAttribute[] columns)
-		{
-			return Array.FindAll<ColumnAttribute>(columns, ExcludeOnlyPrimaryKeyColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing no primary key columns.</returns>
+        public static ColumnAttribute[] GetColumns(ColumnAttribute[] columns)
+        {
+            return Array.FindAll<ColumnAttribute>(columns, ExcludeOnlyPrimaryKeyColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing no primary key columns.</returns>
-		public static IEnumerable<ColumnAttribute> GetColumns(IEnumerable<ColumnAttribute> columns)
-		{
-			return EnumerableUtility.FindAll<ColumnAttribute>(columns, ExcludeOnlyPrimaryKeyColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing no primary key columns.</returns>
+        public static IEnumerable<ColumnAttribute> GetColumns(IEnumerable<ColumnAttribute> columns)
+        {
+            return EnumerableUtility.FindAll<ColumnAttribute>(columns, ExcludeOnlyPrimaryKeyColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing only foreign key columns.</returns>
-		public static ColumnAttribute[] GetForeignKeyColumns(ColumnAttribute[] columns)
-		{
-			return Array.FindAll<ColumnAttribute>(columns, IncludeOnlyForeignKeyColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing only foreign key columns.</returns>
+        public static ColumnAttribute[] GetForeignKeyColumns(ColumnAttribute[] columns)
+        {
+            return Array.FindAll<ColumnAttribute>(columns, IncludeOnlyForeignKeyColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing only foreign key columns.</returns>
-		public static IEnumerable<ColumnAttribute> GetForeignKeyColumns(IEnumerable<ColumnAttribute> columns)
-		{
-			return EnumerableUtility.FindAll(columns, IncludeOnlyForeignKeyColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing only foreign key columns.</returns>
+        public static IEnumerable<ColumnAttribute> GetForeignKeyColumns(IEnumerable<ColumnAttribute> columns)
+        {
+            return EnumerableUtility.FindAll(columns, IncludeOnlyForeignKeyColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing only primary key columns.</returns>
-		public static ColumnAttribute[] GetPrimaryKeyColumns(ColumnAttribute[] columns)
-		{
-			return Array.FindAll<ColumnAttribute>(columns, IncludeOnlyPrimaryKeyColumns);
-		}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing only primary key columns.</returns>
+        public static ColumnAttribute[] GetPrimaryKeyColumns(ColumnAttribute[] columns)
+        {
+            return Array.FindAll<ColumnAttribute>(columns, IncludeOnlyPrimaryKeyColumns);
+        }
 
-		/// <summary>
-		/// Infrastructure. Helper method for filtering columns.
-		/// </summary>
-		/// <param name="columns">The columns to filter.</param>
-		/// <returns>A filtered result of <paramref name="columns"/> containing only primary key columns.</returns>
-		public static IEnumerable<ColumnAttribute> GetPrimaryKeyColumns(IEnumerable<ColumnAttribute> columns)
-		{
-			return EnumerableUtility.FindAll(columns, IncludeOnlyPrimaryKeyColumns);
-		}
-	}
+        /// <summary>
+        /// Infrastructure. Helper method for filtering columns.
+        /// </summary>
+        /// <param name="columns">The columns to filter.</param>
+        /// <returns>A filtered result of <paramref name="columns"/> containing only primary key columns.</returns>
+        public static IEnumerable<ColumnAttribute> GetPrimaryKeyColumns(IEnumerable<ColumnAttribute> columns)
+        {
+            return EnumerableUtility.FindAll(columns, IncludeOnlyPrimaryKeyColumns);
+        }
+    }
 }

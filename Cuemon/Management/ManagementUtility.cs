@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Management;
 using System.Security.Permissions;
 using System.ServiceProcess;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.Diagnostics;
+using Cuemon.Runtime.Caching;
 using Cuemon.Security.Cryptography;
 using Cuemon.Threading;
 
@@ -128,7 +128,7 @@ namespace Cuemon.Management
         /// </remarks>
         public static IReadOnlyDictionary<string, object> GetProcessInfo(Process process)
         {
-            if (process == null) { throw new ArgumentNullException("process"); }
+            if (process == null) { throw new ArgumentNullException(nameof(process)); }
             CheckIfWindowsManagementInstrumentationIsRunning();
 
             IDictionary<string, object> result = new Dictionary<string, object>();
@@ -169,7 +169,7 @@ namespace Cuemon.Management
         /// </exception>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName)
         {
-            return ManagementUtility.GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), ConvertUtility.ToArray<string>("*"));
+            return GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), EnumerableConverter.ToArray<string>("*"));
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Cuemon.Management
         /// <remarks>If the calculated sample value of a counter depends on two counter reads, a delay has to be used before the result is accurate. The recommended delay time is one second to allow the counter to perform the next incremental read, but is default 64 milliseconds for performance considerations.</remarks>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName, TimeSpan sampleDelay)
         {
-            return ManagementUtility.GetPerformanceMonitorCounters(categoryName, sampleDelay, ConvertUtility.ToArray<string>("*"));
+            return GetPerformanceMonitorCounters(categoryName, sampleDelay, EnumerableConverter.ToArray<string>("*"));
         }
 
         /// <summary>
@@ -278,38 +278,20 @@ namespace Cuemon.Management
         /// <remarks>If the calculated sample value of a counter depends on two counter reads, a delay has to be used before the result is accurate. The recommended delay time is one second to allow the counter to perform the next incremental read, but is default 64 milliseconds for performance considerations.</remarks>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName, TimeSpan sampleDelay, IEnumerable<string> instanceNames)
         {
-            if (categoryName == null) { throw new ArgumentNullException("categoryName"); }
-            if (categoryName.Length == 0) { throw new ArgumentEmptyException("categoryName"); }
-            if (instanceNames == null) { throw new ArgumentNullException("instanceNames"); }
-            if (!PerformanceCounterCategory.Exists(categoryName)) { throw new ArgumentException("No performance counter category exists by that name.", "categoryName"); }
+            if (categoryName == null) { throw new ArgumentNullException(nameof(categoryName)); }
+            if (categoryName.Length == 0) { throw new ArgumentEmptyException(nameof(categoryName)); }
+            if (instanceNames == null) { throw new ArgumentNullException(nameof(instanceNames)); }
+            if (!PerformanceCounterCategory.Exists(categoryName)) { throw new ArgumentException("No performance counter category exists by that name.", nameof(categoryName)); }
 
             IList<string> safeInstanceNames = instanceNames as IList<string> ?? new List<string>(instanceNames);
-            IList<PerformanceMonitorCounter> result = new List<PerformanceMonitorCounter>();
             PerformanceCounterCategory category = new PerformanceCounterCategory(categoryName);
             instanceNames = EnumerableUtility.FirstOrDefault(safeInstanceNames) == "*" ? category.GetInstanceNames() as IEnumerable<string> : safeInstanceNames;
-            int instanceNamesCount = EnumerableUtility.Count(instanceNames);
-            DoerWorkItemPool<PerformanceMonitorCounter> poolForInstances = new DoerWorkItemPool<PerformanceMonitorCounter>();
-            CountdownEvent syncForInstances = null;
-            try
+            List<PerformanceMonitorCounter> monitorCounters = new List<PerformanceMonitorCounter>();
+            foreach (string instanceName in instanceNames)
             {
-                syncForInstances = new CountdownEvent(instanceNamesCount);
-                foreach (string instanceName in instanceNames)
-                {
-                    poolForInstances.ProcessWork(ActWorkItem.Create(syncForInstances, DoWorkInstance, category, instanceName, sampleDelay, poolForInstances, syncForInstances));
-                }
-                syncForInstances.Wait(sampleDelay.Add(TimeSpan.FromMinutes(1)));
+                monitorCounters.AddRange(GetPerformanceMonitorCounters(category, instanceName, sampleDelay));
             }
-            finally
-            {
-                if (syncForInstances != null) { syncForInstances.Dispose(); }
-            }
-
-            foreach (PerformanceMonitorCounter counter in poolForInstances.Result)
-            {
-                if (counter == null) { continue; }
-                result.Add(counter);
-            }
-            return new ReadOnlyCollection<PerformanceMonitorCounter>(result);
+            return new ReadOnlyCollection<PerformanceMonitorCounter>(EnumerableUtility.Where(monitorCounters, counter => counter != null));
         }
 
         /// <summary>
@@ -331,24 +313,15 @@ namespace Cuemon.Management
         /// </exception>
 	    public static string GetInstanceName(Process process)
         {
-            if (process == null) { throw new ArgumentNullException("process"); }
+            if (process == null) { throw new ArgumentNullException(nameof(process)); }
             ProcessSnapshot snapshot = new ProcessSnapshot(process);
             return string.Format(CultureInfo.InvariantCulture, "{0}[{1}]", snapshot.Name.ToLowerInvariant(), snapshot.ProcessIdentifier);
         }
 
-        private static void DoWorkInstance(PerformanceCounterCategory category, string instanceName, TimeSpan sampleDelay, DoerWorkItemPool<PerformanceMonitorCounter> pool, CountdownEvent sync)
+        private static IEnumerable<PerformanceMonitorCounter> GetPerformanceMonitorCounters(PerformanceCounterCategory category, string instanceName, TimeSpan sampleDelay)
         {
             PerformanceCounter[] counters = category.GetCounters(instanceName);
-            sync.AddCount(counters.Length);
-            foreach (PerformanceCounter counter in counters)
-            {
-                pool.ProcessWork(DoerWorkItem.Create(sync, DoWorkCounter, counter, sampleDelay));
-            }
-        }
-
-        private static PerformanceMonitorCounter DoWorkCounter(PerformanceCounter counter, TimeSpan sampleDelay)
-        {
-            return new PerformanceMonitorCounter(counter, sampleDelay);
+            return ParallelThreadPool.ForEachTask(counters, counter => new PerformanceMonitorCounter(counter, sampleDelay));
         }
 
         /// <summary>
@@ -380,8 +353,8 @@ namespace Cuemon.Management
         [PermissionSet(SecurityAction.LinkDemand, Unrestricted = true)]
         public static ManagementObjectCollection ParseWin32(string className, string conditionFormat, params object[] args)
         {
-            if (className == null) { throw new ArgumentNullException("className"); }
-            if (className.Length == 0) { throw new ArgumentEmptyException("className"); }
+            if (className == null) { throw new ArgumentNullException(nameof(className)); }
+            if (className.Length == 0) { throw new ArgumentEmptyException(nameof(className)); }
 
             SelectQuery query = new SelectQuery(className, conditionFormat != null ? string.Format(CultureInfo.InvariantCulture, conditionFormat, args) : null);
             using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
@@ -433,7 +406,7 @@ namespace Cuemon.Management
                 case CimType.None:
                     return null;
             }
-            throw new ArgumentOutOfRangeException("cimType", string.Format(CultureInfo.InvariantCulture, "Type, '{0}', is unsupported.", cimType));
+            throw new ArgumentOutOfRangeException(nameof(cimType), string.Format(CultureInfo.InvariantCulture, "Type, '{0}', is unsupported.", cimType));
         }
 
         private static void CheckIfWindowsManagementInstrumentationIsRunning()
@@ -455,7 +428,7 @@ namespace Cuemon.Management
                     if (valueType == typeof(DateTime) & property.Value != null) { value = ManagementDateTimeConverter.ToDateTime((string)value); }
                     if (!property.IsArray && property.Value != null)
                     {
-                        value = ConvertUtility.ChangeType(value, valueType);
+                        value = ObjectConverter.ChangeType(value, valueType);
                     }
 
                     object currentValue;

@@ -11,7 +11,7 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Xml;
 using System.Xml.XPath;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.Collections.Generic;
 using Cuemon.Globalization;
 using Cuemon.Net;
@@ -119,7 +119,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET sends content to the client but after the processing of <see cref="ApplicationEventBinderModule{T}.OnPreSendRequestContent"/>.</remarks>
 		protected override void OnSendRequestContent(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             XsltPage page = context.Context.CurrentHandler as XsltPage;
             if (page != null && XsltPage.EnableDebug)
             {
@@ -206,7 +206,7 @@ namespace Cuemon.Web
         /// </summary>
         protected override void OnApplicationStart(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (!WebsiteUtility.CultureInfoApplication.HasValue) { WebsiteUtility.CultureInfoApplication = this.Website.Globalization.DefaultCultureInfo.LCID; }
             if (!WebsiteUtility.TimeZoneApplication.HasValue) { WebsiteUtility.TimeZoneApplication = this.Website.Globalization.DefaultTimeZone.GetKey(); }
             if (WebsiteUtility.RequestPipelineProcessingExtension.Count == 0) { WebsiteUtility.RequestPipelineProcessingExtension = new List<string>(this.Website.ConfigurationElement.RequestPipelineProcessing.FileExtensions.Split(',')); }
@@ -242,7 +242,7 @@ namespace Cuemon.Web
         /// <returns><c>true</c> if [is valid for compression] [the specified context]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidForCompression(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
             string[] filesToCompress = this.Website.ConfigurationElement.Compression.FileExtensions.Split(',');
             string requestedFileExtension = Path.GetExtension(context.Request.Path) ?? "";
             if (requestedFileExtension.Length == 0) { return false; }
@@ -282,7 +282,7 @@ namespace Cuemon.Web
 
         private static TimeSpan ResolveIntervalForExpiresHeader(HttpApplication context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null) throw new ArgumentNullException(nameof(context));
             DateTime currentUtcDate = DateTime.UtcNow;
             string fileExtension = Path.GetExtension(context.Request.Path) ?? "";
             if (fileExtension.Length == 0) { return TimeSpan.Zero; }
@@ -306,10 +306,10 @@ namespace Cuemon.Web
                                 return TimeSpan.FromDays(expiresHeader.Expires);
                             case "Months":
                                 DateTime currentUtcDateWithAddedMonths = currentUtcDate.AddMonths(expiresHeader.Expires);
-                                return (DateTimeUtility.GetHighestValue(currentUtcDate, currentUtcDateWithAddedMonths) - (DateTimeUtility.GetLowestValue(currentUtcDate, currentUtcDateWithAddedMonths)));
+                                return (EnumerableUtility.Max(EnumerableConverter.FromArray(currentUtcDate, currentUtcDateWithAddedMonths)) - (EnumerableUtility.Min(EnumerableConverter.FromArray(currentUtcDate, currentUtcDateWithAddedMonths))));
                             case "Years":
                                 DateTime currentUtcDateWithAddedYears = currentUtcDate.AddYears(expiresHeader.Expires);
-                                return (DateTimeUtility.GetHighestValue(currentUtcDate, currentUtcDateWithAddedYears) - (DateTimeUtility.GetLowestValue(currentUtcDate, currentUtcDateWithAddedYears)));
+                                return (EnumerableUtility.Max(EnumerableConverter.FromArray(currentUtcDate, currentUtcDateWithAddedYears)) - (EnumerableUtility.Min(EnumerableConverter.FromArray(currentUtcDate, currentUtcDateWithAddedYears))));
                         }
                     }
                 }
@@ -333,7 +333,7 @@ namespace Cuemon.Web
         /// <param name="application">An instance of the <see cref="System.Web.HttpApplication"/> object.</param>
         public virtual void WriteRobotsExclusionProtocol(HttpApplication application)
         {
-            if (application == null) throw new ArgumentNullException("application");
+            if (application == null) throw new ArgumentNullException(nameof(application));
             if (application.Request.Url.AbsolutePath.EndsWith("/robots.txt", StringComparison.OrdinalIgnoreCase)) // robots.txt is only allowed in the root of a website
             {
                 application.Response.Clear();
@@ -349,7 +349,7 @@ namespace Cuemon.Web
         /// <param name="application">An instance of the <see cref="System.Web.HttpApplication"/> object.</param>
         public virtual void HandleSecurity(HttpApplication application)
         {
-            if (application == null) throw new ArgumentNullException("application");
+            if (application == null) throw new ArgumentNullException(nameof(application));
             if (!Website.EnableMaintenance) // make sure we are not in maintenance mode or we *might* ending up in endless loop 
             {
                 if (Website.EnableSecurity)
@@ -393,7 +393,7 @@ namespace Cuemon.Web
         /// <param name="application">An instance of the <see cref="System.Web.HttpApplication"/> object.</param>
         public virtual void HandleMaintenance(HttpApplication application)
         {
-            if (application == null) throw new ArgumentNullException("application");
+            if (application == null) throw new ArgumentNullException(nameof(application));
             if (Website.EnableMaintenance)
             {
                 application.Response.Clear();
@@ -411,7 +411,7 @@ namespace Cuemon.Web
         /// <param name="application">An instance of the <see cref="System.Web.HttpApplication"/> object.</param>
         public virtual void HandleCultureInfo(HttpApplication application)
         {
-            if (application == null) throw new ArgumentNullException("application");
+            if (application == null) throw new ArgumentNullException(nameof(application));
             if (application.Request.QueryString["lcid"] != null)
             {
                 try
@@ -427,7 +427,7 @@ namespace Cuemon.Web
                         application.Request.Url.Host,
                         application.Request.Url.Port,
                         application.Request.Url.AbsolutePath,
-                        HttpRequestUtility.ParseFieldValuePairs(HttpRequestUtility.SanitizeFieldValuePairs(application.Request.QueryString, FieldValueSanitizing.Remove, ConvertUtility.ToArray("lcid")))));
+                        HttpRequestUtility.ParseFieldValuePairs(HttpRequestUtility.SanitizeFieldValuePairs(application.Request.QueryString, FieldValueFilter.Remove, EnumerableConverter.ToArray("lcid")))));
                     application.Context.Response.Redirect(url.PathAndQuery);
                 }
                 catch (FormatException) // someone is messing with our value
@@ -448,7 +448,7 @@ namespace Cuemon.Web
         /// <param name="application">An instance of the <see cref="System.Web.HttpApplication"/> object.</param>
         public virtual void HandleTimeZone(HttpApplication application)
         {
-            if (application == null) throw new ArgumentNullException("application");
+            if (application == null) throw new ArgumentNullException(nameof(application));
             if (application.Request.QueryString["tzKey"] != null)
             {
                 try
@@ -463,7 +463,7 @@ namespace Cuemon.Web
                         application.Request.Url.Host,
                         application.Request.Url.Port,
                         application.Request.Url.AbsolutePath,
-                        HttpRequestUtility.ParseFieldValuePairs(HttpRequestUtility.SanitizeFieldValuePairs(application.Request.QueryString, FieldValueSanitizing.Remove, "tzKey"))));
+                        HttpRequestUtility.ParseFieldValuePairs(HttpRequestUtility.SanitizeFieldValuePairs(application.Request.QueryString, FieldValueFilter.Remove, "tzKey"))));
                     application.Context.Response.Redirect(url.PathAndQuery);
                 }
                 catch (ArgumentException) // key is not present in the enum (possible hack attempt)
@@ -481,7 +481,7 @@ namespace Cuemon.Web
         /// <param name="application">An instance of the <see cref="System.Web.HttpApplication"/> object.</param>
         public virtual void HandleSiteMapProtocol(HttpApplication application)
         {
-            if (application == null) { throw new ArgumentNullException("application"); }
+            if (application == null) { throw new ArgumentNullException(nameof(application)); }
             if (!HasSiteMapProtocolImplementation) { return; }
             if (!application.Request.Url.AbsolutePath.EndsWith("sitemap.xml", StringComparison.OrdinalIgnoreCase)) { return; }
             bool fileExists = File.Exists(application.Request.PhysicalPath); // check that the request sitemap.xml in fact is one that need processing
@@ -497,7 +497,7 @@ namespace Cuemon.Web
         /// <remarks>This method is called just after any custom implementation of <see cref="GlobalModule.OnPostResolveRequestCache"/>.</remarks>
 	    protected override void HandleUrlRouting(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             HttpRoute route;
             IDictionary<string, object> data = new Dictionary<string, object>();
             data.Add("lcid", WebsiteUtility.CultureInfoBySurrogateSession);

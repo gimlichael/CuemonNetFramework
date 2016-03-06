@@ -7,6 +7,7 @@ using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using Cuemon.Collections;
 using Cuemon.Collections.Generic;
 using Cuemon.Data.XmlClient;
 using Cuemon.Reflection;
@@ -28,15 +29,15 @@ namespace Cuemon.ServiceModel
         /// <param name="entityEncoding">An <see cref="Encoding"/> object representing the encoding of the <paramref name="entityBody"/>.</param>
         public EndpointInputParser(IEnumerable<KeyValuePair<string, Type>> endpointParameterTypes, Stream entityBody, ContentType entityContentType, Encoding entityEncoding)
         {
-            Validator.ThrowIfNull(endpointParameterTypes, "endpointParameterTypes");
-            Validator.ThrowIfNull(entityBody, "entityBody");
-            Validator.ThrowIfNull(entityContentType, "entityContentType");
-            Validator.ThrowIfNull(entityEncoding, "entityEncoding");
+            Validator.ThrowIfNull(endpointParameterTypes, nameof(endpointParameterTypes));
+            Validator.ThrowIfNull(entityBody, nameof(entityBody));
+            Validator.ThrowIfNull(entityContentType, nameof(entityContentType));
+            Validator.ThrowIfNull(entityEncoding, nameof(entityEncoding));
 
-            this.EndpointParameterTypes = endpointParameterTypes;
-            this.Body = entityBody;
-            this.ContentType = entityContentType;
-            this.Encoding = entityEncoding;
+            EndpointParameterTypes = endpointParameterTypes;
+            Body = entityBody;
+            ContentType = entityContentType;
+            Encoding = entityEncoding;
         }
 
         private Stream Body { get; set; }
@@ -53,7 +54,7 @@ namespace Cuemon.ServiceModel
         /// <returns>A <see cref="DataPairCollection"/> equivalent to the input parameters of this instance.</returns>
         public DataPairCollection Parse()
         {
-            return this.Parse(DefaultEntityBodyDeserializer);
+            return Parse(DefaultEntityBodyDeserializer);
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace Cuemon.ServiceModel
         /// <returns>A <see cref="DataPairCollection"/> equivalent to the input parameters of this instance.</returns>
         public DataPairCollection Parse(Doer<EndpointInputParser, DataPairCollection> entityBodyDeserializer)
         {
-            Validator.ThrowIfNull(entityBodyDeserializer, "entityBodyDeserializer");
+            Validator.ThrowIfNull(entityBodyDeserializer, nameof(entityBodyDeserializer));
             return entityBodyDeserializer(this);
         }
 
@@ -72,7 +73,7 @@ namespace Cuemon.ServiceModel
             try
             {
                 Type entityBodyType = HttpMessageBody.Parse(parser.ContentType, parser.Encoding);
-                string entityBodyTypeName = TypeUtility.SanitizeTypeName(entityBodyType);
+                string entityBodyTypeName = StringConverter.FromType(entityBodyType);
                 switch (entityBodyTypeName)
                 {
                     case "FormUrlEncodedMessageBody":
@@ -99,10 +100,13 @@ namespace Cuemon.ServiceModel
         private static void ParseComplexTypes(DataPairCollection result, string endpointParameterName, Type endpointParameterType, Doer<string, bool> predicate, Doer<string, string> resolver)
         {
             ConstructorInfo ctor = endpointParameterType.GetConstructor(Type.EmptyTypes);
-            if (ctor == null) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, 
-                "Unable to deserialize endpoint parameter '{0} ({1})' as no default constructor could be found.",
-                    endpointParameterName, 
-                    TypeUtility.SanitizeTypeName(endpointParameterType))); }
+            if (ctor == null)
+            {
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+"Unable to deserialize endpoint parameter '{0} ({1})' as no default constructor could be found.",
+    endpointParameterName,
+    StringConverter.FromType(endpointParameterType)));
+            }
 
             object instance = ctor.Invoke(null);
             Type instanceType = instance.GetType();
@@ -117,13 +121,13 @@ namespace Cuemon.ServiceModel
                         if (property.PropertyType == typeof(byte[]))
                         {
                             byte[] propertyValueAsByteArray;
-                            bool isBase64 = StringUtility.TryParseBase64(propertyValue, out propertyValueAsByteArray);
+                            bool isBase64 = ByteConverter.TryFromBase64String(propertyValue, out propertyValueAsByteArray);
                             if (!isBase64) { continue; }
                             property.SetValue(instance, propertyValueAsByteArray, null);
                         }
                         else
                         {
-                            property.SetValue(instance, ConvertUtility.ChangeType(propertyValue, CultureInfo.InvariantCulture), null);
+                            property.SetValue(instance, ObjectConverter.FromString(propertyValue, CultureInfo.InvariantCulture), null);
                         }
                     }
                     result.Add(endpointParameterName, instance);
@@ -135,8 +139,8 @@ namespace Cuemon.ServiceModel
         {
             string value = resolver(endpointParameterName);
             byte[] valueAsByteArray;
-            bool isBase64 = StringUtility.TryParseBase64(value, out valueAsByteArray);
-            result.Add(endpointParameterName, isBase64 ? valueAsByteArray : ConvertUtility.ChangeType(value, CultureInfo.InvariantCulture), endpointParameterType);
+            bool isBase64 = ByteConverter.TryFromBase64String(value, out valueAsByteArray);
+            result.Add(endpointParameterName, isBase64 ? valueAsByteArray : ObjectConverter.FromString(value, CultureInfo.InvariantCulture), endpointParameterType);
         }
 
         private static DataPairCollection FormUrlEncodedMessageBodyDeserializer(EndpointInputParser parser)
@@ -148,10 +152,10 @@ namespace Cuemon.ServiceModel
             {
                 if (IsComplexWithDefaultConstructor(endpointParameterType.Value))
                 {
-                    ParseComplexTypes(result, 
-                        endpointParameterType.Key, 
-                        endpointParameterType.Value, 
-                        s => EnumerableUtility.Contains(EnumerableUtility.Cast<string>(form.Keys), s, StringComparer.OrdinalIgnoreCase), 
+                    ParseComplexTypes(result,
+                        endpointParameterType.Key,
+                        endpointParameterType.Value,
+                        s => EnumerableUtility.Contains(EnumerableConverter.Cast<string>(form.Keys), s, StringComparer.OrdinalIgnoreCase),
                         s => form[s]);
                 }
                 else
@@ -176,9 +180,9 @@ namespace Cuemon.ServiceModel
                 {
                     foreach (HttpMultipartContent dataPart in dataParts)
                     {
-                        ParseComplexTypes(result, 
-                            endpointParameterType.Key, 
-                            endpointParameterType.Value, 
+                        ParseComplexTypes(result,
+                            endpointParameterType.Key,
+                            endpointParameterType.Value,
                             s => dataPart.Name.Equals(s, StringComparison.OrdinalIgnoreCase),
                             s => dataPart.IsFile ? Convert.ToBase64String(dataPart.Data) : dataPart.GetPartAsString(parser.Encoding));
                     }

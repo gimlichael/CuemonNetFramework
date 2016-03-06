@@ -82,48 +82,6 @@ namespace Cuemon
 
         #region Methods
         /// <summary>
-        /// Converts the string representation of a Base64 to its equivalent <see cref="T:byte[]"/> array.
-        /// </summary>
-        /// <param name="value">The Base64 to convert.</param>
-        /// <param name="result">The array that will contain the parsed value.</param>
-        /// <returns><c>true</c> if the parse operation was successful; otherwise, <c>false</c>.</returns>
-        /// <remarks>
-        /// This method returns <c>false</c> if <paramref name="value"/> is <c>null</c>, <c>empty</c> or not in a recognized format, and does not throw an exception.<br/>
-        /// <paramref name="result"/> will have a default value of <c>null</c>.
-        /// </remarks>
-        public static bool TryParseBase64(string value, out byte[] result)
-        {
-            return TryParseBase64(value, SkipIfKnownChecksumLength, out result);
-        }
-
-        /// <summary>
-        /// Converts the string representation of a Base64 to its equivalent <see cref="T:byte[]"/> array.
-        /// </summary>
-        /// <param name="value">The Base64 to convert.</param>
-        /// <param name="predicate">A function delegate that provides custom rules for bypassing the Base64 structure check.</param>
-        /// <param name="result">The array that will contain the parsed value.</param>
-        /// <returns><c>true</c> if the parse operation was successful; otherwise, <c>false</c>.</returns>
-        /// <remarks>
-        /// This method returns <c>false</c> if <paramref name="value"/> is <c>null</c>, <c>empty</c> or not in a recognized format, and does not throw an exception.<br/>
-        /// <paramref name="result"/> will have a default value of <c>null</c>.
-        /// </remarks>
-        public static bool TryParseBase64(string value, Doer<string, bool> predicate, out byte[] result)
-        {
-            try
-            {
-                Validator.ThrowIfNullOrEmpty(value, "value");
-                if (predicate != null && predicate(value)) { throw new FormatException(); }
-                result = Convert.FromBase64String(value);
-                return true;
-            }
-            catch (Exception)
-            {
-                result = null;
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Determines whether the specified <paramref name="value"/> matches a Base64 structure.
         /// </summary>
         /// <param name="value">The value to test for a Base64 structure.</param>
@@ -143,10 +101,10 @@ namespace Cuemon
         public static bool IsBase64(string value, Doer<string, bool> predicate)
         {
             byte[] result;
-            return TryParseBase64(value, predicate, out result);
+            return ByteConverter.TryFromBase64String(value, predicate, out result);
         }
 
-        private static bool SkipIfKnownChecksumLength(string value)
+        internal static bool SkipIfKnownChecksumLength(string value)
         {
             if (string.IsNullOrEmpty(value)) { return false; }
             if (NumberUtility.IsEven(value.Length))
@@ -298,8 +256,8 @@ namespace Cuemon
         /// </exception>
         public static IEnumerable<string> Chunk(string value, int length)
         {
-            Validator.ThrowIfNull(value, "value");
-            Validator.ThrowIfLowerThanOrEqual(length, 0, "length");
+            Validator.ThrowIfNull(value, nameof(value));
+            Validator.ThrowIfLowerThanOrEqual(length, 0, nameof(length));
             if (value.Length <= length)
             {
                 yield return value;
@@ -374,18 +332,18 @@ namespace Cuemon
         /// <returns><c>true</c> if elements of the <paramref name="source"/> parameter was successfully converted; otherwise <c>false</c>.</returns>
         public static bool IsSequenceOf<T>(IEnumerable<string> source, CultureInfo culture, Doer<string, CultureInfo, bool> parser)
         {
-            Validator.ThrowIfNull(parser, "parser");
+            Validator.ThrowIfNull(parser, nameof(parser));
             return IsSequenceOfCore<T>(source, culture, null, parser);
         }
 
         private static bool IsSequenceOfCore<T>(IEnumerable<string> source, CultureInfo culture, ITypeDescriptorContext context, Doer<string, CultureInfo, bool> parser)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             bool converterHasValue = (parser != null);
             bool valid = true;
             foreach (string substring in source)
             {
-                valid &= converterHasValue ? parser(substring, culture) : ConvertUtility.ParseWith(substring, CanConvertString<T>, culture, context);
+                valid &= converterHasValue ? parser(substring, culture) : Converter.Parse(substring, CanConvertString<T>, culture, context);
             }
             return valid;
         }
@@ -393,7 +351,7 @@ namespace Cuemon
         private static bool CanConvertString<T>(string s, CultureInfo culture, ITypeDescriptorContext context)
         {
             T result;
-            return ConvertUtility.TryParseString(s, culture, context, out result);
+            return Converter.TryFromString(s, culture, context, out result);
         }
 
         /// <summary>
@@ -417,7 +375,7 @@ namespace Cuemon
         /// </exception>
         public static string TrimAll(string value, params char[] trimChars)
         {
-            if (value == null) { throw new ArgumentNullException("value"); }
+            if (value == null) { throw new ArgumentNullException(nameof(value)); }
             if (trimChars == null || trimChars.Length == 0) { trimChars = WhiteSpaceCharacters.ToCharArray(); }
             List<char> result = new List<char>();
             foreach (char c in value)
@@ -461,7 +419,7 @@ namespace Cuemon
         /// </exception>
         public static int Count(string source, char character)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             int count = 0;
             for (int i = 0; i < source.Length; i++)
             {
@@ -561,8 +519,8 @@ namespace Cuemon
         /// </exception>
         public static string Shuffle(params string[] values)
         {
-            if (values == null) { throw new ArgumentNullException("values"); }
-            if (values.Length == 0) { throw new ArgumentOutOfRangeException("values", "You must specify at least one string value to shuffle."); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
+            if (values.Length == 0) { throw new ArgumentOutOfRangeException(nameof(values), "You must specify at least one string value to shuffle."); }
 
             List<char> allChars = new List<char>();
             foreach (string value in values) { allChars.AddRange(value); }
@@ -593,7 +551,7 @@ namespace Cuemon
         /// </exception>
         public static string Shuffle(IEnumerable<string> values)
         {
-            return Shuffle(EnumerableUtility.ToArray(values));
+            return Shuffle(EnumerableConverter.ToArray(values));
         }
 
         /// <summary>
@@ -619,8 +577,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> equivalent to <paramref name="value"/> but with all instances of <paramref name="oldValue"/> replaced with <paramref name="newValue"/>.</returns>
         public static string Replace(string value, string oldValue, string newValue, StringComparison comparison)
         {
-            Validator.ThrowIfNull(oldValue, "oldValue");
-            Validator.ThrowIfNull(newValue, "newValue");
+            Validator.ThrowIfNull(oldValue, nameof(oldValue));
+            Validator.ThrowIfNull(newValue, nameof(newValue));
             return Replace(value, EnumerableUtility.Yield(new StringReplacePair(oldValue, newValue)), comparison);
         }
 
@@ -633,8 +591,8 @@ namespace Cuemon
         /// <returns>A <see cref="String"/> equivalent to <paramref name="value"/> but with all instances of <see cref="StringReplacePair.OldValue"/> replaced with <see cref="StringReplacePair.NewValue"/>.</returns>
         public static string Replace(string value, IEnumerable<StringReplacePair> replacePairs, StringComparison comparison)
         {
-            Validator.ThrowIfNull(value, "value");
-            Validator.ThrowIfNull(replacePairs, "replacePairs");
+            Validator.ThrowIfNull(value, nameof(value));
+            Validator.ThrowIfNull(replacePairs, nameof(replacePairs));
             StringReplaceEngine replaceEngine = new StringReplaceEngine(value, replacePairs, comparison);
             return replaceEngine.ToString();
         }
@@ -648,10 +606,10 @@ namespace Cuemon
         /// </returns>
         public static bool IsNullOrEmpty(IEnumerable<string> values)
         {
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             foreach (string value in values)
             {
-                if (String.IsNullOrEmpty(value)) { return true; }
+                if (string.IsNullOrEmpty(value)) { return true; }
             }
             return false;
         }
@@ -697,7 +655,7 @@ namespace Cuemon
         /// <returns>A random string from the values provided.</returns>
         public static string CreateRandomString(int length, params string[] values)
         {
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             StringBuilder result = new StringBuilder(length);
             for (int i = 0; i < length; i++)
             {
@@ -747,13 +705,13 @@ namespace Cuemon
         /// <returns>The input <paramref name="value"/> with an escaped equivalent.</returns>
         public static string Escape(string value)
         {
-            if (value == null) { throw new ArgumentNullException("value"); }
+            if (value == null) { throw new ArgumentNullException(nameof(value)); }
             StringBuilder builder = new StringBuilder(value.Length);
             foreach (char character in value)
             {
                 if (DoEscapeOrUnescape(character))
                 {
-                    builder.AppendFormat(CultureInfo.InvariantCulture, character < Byte.MaxValue ? "%{0:x2}" : "%u{0:x4}", (uint)character);
+                    builder.AppendFormat(CultureInfo.InvariantCulture, character < byte.MaxValue ? "%{0:x2}" : "%u{0:x4}", (uint)character);
                 }
                 else
                 {
@@ -770,20 +728,20 @@ namespace Cuemon
         /// <returns>The input <paramref name="value"/> with an unescaped equivalent.</returns>
         public static string Unescape(string value)
         {
-            if (value == null) throw new ArgumentNullException("value");
+            if (value == null) throw new ArgumentNullException(nameof(value));
             StringBuilder builder = new StringBuilder(value);
             Regex unicode = new Regex("%u([0-9]|[a-f])([0-9]|[a-f])([0-9]|[a-f])([0-9]|[a-f])", RegexOptions.IgnoreCase);
             MatchCollection matches = unicode.Matches(value);
             foreach (Match unicodeMatch in matches)
             {
-                builder.Replace(unicodeMatch.Value, Convert.ToChar(Int32.Parse(unicodeMatch.Value.Remove(0, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture)).ToString());
+                builder.Replace(unicodeMatch.Value, Convert.ToChar(int.Parse(unicodeMatch.Value.Remove(0, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture)).ToString());
             }
 
-            for (byte i = Byte.MinValue; i < Byte.MaxValue; i++)
+            for (byte i = byte.MinValue; i < byte.MaxValue; i++)
             {
                 if (DoEscapeOrUnescape(i))
                 {
-                    builder.Replace(String.Format(CultureInfo.InvariantCulture, "%{0:x2}", i), Convert.ToChar(i).ToString(CultureInfo.InvariantCulture));
+                    builder.Replace(string.Format(CultureInfo.InvariantCulture, "%{0:x2}", i), Convert.ToChar(i).ToString(CultureInfo.InvariantCulture));
                 }
             }
             return builder.ToString();
@@ -819,8 +777,8 @@ namespace Cuemon
         /// </returns>
         public static bool Contains(string source, string value, StringComparison comparison)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (value == null) { throw new ArgumentNullException("value"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (value == null) { throw new ArgumentNullException(nameof(value)); }
             return (source.IndexOf(value, comparison) >= 0);
         }
 
@@ -849,7 +807,7 @@ namespace Cuemon
         /// </returns>
         public static bool Contains(string source, char value, StringComparison comparison)
         {
-            if (source == null) { throw new ArgumentNullException("value"); }
+            if (source == null) { throw new ArgumentNullException(nameof(value)); }
             return (source.IndexOf(new string(value, 1), 0, source.Length, comparison) >= 0);
         }
 
@@ -878,8 +836,8 @@ namespace Cuemon
         /// </returns>
         public static bool Contains(string source, StringComparison comparison, params string[] values)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             foreach (string valueToFind in values)
             {
                 if (Contains(source, valueToFind, comparison)) { return true; }
@@ -912,8 +870,8 @@ namespace Cuemon
         /// </returns>
         public static bool Contains(string source, StringComparison comparison, params char[] values)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             foreach (char value in values)
             {
                 if (Contains(source, value, comparison)) { return true; }
@@ -948,8 +906,8 @@ namespace Cuemon
         /// </exception>
         public static bool Equals(string source, StringComparison comparison, params string[] values)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             foreach (string value in values)
             {
                 if (source.Equals(value, comparison)) { return true; }
@@ -978,8 +936,8 @@ namespace Cuemon
         /// <returns><c>true</c> if at least one value matches the beginning of this string; otherwise, <c>false</c>.</returns>
         public static bool StartsWith(string value, StringComparison comparison, IEnumerable<string> startWithValues)
         {
-            if (value == null) { throw new ArgumentNullException("value"); }
-            if (startWithValues == null) { throw new ArgumentNullException("startWithValues"); }
+            if (value == null) { throw new ArgumentNullException(nameof(value)); }
+            if (startWithValues == null) { throw new ArgumentNullException(nameof(startWithValues)); }
             foreach (string startWithValue in startWithValues)
             {
                 if (value.StartsWith(startWithValue, comparison)) { return true; }
@@ -1017,81 +975,6 @@ namespace Cuemon
             Encoding encoding = null;
             if (!EncodingUtility.TryParse(value, out encoding)) { encoding = Encoding.Default; }
             return encoding;
-        }
-
-        /// <summary>
-        /// Returns a string expression representing a standardized date- and time value.
-        /// </summary>
-        /// <param name="value">The <see cref="DateTime"/> value to be formatted.</param>
-        /// <param name="pattern">The standardized patterns to apply on <paramref name="value"/>.</param>
-        /// <returns>Returns a string expression representing a date- and time value.</returns>
-        public static string FormatDateTime(DateTime value, StandardizedDateTimeFormatPattern pattern)
-        {
-            return FormatDateTime(value, pattern, 0);
-        }
-
-        /// <summary>
-        /// Returns a string expression representing a standardized date- and time value.
-        /// </summary>
-        /// <param name="value">The <see cref="DateTime"/> value to be formatted.</param>
-        /// <param name="pattern">The standardized patterns to apply on <paramref name="value"/>.</param>
-        /// <param name="fractionalDecimalPlaces">The amount of fractional decimal places to apply to the string expression.</param>
-        /// <returns>Returns a string expression representing a date- and time value.</returns>
-        public static string FormatDateTime(DateTime value, StandardizedDateTimeFormatPattern pattern, byte fractionalDecimalPlaces)
-        {
-            switch (pattern)
-            {
-                case StandardizedDateTimeFormatPattern.Iso8601CompleteDateBasic:
-                    return value.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
-                case StandardizedDateTimeFormatPattern.Iso8601CompleteDateExtended:
-                    return value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                case StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeBasic:
-                    return value.ToString(String.Format(CultureInfo.InvariantCulture, "yyyyMMddTHHmmss{0}{1}", fractionalDecimalPlaces == 0 ? "" : String.Format(CultureInfo.InvariantCulture, ".{0}", CreateFixedString('f', fractionalDecimalPlaces)), value.Kind == DateTimeKind.Utc ? "Z" : "zz"), CultureInfo.InvariantCulture);
-                case StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeExtended:
-                    return value.ToString(String.Format(CultureInfo.InvariantCulture, "yyyy-MM-ddTHH:mm:ss{0}{1}", fractionalDecimalPlaces == 0 ? "" : String.Format(CultureInfo.InvariantCulture, ".{0}", CreateFixedString('f', fractionalDecimalPlaces)), value.Kind == DateTimeKind.Utc ? "Z" : "zz"), CultureInfo.InvariantCulture);
-                default:
-                    throw new ArgumentOutOfRangeException("pattern");
-            }
-        }
-
-        /// <summary>
-        /// Returns a string expression representing a standardized date- and time value.
-        /// </summary>
-        /// <param name="value">The <see cref="DateTime"/> value to be formatted.</param>
-        /// <param name="pattern">The standardized patterns to apply on <paramref name="value"/>.</param>
-        /// <returns>Returns a string expression representing a date- and time value.</returns>
-        public static string FormatDateTime(DateTime value, DateTimeFormatPattern pattern)
-        {
-            return FormatDateTime(value, pattern, CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
-        /// Returns a string expression representing a standardized date- and time value.
-        /// </summary>
-        /// <param name="value">The <see cref="DateTime"/> value to be formatted.</param>
-        /// <param name="pattern">The standardized patterns to apply on <paramref name="value"/>.</param>
-        /// <param name="provider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
-        /// <returns>Returns a string expression representing a date- and time value.</returns>
-        public static string FormatDateTime(DateTime value, DateTimeFormatPattern pattern, IFormatProvider provider)
-        {
-            DateTimeFormatInfo formatInfo = DateTimeFormatInfo.GetInstance(provider);
-            switch (pattern)
-            {
-                case DateTimeFormatPattern.LongDate:
-                    return value.ToString(formatInfo.LongDatePattern, formatInfo);
-                case DateTimeFormatPattern.LongDateTime:
-                    return value.ToString(String.Format(formatInfo, "{0} {1}", formatInfo.LongDatePattern, formatInfo.LongTimePattern), formatInfo);
-                case DateTimeFormatPattern.LongTime:
-                    return value.ToString(formatInfo.LongTimePattern, formatInfo);
-                case DateTimeFormatPattern.ShortDate:
-                    return value.ToString(formatInfo.ShortDatePattern, formatInfo);
-                case DateTimeFormatPattern.ShortDateTime:
-                    return value.ToString(String.Format(formatInfo, "{0} {1}", formatInfo.ShortDatePattern, formatInfo.ShortTimePattern), formatInfo);
-                case DateTimeFormatPattern.ShortTime:
-                    return value.ToString(formatInfo.ShortTimePattern, formatInfo);
-                default:
-                    throw new ArgumentOutOfRangeException("pattern");
-            }
         }
         #endregion
     }

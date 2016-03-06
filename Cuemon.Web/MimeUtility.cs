@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.IO;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Web
 {
@@ -58,7 +58,7 @@ namespace Cuemon.Web
         /// </exception>
         public static IEnumerable<FileMapping> ParseFileExtensions(IEnumerable<string> extensions)
         {
-            return ParseFileExtensions(EnumerableUtility.ToArray(extensions));
+            return ParseFileExtensions(EnumerableConverter.ToArray(extensions));
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace Cuemon.Web
         /// </exception>
         public static IEnumerable<FileMapping> ParseFileExtensions(IEnumerable<FileMapping> mimeTypes, params string[] extensions)
         {
-            if (extensions == null) { throw new ArgumentNullException("extensions"); }
-            if (extensions.Length == 0) { throw new ArgumentOutOfRangeException("extensions", "At least one file extension must be specified."); }
-            if (!HasExtension(extensions)) { throw new ArgumentOutOfRangeException("extensions", "At least one file extension seems to be invalid."); }
+            if (extensions == null) { throw new ArgumentNullException(nameof(extensions)); }
+            if (extensions.Length == 0) { throw new ArgumentOutOfRangeException(nameof(extensions), "At least one file extension must be specified."); }
+            if (!HasExtension(extensions)) { throw new ArgumentOutOfRangeException(nameof(extensions), "At least one file extension seems to be invalid."); }
 
             Doer<IEnumerable<FileMapping>, IList<string>, IEnumerable<FileMapping>> parseMimeTypeCore = CachingManager.Cache.Memoize<IEnumerable<FileMapping>, IList<string>, IEnumerable<FileMapping>>(ParseMimeTypeCore, TimeSpan.FromMinutes(20));
             return parseMimeTypeCore(mimeTypes, new List<string>(extensions));
@@ -149,10 +149,10 @@ namespace Cuemon.Web
         /// </exception>
         public static FileMapping ParseContentType(IEnumerable<FileMapping> mimeTypes, string contentType)
         {
-            if (contentType == null) { throw new ArgumentNullException("contentType"); }
-            if (contentType.Length == 0) { throw new ArgumentEmptyException("contentType"); }
-            if (StringUtility.Count(contentType, '/') != 1) { throw new ArgumentException("A content-type must have one forward slash character (/) as it is composed of a top-level media type followed by a subtype identifier, eg. text/plain.", "contentType"); }
-            
+            if (contentType == null) { throw new ArgumentNullException(nameof(contentType)); }
+            if (contentType.Length == 0) { throw new ArgumentEmptyException(nameof(contentType)); }
+            if (StringUtility.Count(contentType, '/') != 1) { throw new ArgumentException("A content-type must have one forward slash character (/) as it is composed of a top-level media type followed by a subtype identifier, eg. text/plain.", nameof(contentType)); }
+
             Doer<IEnumerable<FileMapping>, string, FileMapping> parseContentTypeCore = CachingManager.Cache.Memoize<IEnumerable<FileMapping>, string, FileMapping>(ParseMimeTypeCore, TimeSpan.FromMinutes(20));
             return parseContentTypeCore(mimeTypes, contentType);
         }

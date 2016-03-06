@@ -9,11 +9,11 @@ using Cuemon.Data.Entity.Mapping;
 
 namespace Cuemon.Data.Entity
 {
-	/// <summary>
-	/// Infrastructure. This utility class is designed to make common <see cref="BusinessEntity"/> related operations easier to comprehend.
-	/// </summary>
-	public static class BusinessEntityUtility
-	{
+    /// <summary>
+    /// Infrastructure. This utility class is designed to make common <see cref="BusinessEntity"/> related operations easier to comprehend.
+    /// </summary>
+    public static class BusinessEntityUtility
+    {
         /// <summary>
         /// Parse and match and entity relation from the specified <paramref name="identifier"/>.
         /// </summary>
@@ -25,8 +25,8 @@ namespace Cuemon.Data.Entity
         /// <exception cref="System.ArgumentNullException"><paramref name="identifier"/> is null.</exception>
         public static TEntity ParseEntityRelation<TEntity>(IEnumerable<TEntity> entities, string identifier) where TEntity : IIdentifier
         {
-            if (entities == null) { throw new ArgumentNullException("entities"); }
-            if (identifier == null) { throw new ArgumentNullException("identifier"); }
+            if (entities == null) { throw new ArgumentNullException(nameof(entities)); }
+            if (identifier == null) { throw new ArgumentNullException(nameof(identifier)); }
             foreach (TEntity entity in entities)
             {
                 if (entity.GetIdentifier() == identifier) { return entity; }
@@ -34,36 +34,36 @@ namespace Cuemon.Data.Entity
             return default(TEntity);
         }
 
-	    /// <summary>
-	    /// An experimental method to create <see cref="BusinessEntity"/> instances from the ancestor-and-descendant-or-self <typeparamref name="T"/>.
-	    /// </summary>
-	    /// <typeparam name="T">The type to lookup derived types from.</typeparam>
-	    /// <param name="adapter">An instance of a <see cref="EntityDataAdapter"/> to lookup derived types in the associated database.</param>
-	    /// <param name="entityConstructorArgs">The entity constructor args to dynamically invoke a new <see cref="BusinessEntity"/>.</param>
-	    /// <returns>An instance of ancestor-and-descendant-or-self derived version of <typeparamref name="T"/>.</returns>
+        /// <summary>
+        /// An experimental method to create <see cref="BusinessEntity"/> instances from the ancestor-and-descendant-or-self <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type to lookup derived types from.</typeparam>
+        /// <param name="adapter">An instance of a <see cref="EntityDataAdapter"/> to lookup derived types in the associated database.</param>
+        /// <param name="entityConstructorArgs">The entity constructor args to dynamically invoke a new <see cref="BusinessEntity"/>.</param>
+        /// <returns>An instance of ancestor-and-descendant-or-self derived version of <typeparamref name="T"/>.</returns>
         public static T CreateDescendantOrSelfEntity<T>(EntityDataAdapter adapter, params object[] entityConstructorArgs) where T : Entity
-	    {
+        {
             return CreateDescendantOrSelfEntity<T>(typeof(T), adapter, entityConstructorArgs);
-	    }
+        }
 
-		/// <summary>
-		/// An experimental method to create <see cref="BusinessEntity"/> instances from the ancestor-and-descendant-or-self <typeparamref name="T"/>.
-		/// </summary>
-		/// <typeparam name="T">The base type of the <paramref name="derived"/> to lookup derived types from.</typeparam>
-		/// <param name="derived">The type to search derived implementations from (descendant-or-self).</param>
-		/// <param name="adapter">An instance of a <see cref="EntityDataAdapter"/> to lookup derived types in the associated database.</param>
-		/// <param name="entityConstructorArgs">The entity constructor args to dynamically invoke a new <see cref="BusinessEntity"/>.</param>
-		/// <returns>An instance of ancestor-and-descendant-or-self derived version of <typeparamref name="T"/>.</returns>
+        /// <summary>
+        /// An experimental method to create <see cref="BusinessEntity"/> instances from the ancestor-and-descendant-or-self <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The base type of the <paramref name="derived"/> to lookup derived types from.</typeparam>
+        /// <param name="derived">The type to search derived implementations from (descendant-or-self).</param>
+        /// <param name="adapter">An instance of a <see cref="EntityDataAdapter"/> to lookup derived types in the associated database.</param>
+        /// <param name="entityConstructorArgs">The entity constructor args to dynamically invoke a new <see cref="BusinessEntity"/>.</param>
+        /// <returns>An instance of ancestor-and-descendant-or-self derived version of <typeparamref name="T"/>.</returns>
         public static T CreateDescendantOrSelfEntity<T>(Type derived, EntityDataAdapter adapter, params object[] entityConstructorArgs) where T : Entity
         {
-            if (adapter == null) { throw new ArgumentNullException("adapter"); }
-            if (entityConstructorArgs == null) { throw new ArgumentNullException("entityConstructorArgs"); }
+            if (adapter == null) { throw new ArgumentNullException(nameof(adapter)); }
+            if (entityConstructorArgs == null) { throw new ArgumentNullException(nameof(entityConstructorArgs)); }
 
             T validEntity = null;
             if (!TypeUtility.ContainsType(derived, typeof(BusinessEntity))) { return null; }
 
             List<Type> derivedTypes = new List<Type>(adapter.Settings.EnableDerivedEntityLookup ? TypeUtility.GetAncestorAndDescendantsOrSelfTypes(derived) : EnumerableUtility.Yield(derived));
-		    bool enableRowVerification = (derivedTypes.Count > 1);
+            bool enableRowVerification = (derivedTypes.Count > 1);
             foreach (Type derivedType in derivedTypes)
             {
                 #region Super Experimental Derived Type Lookup
@@ -86,8 +86,8 @@ namespace Cuemon.Data.Entity
                     index++;
                 }
 
-                if (valuesForConstructor.Count != sortedPrimaryKeyColumns.Count) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Unexpected amount of constructor arguments: {0}. Expected amount of arguments was: {1}.", valuesForConstructor.Count, sortedPrimaryKeyColumns.Count), "entityConstructorArgs"); }
-                
+                if (valuesForConstructor.Count != sortedPrimaryKeyColumns.Count) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Unexpected amount of constructor arguments: {0}. Expected amount of arguments was: {1}.", valuesForConstructor.Count, sortedPrimaryKeyColumns.Count), nameof(entityConstructorArgs)); }
+
                 List<IDataParameter> parameters = new List<IDataParameter>();
                 index = 0;
                 List<string> fieldTypes = new List<string>();
@@ -103,9 +103,9 @@ namespace Cuemon.Data.Entity
                     index++;
                 }
 
-                string fieldTypesResult = ConvertUtility.ToDelimitedString(fieldTypes);
-                string expectedFieldTypesResult = ConvertUtility.ToDelimitedString(expectedFieldTypes);
-                if (!fieldTypesResult.Equals(expectedFieldTypesResult, StringComparison.Ordinal)) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "One or more unexpected types detected in constructor arguments: {0}. Expected types was: {1}.", fieldTypesResult, expectedFieldTypesResult), "entityConstructorArgs"); }
+                string fieldTypesResult = StringConverter.ToDelimitedString(fieldTypes);
+                string expectedFieldTypesResult = StringConverter.ToDelimitedString(expectedFieldTypes);
+                if (!fieldTypesResult.Equals(expectedFieldTypesResult, StringComparison.Ordinal)) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "One or more unexpected types detected in constructor arguments: {0}. Expected types was: {1}.", fieldTypesResult, expectedFieldTypesResult), nameof(entityConstructorArgs)); }
 
                 List<object> primaryKeyValues = new List<object>(parameters.Count);
                 foreach (IDataParameter parameter in parameters) { primaryKeyValues.Add(parameter.Value); }
@@ -129,15 +129,15 @@ namespace Cuemon.Data.Entity
                     DataMapper mapper = new DataMapper(derivedType, RuntimeEntityPrimaryKeyParser);
                     returnEntity = manager.ExecuteExists(adapter.GetDataMappedQuery(QueryType.Exists, mapper), parameters);
                     scope.Complete();
-                }    
+                }
             }
             return returnEntity ? constructor.Invoke(runtime.ConstructorArguments) as T : default(T);
-	    }
+        }
 
         private static IEnumerable<ColumnAttribute> RuntimeEntityPrimaryKeyParser(Type source)
-	    {
+        {
             return MappingUtility.GetPrimaryKeyColumns(DataMapperUtility.ParseColumns(source));
-	    }
+        }
 
         /// <summary>
         /// Infrastructure. Gets a collection of data mapped entity types inherited from <see cref="Entity"/>.
@@ -145,34 +145,34 @@ namespace Cuemon.Data.Entity
         /// <param name="entityType">Type of the <see cref="Entity"/>.</param>
         /// <returns>A collection of entity types that is decorated with the <see cref="DataSourceAttribute"/>.</returns>
 	    public static IList<Type> GetDataMappedEntities(Type entityType)
-	    {
-	        return GetDataMappedEntities(entityType, typeof(Entity));
-	    }
+        {
+            return GetDataMappedEntities(entityType, typeof(Entity));
+        }
 
-		/// <summary>
-		/// Infrastructure. Gets a collection of data mapped entity types.
-		/// </summary>
-		/// <param name="entityType">Type of the <see cref="Entity"/>.</param>
-		/// <param name="baseEntityType">Type of the base <see cref="Entity"/>.</param>
-		/// <returns>A collection of entity types that is decorated with the <see cref="DataSourceAttribute"/>.</returns>
-		public static IList<Type> GetDataMappedEntities(Type entityType, Type baseEntityType)
-		{
-			if (TypeUtility.ContainsType(entityType, baseEntityType))
-			{
-				IList<Type> dataMappedEntities = new List<Type>();
-				Type currentType = entityType;
-				while (currentType != baseEntityType)
-				{
-					DataSourceAttribute dataSource = (DataSourceAttribute)Attribute.GetCustomAttribute(currentType, typeof(DataSourceAttribute));
-					if (dataSource != null)
-					{
-						dataMappedEntities.Add(currentType);
-					}
-					currentType = currentType.BaseType;
-				}
-				return new List<Type>(EnumerableUtility.Reverse(dataMappedEntities));
-			}
-			return new List<Type>();
-		}
-	}
+        /// <summary>
+        /// Infrastructure. Gets a collection of data mapped entity types.
+        /// </summary>
+        /// <param name="entityType">Type of the <see cref="Entity"/>.</param>
+        /// <param name="baseEntityType">Type of the base <see cref="Entity"/>.</param>
+        /// <returns>A collection of entity types that is decorated with the <see cref="DataSourceAttribute"/>.</returns>
+        public static IList<Type> GetDataMappedEntities(Type entityType, Type baseEntityType)
+        {
+            if (TypeUtility.ContainsType(entityType, baseEntityType))
+            {
+                IList<Type> dataMappedEntities = new List<Type>();
+                Type currentType = entityType;
+                while (currentType != baseEntityType)
+                {
+                    DataSourceAttribute dataSource = (DataSourceAttribute)Attribute.GetCustomAttribute(currentType, typeof(DataSourceAttribute));
+                    if (dataSource != null)
+                    {
+                        dataMappedEntities.Add(currentType);
+                    }
+                    currentType = currentType.BaseType;
+                }
+                return new List<Type>(EnumerableUtility.Reverse(dataMappedEntities));
+            }
+            return new List<Type>();
+        }
+    }
 }

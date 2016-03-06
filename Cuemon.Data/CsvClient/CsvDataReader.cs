@@ -45,7 +45,7 @@ namespace Cuemon.Data.CsvClient
         /// <paramref name="header"/> is empty -or- <paramref name="delimiter"/> is empty.
         /// </exception>
         /// <remarks>The default implementation uses comma (",") as <paramref name="delimiter"/>.</remarks>
-        public CsvDataReader(StreamReader reader, string header, string delimiter) : this(reader, header, delimiter, ConvertUtility.ChangeType)
+        public CsvDataReader(StreamReader reader, string header, string delimiter) : this(reader, header, delimiter, ObjectConverter.FromString)
         {
         }
 
@@ -65,14 +65,14 @@ namespace Cuemon.Data.CsvClient
         /// <exception cref="ArgumentEmptyException">
         /// <paramref name="header"/> is empty -or- <paramref name="delimiter"/> is empty.
         /// </exception>
-        /// <remarks>The default implementation uses <see cref="ConvertUtility.ChangeType(System.String)"/> as <paramref name="parser"/>.</remarks>
+        /// <remarks>The default implementation uses <see cref="ObjectConverter.FromString"/> as <paramref name="parser"/>.</remarks>
         public CsvDataReader(StreamReader reader, string header, string delimiter, Doer<string, object> parser) : base(parser)
         {
-            Validator.ThrowIfNull(reader, "reader");
-            Validator.ThrowIfNullOrEmpty(header, "header");
-            Validator.ThrowIfNullOrEmpty(delimiter, "delimiter");
+            Validator.ThrowIfNull(reader, nameof(reader));
+            Validator.ThrowIfNullOrEmpty(header, nameof(header));
+            Validator.ThrowIfNullOrEmpty(delimiter, nameof(delimiter));
             if (!header.Contains(delimiter)) { throw new ArgumentException("Header does not contain the specified delimiter."); }
-            
+
             this.Reader = reader;
             this.Header = StringUtility.Split(header, delimiter);
             this.Delimiter = delimiter;

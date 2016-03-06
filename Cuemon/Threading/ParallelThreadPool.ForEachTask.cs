@@ -1262,19 +1262,20 @@ namespace Cuemon.Threading
 
         private static void ValidateForEachTask<TSource>(ThreadPoolSettings settings, IEnumerable<TSource> source, object body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
+            Validator.ThrowIfNull(settings, nameof(settings));
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(body, nameof(body));
         }
 
         private static IReadOnlyCollection<TResult> ForEachTaskCore<TTuple, TSource, TResult>(DoerFactory<TTuple, TResult> factory, IEnumerable<TSource> source, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TTuple : Template<TSource>
         {
             CountdownEvent sync = null;
-            SortedDoerWorkItemPool<long, TResult> pool = new SortedDoerWorkItemPool<long, TResult>();
             try
             {
                 long sorter = 0;
+                SortedDictionary<long, TResult> result = new SortedDictionary<long, TResult>();
                 PartitionCollection<TSource> partition = new PartitionCollection<TSource>(source, partitionSize);
+                List<Exception> aggregatedExceptions = new List<Exception>();
                 while (partition.HasPartitions)
                 {
                     try
@@ -1284,8 +1285,31 @@ namespace Cuemon.Threading
                         foreach (TSource element in partition)
                         {
                             factory.GenericArguments.Arg1 = element;
-                            ISortedDoerWorkItem<long, TResult> work = SortedDoerWorkItem.Create(sorter, sync, ForEachElementTaskCore, factory.Clone());
-                            pool.ProcessWork(work);
+                            var shallowFactory = factory.Clone();
+                            var current = sorter;
+                            ThreadPoolUtility.Run(() =>
+                            {
+                                try
+                                {
+                                    var item = shallowFactory.ExecuteMethod();
+                                    lock (result)
+                                    {
+                                        result.Add(current, item);
+                                    }
+
+                                }
+                                catch (Exception te)
+                                {
+                                    lock (aggregatedExceptions)
+                                    {
+                                        aggregatedExceptions.Add(te);
+                                    }
+                                }
+                                finally
+                                {
+                                    sync.Signal();
+                                }
+                            });
                             sorter++;
                         }
                         sync.Wait(timeout);
@@ -1299,24 +1323,12 @@ namespace Cuemon.Threading
                         }
                     }
                 }
+                if (aggregatedExceptions.Count > 0) { throw ExceptionUtility.Refine(new ThreadException(aggregatedExceptions), factory.DelegateInfo, factory.GenericArguments); }
+                return new ReadOnlyCollection<TResult>(result.Values);
             }
             finally
             {
                 settings.Rollback();
-            }
-
-            return pool.Result;
-        }
-
-        private static TResult ForEachElementTaskCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory) where TTuple : Template
-        {
-            try
-            {
-                return factory.ExecuteMethod();
-            }
-            finally
-            {
-                factory = null;
             }
         }
     }

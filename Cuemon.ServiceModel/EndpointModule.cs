@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Xml.XPath;
 using Cuemon.Collections.Generic;
+using Cuemon.IO;
 using Cuemon.IO.Compression;
 using Cuemon.Reflection;
 using Cuemon.Web;
@@ -32,7 +33,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>This method is invoked only once as the first event in the HTTP pipeline chain of execution when ASP.NET responds to a request.</remarks>
         protected override void OnApplicationStart(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
 
             EnableExceptionToXmlInterception = true;
             EnableCompression = true;
@@ -110,7 +111,7 @@ namespace Cuemon.ServiceModel
         /// <remarks>This method is invoked when ASP.NET has mapped the current request to the appropriate event handler.</remarks>
         protected override void OnPostMapRequestHandler(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
 
             Type endpoint = ParseEndpoints(context.Request.Url);
             if (endpoint != null)
@@ -155,18 +156,17 @@ namespace Cuemon.ServiceModel
         /// </remarks>
         protected override void HandleExceptionInterception(HttpApplication context, bool includeStackTrace)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             Exception lastException = context.Context.Error;
             if (lastException == null) { return; }
 
-            includeStackTrace = this.IncludeStackTraceOnException;
+            includeStackTrace = IncludeStackTraceOnException;
             HttpException lastHttpException = lastException as HttpException;
 
             string contentType = ParseContentType(lastException);
             if (lastException.Data.Contains("contentType")) { lastException.Data.Remove("contentType"); }
             if (lastException.InnerException != null &&
-                lastException.InnerException.Data.Contains("contentType"))
-            { lastException.InnerException.Data.Remove("contentType"); }
+                lastException.InnerException.Data.Contains("contentType")) { lastException.InnerException.Data.Remove("contentType"); }
 
             int statusCode = 500;
             if (lastHttpException != null)
@@ -195,7 +195,7 @@ namespace Cuemon.ServiceModel
                 try
                 {
                     xmlOutput = XmlConvertUtility.ToStream(lastException, context.Response.ContentEncoding, includeStackTrace);
-                    this.WriteException(context, ConvertUtility.ToByteArray(xmlOutput));
+                    WriteException(context, ByteConverter.FromStream(xmlOutput));
                 }
                 finally
                 {
@@ -212,7 +212,7 @@ namespace Cuemon.ServiceModel
                 {
                     jsonOutput = XmlConvertUtility.ToStream(lastException, context.Response.ContentEncoding, includeStackTrace);
                     jsonOutput = XmlConvertUtility.ToJson(jsonOutput, context.Response.ContentEncoding);
-                    this.WriteException(context, ConvertUtility.ToByteArray(jsonOutput));
+                    WriteException(context, ByteConverter.FromStream(jsonOutput));
                 }
                 finally
                 {
@@ -221,18 +221,18 @@ namespace Cuemon.ServiceModel
                 return;
             }
 
-            string textOutput = ConvertUtility.ToString(lastException, context.Response.ContentEncoding, includeStackTrace);
-            this.WriteException(context, context.Response.ContentEncoding.GetBytes(textOutput));
+            string textOutput = StringConverter.FromException(lastException, context.Response.ContentEncoding, includeStackTrace);
+            WriteException(context, context.Response.ContentEncoding.GetBytes(textOutput));
         }
 
         private void WriteException(HttpApplication context, byte[] outputInBytes)
         {
             context.Response.ClearContent();
             if (EnableCompression &&
-                this.IsValidForCompression(context))
+                IsValidForCompression(context))
             {
                 CompressionType? compressionType = null;
-                CompressionMethodScheme compressionMethod = this.GetClientCompressionMethod(context);
+                CompressionMethodScheme compressionMethod = GetClientCompressionMethod(context);
                 switch (compressionMethod)
                 {
                     case CompressionMethodScheme.GZip:
@@ -246,8 +246,8 @@ namespace Cuemon.ServiceModel
                 if (compressionType.HasValue)
                 {
                     HttpResponseUtility.SetClientCompressionMethod(context.Response, compressionMethod);
-                    Stream compressedOutput = CompressionUtility.CompressStream(ConvertUtility.ToStream(outputInBytes), compressionType.Value);
-                    outputInBytes = ConvertUtility.ToByteArray(compressedOutput);
+                    Stream compressedOutput = CompressionUtility.CompressStream(StreamConverter.FromBytes(outputInBytes), compressionType.Value);
+                    outputInBytes = ByteConverter.FromStream(compressedOutput);
                 }
             }
             context.Response.BinaryWrite(outputInBytes);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Web;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.Diagnostics;
 using Cuemon.Reflection;
 using Cuemon.Web;
@@ -2234,7 +2234,7 @@ namespace Cuemon.ServiceModel
                     if (cachingAttribute.EnableCaching)
                     {
                         if (!cacheability.HasValue) { resolvedCacheability = cachingAttribute.Cacheability; }
-                        expires = utcNow.Add(ConvertUtility.ToTimeSpan(cachingAttribute.Duration, cachingAttribute.DurationUnit));
+                        expires = utcNow.Add(TimeSpanConverter.FromDouble(cachingAttribute.Duration, cachingAttribute.DurationUnit));
                     }
                 }
 

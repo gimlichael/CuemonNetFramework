@@ -12,23 +12,23 @@ namespace Cuemon.Xml.Serialization
     {
         internal static void ParseWriteXml(XmlWriter writer, IHierarchy<object> node)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (node == null) { throw new ArgumentNullException("node"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
             ParseWriteXml(writer, node, false);
         }
 
         internal static void ParseWriteXml(XmlWriter writer, IHierarchy<object> node, bool enumerableCaller)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (node == null) { throw new ArgumentNullException("node"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
             DefaultOr<XmlSerializationAttribute> serializationRules = DefaultOrXmlSerializationAttribute(node.Instance);
             ParseWriteXml(writer, node, enumerableCaller, serializationRules.Instance.DefaultSerializationMethod);
         }
 
         internal static void ParseWriteXml(XmlWriter writer, IHierarchy<object> node, bool enumerableCaller, SerializationMethod method)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (node == null) { throw new ArgumentNullException("node"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
             if (node.HasChildren)
             {
                 WriteEnumerable(writer, node);
@@ -48,8 +48,8 @@ namespace Cuemon.Xml.Serialization
 
         internal static void WriteXml(XmlWriter writer, IHierarchy<object> node, bool enumerableCaller)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (node == null) { throw new ArgumentNullException("node"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
 
             bool hasIgnoreAttribute = node.HasMemberReference && TypeUtility.ContainsAttributeType(node.MemberReference, typeof(XmlIgnoreAttribute));
             if (hasIgnoreAttribute) { return; }
@@ -72,8 +72,8 @@ namespace Cuemon.Xml.Serialization
 
         private static void WriteChildren(XmlWriter writer, IHierarchy<object> node)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (node == null) { throw new ArgumentNullException("node"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
 
             foreach (IHierarchy<object> currentNode in SortChildren(node.GetChildren()))
             {
@@ -107,12 +107,12 @@ namespace Cuemon.Xml.Serialization
 
         internal static XmlQualifiedEntity GetXmlStartElementQualifiedName(IHierarchy<object> node, XmlQualifiedEntity qualifiedRootEntity)
         {
-            if (node == null) { throw new ArgumentNullException("node"); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
             if (qualifiedRootEntity != null && !string.IsNullOrEmpty(qualifiedRootEntity.LocalName)) { return qualifiedRootEntity; }
             bool hasRootAttribute = TypeUtility.ContainsAttributeType(node.InstanceType, true, typeof(XmlRootAttribute));
             bool hasElementAttribute = node.HasMemberReference && TypeUtility.ContainsAttributeType(node.MemberReference, typeof(XmlElementAttribute));
             bool hasWrapperAttribute = TypeUtility.ContainsAttributeType(Hierarchy.Root(node).InstanceType, true, typeof(XmlWrapperAttribute));
-            string rootOrElementName = XmlUtility.SanitizeElementName(node.HasMemberReference ? node.MemberReference.Name : TypeUtility.SanitizeTypeName(node.InstanceType, false, true));
+            string rootOrElementName = XmlUtility.SanitizeElementName(node.HasMemberReference ? node.MemberReference.Name : StringConverter.FromType(node.InstanceType, false, true));
             string ns = null;
 
             if (hasRootAttribute || hasElementAttribute)
@@ -163,9 +163,9 @@ namespace Cuemon.Xml.Serialization
 
         internal static void WriteValue(XmlWriter writer, IHierarchy<object> node, SerializationMethod method, Doer<IWrapper<object>, string> parser, bool enumerableCaller)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (node == null) { throw new ArgumentNullException("node"); }
-            if (parser == null) { throw new ArgumentNullException("parser"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (node == null) { throw new ArgumentNullException(nameof(node)); }
+            if (parser == null) { throw new ArgumentNullException(nameof(parser)); }
             if (IsEnumerable(node)) { return; }
 
             bool hasAttributeAttribute = node.HasMemberReference && TypeUtility.ContainsAttributeType(node.MemberReference, typeof(XmlAttributeAttribute));
@@ -175,7 +175,7 @@ namespace Cuemon.Xml.Serialization
 
             bool isType = node.Instance is Type;
             Type nodeType = isType ? (Type)node.Instance : node.InstanceType;
-            string attributeOrElementName = XmlUtility.SanitizeElementName(node.HasMemberReference ? node.MemberReference.Name : TypeUtility.SanitizeTypeName(nodeType));
+            string attributeOrElementName = XmlUtility.SanitizeElementName(node.HasMemberReference ? node.MemberReference.Name : StringConverter.FromType(nodeType));
 
             if (!hasAttributeAttribute && !hasElementAttribute && !hasTextAttribute)
             {
@@ -243,8 +243,8 @@ namespace Cuemon.Xml.Serialization
 
         internal static void WriteEnumerable(XmlWriter writer, IHierarchy<object> current, bool skipStartElement)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            if (current == null) { throw new ArgumentNullException("current"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            if (current == null) { throw new ArgumentNullException(nameof(current)); }
 
             Type currentType = current.Instance.GetType();
             if (TypeUtility.IsEnumerable(currentType) && currentType != typeof(string))
@@ -261,7 +261,7 @@ namespace Cuemon.Xml.Serialization
                         XmlQualifiedEntity qualifiedEntity = null;
                         if (!TypeUtility.ContainsAttributeType(current.InstanceType, typeof(XmlRootAttribute)) && current.MemberReference == null)
                         {
-                            qualifiedEntity = new XmlQualifiedEntity(TypeUtility.SanitizeTypeName(current.InstanceType, false, true));
+                            qualifiedEntity = new XmlQualifiedEntity(StringConverter.FromType(current.InstanceType, false, true));
                         }
                         qualifiedEntity = GetXmlStartElementQualifiedName(current, qualifiedEntity);
                         writer.WriteStartElement(qualifiedEntity.Prefix, qualifiedEntity.LocalName, qualifiedEntity.Namespace);
@@ -300,7 +300,7 @@ namespace Cuemon.Xml.Serialization
                                 Type[] genericParameters = currentType.GetGenericArguments();
                                 if (genericParameters.Length > 0)
                                 {
-                                    qualifiedEntity = new XmlQualifiedEntity(ConvertUtility.ToDelimitedString(genericParameters, "And", XmlStartNameConverter));
+                                    qualifiedEntity = new XmlQualifiedEntity(StringConverter.ToDelimitedString(genericParameters, "And", XmlStartNameConverter));
                                 }
                             }
 
@@ -320,7 +320,7 @@ namespace Cuemon.Xml.Serialization
 
         private static string XmlStartNameConverter(Type type)
         {
-            return TypeUtility.SanitizeTypeName(type);
+            return StringConverter.FromType(type);
         }
     }
 }

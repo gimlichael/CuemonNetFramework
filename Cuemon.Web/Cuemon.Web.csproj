@@ -81,7 +81,10 @@
     <Compile Include="ApplicationEventBinderModule.cs" />
     <Compile Include="CdnGlobalModule.cs" />
     <Compile Include="Compilation\CompilationUtility.cs" />
+    <Compile Include="CompressionMethodScheme.cs" />
     <Compile Include="Configuration\WebConfigurationUtility.cs" />
+    <Compile Include="FieldValueFilter.cs" />
+    <Compile Include="FieldValueSeparator.cs" />
     <Compile Include="GlobalModule.Exception.cs" />
     <Compile Include="GlobalModule.Routing.cs" />
     <Compile Include="HttpCachingAttribute.cs" />

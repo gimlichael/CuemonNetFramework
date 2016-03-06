@@ -11,8 +11,8 @@ namespace Cuemon.Xml.Serialization
     {
         internal static void ParseReadXml(XmlReader reader, object instance)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (instance == null) { throw new ArgumentNullException("instance"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (instance == null) { throw new ArgumentNullException(nameof(instance)); }
 
             Type instanceType = instance.GetType();
             IEnumerable<PropertyInfo> properties = ReflectionUtility.GetProperties(instanceType, ReflectionUtility.BindingInstancePublicAndPrivate);
@@ -21,8 +21,8 @@ namespace Cuemon.Xml.Serialization
 
         private static void ReaderToPropertiesCopier(XmlReader reader, object instance, IEnumerable<PropertyInfo> properties)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (properties == null) { throw new ArgumentNullException("properties"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (properties == null) { throw new ArgumentNullException(nameof(properties)); }
 
             properties = new List<PropertyInfo>(properties);
             string localName = null;
@@ -41,7 +41,7 @@ namespace Cuemon.Xml.Serialization
                             }
                             else
                             {
-                                property.SetValue(instance, ConvertUtility.ChangeType(reader.Value, property.PropertyType), null);
+                                property.SetValue(instance, ObjectConverter.ChangeType(reader.Value, property.PropertyType), null);
                             }
                         }
                         break;

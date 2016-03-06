@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Cuemon.Collections.Generic
 {
-	/// <summary>
-	/// This utility class provides a set of concrete static methods for supporting the <see cref="Cuemon.Collections.Generic.EnumerableUtility"/>.
-	/// </summary>
-	public static class DictionaryUtility
-	{
+    /// <summary>
+    /// This utility class provides a set of concrete static methods for supporting the <see cref="EnumerableUtility"/>.
+    /// </summary>
+    public static class DictionaryUtility
+    {
         /// <summary>
         /// Returns the first <typeparamref name="TValue"/> matching one of the specified <paramref name="keys"/> in a <see cref="IDictionary{TKey,TValue}"/>, or a default value if the <paramref name="source"/> contains no elements or no match was found.
         /// </summary>
@@ -18,75 +18,30 @@ namespace Cuemon.Collections.Generic
         /// <returns>default(TValue) if source is empty or no match was found; otherwise, the matching element in <paramref name="source"/>.</returns>
         /// <remarks>The default value for reference and nullable types is null.</remarks>
 	    public static TValue FirstMatchOrDefault<TKey, TValue>(IDictionary<TKey, TValue> source, params TKey[] keys)
-	    {
-	        return FirstMatchOrDefault(source, default(TValue), keys);
-	    }
-
-		/// <summary>
-        /// Returns the first <typeparamref name="TValue"/> matching one of the specified <paramref name="keys"/> in a <see cref="IDictionary{TKey,TValue}"/>, or a <paramref name="defaultValue"/> if the <paramref name="source"/> contains no elements or no match was found.
-		/// </summary>
-		/// <typeparam name="TKey">The <see cref="Type"/> of the key.</typeparam>
-		/// <typeparam name="TValue">The <see cref="Type"/> of the value.</typeparam>
-        /// <param name="source">The <see cref="IDictionary{TKey, TValue}"/> to return a matching <typeparamref name="TValue"/> from.</param>
-        /// <param name="defaultValue">The default value to return when <paramref name="source"/> contains no elements or no match was found.</param>
-		/// <param name="keys">A variable number of keys to match in the specified <paramref name="source"/>.</param>
-		/// <returns><paramref name="defaultValue"/> if source is empty or no match was found; otherwise, the matching element in <paramref name="source"/>.</returns>
-		public static TValue FirstMatchOrDefault<TKey, TValue>(IDictionary<TKey, TValue> source, TValue defaultValue, params TKey[] keys)
-		{
-			if (source == null) { throw new ArgumentNullException("source"); }
-			if (keys == null) { throw new ArgumentNullException("keys"); }
-			if (keys.Length == 0) { throw new ArgumentException("You must specify at least one key.", "keys"); }
-			foreach (TKey key in keys)
-			{
-				if (key == null) { continue; }
-				if (source.ContainsKey(key)) { return source[key]; }
-			}
-            return defaultValue;
-		}
-
-        /// <summary>
-        /// Creates a <see cref="Dictionary{TKey,TValue}"/> from the specified <paramref name="source"/> sequence.
-        /// </summary>
-        /// <typeparam name="TKey">The type of keys in the <paramref name="source"/>.</typeparam>
-        /// <typeparam name="TValue">The type of values in the <paramref name="source"/>.</typeparam>
-        /// <param name="source">The sequence to create a <see cref="Dictionary{TKey,TValue}"/> from.</param>
-        /// <returns>A <see cref="Dictionary{TKey,TValue}"/> that is equivalent to the specified <paramref name="source"/> sequence.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="source"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="source"/> contains at least one <see cref="KeyValuePair{TKey,TValue}"/> that produces duplicate keys for two elements.
-        /// </exception>
-        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> source)
         {
-            return ToDictionary(source, EqualityComparer<TKey>.Default);
+            return FirstMatchOrDefault(source, default(TValue), keys);
         }
 
         /// <summary>
-        /// Creates a <see cref="Dictionary{TKey,TValue}"/> from the specified <paramref name="source"/> sequence.
+        /// Returns the first <typeparamref name="TValue"/> matching one of the specified <paramref name="keys"/> in a <see cref="IDictionary{TKey,TValue}"/>, or a <paramref name="defaultValue"/> if the <paramref name="source"/> contains no elements or no match was found.
         /// </summary>
-        /// <typeparam name="TKey">The type of keys in the <paramref name="source"/>.</typeparam>
-        /// <typeparam name="TValue">The type of values in the <paramref name="source"/>.</typeparam>
-        /// <param name="source">The sequence to create a <see cref="Dictionary{TKey,TValue}"/> from.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{T}"/> implementation to use when comparing keys.</param>
-        /// <returns>A <see cref="Dictionary{TKey,TValue}"/> that is equivalent to the specified <paramref name="source"/> sequence.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="source"/> is null - or - <paramref name="comparer"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="source"/> contains at least one <see cref="KeyValuePair{TKey,TValue}"/> that produces duplicate keys for two elements.
-        /// </exception>
-        public static IDictionary<TKey, TValue> ToDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer)
+        /// <typeparam name="TKey">The <see cref="Type"/> of the key.</typeparam>
+        /// <typeparam name="TValue">The <see cref="Type"/> of the value.</typeparam>
+        /// <param name="source">The <see cref="IDictionary{TKey, TValue}"/> to return a matching <typeparamref name="TValue"/> from.</param>
+        /// <param name="defaultValue">The default value to return when <paramref name="source"/> contains no elements or no match was found.</param>
+        /// <param name="keys">A variable number of keys to match in the specified <paramref name="source"/>.</param>
+        /// <returns><paramref name="defaultValue"/> if source is empty or no match was found; otherwise, the matching element in <paramref name="source"/>.</returns>
+        public static TValue FirstMatchOrDefault<TKey, TValue>(IDictionary<TKey, TValue> source, TValue defaultValue, params TKey[] keys)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(comparer, "comparer");
-
-            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>(comparer);
-            foreach (KeyValuePair<TKey, TValue> item in source)
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(keys, nameof(keys));
+            Validator.ThrowIfLowerThan(keys.Length, 1, nameof(keys), "You must specify at least one key.");
+            foreach (TKey key in keys)
             {
-                result.Add(item.Key, item.Value);
+                if (key == null) { continue; }
+                if (source.ContainsKey(key)) { return source[key]; }
             }
-            return result;
+            return defaultValue;
         }
     }
 }

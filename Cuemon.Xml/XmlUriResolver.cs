@@ -9,15 +9,15 @@ namespace Cuemon.Xml
     /// </summary>
     public class XmlUriResolver : XmlUrlResolver
     {
-        private readonly Uri baseUriValue = null;
+        private readonly Uri _baseUriValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlUriResolver"/> class.
         /// </summary>
         /// <param name="baseUri">The base URI used to resolve xsl:include, xsl:import and similar cases.</param>
-        public XmlUriResolver(Uri baseUri) : base()
+        public XmlUriResolver(Uri baseUri)
         {
-            baseUriValue = baseUri;
+            _baseUriValue = baseUri;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Cuemon.Xml
             {
                 return base.ResolveUri(baseUri, relativeUri);
             }
-            return base.ResolveUri(baseUriValue, relativeUri);
+            return base.ResolveUri(_baseUriValue, relativeUri);
         }
     }
 }

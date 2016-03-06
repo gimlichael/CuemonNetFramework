@@ -26,7 +26,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource>(TSource repeats, Act<TSource> method) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, (TSource)ConvertUtility.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method);
+            For(Condition, (TSource)ObjectConverter.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource>(TSource initial, RelationalOperator relational, TSource repeats, Act<TSource> method) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method);
+            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T>(TSource repeats, Act<TSource, T> method, T arg) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, (TSource)ConvertUtility.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg);
+            For(Condition, (TSource)ObjectConverter.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T>(TSource initial, RelationalOperator relational, TSource repeats, Act<TSource, T> method, T arg) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg);
+            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2>(TSource repeats, Act<TSource, T1, T2> method, T1 arg1, T2 arg2) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, (TSource)ConvertUtility.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2);
+            For(Condition, (TSource)ObjectConverter.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2>(TSource initial, RelationalOperator relational, TSource repeats, Act<TSource, T1, T2> method, T1 arg1, T2 arg2) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2);
+            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2, T3>(TSource repeats, Act<TSource, T1, T2, T3> method, T1 arg1, T2 arg2, T3 arg3) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, (TSource)ConvertUtility.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3);
+            For(Condition, (TSource)ObjectConverter.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2, T3>(TSource initial, RelationalOperator relational, TSource repeats, Act<TSource, T1, T2, T3> method, T1 arg1, T2 arg2, T3 arg3) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3);
+            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2, T3, T4>(TSource repeats, Act<TSource, T1, T2, T3, T4> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, (TSource)ConvertUtility.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4);
+            For(Condition, (TSource)ObjectConverter.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2, T3, T4>(TSource initial, RelationalOperator relational, TSource repeats, Act<TSource, T1, T2, T3, T4> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4);
+            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -426,7 +426,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2, T3, T4, T5>(TSource repeats, Act<TSource, T1, T2, T3, T4, T5> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, (TSource)ConvertUtility.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4, arg5);
+            For(Condition, (TSource)ObjectConverter.ChangeType(0, typeof(TSource)), RelationalOperator.LessThan, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -458,7 +458,7 @@ namespace Cuemon
         /// <remarks>Do not use this method for time critical operations as there are quite some overhead do to validation of generic parameter <typeparamref name="TSource"/>.</remarks>
         public static void For<TSource, T1, T2, T3, T4, T5>(TSource initial, RelationalOperator relational, TSource repeats, Act<TSource, T1, T2, T3, T4, T5> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4, arg5);
+            For(Condition, initial, relational, repeats, Iterator, AssignmentOperator.Addition, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), method, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -690,9 +690,9 @@ namespace Cuemon
 
         private static void ValidateFor<TSource>(Doer<TSource, RelationalOperator, TSource, bool> condition, Doer<TSource, AssignmentOperator, TSource, TSource> iterator, object method) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(iterator, "iterator");
-            Validator.ThrowIfNull(method, "method");
+            Validator.ThrowIfNull(condition, nameof(condition));
+            Validator.ThrowIfNull(iterator, nameof(iterator));
+            Validator.ThrowIfNull(method, nameof(method));
             AssignmentUtility.ValidAsNumericOperand<TSource>();
         }
 
@@ -835,8 +835,8 @@ namespace Cuemon
 
         private static void ValidateForEach<TSource>(IEnumerable<TSource> source, object method)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(method, "method");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(method, nameof(method));
         }
 
         private static void ForEachCore<TTuple, TSource>(ActFactory<TTuple> factory, IEnumerable<TSource> elements) where TTuple : Template<TSource>
@@ -1012,9 +1012,9 @@ namespace Cuemon
 
         private static void ValidateWhile<TSource>(TSource source, Doer<bool> condition, object method) where TSource : class
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(condition.Target, "condition", "The specified condition delegate must target an instance method on the provided TSource.");
-            Validator.ThrowIfNull(method, "method");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(condition.Target, nameof(condition), "The specified condition delegate must target an instance method on the provided TSource.");
+            Validator.ThrowIfNull(method, nameof(method));
         }
 
         internal static void ValidateWhileReference<TSource>(TSource source, Doer<bool> condition)
@@ -1077,7 +1077,7 @@ namespace Cuemon
                 case RelationalOperator.NotEqual:
                     return !current.Equals(repeats);
                 default:
-                    throw new ArgumentOutOfRangeException("relational");
+                    throw new ArgumentOutOfRangeException(nameof(relational));
             }
         }
     }

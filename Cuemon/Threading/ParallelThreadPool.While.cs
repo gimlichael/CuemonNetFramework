@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Cuemon.Threading
@@ -1271,9 +1272,9 @@ namespace Cuemon.Threading
 
         private static void ValidateWhile<TSource, TResult>(ThreadPoolSettings settings, TesterDoer<TSource, TResult, bool> condition, object body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(condition, "condition");
-            Validator.ThrowIfNull(body, "body");
+            Validator.ThrowIfNull(settings, nameof(settings));
+            Validator.ThrowIfNull(condition, nameof(condition));
+            Validator.ThrowIfNull(body, nameof(body));
         }
 
         private static void WhileCore<TTuple, TSource, TResult>(ActFactory<TTuple> factory, TesterDoer<TSource, TResult, bool> condition, TSource source, out TResult result, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TTuple : Template<TResult>
@@ -1281,6 +1282,7 @@ namespace Cuemon.Threading
             CountdownEvent sync = null;
             try
             {
+                List<Exception> aggregatedExceptions = new List<Exception>();
                 bool breakout = false;
                 while (true)
                 {
@@ -1291,7 +1293,25 @@ namespace Cuemon.Threading
                         while (condition(source, out result))
                         {
                             factory.GenericArguments.Arg1 = result;
-                            ThreadPoolUtility.QueueWork(WhileEnumeratorCore, factory.Clone(), sync);
+                            var shallowFactory = factory.Clone();
+                            ThreadPoolUtility.Run(() =>
+                            {
+                                try
+                                {
+                                    shallowFactory.ExecuteMethod();
+                                }
+                                catch (Exception te)
+                                {
+                                    lock (aggregatedExceptions)
+                                    {
+                                        aggregatedExceptions.Add(te);
+                                    }
+                                }
+                                finally
+                                {
+                                    sync.Signal();
+                                }
+                            });
                             partitioned--;
                             if (partitioned == 0) { break; }
                         }
@@ -1315,23 +1335,11 @@ namespace Cuemon.Threading
 
                     if (breakout) { break; }
                 }
+                if (aggregatedExceptions.Count > 0) { throw ExceptionUtility.Refine(new ThreadException(aggregatedExceptions), factory.DelegateInfo, factory.GenericArguments); }
             }
             finally
             {
                 settings.Rollback();
-            }
-        }
-
-        private static void WhileEnumeratorCore<TTuple>(ActFactory<TTuple> factory, ISynchronization sync) where TTuple : Template
-        {
-            try
-            {
-                factory.ExecuteMethod();
-            }
-            finally
-            {
-                factory = null;
-                sync.Signal();
             }
         }
     }

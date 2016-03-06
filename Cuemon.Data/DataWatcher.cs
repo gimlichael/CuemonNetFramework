@@ -1,120 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Cuemon.Runtime;
 using Cuemon.Security.Cryptography;
 
 namespace Cuemon.Data
 {
-	/// <summary>
-	/// A <see cref="Watcher"/> implementation, that can monitor and signal changes of one or more data locations by raising the <see cref="Watcher.Changed"/> event.
-	/// </summary>
-	public sealed class DataWatcher : Watcher
-	{
-		private readonly object _locker = new object();
+    /// <summary>
+    /// A <see cref="Watcher"/> implementation, that can monitor and signal changes of one or more data locations by raising the <see cref="Watcher.Changed"/> event.
+    /// </summary>
+    public sealed class DataWatcher : Watcher
+    {
+        private readonly object _locker = new object();
 
-		#region Constructors
-		DataWatcher()
-		{
-		}
+        #region Constructors
+        DataWatcher()
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataWatcher"/> class.
-		/// </summary>
-		/// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
-		/// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
-		/// <param name="parameters">An optional sequence of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
-		/// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval of two minutes using a MD5 hash check on the query result. The signaling is default delayed 15 seconds before first invoke.</remarks>
-		public DataWatcher(DataManager manager, IDataCommand command, params IDataParameter[] parameters) : this(manager, command, TimeSpan.FromMinutes(2), parameters)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWatcher"/> class.
+        /// </summary>
+        /// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
+        /// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
+        /// <param name="parameters">An optional sequence of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
+        /// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval of two minutes using a MD5 hash check on the query result. The signaling is default delayed 15 seconds before first invoke.</remarks>
+        public DataWatcher(DataManager manager, IDataCommand command, params IDataParameter[] parameters) : this(manager, command, TimeSpan.FromMinutes(2), parameters)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataWatcher"/> class.
-		/// </summary>
-		/// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
-		/// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
-		/// <param name="period">The time interval between periodic signaling for changes of the provided <paramref name="command"/>.</param>
-		/// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
-		/// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval specified by <paramref name="period"/> using a MD5 hash check on the query result. The signaling is default delayed 15 seconds before first invoke.</remarks>
-		public DataWatcher(DataManager manager, IDataCommand command, TimeSpan period, params IDataParameter[] parameters) : this(manager, command, TimeSpan.FromSeconds(15), period, TimeSpan.Zero, parameters)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWatcher"/> class.
+        /// </summary>
+        /// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
+        /// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
+        /// <param name="period">The time interval between periodic signaling for changes of the provided <paramref name="command"/>.</param>
+        /// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
+        /// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval specified by <paramref name="period"/> using a MD5 hash check on the query result. The signaling is default delayed 15 seconds before first invoke.</remarks>
+        public DataWatcher(DataManager manager, IDataCommand command, TimeSpan period, params IDataParameter[] parameters) : this(manager, command, TimeSpan.FromSeconds(15), period, TimeSpan.Zero, parameters)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataWatcher"/> class.
-		/// </summary>
-		/// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
-		/// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
-		/// <param name="dueTime">The amount of time to delay before the associated <see cref="Watcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
-		/// <param name="period">The time interval between periodic signaling for changes of the provided <paramref name="command"/>.</param>
-		/// <param name="dueTimeOnChanged">The amount of time to postpone a <see cref="Watcher.Changed"/> event. Specify zero (0) to disable postponing.</param>
-		/// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
-		/// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval specified by <paramref name="period"/> using a MD5 hash check on the query result.</remarks>
-		public DataWatcher(DataManager manager, IDataCommand command, TimeSpan dueTime, TimeSpan period, TimeSpan dueTimeOnChanged, params IDataParameter[] parameters) : base(dueTime, period, dueTimeOnChanged)
-		{
-			if (command == null) { throw new ArgumentNullException("command"); }
-			this.Manager = manager;
-			this.Command = command;
-			this.Parameters = parameters;
-			this.Signature = null;
-		}
-		#endregion
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWatcher"/> class.
+        /// </summary>
+        /// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
+        /// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
+        /// <param name="dueTime">The amount of time to delay before the associated <see cref="Watcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
+        /// <param name="period">The time interval between periodic signaling for changes of the provided <paramref name="command"/>.</param>
+        /// <param name="dueTimeOnChanged">The amount of time to postpone a <see cref="Watcher.Changed"/> event. Specify zero (0) to disable postponing.</param>
+        /// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
+        /// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval specified by <paramref name="period"/> using a MD5 hash check on the query result.</remarks>
+        public DataWatcher(DataManager manager, IDataCommand command, TimeSpan dueTime, TimeSpan period, TimeSpan dueTimeOnChanged, params IDataParameter[] parameters) : base(dueTime, period, dueTimeOnChanged)
+        {
+            if (command == null) { throw new ArgumentNullException(nameof(command)); }
+            this.Manager = manager;
+            this.Command = command;
+            this.Parameters = parameters;
+            this.Signature = null;
+        }
+        #endregion
 
-		#region Properties
-		private string Signature { get; set; }
-		/// <summary>
-		/// Gets the associated <see cref="IDataCommand"/> of this <see cref="DataWatcher"/>.
-		/// </summary>
-		/// <value>The associated <see cref="IDataCommand"/> of this <see cref="DataWatcher"/>.</value>
-		public IDataCommand Command { get; private set; }
+        #region Properties
+        private string Signature { get; set; }
+        /// <summary>
+        /// Gets the associated <see cref="IDataCommand"/> of this <see cref="DataWatcher"/>.
+        /// </summary>
+        /// <value>The associated <see cref="IDataCommand"/> of this <see cref="DataWatcher"/>.</value>
+        public IDataCommand Command { get; private set; }
 
-		/// <summary>
-		/// Gets the associated array of <see cref="IDataParameter"/> of this <see cref="DataWatcher"/>.
-		/// </summary>
+        /// <summary>
+        /// Gets the associated array of <see cref="IDataParameter"/> of this <see cref="DataWatcher"/>.
+        /// </summary>
         /// <value>The associated array of <see cref="IDataParameter"/> of this <see cref="DataWatcher"/>.</value>
-		public IDataParameter[] Parameters { get; private set; }
+        public IDataParameter[] Parameters { get; private set; }
 
-		/// <summary>
-		/// Gets the associated <see cref="DataManager"/> of this <see cref="DataWatcher"/>.
-		/// </summary>
-		/// <value>The associated <see cref="DataManager"/> of this <see cref="DataWatcher"/>.</value>
-		public DataManager Manager { get; private set; }
-		#endregion
+        /// <summary>
+        /// Gets the associated <see cref="DataManager"/> of this <see cref="DataWatcher"/>.
+        /// </summary>
+        /// <value>The associated <see cref="DataManager"/> of this <see cref="DataWatcher"/>.</value>
+        public DataManager Manager { get; private set; }
+        #endregion
 
-		#region Methods
-		/// <summary>
-		/// Handles the signaling of this <see cref="DataWatcher"/>.
-		/// </summary>
-		protected override void HandleSignaling()
-		{
-			lock (_locker)
-			{
-				string currentSignature = null;
-				DateTime utcLastModified = DateTime.UtcNow;
+        #region Methods
+        /// <summary>
+        /// Handles the signaling of this <see cref="DataWatcher"/>.
+        /// </summary>
+        protected override void HandleSignaling()
+        {
+            lock (_locker)
+            {
+                string currentSignature = null;
+                DateTime utcLastModified = DateTime.UtcNow;
                 List<object[]> values = new List<object[]>();
-			    DataManager manager = this.Manager.Clone();
-				using (IDataReader reader = manager.ExecuteReader(this.Command, this.Parameters))
-				{
-					while (reader.Read())
-					{
-						object[] readerValues = new object[reader.FieldCount];
-						reader.GetValues(readerValues);
-						values.Add(readerValues);
-					}
-				}
+                DataManager manager = this.Manager.Clone();
+                using (IDataReader reader = manager.ExecuteReader(this.Command, this.Parameters))
+                {
+                    while (reader.Read())
+                    {
+                        object[] readerValues = new object[reader.FieldCount];
+                        reader.GetValues(readerValues);
+                        values.Add(readerValues);
+                    }
+                }
                 currentSignature = HashUtility.ComputeHash(values);
                 values.Clear();
-			    values = null;
+                values = null;
 
-				if (this.Signature == null) { this.Signature = currentSignature; }
-				if (!this.Signature.Equals(currentSignature, StringComparison.OrdinalIgnoreCase))
-				{
-					this.SetUtcLastModified(utcLastModified);
-					this.OnChangedRaised();
-				}
-				this.Signature = currentSignature;
-			}
-		}
-		#endregion
-	}
+                if (this.Signature == null) { this.Signature = currentSignature; }
+                if (!this.Signature.Equals(currentSignature, StringComparison.OrdinalIgnoreCase))
+                {
+                    this.SetUtcLastModified(utcLastModified);
+                    this.OnChangedRaised();
+                }
+                this.Signature = currentSignature;
+            }
+        }
+        #endregion
+    }
 }

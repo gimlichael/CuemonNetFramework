@@ -16,7 +16,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/>.</returns>
         public static DoerFactory<Template, TResult> Create<TResult>(Doer<TResult> method)
         {
-            return new DoerFactory<Template, TResult>(tuple => method(), TupleUtility.CreateZero(), method != null);
+            return new DoerFactory<Template, TResult>(tuple => method(), TupleUtility.CreateZero(), method);
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and one generic argument.</returns>
         public static DoerFactory<Template<T>, TResult> Create<T, TResult>(Doer<T, TResult> method, T arg)
         {
-            return new DoerFactory<Template<T>, TResult>(tuple => method(tuple.Arg1), TupleUtility.CreateOne(arg), method != null);
+            return new DoerFactory<Template<T>, TResult>(tuple => method(tuple.Arg1), TupleUtility.CreateOne(arg), method);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and two generic arguments.</returns>
         public static DoerFactory<Template<T1, T2>, TResult> Create<T1, T2, TResult>(Doer<T1, T2, TResult> method, T1 arg1, T2 arg2)
         {
-            return new DoerFactory<Template<T1, T2>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2), TupleUtility.CreateTwo(arg1, arg2), method != null);
+            return new DoerFactory<Template<T1, T2>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2), TupleUtility.CreateTwo(arg1, arg2), method);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and three generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3>, TResult> Create<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3)
         {
-            return new DoerFactory<Template<T1, T2, T3>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3), TupleUtility.CreateThree(arg1, arg2, arg3), method != null);
+            return new DoerFactory<Template<T1, T2, T3>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3), TupleUtility.CreateThree(arg1, arg2, arg3), method);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and four generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4>, TResult> Create<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4), TupleUtility.CreateFour(arg1, arg2, arg3, arg4), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4), TupleUtility.CreateFour(arg1, arg2, arg3, arg4), method);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and five generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5>, TResult> Create<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5), TupleUtility.CreateFive(arg1, arg2, arg3, arg4, arg5), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5), TupleUtility.CreateFive(arg1, arg2, arg3, arg4, arg5), method);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and six generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6>, TResult> Create<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6), TupleUtility.CreateSix(arg1, arg2, arg3, arg4, arg5, arg6), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6), TupleUtility.CreateSix(arg1, arg2, arg3, arg4, arg5, arg6), method);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and seven generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7), TupleUtility.CreateSeven(arg1, arg2, arg3, arg4, arg5, arg6, arg7), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7), TupleUtility.CreateSeven(arg1, arg2, arg3, arg4, arg5, arg6, arg7), method);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and eight generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8), TupleUtility.CreateEight(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8), TupleUtility.CreateEight(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8), method);
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and nine generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9), TupleUtility.CreateNine(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9), TupleUtility.CreateNine(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9), method);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and ten generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10), TupleUtility.CreateTen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10), TupleUtility.CreateTen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10), method);
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and eleven generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11), TupleUtility.CreateEleven(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11), TupleUtility.CreateEleven(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11), method);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and twelfth generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12), TupleUtility.CreateTwelve(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12), TupleUtility.CreateTwelve(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12), method);
         }
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and thirteen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13), TupleUtility.CreateThirteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13), TupleUtility.CreateThirteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13), method);
         }
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and fourteen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14), TupleUtility.CreateFourteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14), TupleUtility.CreateFourteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14), method);
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and fifteen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15), TupleUtility.CreateFifteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15), TupleUtility.CreateFifteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15), method);
         }
 
         /// <summary>
@@ -464,7 +464,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and sixteen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16), TupleUtility.CreateSixteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16), TupleUtility.CreateSixteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16), method);
         }
 
         /// <summary>
@@ -509,7 +509,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and seventeen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17), TupleUtility.CreateSeventeen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17), TupleUtility.CreateSeventeen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17), method);
         }
 
         /// <summary>
@@ -556,7 +556,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and eighteen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17, tuple.Arg18), TupleUtility.CreateEighteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17, tuple.Arg18), TupleUtility.CreateEighteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18), method);
         }
 
         /// <summary>
@@ -605,7 +605,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and nineteen generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17, tuple.Arg18, tuple.Arg19), TupleUtility.CreateNineteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17, tuple.Arg18, tuple.Arg19), TupleUtility.CreateNineteen(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19), method);
         }
 
         /// <summary>
@@ -656,7 +656,7 @@ namespace Cuemon
         /// <returns>An instance of <see cref="DoerFactory{TTuple,TResult}"/> object initialized with the specified <paramref name="method"/> and twenty generic arguments.</returns>
         public static DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>, TResult> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20)
         {
-            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17, tuple.Arg18, tuple.Arg19, tuple.Arg20), TupleUtility.CreateTwenty(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20), method != null);
+            return new DoerFactory<Template<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>, TResult>(tuple => method(tuple.Arg1, tuple.Arg2, tuple.Arg3, tuple.Arg4, tuple.Arg5, tuple.Arg6, tuple.Arg7, tuple.Arg8, tuple.Arg9, tuple.Arg10, tuple.Arg11, tuple.Arg12, tuple.Arg13, tuple.Arg14, tuple.Arg15, tuple.Arg16, tuple.Arg17, tuple.Arg18, tuple.Arg19, tuple.Arg20), TupleUtility.CreateTwenty(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20), method);
         }
 
         /// <summary>
@@ -686,7 +686,7 @@ namespace Cuemon
         /// </summary>
         /// <param name="method">The function delegate to invoke.</param>
         /// <param name="tuple">The n-tuple argument of <paramref name="method"/>.</param>
-        public DoerFactory(Doer<TTuple, TResult> method, TTuple tuple) : this(method, tuple, method != null)
+        public DoerFactory(Doer<TTuple, TResult> method, TTuple tuple) : this(method, tuple, method)
         {
         }
 
@@ -695,11 +695,11 @@ namespace Cuemon
         /// </summary>
         /// <param name="method">The function delegate to invoke.</param>
         /// <param name="tuple">The n-tuple argument of <paramref name="method"/>.</param>
-        /// <param name="hasDelegate"><c>true</c> if this instance has a valid delegate; otherwise, <c>false</c>.</param>
-        internal DoerFactory(Doer<TTuple, TResult> method, TTuple tuple, bool hasDelegate) : base(tuple, hasDelegate)
+        /// <param name="originalDelegate">The original delegate wrapped by <paramref name="method"/>.</param>
+        internal DoerFactory(Doer<TTuple, TResult> method, TTuple tuple, Delegate originalDelegate) : base(tuple, originalDelegate != null)
         {
             Method = method;
-            DelegateInfo = method == null ? null : method.Method;
+            DelegateInfo = Infrastructure.ResolveDelegateInfo(method == null ? null : method, originalDelegate);
         }
 
         /// <summary>
@@ -734,9 +734,20 @@ namespace Cuemon
         }
 
         /// <summary>
+        /// Executes the specified delegate asynchronous operation with the specified arguments.
+        /// </summary>
+        /// <param name="callback">The method to be called when the operation has completed.</param>
+        /// <param name="state">An optional object that contains information about the asynchronous operation.</param>
+        public void BeginExecuteMethod(AsyncCallback callback, object state)
+        {
+            ThrowIfNoValidDelegate(Condition.IsNull(Method));
+            Method.BeginInvoke(GenericArguments, callback, state);
+        }
+
+        /// <summary>
         /// Retrieves the return value of the asynchronous operation represented by the <see cref="IAsyncResult"/> passed.
         /// </summary>
-        /// <param name="result">The <see cref="IAsyncResult"/> that represents a specific invoke asynchronous operation, returned when calling <see cref="Doer{TResult}.BeginInvoke"/>.</param>
+        /// <param name="result">The <see cref="IAsyncResult"/> that represents a specific invoke asynchronous operation, returned when calling <see cref="BeginExecuteMethod"/>.</param>
         /// <returns>The <typeparamref name="TResult"/> generated by the asynchronous operation.</returns>
         public TResult EndExecuteMethod(IAsyncResult result)
         {

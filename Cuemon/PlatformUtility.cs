@@ -25,7 +25,7 @@ namespace Cuemon
                 {
                     try
                     {
-                        IDictionary<string, object> compositeProcessorInfo = DictionaryUtility.ToDictionary(ProcessorInfo);
+                        IDictionary<string, object> compositeProcessorInfo = DictionaryConverter.FromEnumerable(ProcessorInfo);
                         IReadOnlyDictionary<string, object> computerSystem = ManagementUtility.GetComputerSystemInfo();
                         if (computerSystem.ContainsKey("NumberOfProcessors")) { compositeProcessorInfo.Add("NumberOfProcessors", computerSystem["NumberOfProcessors"]); }
                         if (!compositeProcessorInfo.ContainsKey("NumberOfCores")) { compositeProcessorInfo.Add("NumberOfCores", coreCount); }
@@ -75,7 +75,7 @@ namespace Cuemon
         /// </remarks>
         public static int GetProcessorAffinityCount(Process process)
         {
-            if (process == null) { throw new ArgumentNullException("process"); }
+            if (process == null) { throw new ArgumentNullException(nameof(process)); }
             uint processAffinityMask = (uint)process.ProcessorAffinity;
             const uint bitsPerByte = 8;
             uint loop = bitsPerByte * sizeof(uint);

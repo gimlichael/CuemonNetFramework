@@ -97,9 +97,9 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy(XmlReader reader, XmlWriterSettings settings, bool leaveStreamOpen, Act<XmlWriter, XmlReader> copier)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (copier == null) { throw new ArgumentNullException("copier"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (copier == null) { throw new ArgumentNullException(nameof(copier)); }
             try
             {
                 return CreateXml(copier, reader, settings);
@@ -159,9 +159,9 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy<T>(XmlReader reader, XmlWriterSettings settings, bool leaveStreamOpen, Act<XmlWriter, XmlReader, T> copier, T arg)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (copier == null) { throw new ArgumentNullException("copier"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (copier == null) { throw new ArgumentNullException(nameof(copier)); }
             try
             {
                 return CreateXml(copier, reader, arg, settings);
@@ -227,9 +227,9 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy<T1, T2>(XmlReader reader, XmlWriterSettings settings, bool leaveStreamOpen, Act<XmlWriter, XmlReader, T1, T2> copier, T1 arg1, T2 arg2)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (copier == null) { throw new ArgumentNullException("copier"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (copier == null) { throw new ArgumentNullException(nameof(copier)); }
             try
             {
                 return CreateXml(copier, reader, arg1, arg2, settings);
@@ -301,9 +301,9 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy<T1, T2, T3>(XmlReader reader, XmlWriterSettings settings, bool leaveStreamOpen, Act<XmlWriter, XmlReader, T1, T2, T3> copier, T1 arg1, T2 arg2, T3 arg3)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (copier == null) { throw new ArgumentNullException("copier"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (copier == null) { throw new ArgumentNullException(nameof(copier)); }
             try
             {
                 return CreateXml(copier, reader, arg1, arg2, arg3, settings);
@@ -381,9 +381,9 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy<T1, T2, T3, T4>(XmlReader reader, XmlWriterSettings settings, bool leaveStreamOpen, Act<XmlWriter, XmlReader, T1, T2, T3, T4> copier, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (copier == null) { throw new ArgumentNullException("copier"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (copier == null) { throw new ArgumentNullException(nameof(copier)); }
             try
             {
                 return CreateXml(copier, reader, arg1, arg2, arg3, arg4, settings);
@@ -467,9 +467,9 @@ namespace Cuemon.Xml
         /// </exception>
         public static Stream Copy<T1, T2, T3, T4, T5>(XmlReader reader, XmlWriterSettings settings, bool leaveStreamOpen, Act<XmlWriter, XmlReader, T1, T2, T3, T4, T5> copier, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (copier == null) { throw new ArgumentNullException("copier"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (copier == null) { throw new ArgumentNullException(nameof(copier)); }
             try
             {
                 return CreateXml(copier, reader, arg1, arg2, arg3, arg4, arg5, settings);
@@ -482,8 +482,8 @@ namespace Cuemon.Xml
 
         private static void DefaultCopier(XmlWriter writer, XmlReader reader)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
 
             while (reader.Read())
             {
@@ -1188,7 +1188,7 @@ namespace Cuemon.Xml
 
         private static Stream CreateXmlCore<TTuple>(ActFactory<TTuple> factory, XmlWriterSettings settings, MethodBase caller) where TTuple : Template<XmlWriter>
         {
-            if (settings == null) { throw new ArgumentNullException("settings"); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
             Stream output = null;
             MemoryStream tempOutput = null;
             try

@@ -25,10 +25,10 @@ namespace Cuemon.Collections.Generic
         /// </summary>
         public PagedSettings()
         {
-            this.PageSize = DefaultPageSize;
-            this.PageNumber = 1;
-            this.SortOrderDirection = SortOrder.Unspecified;
-            this.Data = new DataPairDictionary();
+            PageSize = DefaultPageSize;
+            PageNumber = 1;
+            SortOrderDirection = SortOrder.Unspecified;
+            Data = new DataPairDictionary();
         }
         #endregion
 
@@ -40,7 +40,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode()
         {
-            return StructUtility.GetHashCode32(EnumerableUtility.AsEnumerable(this.PageSize, this.PageNumber, (int)this.SortOrderDirection, this.Data.GetHashCode())) ^ StringUtility.GetHashCode(string.Concat(this.SearchCriteria, this.SortOrderBy));
+            return StructUtility.GetHashCode32(EnumerableConverter.FromArray(PageSize, PageNumber, (int)SortOrderDirection, Data.GetHashCode())) ^ StringUtility.GetHashCode(string.Concat(SearchCriteria, SortOrderBy));
         }
 
         #endregion
@@ -52,7 +52,7 @@ namespace Cuemon.Collections.Generic
         /// <value><c>true</c> if this instance invoked with a search operation; otherwise, <c>false</c>.</value>
         public bool HasSearchCriteriaDefined
         {
-            get { return !String.IsNullOrEmpty(this.SearchCriteria); }
+            get { return !String.IsNullOrEmpty(SearchCriteria); }
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Cuemon.Collections.Generic
         /// <value><c>true</c> if this instance invoked with a sorting operation.; otherwise, <c>false</c>.</value>
         public bool HasSortOrderByDefined
         {
-            get { return !String.IsNullOrEmpty(this.SortOrderBy); }
+            get { return !string.IsNullOrEmpty(SortOrderBy); }
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Cuemon.Collections.Generic;
+using Cuemon.Runtime;
 
 namespace Cuemon.IO
 {
@@ -27,7 +29,7 @@ namespace Cuemon.IO
         /// <param name="path">The directory that this <see cref="FileDependency" /> will monitor. When the directory changes, this <see cref="FileDependency" /> will notify any subscribing objects of the change.</param>
         /// <param name="filter">The type of files to watch. For example, "*.xslt" watches for changes to all XSLT files.</param>
         public FileDependency(string path, string filter)
-            : this(ConvertUtility.ToArray<string>(path), filter)
+            : this(EnumerableConverter.ToArray<string>(path), filter)
         {
         }
 
@@ -36,7 +38,7 @@ namespace Cuemon.IO
         /// </summary>
         /// <param name="directories">An <see cref="IEnumerable{T}"/> of directories that this <see cref="FileDependency"/> will monitor. When any of these directories changes, this <see cref="FileDependency"/> will notify any subscribing objects of the change.</param>
         public FileDependency(IEnumerable<string> directories)
-            : this (directories, null)
+            : this(directories, null)
         {
         }
 
@@ -47,7 +49,7 @@ namespace Cuemon.IO
         /// <param name="filter">The type of files to watch. For example, "*.xslt" watches for changes to all XSLT files.</param>
         public FileDependency(IEnumerable<string> directories, string filter)
         {
-            if (directories == null) { throw new ArgumentNullException("directories"); }
+            if (directories == null) { throw new ArgumentNullException(nameof(directories)); }
             this.Directories = directories;
             this.Filter = filter;
         }

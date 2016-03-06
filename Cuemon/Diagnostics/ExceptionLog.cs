@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Cuemon.IO;
 
 namespace Cuemon.Diagnostics
 {
@@ -94,7 +95,7 @@ namespace Cuemon.Diagnostics
         /// <param name="computerName">The name of the computer to associate the <paramref name="exception"/> with.</param>
         public virtual void WriteEntry(Exception exception, LogEntrySeverity severity, string computerName)
         {
-            if (exception == null) throw new ArgumentNullException("exception");
+            if (exception == null) throw new ArgumentNullException(nameof(exception));
             MemoryStream output = null;
             MemoryStream tempOutput = null;
             try
@@ -102,16 +103,16 @@ namespace Cuemon.Diagnostics
                 tempOutput = new MemoryStream();
                 using (StreamWriter writer = new StreamWriter(tempOutput, this.Encoding))
                 {
-                    writer.Write(ConvertUtility.ToString(exception, this.Encoding));
+                    writer.Write(StringConverter.FromException(exception, this.Encoding));
                     writer.Flush();
                     tempOutput.Position = 0;
                     output = tempOutput;
                     tempOutput = null;
-                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, ConvertUtility.ToString(output, PreambleSequence.Remove), severity, computerName);
+                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, PreambleSequence.Remove), severity, computerName);
                 }
                 output = null;
             }
-            finally 
+            finally
             {
                 if (tempOutput != null) { tempOutput.Dispose(); }
                 if (output != null) { output.Dispose(); }

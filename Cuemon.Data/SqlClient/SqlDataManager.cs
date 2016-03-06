@@ -71,9 +71,9 @@ namespace Cuemon.Data.SqlClient
         /// <returns><see cref="int"/></returns>
         public override int ExecuteIdentityInt32(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
-            if (dataCommand == null) throw new ArgumentNullException("dataCommand");
-            if (dataCommand.Type != CommandType.Text) { throw new ArgumentException("This method only supports CommandType.Text specifications.", "dataCommand"); }
-            return this.ExecuteScalarAsInt32(new DataCommand(string.Format(CultureInfo.InvariantCulture, "{0} {1}",
+            if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
+            if (dataCommand.Type != CommandType.Text) { throw new ArgumentException("This method only supports CommandType.Text specifications.", nameof(dataCommand)); }
+            return ExecuteScalarAsInt32(new DataCommand(string.Format(CultureInfo.InvariantCulture, "{0} {1}",
                 dataCommand.Text,
                 "SELECT CONVERT(INT, SCOPE_IDENTITY())"),
                 dataCommand.Type,
@@ -88,9 +88,9 @@ namespace Cuemon.Data.SqlClient
         /// <returns><see cref="long"/></returns>
         public override long ExecuteIdentityInt64(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
-            if (dataCommand == null) throw new ArgumentNullException("dataCommand");
-            if (dataCommand.Type != CommandType.Text) { throw new ArgumentException("This method only supports CommandType.Text specifications.", "dataCommand"); }
-            return this.ExecuteScalarAsInt64(new DataCommand(string.Format(CultureInfo.InvariantCulture, "{0} {1}",
+            if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
+            if (dataCommand.Type != CommandType.Text) { throw new ArgumentException("This method only supports CommandType.Text specifications.", nameof(dataCommand)); }
+            return ExecuteScalarAsInt64(new DataCommand(string.Format(CultureInfo.InvariantCulture, "{0} {1}",
                 dataCommand.Text,
                 "SELECT CONVERT(BIGINT, SCOPE_IDENTITY())"),
                 dataCommand.Type,
@@ -105,9 +105,9 @@ namespace Cuemon.Data.SqlClient
         /// <returns><see cref="decimal"/></returns>
         public override decimal ExecuteIdentityDecimal(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
-            if (dataCommand == null) throw new ArgumentNullException("dataCommand");
-            if (dataCommand.Type != CommandType.Text) { throw new ArgumentException("This method only supports CommandType.Text specifications.", "dataCommand"); }
-            return this.ExecuteScalarAsDecimal(new DataCommand(string.Format(CultureInfo.InvariantCulture, "{0} {1}",
+            if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
+            if (dataCommand.Type != CommandType.Text) { throw new ArgumentException("This method only supports CommandType.Text specifications.", nameof(dataCommand)); }
+            return ExecuteScalarAsDecimal(new DataCommand(string.Format(CultureInfo.InvariantCulture, "{0} {1}",
                 dataCommand.Text,
                 "SELECT CONVERT(NUMERIC, SCOPE_IDENTITY())"),
                 dataCommand.Type,
@@ -145,10 +145,10 @@ namespace Cuemon.Data.SqlClient
         /// </remarks>
         public void ExecuteBulk(IDataReader source, IEnumerable<Mapping> mappings, string destinationTable)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(mappings, "mappings");
-            Validator.ThrowIfNullOrEmpty(destinationTable, "destinationTable");
-            this.ExecuteBulk(source, ToSqlBulkCopyMappings(mappings), destinationTable);
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(mappings, nameof(mappings));
+            Validator.ThrowIfNullOrEmpty(destinationTable, nameof(destinationTable));
+            ExecuteBulk(source, ToSqlBulkCopyMappings(mappings), destinationTable);
         }
 
         /// <summary>
@@ -182,12 +182,12 @@ namespace Cuemon.Data.SqlClient
         /// </remarks>
         public void ExecuteBulk(IDataReader source, IEnumerable<SqlBulkCopyColumnMapping> mappings, string destinationTable)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (mappings == null) { throw new ArgumentNullException("mappings"); }
-            if (destinationTable == null) { throw new ArgumentNullException("destinationTable"); }
-            if (destinationTable.Length == 0) { throw new ArgumentEmptyException("destinationTable"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (mappings == null) { throw new ArgumentNullException(nameof(mappings)); }
+            if (destinationTable == null) { throw new ArgumentNullException(nameof(destinationTable)); }
+            if (destinationTable.Length == 0) { throw new ArgumentEmptyException(nameof(destinationTable)); }
 
-            this.ExecuteBulk(source, mappings, destinationTable, SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.UseInternalTransaction);
+            ExecuteBulk(source, mappings, destinationTable, SqlBulkCopyOptions.TableLock | SqlBulkCopyOptions.UseInternalTransaction);
         }
 
         /// <summary>
@@ -205,10 +205,10 @@ namespace Cuemon.Data.SqlClient
         /// </exception>
         public void ExecuteBulk(IDataReader source, IEnumerable<Mapping> mappings, string destinationTable, SqlBulkCopyOptions options)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(mappings, "mappings");
-            Validator.ThrowIfNullOrEmpty(destinationTable, "destinationTable");
-            this.ExecuteBulk(source, ToSqlBulkCopyMappings(mappings), destinationTable, options);
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(mappings, nameof(mappings));
+            Validator.ThrowIfNullOrEmpty(destinationTable, nameof(destinationTable));
+            ExecuteBulk(source, ToSqlBulkCopyMappings(mappings), destinationTable, options);
         }
 
         /// <summary>
@@ -226,11 +226,11 @@ namespace Cuemon.Data.SqlClient
         /// </exception>
         public void ExecuteBulk(IDataReader source, IEnumerable<SqlBulkCopyColumnMapping> mappings, string destinationTable, SqlBulkCopyOptions options)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (mappings == null) { throw new ArgumentNullException("mappings"); }
-            if (destinationTable == null) { throw new ArgumentNullException("destinationTable"); }
-            if (destinationTable.Length == 0) { throw new ArgumentEmptyException("destinationTable"); }
-            this.ExecuteBulk(source, mappings, destinationTable, options, DataCommand.DefaultTimeout);
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (mappings == null) { throw new ArgumentNullException(nameof(mappings)); }
+            if (destinationTable == null) { throw new ArgumentNullException(nameof(destinationTable)); }
+            if (destinationTable.Length == 0) { throw new ArgumentEmptyException(nameof(destinationTable)); }
+            ExecuteBulk(source, mappings, destinationTable, options, DataCommand.DefaultTimeout);
         }
 
         /// <summary>
@@ -249,10 +249,10 @@ namespace Cuemon.Data.SqlClient
         /// </exception>
         public void ExecuteBulk(IDataReader source, IEnumerable<Mapping> mappings, string destinationTable, SqlBulkCopyOptions options, TimeSpan timeout)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(mappings, "mappings");
-            Validator.ThrowIfNullOrEmpty(destinationTable, "destinationTable");
-            this.ExecuteBulk(source, ToSqlBulkCopyMappings(mappings), destinationTable, options, timeout);
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(mappings, nameof(mappings));
+            Validator.ThrowIfNullOrEmpty(destinationTable, nameof(destinationTable));
+            ExecuteBulk(source, ToSqlBulkCopyMappings(mappings), destinationTable, options, timeout);
         }
 
         /// <summary>
@@ -271,14 +271,14 @@ namespace Cuemon.Data.SqlClient
         /// </exception>
         public void ExecuteBulk(IDataReader source, IEnumerable<SqlBulkCopyColumnMapping> mappings, string destinationTable, SqlBulkCopyOptions options, TimeSpan timeout)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (mappings == null) { throw new ArgumentNullException("mappings"); }
-            if (destinationTable == null) { throw new ArgumentNullException("destinationTable"); }
-            if (destinationTable.Length == 0) { throw new ArgumentEmptyException("destinationTable"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (mappings == null) { throw new ArgumentNullException(nameof(mappings)); }
+            if (destinationTable == null) { throw new ArgumentNullException(nameof(destinationTable)); }
+            if (destinationTable.Length == 0) { throw new ArgumentEmptyException(nameof(destinationTable)); }
 
-            if (this.EnableTransientFaultRecovery)
+            if (EnableTransientFaultRecovery)
             {
-                TransientFaultUtility.ExecuteAction(this.RetryAttempts, this.TransientFaultRecoveryWaitTime, this.IsTransientFault, ExecuteBulkCore, source, mappings, destinationTable, options, timeout);
+                TransientFaultUtility.ExecuteAction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteBulkCore, source, mappings, destinationTable, options, timeout);
                 return;
             }
             ExecuteBulkCore(source, mappings, destinationTable, options, timeout);
@@ -290,7 +290,7 @@ namespace Cuemon.Data.SqlClient
 
             try
             {
-                using (SqlBulkCopy copy = new SqlBulkCopy(this.ConnectionString, options))
+                using (SqlBulkCopy copy = new SqlBulkCopy(ConnectionString, options))
                 {
                     foreach (SqlBulkCopyColumnMapping mapping in mappings) { copy.ColumnMappings.Add(mapping); }
                     copy.BulkCopyTimeout = (int)timeout.TotalSeconds;
@@ -340,7 +340,7 @@ namespace Cuemon.Data.SqlClient
         /// </exception>
         public static SqlBulkCopyColumnMapping Parse(Mapping mapping)
         {
-            Validator.ThrowIfNull(mapping, "mapping");
+            Validator.ThrowIfNull(mapping, nameof(mapping));
             IndexMapping indexMapping = mapping as IndexMapping;
             if (indexMapping != null)
             {
@@ -373,7 +373,7 @@ namespace Cuemon.Data.SqlClient
         /// </exception>
         public static Mapping Parse(SqlBulkCopyColumnMapping mapping)
         {
-            Validator.ThrowIfNull(mapping, "mapping");
+            Validator.ThrowIfNull(mapping, nameof(mapping));
             if (mapping.DestinationOrdinal >= 0 &&
                 mapping.SourceOrdinal >= 0)
             {
@@ -422,7 +422,7 @@ namespace Cuemon.Data.SqlClient
         /// </returns>
         public override DataManager Clone()
         {
-            return new SqlDataManager(this.ConnectionString);
+            return new SqlDataManager(ConnectionString);
 
         }
         /// <summary>
@@ -433,13 +433,13 @@ namespace Cuemon.Data.SqlClient
         /// <returns></returns>
         protected override IDbCommand GetCommandCore(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
-            if (dataCommand == null) throw new ArgumentNullException("dataCommand");
-            if (parameters == null) throw new ArgumentNullException("parameters");
+            if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             SqlCommand command = null;
             SqlCommand tempCommand = null;
             try
             {
-                tempCommand = new SqlCommand(dataCommand.Text, new SqlConnection(this.ConnectionString));
+                tempCommand = new SqlCommand(dataCommand.Text, new SqlConnection(ConnectionString));
                 foreach (SqlParameter parameter in parameters) // we use the explicit type, as this is a >Sql<DataManager class
                 {
                     // handle dates so they are compatible with SQL 200X and forward
@@ -529,7 +529,7 @@ namespace Cuemon.Data.SqlClient
         private static SqlException ParseException(Exception exception)
         {
             IEnumerable<Exception> exceptions = EnumerableUtility.Concat(EnumerableUtility.Yield(exception), ExceptionUtility.Flatten(exception));
-            return EnumerableUtility.FirstOrDefault(EnumerableUtility.Cast<SqlException>(EnumerableUtility.FindAll(exceptions, MatchSqlException)));
+            return EnumerableUtility.FirstOrDefault(EnumerableConverter.Cast<SqlException>(EnumerableUtility.FindAll(exceptions, MatchSqlException)));
         }
 
         private static bool MatchSqlException(Exception exception)

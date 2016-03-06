@@ -7,16 +7,18 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.Collections.Generic;
+using Cuemon.Collections.Specialized;
+using Cuemon.Net;
 
 namespace Cuemon.Web
 {
-	/// <summary>
-	/// This utility class is designed to make <see cref="HttpRequest"/> operations easier to work with.
-	/// </summary>
-	public static class HttpRequestUtility
-	{
+    /// <summary>
+    /// This utility class is designed to make <see cref="HttpRequest"/> operations easier to work with.
+    /// </summary>
+    public static class HttpRequestUtility
+    {
         /// <summary>
         /// Gets the raw URL of the current <paramref name="request"/>.
         /// </summary>
@@ -27,10 +29,10 @@ namespace Cuemon.Web
         /// </exception>
         /// <remarks>For reasons unknown ASP.NET/IIS make changes to the <see cref="HttpRequest.Url"/> property. This method will correct this by combining the <see cref="HttpRequest.RawUrl"/> property with the former mentioned property.</remarks>
 	    public static Uri RawUrl(HttpRequest request)
-	    {
-            if (request == null) { throw new ArgumentNullException("request"); }
-	        return new Uri(request.Url, request.RawUrl);
-	    }
+        {
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            return new Uri(request.Url, request.RawUrl);
+        }
 
         /// <summary>
         /// Determines whether the specified <paramref name="request"/> is solely executed by the server local.
@@ -64,37 +66,37 @@ namespace Cuemon.Web
         /// </remarks>
         public static bool IsServerLocal(HttpRequest request)
         {
-            if (request == null) { throw new ArgumentNullException("request"); }
-            return (request.IsLocal &&  (request.UserAgent == null && request.UserLanguages == null && request.UrlReferrer == null));
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            return (request.IsLocal && (request.UserAgent == null && request.UserLanguages == null && request.UrlReferrer == null));
         }
 
-	    internal static bool IsStandaloneServerLocal(HttpRequest request)
-	    {
-	        return (IsServerLocal(request) && GlobalModule.IsStandaloneWebsite);
-	    }
+        internal static bool IsStandaloneServerLocal(HttpRequest request)
+        {
+            return (IsServerLocal(request) && GlobalModule.IsStandaloneWebsite);
+        }
 
-		/// <summary>
-		/// Gets the host authority information from the current <see cref="HttpContext"/> as an <see cref="Uri"/>.
-		/// </summary>
-		/// <returns>The host authority information from the current <see cref="HttpContext"/> as an <see cref="Uri"/>.</returns>
+        /// <summary>
+        /// Gets the host authority information from the current <see cref="HttpContext"/> as an <see cref="Uri"/>.
+        /// </summary>
+        /// <returns>The host authority information from the current <see cref="HttpContext"/> as an <see cref="Uri"/>.</returns>
         /// <remarks>For more information about host authority information please have a look at this URI scheme page @ Wikipedia: http://en.wikipedia.org/wiki/URI_scheme</remarks>
         public static Uri GetHostAuthority()
-		{
+        {
             GlobalModule.CheckForHttpContextAvailability();
-			return GetHostAuthority(HttpContext.Current.Request);
-		}
+            return GetHostAuthority(HttpContext.Current.Request);
+        }
 
-		/// <summary>
-		/// Gets the host authority information from the specified <paramref name="request"/> as an <see cref="Uri"/>.
-		/// </summary>
-		/// <param name="request">An instance of <see cref="HttpRequest"/> object.</param>
-		/// <returns>The host authority information from the specified <paramref name="request"/> as an <see cref="Uri"/>.</returns>
+        /// <summary>
+        /// Gets the host authority information from the specified <paramref name="request"/> as an <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="request">An instance of <see cref="HttpRequest"/> object.</param>
+        /// <returns>The host authority information from the specified <paramref name="request"/> as an <see cref="Uri"/>.</returns>
         /// <remarks>For more information about host authority information please have a look at this URI scheme page @ Wikipedia: http://en.wikipedia.org/wiki/URI_scheme</remarks>
         public static Uri GetHostAuthority(HttpRequest request)
-		{
-			if (request == null) { throw new ArgumentNullException("request"); }
-			return GetHostAuthority(request.Url);
-		}
+        {
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            return GetHostAuthority(request.Url);
+        }
 
         /// <summary>
         /// Gets the host authority information from the specified <paramref name="uri"/> as an <see cref="Uri"/>.
@@ -106,7 +108,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static Uri GetHostAuthority(Uri uri)
         {
-            if (uri == null) { throw new ArgumentNullException("uri"); }
+            if (uri == null) { throw new ArgumentNullException(nameof(uri)); }
             return new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/", uri.GetLeftPart(UriPartial.Authority)));
         }
 
@@ -128,7 +130,7 @@ namespace Cuemon.Web
         /// <returns>A sequence of <see cref="ContentType"/> values equivalent to the values contained in the Accept header, if the resolvement succeeded; otherwise defaults to */* value.</returns>
         public static IEnumerable<ContentType> GetAcceptHeader(HttpRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException(nameof(request));
             string acceptHeader = request.Headers["Accept"];
             if (!string.IsNullOrEmpty(acceptHeader))
             {
@@ -182,68 +184,68 @@ namespace Cuemon.Web
         /// <returns>A <see cref="ContentType"/> object equivalent to the value contained in the Content-Type header, if the resolvement succeeded; otherwise null.</returns>
         public static ContentType GetContentTypeHeader(HttpRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException(nameof(request));
             string contentTypeHeader = request.Headers["Content-Type"];
             return !string.IsNullOrEmpty(contentTypeHeader) ? new ContentType(contentTypeHeader) : null;
         }
 
-		/// <summary>
-		/// Resolves the string representation of an Accept-Encoding header and converts the values to an <see cref="IEnumerable{CompressionMethodScheme}"/> equivalent using the current <see cref="HttpContext"/>.
-		/// </summary>
-		/// <exception cref="InvalidOperationException">This exception is thrown if HttpContext is unavailable.</exception>
-		/// <returns>A sequence of <see cref="CompressionMethodScheme"/> values equivalent to the values contained in the Accept-Encoding header, if the resolvement succeeded; otherwise defaults to <see cref="CompressionMethodScheme.Identity"/> value.</returns>
-		public static IEnumerable<CompressionMethodScheme> GetAcceptEncodingHeader()
-		{
-			GlobalModule.CheckForHttpContextAvailability();
-			return GetAcceptEncodingHeader(HttpContext.Current.Request);
-		}
+        /// <summary>
+        /// Resolves the string representation of an Accept-Encoding header and converts the values to an <see cref="IEnumerable{CompressionMethodScheme}"/> equivalent using the current <see cref="HttpContext"/>.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">This exception is thrown if HttpContext is unavailable.</exception>
+        /// <returns>A sequence of <see cref="CompressionMethodScheme"/> values equivalent to the values contained in the Accept-Encoding header, if the resolvement succeeded; otherwise defaults to <see cref="CompressionMethodScheme.Identity"/> value.</returns>
+        public static IEnumerable<CompressionMethodScheme> GetAcceptEncodingHeader()
+        {
+            GlobalModule.CheckForHttpContextAvailability();
+            return GetAcceptEncodingHeader(HttpContext.Current.Request);
+        }
 
-		/// <summary>
+        /// <summary>
         /// Resolves the string representation of an Accept-Encoding header and converts the values to an <see cref="IEnumerable{CompressionMethodScheme}"/> equivalent using the specified <paramref name="request"/> object.
-		/// </summary>
-		/// <param name="request">An instance of the <see cref="HttpRequest"/> object.</param>
-		/// <returns>A sequence of <see cref="CompressionMethodScheme"/> values equivalent to the values contained in the Accept-Encoding header, if the resolvement succeeded; otherwise defaults to <see cref="CompressionMethodScheme.Identity"/> value.</returns>
-		public static IEnumerable<CompressionMethodScheme> GetAcceptEncodingHeader(HttpRequest request)
-		{
-			if (request == null) throw new ArgumentNullException("request");
-			string acceptEncodingHeader = request.Headers["Accept-Encoding"];
-			if (!string.IsNullOrEmpty(acceptEncodingHeader))
-			{
-				IEnumerable<KeyValuePair<double, CompressionMethodScheme>> compressionSchemes = new SortedDictionary<double, CompressionMethodScheme>(); // *) lowest first - highest last
-				double priority = 20;
-				string[] acceptEncodingOptions = acceptEncodingHeader.Split(',');
-				foreach (string acceptEncodingOption in acceptEncodingOptions)
-				{
-					double currentPriority = priority;
-					string[] acceptEncoding = acceptEncodingOption.Split(';');
-					CompressionMethodScheme currentCompressionScheme = ParseAcceptEncoding(acceptEncoding[0]);
-					if (acceptEncoding.Length > 1)
-					{
-						Regex regex = new Regex(@"\d.\d|\d");
-						Match parsedPriority = regex.Match(acceptEncoding[1]);
-						if (!string.IsNullOrEmpty(parsedPriority.Value))
-						{
-							currentPriority = Convert.ToDouble(parsedPriority.Value, CultureInfo.InvariantCulture);
-							if (currentPriority == 0)
-							{
-								currentCompressionScheme = acceptEncoding[0].Trim() == "*" ? CompressionMethodScheme.Identity : CompressionMethodScheme.None;
-							} 
-						}
-					}
+        /// </summary>
+        /// <param name="request">An instance of the <see cref="HttpRequest"/> object.</param>
+        /// <returns>A sequence of <see cref="CompressionMethodScheme"/> values equivalent to the values contained in the Accept-Encoding header, if the resolvement succeeded; otherwise defaults to <see cref="CompressionMethodScheme.Identity"/> value.</returns>
+        public static IEnumerable<CompressionMethodScheme> GetAcceptEncodingHeader(HttpRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            string acceptEncodingHeader = request.Headers["Accept-Encoding"];
+            if (!string.IsNullOrEmpty(acceptEncodingHeader))
+            {
+                IEnumerable<KeyValuePair<double, CompressionMethodScheme>> compressionSchemes = new SortedDictionary<double, CompressionMethodScheme>(); // *) lowest first - highest last
+                double priority = 20;
+                string[] acceptEncodingOptions = acceptEncodingHeader.Split(',');
+                foreach (string acceptEncodingOption in acceptEncodingOptions)
+                {
+                    double currentPriority = priority;
+                    string[] acceptEncoding = acceptEncodingOption.Split(';');
+                    CompressionMethodScheme currentCompressionScheme = ParseAcceptEncoding(acceptEncoding[0]);
+                    if (acceptEncoding.Length > 1)
+                    {
+                        Regex regex = new Regex(@"\d.\d|\d");
+                        Match parsedPriority = regex.Match(acceptEncoding[1]);
+                        if (!string.IsNullOrEmpty(parsedPriority.Value))
+                        {
+                            currentPriority = Convert.ToDouble(parsedPriority.Value, CultureInfo.InvariantCulture);
+                            if (currentPriority == 0)
+                            {
+                                currentCompressionScheme = acceptEncoding[0].Trim() == "*" ? CompressionMethodScheme.Identity : CompressionMethodScheme.None;
+                            }
+                        }
+                    }
                     if (!((SortedDictionary<double, CompressionMethodScheme>)compressionSchemes).ContainsKey(currentPriority)) { ((SortedDictionary<double, CompressionMethodScheme>)compressionSchemes).Add(currentPriority, currentCompressionScheme); }
-					priority--;
-				}
-				compressionSchemes = EnumerableUtility.Reverse(compressionSchemes);
-				foreach (KeyValuePair<double, CompressionMethodScheme> compressionScheme in compressionSchemes)
-				{
-					yield return compressionScheme.Value; // reverse the list, so highest values are first, and lowest last (prioritized)
-				}
-			}
-			else
-			{
-                yield return CompressionMethodScheme.Identity;    
-			}
-		}
+                    priority--;
+                }
+                compressionSchemes = EnumerableUtility.Reverse(compressionSchemes);
+                foreach (KeyValuePair<double, CompressionMethodScheme> compressionScheme in compressionSchemes)
+                {
+                    yield return compressionScheme.Value; // reverse the list, so highest values are first, and lowest last (prioritized)
+                }
+            }
+            else
+            {
+                yield return CompressionMethodScheme.Identity;
+            }
+        }
 
         /// <summary>
         /// This method will parse a sequence of <see cref="CompressionMethodScheme"/> and return the most appropriate <see cref="CompressionMethodScheme"/>.
@@ -276,7 +278,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static CompressionMethodScheme ParseAcceptEncoding(HttpRequest request)
         {
-            if (request == null) { throw new ArgumentNullException("request"); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
             IEnumerable<CompressionMethodScheme> compressionMethods = GetAcceptEncodingHeader(request);
             return ParseAcceptEncoding(compressionMethods);
         }
@@ -295,7 +297,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static CompressionMethodScheme ParseAcceptEncoding(IEnumerable<CompressionMethodScheme> compressionMethods)
         {
-            if (compressionMethods == null) { throw new ArgumentNullException("compressionMethods"); }
+            if (compressionMethods == null) { throw new ArgumentNullException(nameof(compressionMethods)); }
             List<CompressionMethodScheme> compressionMethodSchemes = new List<CompressionMethodScheme>(compressionMethods);
             CompressionMethodScheme compressionMethod = EnumerableUtility.FirstOrDefault(compressionMethodSchemes);
             if (compressionMethodSchemes.Contains(CompressionMethodScheme.GZip)) // changed from default DEFLATE to GZIP (http://zoompf.com/blog/2012/02/lose-the-wait-http-compression)
@@ -313,22 +315,22 @@ namespace Cuemon.Web
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <remarks>This method will default to <see cref="CompressionMethodScheme.Identity"/> in case of an unknown HTTP Accept-Encoding.</remarks>
 		public static CompressionMethodScheme ParseAcceptEncoding(string acceptEncoding)
-		{
-            if (acceptEncoding == null) { throw new ArgumentNullException("acceptEncoding"); }
-			acceptEncoding = acceptEncoding.Trim().ToUpperInvariant();
-			switch (acceptEncoding)
-			{
-				case "COMPRESS":
-					return CompressionMethodScheme.Compress;
-				case "DEFLATE":
-					return CompressionMethodScheme.Deflate;
+        {
+            if (acceptEncoding == null) { throw new ArgumentNullException(nameof(acceptEncoding)); }
+            acceptEncoding = acceptEncoding.Trim().ToUpperInvariant();
+            switch (acceptEncoding)
+            {
+                case "COMPRESS":
+                    return CompressionMethodScheme.Compress;
+                case "DEFLATE":
+                    return CompressionMethodScheme.Deflate;
                 case "*":
-				case "GZIP":
-					return CompressionMethodScheme.GZip;
-				default:
-					return CompressionMethodScheme.Identity;
-			}
-		}
+                case "GZIP":
+                    return CompressionMethodScheme.GZip;
+                default:
+                    return CompressionMethodScheme.Identity;
+            }
+        }
 
         /// <summary>
         /// Determines whether a cached version of the content of the resource is found client-side given the specified <paramref name="validator"/>.
@@ -345,7 +347,7 @@ namespace Cuemon.Web
         /// </exception>
         public static bool IsClientSideResourceCached(CacheValidator validator)
         {
-            if (validator == null) { throw new ArgumentNullException("validator"); }
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
             return HttpRequestUtility.IsClientSideResourceCached(validator, HttpContext.Current.Request);
         }
 
@@ -362,8 +364,8 @@ namespace Cuemon.Web
         /// </exception>
         public static bool IsClientSideResourceCached(CacheValidator validator, HttpRequest request)
         {
-            if (validator == null) { throw new ArgumentNullException("validator"); }
-            if (request == null) { throw new ArgumentNullException("request"); }
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
             return IsClientSideResourceCached(validator, request.Headers);
         }
 
@@ -380,9 +382,9 @@ namespace Cuemon.Web
         /// </exception>
         public static bool IsClientSideResourceCached(CacheValidator validator, NameValueCollection headers)
         {
-            if (validator == null) { throw new ArgumentNullException("validator"); }
-            if (headers == null) { throw new ArgumentNullException("headers"); }
-            return HttpRequestUtility.IsClientSideResourceCached(validator, ConvertUtility.ToWebHeaderCollection(headers));
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
+            return HttpRequestUtility.IsClientSideResourceCached(validator, WebHeaderCollectionConverter.FromNameValueCollection(headers));
         }
 
         /// <summary>
@@ -398,8 +400,8 @@ namespace Cuemon.Web
         /// </exception>
         public static bool IsClientSideResourceCached(CacheValidator validator, WebHeaderCollection headers)
         {
-            if (validator == null) { throw new ArgumentNullException("validator"); }
-            if (headers == null) { throw new ArgumentNullException("headers"); }
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
             DateTime lastModified = validator.GetMostSignificant();
             lastModified = new DateTime(lastModified.Year, lastModified.Month, lastModified.Day, lastModified.Hour, lastModified.Minute, lastModified.Second, DateTimeKind.Utc); // make sure, that modified has the same format as the if-modified-since header
             DateTime result;
@@ -437,9 +439,9 @@ namespace Cuemon.Web
         /// <see cref="HttpContext"/> is unavailable.
         /// </exception>
 		public static bool IsClientSideResourceCached(DateTime lastModified)
-		{
+        {
             return HttpRequestUtility.IsClientSideResourceCached(lastModified, HttpContext.Current.Request);
-		}
+        }
 
         /// <summary>
         /// Determines whether a cached version of the requested resource is found client-side given the last modified <see cref="DateTime"/> value.
@@ -453,10 +455,10 @@ namespace Cuemon.Web
         /// <paramref name="request"/> is null.
         /// </exception>
         public static bool IsClientSideResourceCached(DateTime lastModified, HttpRequest request)
-		{
-            if (request == null) { throw new ArgumentNullException("request"); }
+        {
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
             return IsClientSideResourceCached(lastModified, request.Headers);
-		}
+        }
 
         /// <summary>
         /// Determines whether a cached version of the requested resource is found client-side given the last modified <see cref="DateTime" /> value.
@@ -471,7 +473,7 @@ namespace Cuemon.Web
         /// </exception>
         public static bool IsClientSideResourceCached(DateTime lastModified, NameValueCollection headers)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
             return IsClientSideResourceCached(lastModified, headers, null);
         }
 
@@ -493,7 +495,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static bool IsClientSideResourceCached(DateTime lastModified, NameValueCollection headers, string entityTag)
         {
-            return HttpRequestUtility.IsClientSideResourceCached(lastModified, ConvertUtility.ToWebHeaderCollection(headers), entityTag);
+            return HttpRequestUtility.IsClientSideResourceCached(lastModified, WebHeaderCollectionConverter.FromNameValueCollection(headers), entityTag);
         }
 
         /// <summary>
@@ -509,7 +511,7 @@ namespace Cuemon.Web
         /// </exception>
         public static bool IsClientSideResourceCached(DateTime lastModified, WebHeaderCollection headers)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
             return IsClientSideResourceCached(lastModified, headers, null);
         }
 
@@ -531,7 +533,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static bool IsClientSideResourceCached(DateTime lastModified, WebHeaderCollection headers, string entityTag)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
             CacheValidator validator = new CacheValidator(lastModified, lastModified, entityTag);
             return IsClientSideResourceCached(validator, headers);
         }
@@ -565,7 +567,7 @@ namespace Cuemon.Web
         /// </exception>
         public static bool TryGetEntityTagHeader(HttpRequest request, out string result)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException(nameof(request));
             return TryGetEntityTagHeader(request.Headers, out result);
         }
 
@@ -582,8 +584,8 @@ namespace Cuemon.Web
         /// </exception>
         public static bool TryGetEntityTagHeader(NameValueCollection headers, out string result)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
-            return TryGetEntityTagHeader(ConvertUtility.ToWebHeaderCollection(headers), out result);
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
+            return TryGetEntityTagHeader(WebHeaderCollectionConverter.FromNameValueCollection(headers), out result);
         }
 
         /// <summary>
@@ -599,15 +601,15 @@ namespace Cuemon.Web
         /// </exception>
         public static bool TryGetEntityTagHeader(WebHeaderCollection headers, out string result)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
             string header = headers[HttpRequestHeader.IfNoneMatch];
             result = header;
             return !string.IsNullOrEmpty(result);
         }
 
-		/// <summary>
-		/// Resolves the string representation of an If-Modified-Since header and converts the value to its <see cref="DateTime"/> equivalent using the current <see cref="HttpContext"/>.
-		/// </summary>
+        /// <summary>
+        /// Resolves the string representation of an If-Modified-Since header and converts the value to its <see cref="DateTime"/> equivalent using the current <see cref="HttpContext"/>.
+        /// </summary>
         /// <param name="result">When this method returns, contains the <see cref="DateTime"/> value equivalent to the date and time contained in <b>If-Modified-Since</b> header, if the conversion succeeded, or <see cref="DateTime.MinValue"/> if resolvement failed. The conversion fails if no <b>If-Modified-Since</b> header can be resolved. This parameter is passed uninitialized.</param>
         /// <returns>
         ///     <c>true</c> if the <b>If-Modified-Since</b> header was found in the <see cref="HttpContext"/>; otherwise, false.
@@ -615,16 +617,16 @@ namespace Cuemon.Web
         /// <exception cref="InvalidOperationException">
         /// <see cref="HttpContext"/> is unavailable.
         /// </exception>
-		public static bool TryGetLastModifiedHeader(out DateTime result)
-		{
+        public static bool TryGetLastModifiedHeader(out DateTime result)
+        {
             GlobalModule.CheckForHttpContextAvailability();
-			return TryGetLastModifiedHeader(HttpContext.Current.Request, out result);
-		}
+            return TryGetLastModifiedHeader(HttpContext.Current.Request, out result);
+        }
 
-		/// <summary>
-		/// Resolves the string representation of an If-Modified-Since header and converts the value to its <see cref="DateTime"/> equivalent.
-		/// </summary>
-		/// <param name="request">An instance of the <see cref="HttpRequest"/> object.</param>
+        /// <summary>
+        /// Resolves the string representation of an If-Modified-Since header and converts the value to its <see cref="DateTime"/> equivalent.
+        /// </summary>
+        /// <param name="request">An instance of the <see cref="HttpRequest"/> object.</param>
         /// <param name="result">When this method returns, contains the <see cref="DateTime"/> value equivalent to the date and time contained in <b>If-Modified-Since</b> header, if the conversion succeeded, or <see cref="DateTime.MinValue"/> if resolvement failed. The conversion fails if no <b>If-Modified-Since</b> header can be resolved. This parameter is passed uninitialized.</param>
         /// <returns>
         ///     <c>true</c> if the <b>If-Modified-Since</b> header was found in the <paramref name="request"/>; otherwise, false.
@@ -632,11 +634,11 @@ namespace Cuemon.Web
         /// <exception cref="ArgumentNullException">
         /// <paramref name="request"/> is null.
         /// </exception>
-		public static bool TryGetLastModifiedHeader(HttpRequest request, out DateTime result)
-		{
-			if (request == null) { throw new ArgumentNullException("request"); }
-		    return TryGetLastModifiedHeader(request.Headers, out result);
-		}
+        public static bool TryGetLastModifiedHeader(HttpRequest request, out DateTime result)
+        {
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            return TryGetLastModifiedHeader(request.Headers, out result);
+        }
 
         /// <summary>
         /// Resolves the string representation of an If-Modified-Since header and converts the value to its <see cref="DateTime"/> equivalent.
@@ -651,8 +653,8 @@ namespace Cuemon.Web
         /// </exception>
         public static bool TryGetLastModifiedHeader(NameValueCollection headers, out DateTime result)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
-            return TryGetLastModifiedHeader(ConvertUtility.ToWebHeaderCollection(headers), out result);
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
+            return TryGetLastModifiedHeader(WebHeaderCollectionConverter.FromNameValueCollection(headers), out result);
         }
 
         /// <summary>
@@ -668,7 +670,7 @@ namespace Cuemon.Web
         /// </exception>
         public static bool TryGetLastModifiedHeader(WebHeaderCollection headers, out DateTime result)
         {
-            if (headers == null) { throw new ArgumentNullException("headers"); }
+            if (headers == null) { throw new ArgumentNullException(nameof(headers)); }
             result = DateTime.MinValue;
             string header = headers[HttpRequestHeader.IfModifiedSince];
             if (!string.IsNullOrEmpty(header))
@@ -678,317 +680,260 @@ namespace Cuemon.Web
             return false;
         }
 
-		/// <summary>
-		/// Combines the specified query string <paramref name="sources"/> into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.
-		/// </summary>
-		/// <param name="sources">A variable number of query string <paramref name="sources"/> to combine into one <see cref="String"/>.</param>
-		/// <returns>A variable number of query string <paramref name="sources"/> combined into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.</returns>
-		public static string CombineFieldValuePairs(params string[] sources)
-		{
-			return CombineFieldValuePairs(FieldValueSeparator.Ampersand, sources);
-		}
+        /// <summary>
+        /// Combines the specified query string <paramref name="sources"/> into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.
+        /// </summary>
+        /// <param name="sources">A variable number of query string <paramref name="sources"/> to combine into one <see cref="String"/>.</param>
+        /// <returns>A variable number of query string <paramref name="sources"/> combined into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.</returns>
+        public static string CombineFieldValuePairs(params string[] sources)
+        {
+            return CombineFieldValuePairs(FieldValueSeparator.Ampersand, sources);
+        }
 
-		/// <summary>
-		/// Combines the specified query string, header or a form-data <paramref name="sources"/> into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.
-		/// </summary>
-		/// <param name="sources">A variable number of query string, header or a form-data <paramref name="sources"/> to combine into one <see cref="String"/>.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the combination.</param>
-		/// <returns>A variable number of query string, header or a form-data <paramref name="sources"/> combined into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.</returns>
-		public static string CombineFieldValuePairs(FieldValueSeparator separator, params string[] sources)
-		{
-			if (sources == null) { throw new ArgumentNullException("sources"); }
-			List<NameValueCollection> nameValues = new List<NameValueCollection>();
-			foreach (string fieldValuePairs in sources)
-			{
-				nameValues.Add(ParseFieldValuePairs(fieldValuePairs, separator));
-			}
-			return ParseFieldValuePairs(CombineFieldValuePairs(separator, nameValues.ToArray()), separator);
-		}
+        /// <summary>
+        /// Combines the specified query string, header or a form-data <paramref name="sources"/> into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.
+        /// </summary>
+        /// <param name="sources">A variable number of query string, header or a form-data <paramref name="sources"/> to combine into one <see cref="String"/>.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the combination.</param>
+        /// <returns>A variable number of query string, header or a form-data <paramref name="sources"/> combined into one <see cref="String"/> equivalent field-value pairs as specified by the W3C.</returns>
+        public static string CombineFieldValuePairs(FieldValueSeparator separator, params string[] sources)
+        {
+            if (sources == null) { throw new ArgumentNullException(nameof(sources)); }
+            List<NameValueCollection> nameValues = new List<NameValueCollection>();
+            foreach (string fieldValuePairs in sources)
+            {
+                nameValues.Add(ParseFieldValuePairs(fieldValuePairs, separator));
+            }
+            return ParseFieldValuePairs(CombineFieldValuePairs(separator, nameValues.ToArray()), separator);
+        }
 
-		/// <summary>
-		/// Combines the specified query string <paramref name="sources"/> into one <see cref="NameValueCollection"/> equivalent field-value pairs.
-		/// </summary>
-		/// <param name="sources">A variable number of query string <paramref name="sources"/> to combine into one <see cref="NameValueCollection"/>.</param>
-		/// <returns>A variable number of query string <paramref name="sources"/> combined into one <see cref="NameValueCollection"/> equivalent field-value pairs.</returns>
-		public static NameValueCollection CombineFieldValuePairs(params NameValueCollection[] sources)
-		{
-			return CombineFieldValuePairs(FieldValueSeparator.Ampersand, sources);
-		}
+        /// <summary>
+        /// Combines the specified query string <paramref name="sources"/> into one <see cref="NameValueCollection"/> equivalent field-value pairs.
+        /// </summary>
+        /// <param name="sources">A variable number of query string <paramref name="sources"/> to combine into one <see cref="NameValueCollection"/>.</param>
+        /// <returns>A variable number of query string <paramref name="sources"/> combined into one <see cref="NameValueCollection"/> equivalent field-value pairs.</returns>
+        public static NameValueCollection CombineFieldValuePairs(params NameValueCollection[] sources)
+        {
+            return CombineFieldValuePairs(FieldValueSeparator.Ampersand, sources);
+        }
 
-		/// <summary>
-		/// Combines the specified query string, header or a form-data <paramref name="sources"/> into one <see cref="NameValueCollection"/> equivalent field-value pairs.
-		/// </summary>
-		/// <param name="sources">A variable number of query string, header or a form-data <paramref name="sources"/> to combine into one <see cref="NameValueCollection"/>.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the combination.</param>
-		/// <returns>A variable number of query string, header or a form-data <paramref name="sources"/> combined into one <see cref="NameValueCollection"/> equivalent field-value pairs.</returns>
-		public static NameValueCollection CombineFieldValuePairs(FieldValueSeparator separator, params NameValueCollection[] sources)
-		{
-			if (sources == null) { throw new ArgumentNullException("sources"); }
-			StringBuilder mergedFieldValuePairs = new StringBuilder(separator == FieldValueSeparator.Ampersand ? "?" : "");
-			foreach (NameValueCollection fieldValuePairs in sources)
-			{
-				if (fieldValuePairs.Count == 0) { continue; }
-				mergedFieldValuePairs.Append(separator == FieldValueSeparator.Ampersand ? ParseFieldValuePairs(fieldValuePairs, separator).Remove(0, 1) : ParseFieldValuePairs(fieldValuePairs, separator));
-				mergedFieldValuePairs.Append(GetSeparator(separator));
-			}
-			if (mergedFieldValuePairs.Length > 0) { mergedFieldValuePairs.Remove(mergedFieldValuePairs.Length - 1, 1); }
-			return ParseFieldValuePairs(mergedFieldValuePairs.ToString(), separator);
-		}
+        /// <summary>
+        /// Combines the specified query string, header or a form-data <paramref name="sources"/> into one <see cref="NameValueCollection"/> equivalent field-value pairs.
+        /// </summary>
+        /// <param name="sources">A variable number of query string, header or a form-data <paramref name="sources"/> to combine into one <see cref="NameValueCollection"/>.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the combination.</param>
+        /// <returns>A variable number of query string, header or a form-data <paramref name="sources"/> combined into one <see cref="NameValueCollection"/> equivalent field-value pairs.</returns>
+        public static NameValueCollection CombineFieldValuePairs(FieldValueSeparator separator, params NameValueCollection[] sources)
+        {
+            if (sources == null) { throw new ArgumentNullException(nameof(sources)); }
+            StringBuilder mergedFieldValuePairs = new StringBuilder(separator == FieldValueSeparator.Ampersand ? "?" : "");
+            foreach (NameValueCollection fieldValuePairs in sources)
+            {
+                if (fieldValuePairs.Count == 0) { continue; }
+                mergedFieldValuePairs.Append(separator == FieldValueSeparator.Ampersand ? ParseFieldValuePairs(fieldValuePairs, separator).Remove(0, 1) : ParseFieldValuePairs(fieldValuePairs, separator));
+                mergedFieldValuePairs.Append(GetSeparator(separator));
+            }
+            if (mergedFieldValuePairs.Length > 0) { mergedFieldValuePairs.Remove(mergedFieldValuePairs.Length - 1, 1); }
+            return ParseFieldValuePairs(mergedFieldValuePairs.ToString(), separator);
+        }
 
-		/// <summary>
-		/// Parses a query string into a <see cref="String"/> equivalent field-value pairs as specified by the W3C.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string to parse.</param>
-		/// <returns>A <see cref="String"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
-		public static string ParseFieldValuePairs(NameValueCollection fieldValuePairs)
-		{
-			return ParseFieldValuePairs(fieldValuePairs, FieldValueSeparator.Ampersand);
-		}
+        /// <summary>
+        /// Parses a query string into a <see cref="String"/> equivalent field-value pairs as specified by the W3C.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string to parse.</param>
+        /// <returns>A <see cref="String"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
+        public static string ParseFieldValuePairs(NameValueCollection fieldValuePairs)
+        {
+            return ParseFieldValuePairs(fieldValuePairs, FieldValueSeparator.Ampersand);
+        }
 
-		/// <summary>
-		/// Parses a query string, header or a form-data into a <see cref="String"/> equivalent field-value pairs as specified by the W3C.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
-		/// <returns>A <see cref="String"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
-		public static string ParseFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSeparator separator)
-		{
-			return ParseFieldValuePairs(fieldValuePairs, separator, true);
-		}
+        /// <summary>
+        /// Parses a query string, header or a form-data into a <see cref="String"/> equivalent field-value pairs as specified by the W3C.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
+        /// <returns>A <see cref="String"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
+        public static string ParseFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSeparator separator)
+        {
+            return ParseFieldValuePairs(fieldValuePairs, separator, true);
+        }
 
-		/// <summary>
-		/// Parses a query string, header or a form-data into a <see cref="String"/> equivalent field-value pairs as specified by the W3C.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
-		/// <param name="urlEncode">Encodes the output URL string. Default is true.</param>
-		/// <returns>A <see cref="String"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
-		public static string ParseFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSeparator separator, bool urlEncode)
-		{
-			if (fieldValuePairs == null) throw new ArgumentNullException("fieldValuePairs");
-			char characterSeperator = GetSeparator(separator);
-			StringBuilder builder = new StringBuilder(separator == FieldValueSeparator.Ampersand ? "?" : "");
-			foreach (string item in fieldValuePairs)
-			{
-				builder.AppendFormat("{0}={1}", item, urlEncode ? HttpUtility.UrlEncode(HttpUtility.UrlDecode(fieldValuePairs[item])) : fieldValuePairs[item]); // the HttpUtility.UrlDecode is called when used outside of IIS .. IIS auto UrlEncode .. why we have to assure, that we don't double UrlEncode ..
-				builder.Append(characterSeperator);
-			}
-			if (builder.Length > 0 && separator == FieldValueSeparator.Ampersand) { builder.Remove(builder.Length - 1, 1); }
-			return builder.ToString();
-		}
+        /// <summary>
+        /// Parses a query string, header or a form-data into a <see cref="String"/> equivalent field-value pairs as specified by the W3C.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
+        /// <param name="urlEncode">Encodes the output URL string. Default is true.</param>
+        /// <returns>A <see cref="String"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
+        public static string ParseFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSeparator separator, bool urlEncode)
+        {
+            if (fieldValuePairs == null) throw new ArgumentNullException(nameof(fieldValuePairs));
+            char characterSeperator = GetSeparator(separator);
+            StringBuilder builder = new StringBuilder(separator == FieldValueSeparator.Ampersand ? "?" : "");
+            foreach (string item in fieldValuePairs)
+            {
+                builder.AppendFormat("{0}={1}", item, urlEncode ? HttpUtility.UrlEncode(HttpUtility.UrlDecode(fieldValuePairs[item])) : fieldValuePairs[item]); // the HttpUtility.UrlDecode is called when used outside of IIS .. IIS auto UrlEncode .. why we have to assure, that we don't double UrlEncode ..
+                builder.Append(characterSeperator);
+            }
+            if (builder.Length > 0 && separator == FieldValueSeparator.Ampersand) { builder.Remove(builder.Length - 1, 1); }
+            return builder.ToString();
+        }
 
-		/// <summary>
-		/// Parses a query string into a <see cref="NameValueCollection"/> equivalent field-value pairs.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string to parse.</param>
-		/// <returns>A <see cref="NameValueCollection"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
-		public static NameValueCollection ParseFieldValuePairs(string fieldValuePairs)
-		{
-			return ParseFieldValuePairs(fieldValuePairs, FieldValueSeparator.Ampersand);
-		}
+        /// <summary>
+        /// Parses a query string into a <see cref="NameValueCollection"/> equivalent field-value pairs.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string to parse.</param>
+        /// <returns>A <see cref="NameValueCollection"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
+        public static NameValueCollection ParseFieldValuePairs(string fieldValuePairs)
+        {
+            return ParseFieldValuePairs(fieldValuePairs, FieldValueSeparator.Ampersand);
+        }
 
-		/// <summary>
-		/// Parses a query string, header or a form-data into a <see cref="NameValueCollection"/> equivalent field-value pairs.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
-		/// <returns>A <see cref="NameValueCollection"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
-		public static NameValueCollection ParseFieldValuePairs(string fieldValuePairs, FieldValueSeparator separator)
-		{
-			return ParseFieldValuePairs(fieldValuePairs, separator, false);
-		}
+        /// <summary>
+        /// Parses a query string, header or a form-data into a <see cref="NameValueCollection"/> equivalent field-value pairs.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
+        /// <returns>A <see cref="NameValueCollection"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
+        public static NameValueCollection ParseFieldValuePairs(string fieldValuePairs, FieldValueSeparator separator)
+        {
+            return ParseFieldValuePairs(fieldValuePairs, separator, false);
+        }
 
-		/// <summary>
-		/// Parses a query string, header or a form-data into a <see cref="NameValueCollection"/> equivalent field-value pairs.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
-		/// <param name="urlDecode">Converts <paramref name="fieldValuePairs"/> that has been encoded for transmission in a URL into a decoded string. Default is false.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
-		/// <returns>A <see cref="NameValueCollection"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
-		public static NameValueCollection ParseFieldValuePairs(string fieldValuePairs, FieldValueSeparator separator, bool urlDecode)
-		{
-			if (fieldValuePairs == null) { throw new ArgumentNullException("fieldValuePairs"); } 
-			NameValueCollection modifiedFieldValuePairs = new NameValueCollection();
-			if (fieldValuePairs.Length == 0) { return modifiedFieldValuePairs; }
-			char characterSeperator = GetSeparator(separator);
-			if (separator == FieldValueSeparator.Ampersand && fieldValuePairs.StartsWith("?", StringComparison.OrdinalIgnoreCase)) { fieldValuePairs = fieldValuePairs.Remove(0, 1); }
-			string[] namesAndValues = fieldValuePairs.Split(characterSeperator);
-			foreach (string nameAndValue in namesAndValues)
-			{
-				int equalLocation = nameAndValue.IndexOf("=", StringComparison.OrdinalIgnoreCase);
-				if (equalLocation < 0) {continue; } // we have no parameter values, just a value pair like lcid=1030& or lcid=1030&test
-				string value = equalLocation == nameAndValue.Length ? null : urlDecode ? HttpUtility.UrlDecode(nameAndValue.Substring(equalLocation + 1)) : nameAndValue.Substring(equalLocation + 1);
-				modifiedFieldValuePairs.Add(nameAndValue.Substring(0, nameAndValue.IndexOf("=", StringComparison.OrdinalIgnoreCase)), value);
-			}
-			return modifiedFieldValuePairs;
-		}
+        /// <summary>
+        /// Parses a query string, header or a form-data into a <see cref="NameValueCollection"/> equivalent field-value pairs.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data values to parse.</param>
+        /// <param name="urlDecode">Converts <paramref name="fieldValuePairs"/> that has been encoded for transmission in a URL into a decoded string. Default is false.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the conversion.</param>
+        /// <returns>A <see cref="NameValueCollection"/> value equivalent to the values in the <paramref name="fieldValuePairs"/>.</returns>
+        public static NameValueCollection ParseFieldValuePairs(string fieldValuePairs, FieldValueSeparator separator, bool urlDecode)
+        {
+            if (fieldValuePairs == null) { throw new ArgumentNullException(nameof(fieldValuePairs)); }
+            NameValueCollection modifiedFieldValuePairs = new NameValueCollection();
+            if (fieldValuePairs.Length == 0) { return modifiedFieldValuePairs; }
+            char characterSeperator = GetSeparator(separator);
+            if (separator == FieldValueSeparator.Ampersand && fieldValuePairs.StartsWith("?", StringComparison.OrdinalIgnoreCase)) { fieldValuePairs = fieldValuePairs.Remove(0, 1); }
+            string[] namesAndValues = fieldValuePairs.Split(characterSeperator);
+            foreach (string nameAndValue in namesAndValues)
+            {
+                int equalLocation = nameAndValue.IndexOf("=", StringComparison.OrdinalIgnoreCase);
+                if (equalLocation < 0) { continue; } // we have no parameter values, just a value pair like lcid=1030& or lcid=1030&test
+                string value = equalLocation == nameAndValue.Length ? null : urlDecode ? HttpUtility.UrlDecode(nameAndValue.Substring(equalLocation + 1)) : nameAndValue.Substring(equalLocation + 1);
+                modifiedFieldValuePairs.Add(nameAndValue.Substring(0, nameAndValue.IndexOf("=", StringComparison.OrdinalIgnoreCase)), value);
+            }
+            return modifiedFieldValuePairs;
+        }
 
-		private static char GetSeparator(FieldValueSeparator separator)
-		{
-			switch (separator)
-			{
-				case FieldValueSeparator.Ampersand:
-					return '&';
-				case FieldValueSeparator.Semicolon:
-					return ';';
-			}
-			throw new ArgumentOutOfRangeException("separator");
-		}
+        private static char GetSeparator(FieldValueSeparator separator)
+        {
+            switch (separator)
+            {
+                case FieldValueSeparator.Ampersand:
+                    return '&';
+                case FieldValueSeparator.Semicolon:
+                    return ';';
+            }
+            throw new ArgumentOutOfRangeException(nameof(separator));
+        }
 
-		/// <summary>
-		/// Sanitizes the query string, header or form-data from the specified arguments, using all of the keys gathered in <paramref name="fieldValuePairs"/> and <see cref="FieldValueSeparator.Ampersand"/> as the separator.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
-		/// <param name="sanitizing">The sanitizing action to perform on the <paramref name="fieldValuePairs"/>.</param>
-		/// <returns>A sanitized <see cref="String"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
-		public static string SanitizeFieldValuePairs(string fieldValuePairs, FieldValueSanitizing sanitizing)
-		{
-			if (fieldValuePairs == null) throw new ArgumentNullException("fieldValuePairs");
-			NameValueCollection tempFieldValuePairs = ParseFieldValuePairs(fieldValuePairs);
-			return SanitizeFieldValuePairs(fieldValuePairs, sanitizing, tempFieldValuePairs.AllKeys);
-		}
+        /// <summary>
+        /// Sanitizes the query string, header or form-data from the specified arguments, using all of the keys gathered in <paramref name="fieldValuePairs"/> and <see cref="FieldValueSeparator.Ampersand"/> as the separator.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
+        /// <param name="filter">The filter action to perform on the <paramref name="fieldValuePairs"/>.</param>
+        /// <returns>A sanitized <see cref="String"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
+        public static string SanitizeFieldValuePairs(string fieldValuePairs, FieldValueFilter filter)
+        {
+            if (fieldValuePairs == null) throw new ArgumentNullException(nameof(fieldValuePairs));
+            NameValueCollection tempFieldValuePairs = ParseFieldValuePairs(fieldValuePairs);
+            return SanitizeFieldValuePairs(fieldValuePairs, filter, tempFieldValuePairs.AllKeys);
+        }
 
-		/// <summary>
-		/// Sanitizes the query string from the specified arguments, using <see cref="FieldValueSeparator.Ampersand"/> as the separator.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string to sanitize.</param>
-		/// <param name="sanitizing">The sanitizing action to perform on the <paramref name="fieldValuePairs"/>.</param>
-		/// <param name="keys">The keys to use in the sanitizing process.</param>
-		/// <returns>A sanitized <see cref="String"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
-		public static string SanitizeFieldValuePairs(string fieldValuePairs, FieldValueSanitizing sanitizing, params string[] keys)
-		{
-			return SanitizeFieldValuePairs(fieldValuePairs, sanitizing, FieldValueSeparator.Ampersand, keys);
-		}
+        /// <summary>
+        /// Sanitizes the query string from the specified arguments, using <see cref="FieldValueSeparator.Ampersand"/> as the separator.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string to sanitize.</param>
+        /// <param name="filter">The filter action to perform on the <paramref name="fieldValuePairs"/>.</param>
+        /// <param name="keys">The keys to use in the filter process.</param>
+        /// <returns>A sanitized <see cref="String"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
+        public static string SanitizeFieldValuePairs(string fieldValuePairs, FieldValueFilter filter, params string[] keys)
+        {
+            return SanitizeFieldValuePairs(fieldValuePairs, filter, FieldValueSeparator.Ampersand, keys);
+        }
 
-		/// <summary>
-		/// Sanitizes the query string, header or form-data from the specified arguments.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
-		/// <param name="sanitizing">The sanitizing action to perform on the <paramref name="fieldValuePairs"/>.</param>
-		/// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the result.</param>
-		/// <param name="keys">The keys to use in the sanitizing process.</param>
-		/// <returns>A sanitized <see cref="String"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
-		public static string SanitizeFieldValuePairs(string fieldValuePairs, FieldValueSanitizing sanitizing, FieldValueSeparator separator, IEnumerable<string> keys)
-		{
-			if (fieldValuePairs == null) throw new ArgumentNullException("fieldValuePairs");
-			if (keys == null) throw new ArgumentNullException("keys");
-			NameValueCollection newFieldValuePairs = ParseFieldValuePairs(fieldValuePairs, separator);
-			return ParseFieldValuePairs(SanitizeFieldValuePairs(newFieldValuePairs, sanitizing, keys), separator);
-		}
+        /// <summary>
+        /// Sanitizes the query string, header or form-data from the specified arguments.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
+        /// <param name="filter">The filter action to perform on the <paramref name="fieldValuePairs"/>.</param>
+        /// <param name="separator">The <see cref="FieldValueSeparator"/> to use in the result.</param>
+        /// <param name="keys">The keys to use in the filter process.</param>
+        /// <returns>A sanitized <see cref="String"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
+        public static string SanitizeFieldValuePairs(string fieldValuePairs, FieldValueFilter filter, FieldValueSeparator separator, IEnumerable<string> keys)
+        {
+            if (fieldValuePairs == null) throw new ArgumentNullException(nameof(fieldValuePairs));
+            if (keys == null) throw new ArgumentNullException(nameof(keys));
+            NameValueCollection newFieldValuePairs = ParseFieldValuePairs(fieldValuePairs, separator);
+            return ParseFieldValuePairs(SanitizeFieldValuePairs(newFieldValuePairs, filter, keys), separator);
+        }
 
-		/// <summary>
-		/// Sanitizes the query string, header or form-data from the specified arguments, using all of the keys gathered in <paramref name="fieldValuePairs"/> and <see cref="FieldValueSeparator.Ampersand"/> as the separator.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
-		/// <param name="sanitizing">The sanitizing action to perform on the <paramref name="fieldValuePairs"/>.</param>
-		/// <returns>A sanitized <see cref="NameValueCollection"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
-		public static NameValueCollection SanitizeFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSanitizing sanitizing)
-		{
-			if (fieldValuePairs == null) throw new ArgumentNullException("fieldValuePairs");
-			return SanitizeFieldValuePairs(fieldValuePairs, sanitizing, fieldValuePairs.AllKeys);
-		}
+        /// <summary>
+        /// Sanitizes the query string, header or form-data from the specified arguments, using all of the keys gathered in <paramref name="fieldValuePairs"/> and <see cref="FieldValueSeparator.Ampersand"/> as the separator.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
+        /// <param name="filter">The filter action to perform on the <paramref name="fieldValuePairs"/>.</param>
+        /// <returns>A sanitized <see cref="NameValueCollection"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
+        public static NameValueCollection SanitizeFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueFilter filter)
+        {
+            if (fieldValuePairs == null) throw new ArgumentNullException(nameof(fieldValuePairs));
+            return SanitizeFieldValuePairs(fieldValuePairs, filter, fieldValuePairs.AllKeys);
+        }
 
-		/// <summary>
-		/// Sanitizes the query string, header or form-data from the specified arguments, using <see cref="FieldValueSeparator.Ampersand"/> as the separator.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
-		/// <param name="sanitizing">The sanitizing action to perform on the <paramref name="fieldValuePairs"/>.</param>
-		/// <param name="keys">The keys to use in the sanitizing process.</param>
-		/// <returns>A sanitized <see cref="NameValueCollection"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
-		public static NameValueCollection SanitizeFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSanitizing sanitizing, params string[] keys)
-		{
-			return SanitizeFieldValuePairs(fieldValuePairs, sanitizing, (IEnumerable<string>)keys);
-		}
+        /// <summary>
+        /// Sanitizes the query string, header or form-data from the specified arguments, using <see cref="FieldValueSeparator.Ampersand"/> as the separator.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
+        /// <param name="filter">The filter action to perform on the <paramref name="fieldValuePairs"/>.</param>
+        /// <param name="keys">The keys to use in the filter process.</param>
+        /// <returns>A sanitized <see cref="NameValueCollection"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
+        public static NameValueCollection SanitizeFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueFilter filter, params string[] keys)
+        {
+            return SanitizeFieldValuePairs(fieldValuePairs, filter, (IEnumerable<string>)keys);
+        }
 
-		/// <summary>
-		/// Sanitizes the query string, header or form-data from the specified arguments.
-		/// </summary>
-		/// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
-		/// <param name="sanitizing">The sanitizing action to perform on the <paramref name="fieldValuePairs"/>.</param>
-		/// <param name="keys">The keys to use in the sanitizing process.</param>
-		/// <returns>A sanitized <see cref="NameValueCollection"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
-		public static NameValueCollection SanitizeFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueSanitizing sanitizing, IEnumerable<string> keys)
-		{
-			if (fieldValuePairs == null) throw new ArgumentNullException("fieldValuePairs");
-			if (keys == null) throw new ArgumentNullException("keys");
-			NameValueCollection modifiedFieldValuePairs = new NameValueCollection(fieldValuePairs);
-			switch (sanitizing)
-			{
-				case FieldValueSanitizing.RemoveDublets:
-					foreach (string key in keys)
-					{
-						string[] values = modifiedFieldValuePairs[key].Split(',');
-						int zeroBasedIndex = values.Length - 1;
-						if (zeroBasedIndex >= 0) { modifiedFieldValuePairs[key] = values[zeroBasedIndex]; }
-					}
-					break;
-				case FieldValueSanitizing.Remove:
-					foreach (string key in keys)
-					{
-						modifiedFieldValuePairs.Remove(key);
-					}
-					break;
-				default:
-					throw new ArgumentOutOfRangeException("sanitizing");
-			}
-			return modifiedFieldValuePairs;
-		}
-	}
-
-	/// <summary>
-	/// Specifies the sanitize action to perform on either query strings, headers or form data.
-	/// </summary>
-	public enum FieldValueSanitizing
-	{
-		/// <summary>
-		/// Sanitizes the request so that all keys (with matching values) is removed.
-		/// </summary>
-		Remove,
-		/// <summary>
-		/// Sanitizes the request so that all keys is assured only the latest value applied.
-		/// </summary>
-		RemoveDublets
-	}
-
-	/// <summary>
-	/// Specifies a range of field value seperators.
-	/// </summary>
-	public enum FieldValueSeparator
-	{
-		/// <summary>
-		/// An ampersand (&amp;) separator.
-		/// </summary>
-		Ampersand,
-		/// <summary>
-		/// A semicolon (;) separator.
-		/// </summary>
-		Semicolon
-	}
-
-	/// <summary>
-	/// Represents the optional response compression encoding format to be used to compress the data received in response to an <see cref="HttpRequest"/>.
-	/// </summary>
-	public enum CompressionMethodScheme
-	{
-		/// <summary>
-		/// Use the identity scheme - hence no compression.
-		/// </summary>
-		Identity = 0,
-		/// <summary>
-		/// Use the GZip compression scheme.
-		/// </summary>
-		GZip = 1,
-		/// <summary>
-		/// Use the deflate compression scheme.
-		/// </summary>
-		Deflate = 2,
-		/// <summary>
-		/// Use the LZW compression scheme.
-		/// </summary>
-		Compress = 3,
-		/// <summary>
-		/// Do not use any of the compression schemes.
-		/// </summary>
-		None = 100
-	}
+        /// <summary>
+        /// Sanitizes the query string, header or form-data from the specified arguments.
+        /// </summary>
+        /// <param name="fieldValuePairs">The query string, header or form-data to sanitize.</param>
+        /// <param name="filter">The filter action to perform on the <paramref name="fieldValuePairs"/>.</param>
+        /// <param name="keys">The keys to use in the filter process.</param>
+        /// <returns>A sanitized <see cref="NameValueCollection"/> equivalent of <paramref name="fieldValuePairs"/>.</returns>
+        public static NameValueCollection SanitizeFieldValuePairs(NameValueCollection fieldValuePairs, FieldValueFilter filter, IEnumerable<string> keys)
+        {
+            if (fieldValuePairs == null) throw new ArgumentNullException(nameof(fieldValuePairs));
+            if (keys == null) throw new ArgumentNullException(nameof(keys));
+            NameValueCollection modifiedFieldValuePairs = new NameValueCollection(fieldValuePairs);
+            switch (filter)
+            {
+                case FieldValueFilter.RemoveDublets:
+                    foreach (string key in keys)
+                    {
+                        string[] values = modifiedFieldValuePairs[key].Split(',');
+                        int zeroBasedIndex = values.Length - 1;
+                        if (zeroBasedIndex >= 0) { modifiedFieldValuePairs[key] = values[zeroBasedIndex]; }
+                    }
+                    break;
+                case FieldValueFilter.Remove:
+                    foreach (string key in keys)
+                    {
+                        modifiedFieldValuePairs.Remove(key);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(filter));
+            }
+            return modifiedFieldValuePairs;
+        }
+    }
 }

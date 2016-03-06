@@ -65,9 +65,9 @@ namespace Cuemon.ServiceModel
         /// <param name="deserializer">The function delegate that converts the entity-body of an HTTP message to an object of type <typeparamref name="TBody"/>.</param>
         protected HttpMessageBody(ContentType mimeType, Encoding encoding, Doer<Stream, ContentType, Encoding, TBody> deserializer)
         {
-            if (mimeType == null) { throw new ArgumentNullException("mimeType"); }
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
-            if (deserializer == null) { throw new ArgumentNullException("deserializer"); }
+            if (mimeType == null) { throw new ArgumentNullException(nameof(mimeType)); }
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
+            if (deserializer == null) { throw new ArgumentNullException(nameof(deserializer)); }
 
             MimeType = mimeType;
             Encoding = encoding;
@@ -118,7 +118,7 @@ namespace Cuemon.ServiceModel
             if (!HasSupportedMimeType)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The MIME type of this instance is not supported. Expected MIME type of this instance must be one of the following: {0}. Actually MIME type was: {1}.",
-                    ConvertUtility.ToDelimitedString(SupportedMimeTypes, ", "),
+                    StringConverter.ToDelimitedString(SupportedMimeTypes, ", "),
                     MimeType == null ? "<unspecified>" : MimeType.MediaType));
             }
             return Deserializer(entityBody, MimeType, Encoding);

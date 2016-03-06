@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -11,11 +10,13 @@ using System.Threading;
 using System.Web;
 using System.Web.Configuration;
 using Cuemon.Annotations;
-using Cuemon.Caching;
+using Cuemon.Collections;
+using Cuemon.Integrity;
 using Cuemon.Collections.Generic;
 using Cuemon.Diagnostics;
 using Cuemon.Net.Http;
 using Cuemon.Reflection;
+using Cuemon.Runtime.Caching;
 using Cuemon.Web;
 using Cuemon.Web.Routing;
 using Cuemon.Xml;
@@ -23,22 +24,22 @@ using Cuemon.Xml.Serialization;
 
 namespace Cuemon.ServiceModel
 {
-	/// <summary>
+    /// <summary>
     /// Defines the contract that a class must implement in order to process a request for a matching route pattern while providing ways for diagnostics, monitoring and performance measuring in your services for the Microsoft .NET Framework version 2.0 SP1 and forward.
-	/// </summary>
+    /// </summary>
     public abstract partial class Endpoint : Instrumentation, IHttpHandler
-	{
-		#region Constructors
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Endpoint"/> class.
-		/// </summary>
-		protected Endpoint()
-		{
-		    this.EnableMethodPerformanceTiming = true;
-		    this.EnablePropertyPerformanceTiming = true;
-		    XmlSerializationUtility.SkipPropertyCallback = this.PropertyFilter;
-		}
-		#endregion
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Endpoint"/> class.
+        /// </summary>
+        protected Endpoint()
+        {
+            EnableMethodPerformanceTiming = true;
+            EnablePropertyPerformanceTiming = true;
+            XmlSerializationUtility.SkipPropertyCallback = PropertyFilter;
+        }
+        #endregion
 
         #region Events
         #endregion
@@ -53,16 +54,21 @@ namespace Cuemon.ServiceModel
         {
             get { return false; }
         }
-		#endregion
+        #endregion
 
-		#region Methods
-		/// <summary>
-		/// Gets a reference to the <see cref="CachingManager.Cache"/> object.
-		/// </summary>
-		public CacheCollection Cache
-		{
-			get { return CachingManager.Cache; }
-		}
+        #region Methods
+        //public T EnqueueToCache<T>(string key, T item)
+        //{
+        //    return item;
+        //}
+
+        /// <summary>
+        /// Gets a reference to the <see cref="CachingManager.Cache"/> object.
+        /// </summary>
+        public CacheCollection Cache
+        {
+            get { return CachingManager.Cache; }
+        }
 
         /// <summary>
         /// Gets the HTTP-specific information about the current request processed by this <see cref="Endpoint"/> implementation.
@@ -76,9 +82,9 @@ namespace Cuemon.ServiceModel
         /// <param name="context">An <see cref="T:System.Web.HttpContext" /> object that provides references to the intrinsic server objects (for example, Request, Response, Session, and Server) used to service HTTP requests.</param>
         public virtual void ProcessRequest(HttpContext context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            this.HandlerContext = context;
-            
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
+            HandlerContext = context;
+
             Uri requestUri = context.Request.Url;
             MethodBase method = MethodBase.GetCurrentMethod();
             IEnumerable<ContentType> acceptHeaders = HttpRequestUtility.GetAcceptHeader(context.Request);
@@ -88,15 +94,15 @@ namespace Cuemon.ServiceModel
             {
                 object[] parameters;
                 HttpMethods currentVerb = EnumUtility.Parse<HttpMethods>(context.Request.HttpMethod, true);
-                
+
                 Encoding encoding = context.Response.ContentEncoding;
-                ContentType contentTypeResponse = this.ParseAcceptHeader(acceptHeaders);
+                ContentType contentTypeResponse = ParseAcceptHeader(acceptHeaders);
                 context.Response.AddHeader("Content-Type", contentTypeResponse.MediaType);
 
-                MethodInfo httpMethodToInvoke = null;
+                MethodInfo httpMethodToInvoke;
                 try
                 {
-                    HttpHandlerAction handlerAction = EndpointModule.GetHandlerAction(this.GetType());
+                    HttpHandlerAction handlerAction = EndpointModule.GetHandlerAction(GetType());
                     Uri baseUri = new Uri(HttpRequestUtility.GetHostAuthority(requestUri), handlerAction.Path.Remove(handlerAction.Path.Length - 1, 1));
                     httpMethodToInvoke = HttpRouteUtility.ParseRouteMethod(this, baseUri, requestUri, currentVerb, out parameters);
                 }
@@ -117,19 +123,19 @@ namespace Cuemon.ServiceModel
                     {
                         if (contentType == null ||
                             string.IsNullOrEmpty(contentType.MediaType)) { throw new HttpException((int)HttpStatusCode.BadRequest, "The HTTP Content-Type header is missing from the request; unable to proceed with parsing of the HTTP message entity-body."); }
-                        IEnumerable<DataPair> entityBodyParameters = this.ParseInputStream(httpMethodToInvoke, requestStream, contentType, encoding);
-                        parameters = EnumerableUtility.ToArray(EnumerableUtility.Concat(parameters, ConvertUtility.ParseSequenceWith(entityBodyParameters, pair => pair.Value)));
+                        IEnumerable<DataPair> entityBodyParameters = ParseInputStream(httpMethodToInvoke, requestStream, contentType, encoding);
+                        parameters = EnumerableConverter.ToArray(EnumerableUtility.Concat(parameters, EnumerableConverter.Parse(entityBodyParameters, pair => pair.Value)));
                     }
                 }
-                
+
                 if (httpMethodToInvoke.GetParameters().Length != parameters.Length)
                 {
-                    throw ExceptionUtility.Refine(new HttpException((int) HttpStatusCode.BadRequest, string.Format(CultureInfo.InvariantCulture, "Unable to perform a HTTP operation at the requested URI location '{0}' due to parameter count mismatch. Expected parameter count was {1}. Actual parameter count is {2}. Resolved parameters was: '{3}'. Actual parameters is: '{4}', where the missing parameter -or- parameters, often is related to misspelled parameter name -or- parameter names.",
+                    throw ExceptionUtility.Refine(new HttpException((int)HttpStatusCode.BadRequest, string.Format(CultureInfo.InvariantCulture, "Unable to perform a HTTP operation at the requested URI location '{0}' due to parameter count mismatch. Expected parameter count was {1}. Actual parameter count is {2}. Resolved parameters was: '{3}'. Actual parameters is: '{4}', where the missing parameter -or- parameters, often is related to misspelled parameter name -or- parameter names.",
                                                                                            requestUri.PathAndQuery,
                                                                                            httpMethodToInvoke.GetParameters().Length,
                                                                                            parameters.Length,
-                                                                                           ConvertUtility.ToDelimitedString(httpMethodToInvoke.GetParameters(), ",", Converter),
-                                                                                           ConvertUtility.ToDelimitedString(parameters))), MethodBase.GetCurrentMethod());
+                                                                                           StringConverter.ToDelimitedString(httpMethodToInvoke.GetParameters(), ",", Converter),
+                                                                                           StringConverter.ToDelimitedString(parameters))), MethodBase.GetCurrentMethod());
                 }
 
                 object result = httpMethodToInvoke.Invoke(this, parameters);
@@ -174,35 +180,18 @@ namespace Cuemon.ServiceModel
         /// </exception>
         protected virtual DataPairCollection ParseInputStream(MethodInfo method, Stream entityBody, ContentType mimeType, Encoding encoding)
         {
-            Validator.ThrowIfNull(method, "method");
-            Validator.ThrowIfNull(entityBody, "entityBody");
-            Validator.ThrowIfNull(mimeType, "mimeType", "The HTTP Content-Type header is missing from the request; unable to proceed with parsing.");
-            Validator.ThrowIfNull(encoding, "encoding");
+            Validator.ThrowIfNull(method, nameof(method));
+            Validator.ThrowIfNull(entityBody, nameof(entityBody));
+            Validator.ThrowIfNull(mimeType, nameof(mimeType), "The HTTP Content-Type header is missing from the request; unable to proceed with parsing.");
+            Validator.ThrowIfNull(encoding, nameof(encoding));
 
-            EndpointInputParser parser = new EndpointInputParser(ConvertUtility.ParseSequenceWith(method.GetParameters(), info => new KeyValuePair<string, Type>(info.Name, info.ParameterType)),
+            EndpointInputParser parser = new EndpointInputParser(EnumerableConverter.Parse(method.GetParameters(), info => new KeyValuePair<string, Type>(info.Name, info.ParameterType)),
                 entityBody,
                 mimeType,
                 encoding);
+
             return parser.Parse();
         }
-
-	    private static void ParseMultipart(Encoding encoding, IEnumerable<HttpMultipartContent> parts, IEnumerable<PropertyInfo> properties, ref object instance)
-	    {
-            foreach (HttpMultipartContent part in parts)
-            {
-                foreach (PropertyInfo property in properties)
-                {
-                    if (part.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        object propertyValue = part.IsFile ? ConvertUtility.ToByteArray(part.GetPartAsFile().Data) : ConvertUtility.ChangeType(part.GetPartAsString(encoding), property.PropertyType);
-                        if (property.CanWrite)
-                        {
-                            property.SetValue(instance, propertyValue, null);
-                        }
-                    }
-                }
-            }
-	    }
 
         private static void WriteResult(HttpContext context, object result)
         {
@@ -220,18 +209,18 @@ namespace Cuemon.ServiceModel
                     output = XmlUtility.ConvertEncoding(XmlSerializationUtility.Serialize(result), context.Response.ContentEncoding);
                     if (asXml)
                     {
-                        outputAsBytes = ConvertUtility.ToByteArray(output);
+                        outputAsBytes = ByteConverter.FromStream(output);
                     }
                     else if (asJson)
                     {
                         output = XmlConvertUtility.ToJson(output, context.Response.ContentEncoding);
-                        outputAsBytes = ConvertUtility.ToByteArray(output);
+                        outputAsBytes = ByteConverter.FromStream(output);
                     }
                 }
                 else if (asPlain)
                 {
                     // todo: serialize here
-                    outputAsBytes = ConvertUtility.ToByteArray(result.ToString(), PreambleSequence.Remove, context.Response.ContentEncoding);
+                    outputAsBytes = ByteConverter.FromString(result.ToString(), PreambleSequence.Remove, context.Response.ContentEncoding);
                 }
                 else
                 {
@@ -245,12 +234,12 @@ namespace Cuemon.ServiceModel
             }
         }
 
-	    private string Converter(ParameterInfo parameterInfo)
-	    {
-	        return TypeUtility.SanitizeTypeName(parameterInfo.ParameterType) + " " + parameterInfo.Name;
-	    }
+        private string Converter(ParameterInfo parameterInfo)
+        {
+            return StringConverter.FromType(parameterInfo.ParameterType) + " " + parameterInfo.Name;
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Specifies what properties to skip when invoking an serializing an object for a HTTP operation.
         /// </summary>
         /// <param name="propertyToEvaluate">The property to evaluate and potential skip in the serialization process.</param>
@@ -275,16 +264,16 @@ namespace Cuemon.ServiceModel
         /// </exception>
         protected virtual ContentType ParseAcceptHeader(IEnumerable<ContentType> acceptHeaders)
         {
-            if (acceptHeaders == null) { throw new ArgumentNullException("acceptHeaders"); }
-            List<ContentType> supportedMimeTypes = new List<ContentType>(this.SupportedMimeTypes);
+            if (acceptHeaders == null) { throw new ArgumentNullException(nameof(acceptHeaders)); }
+            List<ContentType> supportedMimeTypes = new List<ContentType>(SupportedMimeTypes);
             foreach (ContentType acceptHeader in acceptHeaders)
             {
                 if (EnumerableUtility.Contains(supportedMimeTypes, acceptHeader, new PropertyEqualityComparer<ContentType>("MediaType", StringComparer.OrdinalIgnoreCase))) { return acceptHeader; }
-                if (acceptHeader.MediaType == "*/*") { return EnumerableUtility.FirstOrDefault(this.SupportedMimeTypes); }
+                if (acceptHeader.MediaType == "*/*") { return EnumerableUtility.FirstOrDefault(SupportedMimeTypes); }
             }
-            throw ExceptionUtility.Refine(new HttpParseException(string.Format(CultureInfo.InvariantCulture, "The HTTP Accept header appears to contain invalid MIME types. Expected MIME type for this service endpoint must be one of the following: {0}. Actually MIME type -or- MIME types was: {1}.", 
-                ConvertUtility.ToDelimitedString(supportedMimeTypes, ", "),
-                ConvertUtility.ToDelimitedString(acceptHeaders, ", "))), MethodBase.GetCurrentMethod());
+            throw ExceptionUtility.Refine(new HttpParseException(string.Format(CultureInfo.InvariantCulture, "The HTTP Accept header appears to contain invalid MIME types. Expected MIME type for this service endpoint must be one of the following: {0}. Actually MIME type -or- MIME types was: {1}.",
+                StringConverter.ToDelimitedString(supportedMimeTypes, ", "),
+                StringConverter.ToDelimitedString(acceptHeaders, ", "))), MethodBase.GetCurrentMethod());
         }
 
         /// <summary>
@@ -292,27 +281,36 @@ namespace Cuemon.ServiceModel
         /// </summary>
         /// <value>The supported MIME types of this <see cref="Endpoint"/> implementation.</value>
 	    protected virtual IEnumerable<ContentType> SupportedMimeTypes
-	    {
-	        get
-	        {
-	            yield return new ContentType("application/xml");
+        {
+            get
+            {
+                yield return new ContentType("application/xml");
                 yield return new ContentType("text/xml");
-	            yield return new ContentType("application/json");
-	            yield return new ContentType("text/plain");
-	        }
-	    }
+                yield return new ContentType("application/json");
+                yield return new ContentType("text/plain");
+            }
+        }
 
-	    /// <summary>
+        //protected virtual IEnumerable<char> SupportedCompoundPathSegments
+        //{
+        //    get
+        //    {
+        //        yield return ',';
+        //        yield return ';';
+        //    }
+        //}
+
+        /// <summary>
         /// Provides a way to handle exceptions thrown from one of the <c>ExecuteXXX</c> methods.
         /// </summary>
         /// <param name="caller">A <see cref="MethodBase"/> object representing the executing caller method.</param>
         /// <param name="exception">An <see cref="Exception"/> object thrown from one of the <c>ExecuteXXX</c> methods.</param>
         /// <param name="parameters">An array of objects that represent the arguments passed to to the method that <paramref name="caller"/> represents.</param>
         /// <remarks>This method should be overridden and provide logic for changing client responses and the likes thereof.</remarks>
-	    protected virtual void ExceptionHandler(MethodBase caller, Exception exception, params object[] parameters)
-	    {
+        protected virtual void ExceptionHandler(MethodBase caller, Exception exception, params object[] parameters)
+        {
             throw ExceptionUtility.Refine(exception, caller, parameters);
-	    }
+        }
 
         /// <summary>
         /// Provides a way to handle the client-side related cache headers for the content being delivered through the HTTP response.
@@ -323,33 +321,33 @@ namespace Cuemon.ServiceModel
         /// <param name="suppressResponseBody">If set to <c>true</c>, any data that is normally written to the entity body of the response is omitted.</param>
         /// <remarks>The default implementation supports a traditional ASP.NET runtime environment.</remarks>
         protected virtual void ClientSideCachingHandler(CacheValidator validator, DateTime expires, HttpCacheability cacheability, out bool suppressResponseBody)
-	    {
+        {
             if (validator == null) { validator = CacheValidator.ReferencePoint; }
             if (expires == DateTime.MinValue) { cacheability = HttpCacheability.NoCache; }
 
-            HttpContext context = this.HandlerContext as HttpContext;
+            HttpContext context = HandlerContext as HttpContext;
             if (context != null)
             {
                 HttpStatusCode statusCode;
-                WebHeaderCollection headers = HttpResponseUtility.CreateClientSideContentCacheExpiresHeaders(validator, expires, cacheability, HttpRequestUtility.IsClientSideResourceCached, context.Request.Headers, out statusCode);
+                WebHeaderCollection headers = HttpResponseUtility.CreateClientSideContentCacheExpiresHeaders(validator.CombineWith(context.Request.Url.AbsolutePath.ToLowerInvariant()), expires, cacheability, HttpRequestUtility.IsClientSideResourceCached, context.Request.Headers, out statusCode);
                 suppressResponseBody = (statusCode == HttpStatusCode.NotModified);
                 context.Response.Headers.Add(headers);
-                context.Response.SuppressContent = suppressResponseBody;   
+                context.Response.SuppressContent = suppressResponseBody;
             }
             else
             {
                 suppressResponseBody = false;
             }
-	    }
+        }
 
         /// <summary>
         /// Provides a way to handle the <paramref name="statusCode"/> of the HTTP response.
         /// </summary>
         /// <param name="statusCode">The HTTP status code of the output returned to the client.</param>
 	    protected void StatusCodeHandler(HttpStatusCode statusCode)
-	    {
-	        this.StatusCodeHandler(statusCode, null);
-	    }
+        {
+            StatusCodeHandler(statusCode, null);
+        }
 
         /// <summary>
         /// Provides a way to handle the <paramref name="statusCode"/> of the HTTP response.
@@ -357,14 +355,14 @@ namespace Cuemon.ServiceModel
         /// <param name="statusCode">The HTTP status code of the output returned to the client.</param>
         /// <param name="statusDescription">The HTTP status string of the output returned to the client.</param>
 	    protected virtual void StatusCodeHandler(HttpStatusCode statusCode, string statusDescription)
-	    {
-            HttpContext context = this.HandlerContext as HttpContext;
+        {
+            HttpContext context = HandlerContext as HttpContext;
             if (context != null)
             {
                 context.Response.StatusCode = (int)statusCode;
                 if (!string.IsNullOrEmpty(statusDescription)) { context.Response.StatusDescription = statusDescription; }
             }
-	    }
-	    #endregion
-	}
+        }
+        #endregion
+    }
 }

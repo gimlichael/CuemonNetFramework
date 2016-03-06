@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
-using Cuemon.Caching;
+using Cuemon.Runtime.Caching;
 using Cuemon.Security.Cryptography;
 using Microsoft.Win32;
 
@@ -113,8 +113,8 @@ namespace Cuemon.Globalization
             {
                 string hashKey = HashUtility.ComputeHash(tziValue);
                 if (CachingManager.Cache.ContainsKey(hashKey, CacheGroupName)) { return CachingManager.Cache.Get<TZI>(hashKey, CacheGroupName); }
-                
-                if (tziValue.Length != Marshal.SizeOf(this.TziInitialized)) { throw new ArgumentException("Information size is incorrect", "tziValue"); }
+
+                if (tziValue.Length != Marshal.SizeOf(this.TziInitialized)) { throw new ArgumentException("Information size is incorrect", nameof(tziValue)); }
                 TZI tzi;
                 GCHandle h = GCHandle.Alloc(tziValue, GCHandleType.Pinned);
 
@@ -183,7 +183,7 @@ namespace Cuemon.Globalization
                 }
 
                 DateTime date = new DateTime(year, month, 1, hour, minute, second);
-                DateTime dateEnd= new DateTime();
+                DateTime dateEnd = new DateTime();
 
                 dateEnd = date.AddMonths(1).AddDays(-1);
 

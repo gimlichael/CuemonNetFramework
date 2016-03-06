@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Cuemon.IO;
+using Cuemon.Runtime.Serialization;
 using Cuemon.Xml.XPath;
 
 namespace Cuemon.Xml
@@ -85,8 +86,8 @@ namespace Cuemon.Xml
         /// <returns>An XML <see cref="Stream"/> variant of the specified <paramref name="exception"/>.</returns>
         public static Stream ToStream(Exception exception, Encoding encoding, bool includeStackTrace)
         {
-            if (exception == null) { throw new ArgumentNullException("exception"); }
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
             MemoryStream tempOutput = null;
             MemoryStream output = null;
             try
@@ -198,8 +199,8 @@ namespace Cuemon.Xml
         /// <remarks>The JSON representation is in compliance with RFC 4627. Take note, that all string values is escaped using <see cref="StringUtility.Escape"/>. This is by design and to help ensure compatibility with a wide range of data.</remarks>
         public static Stream ToJson(Stream xmlValue, Encoding encoding)
         {
-            if (xmlValue == null) throw new ArgumentNullException("xmlValue");
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
+            if (xmlValue == null) throw new ArgumentNullException(nameof(xmlValue));
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
             JsonWriter.ValidateEncoding(encoding);
 
             long startingPosition = xmlValue.Position;
@@ -340,7 +341,7 @@ namespace Cuemon.Xml
                             if (attributes.Current == null) { continue; }
                             XPathNavigator attribute = attributes.Current;
                             string value = attribute.Value.Trim();
-                            JsonInstance child = new XmlJsonInstance(attribute.Name, ConvertUtility.ChangeType(value, CultureInfo.InvariantCulture), nodeNumber, XPathNodeType.Attribute);
+                            JsonInstance child = new XmlJsonInstance(attribute.Name, ObjectConverter.FromString(value, CultureInfo.InvariantCulture), nodeNumber, XPathNodeType.Attribute);
                             child.Parent = instance;
                             instance.Instances.Add(child);
                         }
@@ -374,11 +375,11 @@ namespace Cuemon.Xml
 
                             if (directElement && textValueSpaceCount == 0)
                             {
-                                instance = new XmlJsonInstance(elementName, ConvertUtility.ChangeType(textValue, CultureInfo.InvariantCulture), nodeNumber);
+                                instance = new XmlJsonInstance(elementName, ObjectConverter.FromString(textValue, CultureInfo.InvariantCulture), nodeNumber);
                             }
                             else
                             {
-                                JsonInstance child = new XmlJsonInstance("#text", ConvertUtility.ChangeType(textValue, CultureInfo.InvariantCulture), nodeNumber);
+                                JsonInstance child = new XmlJsonInstance("#text", ObjectConverter.FromString(textValue, CultureInfo.InvariantCulture), nodeNumber);
                                 child.Parent = instance;
                                 instance.Instances.Add(child);
                             }

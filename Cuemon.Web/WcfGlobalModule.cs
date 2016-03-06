@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Web;
 using System.Xml.XPath;
 using Cuemon.Collections.Generic;
+using Cuemon.IO;
 using Cuemon.IO.Compression;
 using Cuemon.Web.Compilation;
 using Cuemon.Xml;
@@ -25,8 +25,7 @@ namespace Cuemon.Web
         /// <remarks>For this to work, you must have enabled <c>AspNetCompatibilityRequirements</c> in your WCF service to either <c>AspNetCompatibilityRequirementsMode.Allowed</c> or <c>AspNetCompatibilityRequirementsMode.Required</c>.</remarks>
         public static bool EnableWcfRestFaultXmlParsing
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Cuemon.Web
         /// </remarks>
         protected override void HandleExceptionInterception(HttpApplication context, bool includeStackTrace)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (context.Response.StatusCode >= 400 && EnableWcfRestFaultXmlParsing)
             {
                 string contentType = context.Response.ContentType;
@@ -97,7 +96,7 @@ namespace Cuemon.Web
         /// </remarks>
         protected override bool IsValidForCompression(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
             return base.IsValidForCompressionCore(MimeUtility.ParseContentType(context.Response.ContentType));
         }
 
@@ -108,7 +107,7 @@ namespace Cuemon.Web
         protected override void HandleCompressionHeaders(HttpApplication context)
         {
             if (!EnableCompression && this.ParseCompressionHeaders) { return; }
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (context.Context.Error != null || context.Response.SuppressContent) { return; }
 
             HttpResponseContentFilter filter = context.Response.Filter as HttpResponseContentFilter;
@@ -131,7 +130,7 @@ namespace Cuemon.Web
                 {
                     try
                     {
-                        byte[] outputInBytes = ConvertUtility.ToByteArray(CompressionUtility.CompressStream(snapshotOfContent, compressionType.Value));
+                        byte[] outputInBytes = ByteConverter.FromStream(CompressionUtility.CompressStream(snapshotOfContent, compressionType.Value));
                         context.Response.ClearContent();
                         context.Response.BinaryWrite(outputInBytes);
                     }
@@ -166,23 +165,8 @@ namespace Cuemon.Web
         /// <param name="compression">The compression method to apply to the HTTP Content-Encoding header.</param>
         protected override void InitializeCompression(HttpApplication context, CompressionMethodScheme compression)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            switch (compression)
-            {
-                case CompressionMethodScheme.Deflate:
-                    context.Response.Filter = new DeflateStream(context.Response.Filter, CompressionMode.Compress);
-                    this.ParseCompressionHeaders = true;
-                    break;
-                case CompressionMethodScheme.GZip:
-                    context.Response.Filter = new GZipStream(context.Response.Filter, CompressionMode.Compress);
-                    this.ParseCompressionHeaders = true;
-                    break;
-                case CompressionMethodScheme.Identity:
-                case CompressionMethodScheme.Compress:
-                case CompressionMethodScheme.None:
-                    this.ParseCompressionHeaders = true;
-                    break;
-            }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
+            Infrastructure.ApplyCompression(context, this, compression, () => true);
         }
 
         /// <summary>
@@ -191,7 +175,7 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         protected override void OnPreRequestHandlerExecute(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (this.IsWindowsCommunicationFoundationHelpPage(context))
             {
                 HttpResponseUtility.DisableClientSideResourceCache(context.Response);
@@ -217,7 +201,7 @@ namespace Cuemon.Web
         /// <param name="context">The context of the ASP.NET application.</param>
         protected override void OnPreSendRequestHeaders(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             if (this.IsWindowsCommunicationFoundationHelpPage(context)) { return; }
             base.OnPreSendRequestHeaders(context);
         }

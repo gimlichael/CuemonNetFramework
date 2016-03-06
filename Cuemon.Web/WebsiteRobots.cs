@@ -4,9 +4,9 @@ using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
-using Cuemon.Caching;
 using Cuemon.IO;
 using Cuemon.Net;
+using Cuemon.Runtime.Caching;
 using Cuemon.Security.Cryptography;
 using Cuemon.Xml.Serialization;
 using Cuemon.Xml.XPath;
@@ -92,7 +92,7 @@ namespace Cuemon.Web
         /// <value>The corresponding robots exclusion XSLT file.</value>
         public string ExclusionStyleSheetFile
         {
-            get 
+            get
             {
                 string file = this.Website.ConfigurationElement.Robots.ExclusionStyleSheetFile;
                 if (!string.IsNullOrEmpty(file))
@@ -116,7 +116,7 @@ namespace Cuemon.Web
         /// <returns>A <see cref="System.String"/> representing the Robots Exclusion Protocol.</returns>
         public string RenderRobotsExclusionProtocol()
         {
-            return ConvertUtility.ToString(XsltUtility.Transform(this.ToXml(), new Uri(this.ExclusionStyleSheetFile), false, new XsltParameter("hostHeader", "", HttpContext.Current.Request.Url.Host)), PreambleSequence.Remove);
+            return StringConverter.FromStream(XsltUtility.Transform(this.ToXml(), new Uri(this.ExclusionStyleSheetFile), false, new XsltParameter("hostHeader", "", HttpContext.Current.Request.Url.Host)), PreambleSequence.Remove);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Cuemon.Web
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             XPathNavigator navigator = this.CreateNavigator();
             navigator.MoveToFirstChild();
             writer.WriteRaw(navigator.InnerXml);

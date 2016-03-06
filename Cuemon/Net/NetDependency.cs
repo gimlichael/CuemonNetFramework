@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cuemon.Collections.Generic;
+using Cuemon.Runtime;
 
 namespace Cuemon.Net
 {
-	/// <summary>
-	/// This <see cref="NetDependency"/> class will monitor any changes occurred to a Uniform Resource Identifier while notifying subscribing objects.
-	/// </summary>
-	public sealed class NetDependency : Dependency
-	{
-		private readonly object _locker = new object();
+    /// <summary>
+    /// This <see cref="NetDependency"/> class will monitor any changes occurred to a Uniform Resource Identifier while notifying subscribing objects.
+    /// </summary>
+    public sealed class NetDependency : Dependency
+    {
+        private readonly object _locker = new object();
 
-		#region Constructors
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="value">The URI string to monitor for changes.</param>
-		/// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes.</remarks>
-		public NetDependency(string value) : this(new Uri(value))
-		{
-		}
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="value">The URI string to monitor for changes.</param>
+        /// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes.</remarks>
+        public NetDependency(string value) : this(new Uri(value))
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="value">The URI to monitor for changes.</param>
-		/// <remarks>The signaling is default delayed 15 seconds before first invoke.</remarks>
-		public NetDependency(Uri value) : this(ConvertUtility.ToArray<Uri>(value), false)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="value">The URI to monitor for changes.</param>
+        /// <remarks>The signaling is default delayed 15 seconds before first invoke.</remarks>
+        public NetDependency(Uri value) : this(EnumerableConverter.ToArray<Uri>(value), false)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetDependency"/> class.
@@ -38,124 +40,124 @@ namespace Cuemon.Net
         {
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
         /// <param name="checkResponseData">if set to <c>true</c>, a MD5 hash check of the response data is used to determine a change state of the resource; <c>false</c> to check only for the last modification of the resource.</param>
-		/// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes. The <paramref name="checkResponseData"/> is useful, when the web server you are probing does not contain the Last-Modified header.</remarks>
-		public NetDependency(IEnumerable<Uri> values, bool checkResponseData) : this(values, checkResponseData, TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(2))
-		{
-		}
+        /// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes. The <paramref name="checkResponseData"/> is useful, when the web server you are probing does not contain the Last-Modified header.</remarks>
+        public NetDependency(IEnumerable<Uri> values, bool checkResponseData) : this(values, checkResponseData, TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(2))
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		/// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
-		public NetDependency(IEnumerable<Uri> values, TimeSpan dueTime, TimeSpan period) : this(values, false, dueTime, period)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
+        public NetDependency(IEnumerable<Uri> values, TimeSpan dueTime, TimeSpan period) : this(values, false, dueTime, period)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		/// <remarks>The signaling is default delayed 15 seconds before first invoke.</remarks>
-		public NetDependency(IEnumerable<Uri> values, TimeSpan period) : this(values, TimeSpan.FromSeconds(15), period)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <remarks>The signaling is default delayed 15 seconds before first invoke.</remarks>
+        public NetDependency(IEnumerable<Uri> values, TimeSpan period) : this(values, TimeSpan.FromSeconds(15), period)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
         /// <param name="checkResponseData">if set to <c>true</c>, a MD5 hash check of the response data is used to determine a change state of the resource; <c>false</c> to check only for the last modification of the resource.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
         /// <remarks>The signaling is default delayed 15 seconds before first invoke. The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
-		public NetDependency(IEnumerable<Uri> values, bool checkResponseData, TimeSpan period) : this(values, checkResponseData, TimeSpan.FromSeconds(15), period)
-		{
-		}
+        public NetDependency(IEnumerable<Uri> values, bool checkResponseData, TimeSpan period) : this(values, checkResponseData, TimeSpan.FromSeconds(15), period)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
         /// <param name="checkResponseData">if set to <c>true</c>, a MD5 hash check of the response data is used to determine a change state of the resource; <c>false</c> to check only for the last modification of the resource.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		/// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
-		/// <remarks>The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
-		public NetDependency(IEnumerable<Uri> values, bool checkResponseData, TimeSpan dueTime, TimeSpan period)
-		{
-			if (values == null) { throw new ArgumentNullException("values"); }
-		    this.Uris = values;
-		    this.CheckResponseData = checkResponseData;
-		    this.DueTime = dueTime;
-		    this.Period = period;
-		}
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
+        /// <remarks>The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
+        public NetDependency(IEnumerable<Uri> values, bool checkResponseData, TimeSpan dueTime, TimeSpan period)
+        {
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
+            this.Uris = values;
+            this.CheckResponseData = checkResponseData;
+            this.DueTime = dueTime;
+            this.Period = period;
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI string locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-		/// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes.</remarks>
-		public NetDependency(IEnumerable<string> values) : this(values, false)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI string locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes.</remarks>
+        public NetDependency(IEnumerable<string> values) : this(values, false)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI string locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI string locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
         /// <param name="checkResponseData">if set to <c>true</c>, a MD5 hash check of the response data is used to determine a change state of the resource; <c>false</c> to check only for the last modification of the resource.</param>
-		/// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes. The <paramref name="checkResponseData"/> is useful, when the web server you are probing does not contain the Last-Modified header.</remarks>
-		public NetDependency(IEnumerable<string> values, bool checkResponseData) : this(values, checkResponseData, TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(2))
-		{
-		}
+        /// <remarks>The signaling is default delayed 15 seconds before first invoke. Signaling occurs every 2 minutes. The <paramref name="checkResponseData"/> is useful, when the web server you are probing does not contain the Last-Modified header.</remarks>
+        public NetDependency(IEnumerable<string> values, bool checkResponseData) : this(values, checkResponseData, TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(2))
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		/// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
-		public NetDependency(IEnumerable<string> values, TimeSpan dueTime, TimeSpan period) : this(values, false, dueTime, period)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
+        public NetDependency(IEnumerable<string> values, TimeSpan dueTime, TimeSpan period) : this(values, false, dueTime, period)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		public NetDependency(IEnumerable<string> values, TimeSpan period) : this(values, TimeSpan.FromSeconds(15), period)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        public NetDependency(IEnumerable<string> values, TimeSpan period) : this(values, TimeSpan.FromSeconds(15), period)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
         /// <param name="checkResponseData">if set to <c>true</c>, a MD5 hash check of the response data is used to determine a change state of the resource; <c>false</c> to check only for the last modification of the resource.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		/// <remarks>The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
-		public NetDependency(IEnumerable<string> values, bool checkResponseData, TimeSpan period) : this(values, checkResponseData, TimeSpan.FromSeconds(15), period)
-		{
-		}
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <remarks>The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
+        public NetDependency(IEnumerable<string> values, bool checkResponseData, TimeSpan period) : this(values, checkResponseData, TimeSpan.FromSeconds(15), period)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NetDependency"/> class.
-		/// </summary>
-		/// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetDependency"/> class.
+        /// </summary>
+        /// <param name="values">An <see cref="IEnumerable{T}"/> of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
         /// <param name="checkResponseData">if set to <c>true</c>, a MD5 hash check of the response data is used to determine a change state of the resource; <c>false</c> to check only for the last modification of the resource.</param>
-		/// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
-		/// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
-		/// <remarks>The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
-		public NetDependency(IEnumerable<string> values, bool checkResponseData, TimeSpan dueTime, TimeSpan period) : this(ToUriSequence(values), checkResponseData, dueTime, period)
-		{
-		}
+        /// <param name="dueTime">The amount of time to delay before the associated <see cref="NetWatcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
+        /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
+        /// <remarks>The <paramref name="checkResponseData"/> is useful when the web server you are probing does not contain the Last-Modified header.</remarks>
+        public NetDependency(IEnumerable<string> values, bool checkResponseData, TimeSpan dueTime, TimeSpan period) : this(ToUriSequence(values), checkResponseData, dueTime, period)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetDependency"/> class.
@@ -181,7 +183,7 @@ namespace Cuemon.Net
         /// </summary>
         /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
         /// <param name="values">An array of URI string locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-        public NetDependency(TimeSpan period, params string[] values) : this(values,  period)
+        public NetDependency(TimeSpan period, params string[] values) : this(values, period)
         {
         }
 
@@ -242,7 +244,7 @@ namespace Cuemon.Net
         /// </summary>
         /// <param name="period">The time interval between periodic signaling to the specified <paramref name="values"/> by the associated <see cref="NetWatcher"/>. Specify negative one (-1) milliseconds to disable periodic signaling.</param>
         /// <param name="values">An array of URI locations that this <see cref="NetDependency"/> will monitor. When any of these resources changes, this <see cref="NetDependency"/> will notify any subscribing objects of the change.</param>
-        public NetDependency(TimeSpan period, params Uri[] values) : this(values,  period)
+        public NetDependency(TimeSpan period, params Uri[] values) : this(values, period)
         {
         }
 
@@ -278,26 +280,26 @@ namespace Cuemon.Net
         public NetDependency(bool checkResponseData, TimeSpan dueTime, TimeSpan period, params Uri[] values) : this(values, checkResponseData, dueTime, period)
         {
         }
-		#endregion
+        #endregion
 
-		#region Properties
-		private DateTime UtcCreated { get; set; }
+        #region Properties
+        private DateTime UtcCreated { get; set; }
 
-		private IEnumerable<NetWatcher> Watchers
-		{
-		    get; set;
-		}
+        private IEnumerable<NetWatcher> Watchers
+        {
+            get; set;
+        }
 
-		/// <summary>
-		/// Gets a value indicating whether the <see cref="Dependency"/> object has changed.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if the <see cref="Dependency"/> object has changed; otherwise, <c>false</c>.
-		/// </value>
-		public override bool HasChanged
-		{
-			get { return (this.UtcLastModified > this.UtcCreated); }
-		}
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="Dependency"/> object has changed.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if the <see cref="Dependency"/> object has changed; otherwise, <c>false</c>.
+        /// </value>
+        public override bool HasChanged
+        {
+            get { return (this.UtcLastModified > this.UtcCreated); }
+        }
 
         private IEnumerable<Uri> Uris { get; set; }
 
@@ -306,32 +308,32 @@ namespace Cuemon.Net
         private TimeSpan DueTime { get; set; }
 
         private TimeSpan Period { get; set; }
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-	    private static IEnumerable<Uri> ToUriSequence(IEnumerable<string> uriStrings)
-	    {
-	        if (uriStrings == null) { return null; }
+        private static IEnumerable<Uri> ToUriSequence(IEnumerable<string> uriStrings)
+        {
+            if (uriStrings == null) { return null; }
             List<Uri> uris = new List<Uri>();
             foreach (string uri in uriStrings)
             {
                 Uri realUri;
                 if (UriUtility.TryParse(uri, UriKind.Absolute, out realUri)) { uris.Add(realUri); }
             }
-	        return uris;
-	    }
+            return uris;
+        }
 
         /// <summary>
         /// Starts and performs the necessary dependency tasks of this instance.
         /// </summary>
         /// <exception cref="System.ArgumentException">The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP or HTTP.;uris</exception>
 		public override void Start()
-		{
+        {
             List<NetWatcher> watchers = new List<NetWatcher>();
             foreach (Uri uri in this.Uris)
             {
-                switch (UriUtility.ParseScheme(uri.Scheme))
+                switch (UriSchemeConverter.FromString(uri.Scheme))
                 {
                     case UriScheme.File:
                     case UriScheme.Ftp:
@@ -358,29 +360,29 @@ namespace Cuemon.Net
             this.Watchers = watchers.ToArray();
             this.UtcCreated = DateTime.UtcNow;
             this.SetUtcLastModified(this.UtcCreated);
-		}
+        }
 
-		private void WatcherChanged(object sender, WatcherEventArgs args)
-		{
-			this.SetUtcLastModified(DateTime.UtcNow);
-			if (!this.HasChanged) { return; }
-			if (this.Watchers != null)
-			{
-				lock (_locker)
-				{
-					if (this.Watchers != null)
-					{
+        private void WatcherChanged(object sender, WatcherEventArgs args)
+        {
+            this.SetUtcLastModified(DateTime.UtcNow);
+            if (!this.HasChanged) { return; }
+            if (this.Watchers != null)
+            {
+                lock (_locker)
+                {
+                    if (this.Watchers != null)
+                    {
                         foreach (NetWatcher watcher in this.Watchers)
                         {
                             watcher.Changed -= new EventHandler<WatcherEventArgs>(WatcherChanged);
                             watcher.Dispose();
                         }
-					}
+                    }
                     this.Watchers = null;
-				}
-			}
-			this.OnDependencyChangedRaised(new DependencyEventArgs(this.UtcLastModified));
-		}
-		#endregion
-	}
+                }
+            }
+            this.OnDependencyChangedRaised(new DependencyEventArgs(this.UtcLastModified));
+        }
+        #endregion
+    }
 }

@@ -6,11 +6,11 @@ using Cuemon.Reflection;
 
 namespace Cuemon
 {
-	/// <summary>
+    /// <summary>
     /// This utility class is designed to make exception operations more flexible and easier to work with.
-	/// </summary>
-	public static class ExceptionUtility
-	{
+    /// </summary>
+    public static class ExceptionUtility
+    {
         /// <summary>
         /// Refines the specified <paramref name="exception"/> with valuable meta information extracted from the associated <paramref name="method"/>.
         /// </summary>
@@ -23,7 +23,7 @@ namespace Cuemon
         /// </exception>
         public static T Refine<T>(T exception, MethodBase method) where T : Exception
         {
-            return Refine(exception, method, new object[0] { });
+            return Refine(exception, method, new object[] { });
         }
 
         /// <summary>
@@ -39,19 +39,35 @@ namespace Cuemon
         /// </exception>
         public static T Refine<T>(T exception, MethodBase method, params object[] parameters) where T : Exception
         {
-            Validator.ThrowIfNull(exception, "exception");
-            Validator.ThrowIfNull(method, "method");
+            Validator.ThrowIfNull(method, nameof(method));
+            return Refine(exception, MethodSignature.Create(method), parameters);
+        }
 
-            MethodSignature methodSignature = MethodSignature.Create(method);
-            exception.Source = methodSignature.ToString();
-            if (methodSignature.HasParameters)
+        /// <summary>
+        /// Refines the specified <paramref name="exception"/> with valuable meta information extracted from the associated <paramref name="method"/> and <paramref name="parameters"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the exception.</typeparam>
+        /// <param name="exception">The exception that needs to be thrown.</param>
+        /// <param name="method">The method signature containing valuable meta information.</param>
+        /// <param name="parameters">The optional parameters to accompany <paramref name="method"/>.</param>
+        /// <returns>The specified <paramref name="exception"/> refined with valuable meta information.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="exception"/> is null - or - <paramref name="method"/> is null.
+        /// </exception>
+        public static T Refine<T>(T exception, MethodSignature method, params object[] parameters) where T : Exception
+        {
+            Validator.ThrowIfNull(exception, nameof(exception));
+            Validator.ThrowIfNull(method, nameof(method));
+
+            exception.Source = method.ToString();
+            if (method.HasParameters)
             {
-                foreach (KeyValuePair<string, object> item in methodSignature.MergeParameters(parameters))
+                foreach (KeyValuePair<string, object> item in method.MergeParameters(parameters))
                 {
-                    string key = String.Format(CultureInfo.InvariantCulture, "{0}.{1} --> {2}", methodSignature.ClassName, methodSignature.MethodName, item.Key);
+                    string key = string.Format(CultureInfo.InvariantCulture, "{0}.{1} --> {2}", method.ClassName, method.MethodName, item.Key);
                     if (!exception.Data.Contains(key))
                     {
-                        exception.Data.Add(key, ObjectUtility.ToString(item.Value));
+                        exception.Data.Add(key, StringConverter.FromObject(item.Value));
                     }
                 }
             }
@@ -69,8 +85,8 @@ namespace Cuemon
         /// </exception>
         public static TResult Parse<TResult>(Exception exception) where TResult : Exception
         {
-            if (exception == null) { throw new ArgumentNullException("exception"); }
-            
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
+
             Type resultType = typeof(TResult);
             Type sourceType = exception.GetType();
             if (TypeUtility.ContainsType(sourceType, resultType)) { return exception as TResult; }
@@ -93,7 +109,7 @@ namespace Cuemon
         /// </remarks>
         public static IEnumerable<Exception> Flatten(Exception exception)
         {
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             return Flatten(exception, exception.GetType());
         }
 
@@ -112,8 +128,8 @@ namespace Cuemon
         /// </remarks>
         public static IEnumerable<Exception> Flatten(Exception exception, Type exceptionType)
         {
-            if (exception == null) { throw new ArgumentNullException("exception"); }
-            if (exceptionType == null) { throw new ArgumentNullException("exceptionType"); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
+            if (exceptionType == null) { throw new ArgumentNullException(nameof(exceptionType)); }
             PropertyInfo innerExceptionsProperty = ReflectionUtility.GetProperty(exceptionType, "InnerExceptions");
             if (innerExceptionsProperty != null) { return innerExceptionsProperty.GetValue(exception, null) as IEnumerable<Exception>; }
             return HierarchyUtility.WhileSourceTraversalIsNotNull(exception, FlattenCallback);
@@ -131,9 +147,9 @@ namespace Cuemon
         /// <param name="message">A message that describes the error.</param>
         /// <returns>A new instance of <see cref="ArgumentOutOfRangeException"/> initialized to the provided parameters.</returns>
 	    public static ArgumentOutOfRangeException CreateArgumentOutOfRangeException(string paramName, string message)
-	    {
-	        return new ArgumentOutOfRangeException(paramName, message);
-	    }
+        {
+            return new ArgumentOutOfRangeException(paramName, message);
+        }
 
         /// <summary>
         /// Creates and returns a new <see cref="ArgumentEmptyException"/> initialized to the provided parameters.
@@ -142,9 +158,9 @@ namespace Cuemon
         /// <param name="message">A message that describes the error.</param>
         /// <returns>A new instance of <see cref="ArgumentEmptyException"/> initialized to the provided parameters.</returns>
 	    public static ArgumentEmptyException CreateArgumentEmptyException(string paramName, string message)
-	    {
-	        return new ArgumentEmptyException(paramName, message);
-	    }
+        {
+            return new ArgumentEmptyException(paramName, message);
+        }
 
         /// <summary>
         /// Creates and returns a new <see cref="ArgumentNullException"/> initialized to the provided parameters.
@@ -153,9 +169,9 @@ namespace Cuemon
         /// <param name="message">A message that describes the error.</param>
         /// <returns>A new instance of <see cref="ArgumentNullException"/> initialized to the provided parameters.</returns>
 	    public static ArgumentNullException CreateArgumentNullException(string paramName, string message)
-	    {
-	        return new ArgumentNullException(paramName, message);
-	    }
+        {
+            return new ArgumentNullException(paramName, message);
+        }
 
         /// <summary>
         /// Creates and returns a new <see cref="ArgumentException"/> initialized to the provided parameters.
@@ -164,9 +180,9 @@ namespace Cuemon
         /// <param name="message">A message that describes the error.</param>
         /// <returns>A new instance of <see cref="ArgumentException"/> initialized to the provided parameters.</returns>
 	    public static ArgumentException CreateArgumentException(string paramName, string message)
-	    {
+        {
             return CreateArgumentException(paramName, message, null);
-	    }
+        }
 
         /// <summary>
         /// Creates and returns a new <see cref="ArgumentException"/> initialized to the provided parameters.

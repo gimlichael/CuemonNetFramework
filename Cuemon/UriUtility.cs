@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Cuemon.Collections.Generic;
 
 namespace Cuemon
@@ -18,7 +17,7 @@ namespace Cuemon
         {
             get
             {
-                return EnumerableUtility.AsEnumerable(UriScheme.File, UriScheme.Ftp, UriScheme.Gopher, UriScheme.Http, UriScheme.Https, UriScheme.Mailto, UriScheme.NetPipe, UriScheme.NetTcp, UriScheme.News, UriScheme.Nntp);
+                return EnumerableConverter.FromArray(UriScheme.File, UriScheme.Ftp, UriScheme.Gopher, UriScheme.Http, UriScheme.Https, UriScheme.Mailto, UriScheme.NetPipe, UriScheme.NetTcp, UriScheme.News, UriScheme.Nntp);
             }
         }
 
@@ -103,8 +102,8 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsScheme(Uri value, params UriScheme[] uriSchemes)
         {
-            Validator.ThrowIfNull(value, "value");
-            return EnumerableUtility.Contains<UriScheme>(uriSchemes, ParseScheme(value.Scheme));
+            Validator.ThrowIfNull(value, nameof(value));
+            return EnumerableUtility.Contains(uriSchemes, UriSchemeConverter.FromString(value.Scheme));
         }
 
         /// <summary>
@@ -174,128 +173,37 @@ namespace Cuemon
         /// </exception>
         public static Uri Parse(string uriString, UriKind uriKind, IEnumerable<UriScheme> uriSchemes)
         {
-            Validator.ThrowIfNullOrEmpty(uriString, "uriString");
-            Validator.ThrowIfNull(uriSchemes, "uriSchemes");
+            Validator.ThrowIfNullOrEmpty(uriString, nameof(uriString));
+            Validator.ThrowIfNull(uriSchemes, nameof(uriSchemes));
 
             bool isValid = false;
-            string format = "{0}{1}";
             foreach (UriScheme scheme in uriSchemes)
             {
                 switch (scheme)
                 {
                     case UriScheme.File:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeFile, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.Ftp:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeFtp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.Gopher:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeGopher, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.Http:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.Https:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeHttps, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.Mailto:
-                        isValid = uriString.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.NetPipe:
-                        isValid = uriString.StartsWith("net.pipe://", StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.NetTcp:
-                        isValid = uriString.StartsWith("net.tcp://", StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.News:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNews, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
-                        break;
                     case UriScheme.Nntp:
-                        isValid = uriString.StartsWith(string.Format(CultureInfo.InvariantCulture, format, Uri.UriSchemeNntp, Uri.SchemeDelimiter), StringComparison.OrdinalIgnoreCase);
+                        string validUriScheme = StringConverter.FromUriScheme(scheme);
+                        isValid = uriString.StartsWith(validUriScheme, StringComparison.OrdinalIgnoreCase);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException("uriSchemes");
+                        throw new ArgumentOutOfRangeException(nameof(uriSchemes));
                 }
                 if (isValid) { break; }
             }
 
             Uri result;
             if (!isValid ||
-                !Uri.TryCreate(uriString, uriKind, out result)) { throw new ArgumentException("The specified uriString is not a valid URI.", "uriString"); }
+                !Uri.TryCreate(uriString, uriKind, out result)) { throw new ArgumentException("The specified uriString is not a valid URI.", nameof(uriString)); }
             return result;
         }
-
-        /// <summary>
-        /// Converts the specified string representation of an URI scheme to its <see cref="UriScheme"/> equivalent.
-        /// </summary>
-        /// <param name="scheme">A string containing an URI scheme to convert.</param>
-        /// <returns>A <see cref="UriScheme"/> equivalent to the URI scheme contained in <c>scheme</c>.</returns>
-        public static UriScheme ParseScheme(string scheme)
-        {
-            if (scheme == null) { throw new ArgumentNullException("scheme"); }
-            if (scheme.Length == 0) { throw new ArgumentException("The URI scheme cannot be empty.", "scheme"); }
-            if (scheme.Equals(Uri.UriSchemeFile, StringComparison.OrdinalIgnoreCase)) { return UriScheme.File; }
-            if (scheme.Equals(Uri.UriSchemeFtp, StringComparison.OrdinalIgnoreCase)) { return UriScheme.Ftp; }
-            if (scheme.Equals(Uri.UriSchemeGopher, StringComparison.OrdinalIgnoreCase)) { return UriScheme.Gopher; }
-            if (scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)) { return UriScheme.Http; }
-            if (scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)) { return UriScheme.Https; }
-            if (scheme.Equals(Uri.UriSchemeMailto, StringComparison.OrdinalIgnoreCase)) { return UriScheme.Mailto; }
-            if (scheme.Equals(Uri.UriSchemeNetPipe, StringComparison.OrdinalIgnoreCase)) { return UriScheme.NetPipe; }
-            if (scheme.Equals(Uri.UriSchemeNetTcp, StringComparison.OrdinalIgnoreCase)) { return UriScheme.NetTcp; }
-            if (scheme.Equals(Uri.UriSchemeNews, StringComparison.OrdinalIgnoreCase)) { return UriScheme.News; }
-            if (scheme.Equals(Uri.UriSchemeNntp, StringComparison.OrdinalIgnoreCase)) { return UriScheme.Nntp; }
-            return UriScheme.Undefined;
-        }
-    }
-
-    /// <summary>
-    /// Defines the schemes available for an <see cref="Uri"/> class.
-    /// </summary>
-    public enum UriScheme
-    {
-        /// <summary>
-        /// Specifies an undefined scheme.
-        /// </summary>
-        Undefined,
-        /// <summary>
-        /// Specifies that the URI is a pointer to a file.
-        /// </summary>
-        File,
-        /// <summary>
-        /// Specifies that the URI is accessed through the File Transfer Protocol (FTP).
-        /// </summary>
-        Ftp,
-        /// <summary>
-        /// Specifies that the URI is accessed through the Gopher protocol.
-        /// </summary>
-        Gopher,
-        /// <summary>
-        /// Specifies that the URI is accessed through the Hypertext Transfer Protocol (HTTP).
-        /// </summary>
-        Http,
-        /// <summary>
-        /// Specifies that the URI is accessed through the Secure Hypertext Transfer Protocol (HTTPS).
-        /// </summary>
-        Https,
-        /// <summary>
-        /// Specifies that the URI is an e-mail address and is accessed through the Simple Mail Transport Protocol (SMTP).
-        /// </summary>
-        Mailto,
-        /// <summary>
-        /// Specifies that the URI is accessed through the NetPipe scheme of the "Indigo" system.
-        /// </summary>
-        NetPipe,
-        /// <summary>
-        /// Specifies that the URI is accessed through the NetTcp scheme of the "Indigo" system.
-        /// </summary>
-        NetTcp,
-        /// <summary>
-        /// Specifies that the URI is an Internet news group and is accessed through the Network News Transport Protocol (NNTP).
-        /// </summary>
-        News,
-        /// <summary>
-        /// Specifies that the URI is an Internet news group and is accessed through the Network News Transport Protocol (NNTP).
-        /// </summary>
-        Nntp
     }
 }

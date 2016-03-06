@@ -15,10 +15,10 @@ namespace Cuemon.Net.Http
     /// </summary>
     public static class NetHttpUtility
     {
-        private static TimeSpan _httpDefaultTimeout = TimeSpan.FromMinutes(2);
+        private static TimeSpan _httpDefaultTimeout = TimeSpan.FromSeconds(30);
 
         /// <summary>
-        /// Gets or sets the default HTTP timeout value as a <see cref="TimeSpan"/> for <see cref="HttpWebRequest "/> and <see cref="HttpWebResponse"/> related operations. Default value is 2 minutes.
+        /// Gets or sets the default HTTP timeout value as a <see cref="TimeSpan"/> for <see cref="HttpWebRequest "/> and <see cref="HttpWebResponse"/> related operations. Default value is 30 seconds.
         /// </summary>
         /// <value>The default HTTP timeout value as a <see cref="TimeSpan"/>.</value>
         public static TimeSpan DefaultHttpTimeout
@@ -153,11 +153,11 @@ namespace Cuemon.Net.Http
         /// </exception>
         public static string ResponseAsString(HttpWebResponse response, PreambleSequence sequence, Encoding encoding, params HttpStatusCode[] expectedStatusCodes)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (encoding == null) { throw new ArgumentNullException("encoding"); }
-            if (expectedStatusCodes == null) { throw new ArgumentNullException("expectedStatusCodes"); }
-            if (expectedStatusCodes.Length == 0) { throw new ArgumentEmptyException("expectedStatusCodes", "You must specify at least one status code to accept as a valid response."); }
-            return ConvertUtility.ToString(ResponseAsStream(response, expectedStatusCodes), sequence, encoding);
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
+            if (expectedStatusCodes == null) { throw new ArgumentNullException(nameof(expectedStatusCodes)); }
+            if (expectedStatusCodes.Length == 0) { throw new ArgumentEmptyException(nameof(expectedStatusCodes), "You must specify at least one status code to accept as a valid response."); }
+            return StringConverter.FromStream(ResponseAsStream(response, expectedStatusCodes), sequence, encoding);
         }
 
         /// <summary>
@@ -194,10 +194,10 @@ namespace Cuemon.Net.Http
         /// </exception>
         public static byte[] ResponseAsByteArray(HttpWebResponse response, params HttpStatusCode[] expectedStatusCodes)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (expectedStatusCodes == null) { throw new ArgumentNullException("expectedStatusCodes"); }
-            if (expectedStatusCodes.Length == 0) { throw new ArgumentEmptyException("expectedStatusCodes", "You must specify at least one status code to accept as a valid response."); }
-            return ConvertUtility.ToByteArray(ResponseAsStream(response, expectedStatusCodes));
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (expectedStatusCodes == null) { throw new ArgumentNullException(nameof(expectedStatusCodes)); }
+            if (expectedStatusCodes.Length == 0) { throw new ArgumentEmptyException(nameof(expectedStatusCodes), "You must specify at least one status code to accept as a valid response."); }
+            return ByteConverter.FromStream(ResponseAsStream(response, expectedStatusCodes));
         }
 
         /// <summary>
@@ -234,9 +234,9 @@ namespace Cuemon.Net.Http
         /// </exception>
         public static Stream ResponseAsStream(HttpWebResponse response, params HttpStatusCode[] expectedStatusCodes)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (expectedStatusCodes == null) { throw new ArgumentNullException("expectedStatusCodes"); }
-            if (expectedStatusCodes.Length == 0) { throw new ArgumentOutOfRangeException("expectedStatusCodes", "You must specify at least one status code to accept as a valid response."); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (expectedStatusCodes == null) { throw new ArgumentNullException(nameof(expectedStatusCodes)); }
+            if (expectedStatusCodes.Length == 0) { throw new ArgumentOutOfRangeException(nameof(expectedStatusCodes), "You must specify at least one status code to accept as a valid response."); }
 
             using (response)
             {
@@ -244,7 +244,7 @@ namespace Cuemon.Net.Http
                 {
                     return StreamUtility.CopyStream(response.GetResponseStream());
                 }
-                throw new WebException(string.Format(CultureInfo.InvariantCulture, "Unexpected status code returned from the response: '{0}'. Expected range of status codes was: {1}.", response.StatusCode, ConvertUtility.ToDelimitedString(expectedStatusCodes, ",", " '{0}'")), WebExceptionStatus.ProtocolError);
+                throw new WebException(string.Format(CultureInfo.InvariantCulture, "Unexpected status code returned from the response: '{0}'. Expected range of status codes was: {1}.", response.StatusCode, StringConverter.ToDelimitedString(expectedStatusCodes, ",", " '{0}'")), WebExceptionStatus.ProtocolError);
             }
         }
 
@@ -255,7 +255,7 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
         public static HttpWebResponse Http(HttpWebRequest request)
         {
-            if (request == null) { throw new ArgumentNullException("request"); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
             return HttpCore(request);
         }
 
@@ -267,9 +267,9 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
         public static HttpWebResponse Http(string method, Uri location)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             return HttpCore(location, method, null, HttpWebRequestSettings.CreateDefault());
         }
 
@@ -282,10 +282,10 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
         public static HttpWebResponse Http(string method, Uri location, HttpWebRequestSettings settings)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
             return HttpCore(location, method, null, settings);
         }
 
@@ -299,11 +299,11 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
         public static HttpWebResponse Http(string method, Uri location, HttpWebRequestSettings settings, Stream content)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (content == null) { throw new ArgumentNullException(nameof(content)); }
             return HttpCore(location, method, content, settings);
         }
 
@@ -317,12 +317,12 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
         public static HttpWebResponse Http(string method, Uri location, string contentType, Stream content)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            if (contentType == null) { throw new ArgumentNullException("contentType"); }
-            if (contentType.Length == 0) { throw new ArgumentEmptyException("contentType"); }
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
+            if (content == null) { throw new ArgumentNullException(nameof(content)); }
+            if (contentType == null) { throw new ArgumentNullException(nameof(contentType)); }
+            if (contentType.Length == 0) { throw new ArgumentEmptyException(nameof(contentType)); }
             HttpWebRequestSettings settings = HttpWebRequestSettings.CreateDefault();
             settings.Headers.Add(HttpRequestHeader.ContentType, contentType);
             return HttpCore(location, method, content, settings);
@@ -385,11 +385,11 @@ namespace Cuemon.Net.Http
 
         private static HttpWebResponse HttpCore(Uri location, string method, Stream content, HttpWebRequestSettings settings)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(location);
             request.Method = method.ToUpperInvariant();
             request.AllowAutoRedirect = settings.AllowAutoRedirect;
@@ -574,314 +574,6 @@ namespace Cuemon.Net.Http
         public static HttpWebResponse HttpPost(Uri location, HttpWebRequestSettings settings, Stream content)
         {
             return Http(HttpMethods.Post.ToString(), location, settings, content);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="location"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse>  CreateHttpDeleteWorkItem(ISynchronization synchronization, Uri location)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            return DoerWorkItem.Create(synchronization, HttpDelete, location);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="settings"/> is null or<br/>
-        /// <paramref name="location"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpDeleteWorkItem(ISynchronization synchronization, Uri location, HttpWebRequestSettings settings)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            return DoerWorkItem.Create(synchronization, HttpDelete, location, settings);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="location"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpGetWorkItem(ISynchronization synchronization, Uri location)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            return DoerWorkItem.Create(synchronization, HttpGet, location);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="settings"/> is null or<br/>
-        /// <paramref name="location"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpGetWorkItem(ISynchronization synchronization, Uri location, HttpWebRequestSettings settings)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            return DoerWorkItem.Create(synchronization, HttpGet, location, settings);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="contentType">The value of the Content-Type HTTP header.</param>
-        /// <param name="content">The content value of the HTTP request body.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="location"/> is null or<br/>
-        /// <paramref name="contentType"/> is null or<br/>
-        /// <paramref name="content"/> is null.
-        /// </exception>
-        /// <exception cref="Cuemon.ArgumentEmptyException">
-        /// <paramref name="contentType"/> is empty.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpPutWorkItem(ISynchronization synchronization, Uri location, string contentType, Stream content)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (contentType == null) { throw new ArgumentNullException("contentType"); }
-            if (contentType.Length == 0) { throw new ArgumentEmptyException("contentType"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            return DoerWorkItem.Create(synchronization, HttpPut, location, contentType, content);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// Default expected <see cref="HttpStatusCode"/> is <see cref="HttpStatusCode.OK"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
-        /// <param name="content">The content value of the HTTP request body.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="location"/> is null or<br/>
-        /// <paramref name="settings"/> is null or<br/>
-        /// <paramref name="content"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpPutWorkItem(ISynchronization synchronization, Uri location, HttpWebRequestSettings settings, Stream content)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            return DoerWorkItem.Create(synchronization, HttpPut, location, settings, content);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// Default expected <see cref="HttpStatusCode"/> is <see cref="HttpStatusCode.OK"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="contentType">The value of the Content-Type HTTP header.</param>
-        /// <param name="content">The content value of the HTTP request body.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="location"/> is null or<br/>
-        /// <paramref name="contentType"/> is null or<br/>
-        /// <paramref name="content"/> is null.
-        /// </exception>
-        /// <exception cref="Cuemon.ArgumentEmptyException">
-        /// <paramref name="contentType"/> is empty.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpPostWorkItem(ISynchronization synchronization, Uri location, string contentType, Stream content)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (contentType == null) { throw new ArgumentNullException("contentType"); }
-            if (contentType.Length == 0) { throw new ArgumentEmptyException("contentType"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            return DoerWorkItem.Create(synchronization, HttpPost, location, contentType, content);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
-        /// <param name="content">The content value of the HTTP request body.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="location"/> is null or<br/>
-        /// <paramref name="settings"/> is null or<br/>
-        /// <paramref name="content"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpPostWorkItem(ISynchronization synchronization, Uri location, HttpWebRequestSettings settings, Stream content)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            return DoerWorkItem.Create(synchronization, HttpPost, location, settings, content);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="request">An instance of <see cref="HttpWebRequest"/>.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="request"/> is null.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpWorkItem(ISynchronization synchronization, HttpWebRequest request)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (request == null) { throw new ArgumentNullException("request"); }
-            return DoerWorkItem.Create(synchronization, Http, request);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="method">The request method to use to contact the Internet resource.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="method"/> is null or<br/>
-        /// <paramref name="location"/> is null.
-        /// </exception>
-        /// <exception cref="Cuemon.ArgumentEmptyException">
-        /// <paramref name="method"/> is empty.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpWorkItem(ISynchronization synchronization, string method, Uri location)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            return DoerWorkItem.Create(synchronization, Http, method, location);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="method">The request method to use to contact the Internet resource.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="method"/> is null or<br/>
-        /// <paramref name="location"/> is null.
-        /// </exception>
-        /// <exception cref="Cuemon.ArgumentEmptyException">
-        /// <paramref name="method"/> is empty.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpWorkItem(ISynchronization synchronization, string method, Uri location, HttpWebRequestSettings settings)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            return DoerWorkItem.Create(synchronization, Http, method, location, settings);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="method">The request method to use to contact the Internet resource.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
-        /// <param name="content">The content value of the HTTP request body.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="method"/> is null or<br/>
-        /// <paramref name="location"/> is null or<br/>
-        /// <paramref name="settings"/> is null or<br/>
-        /// <paramref name="content"/> is null.
-        /// </exception>
-        /// <exception cref="Cuemon.ArgumentEmptyException">
-        /// <paramref name="method"/> is empty.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// <paramref name="settings"/> is an empty collection.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpWorkItem(ISynchronization synchronization, string method, Uri location, HttpWebRequestSettings settings, Stream content)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            return DoerWorkItem.Create(synchronization, Http, method, location, settings, content);
-        }
-
-        /// <summary>
-        /// Creates and returns an <see cref="IDoerWorkItem{TResult}"/> implemented object that will call the <see cref="NetHttpUtility"/> associated method signature and invoke <see cref="Http(System.Net.HttpWebRequest)"/> where the result is stored in <see cref="DoerWorkItem{TResult}.Result"/>.
-        /// </summary>
-        /// <param name="synchronization">An instance of an object implementing the <see cref="ISynchronization"/> interface used for threaded synchronization signaling.</param>
-        /// <param name="method">The request method to use to contact the Internet resource.</param>
-        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="contentType">The value of the Content-Type HTTP header.</param>
-        /// <param name="content">The content value of the HTTP request body.</param>
-        /// <returns>An <see cref="IDoerWorkItem{TResult}"/> implemented object that will invoke <see cref="Http(System.Net.HttpWebRequest)"/> from the associated <see cref="DoerWorkItemPool{TResult}"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="synchronization"/> is null or<br/>
-        /// <paramref name="method"/> is null or<br/>
-        /// <paramref name="location"/> is null or<br/>
-        /// <paramref name="contentType"/> is null or<br/>
-        /// <paramref name="content"/> is null.
-        /// </exception>
-        /// <exception cref="Cuemon.ArgumentEmptyException">
-        /// <paramref name="method"/> is empty or <br/>
-        /// <paramref name="contentType"/> is empty.
-        /// </exception>
-        public static IDoerWorkItem<HttpWebResponse> CreateHttpWorkItem(ISynchronization synchronization, string method, Uri location, string contentType, Stream content)
-        {
-            if (synchronization == null) { throw new ArgumentNullException("synchronization"); }
-            if (method == null) { throw new ArgumentNullException("method"); }
-            if (method.Length == 0) { throw new ArgumentEmptyException("method"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
-            if (contentType == null) { throw new ArgumentNullException("contentType"); }
-            if (contentType.Length == 0) { throw new ArgumentEmptyException("contentType"); }
-            if (content == null) { throw new ArgumentNullException("content"); }
-            return DoerWorkItem.Create(synchronization, Http, method, location, contentType, content);
         }
 
         /// <summary>

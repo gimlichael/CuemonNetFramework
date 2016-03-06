@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.SessionState;
-using Cuemon.Caching;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Web.SessionState
 {
@@ -141,7 +141,7 @@ namespace Cuemon.Web.SessionState
                 this.TryGetSession(out session);
                 return session.Count;
             }
-       }
+        }
 
         /// <summary>
         /// Returns an enumerator that can be used to read all the session-state item values in the current session.

@@ -165,7 +165,7 @@ namespace Cuemon.Web.Security
                     for (int i = 0; i < credentials.Length; i++)
                     {
                         string[] credentialPair = StringUtility.Split(credentials[i], "=");
-                        result.Add(credentialPair[0].Trim(), ConvertUtility.ParseWith(credentialPair[1], QuotedStringParser));
+                        result.Add(credentialPair[0].Trim(), Converter.Parse(credentialPair[1], QuotedStringParser));
                     }
                     return IsDigestCredentialsValid(result) ? result : null;
                 }

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
-using Cuemon.Caching;
+using Cuemon.Runtime.Caching;
 using Cuemon.Xml.Serialization;
 
 namespace Cuemon.Web
@@ -22,7 +22,7 @@ namespace Cuemon.Web
         /// Initializes a new instance of the <see cref="WebsiteSiteMap"/> class.
         /// </summary>
         WebsiteSiteMap()
-        {}
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebsiteSiteMap"/> class.
@@ -42,33 +42,33 @@ namespace Cuemon.Web
         /// <returns>An <see cref="IXPathNavigable"/> object.</returns>
         internal static IXPathNavigable GetSiteMapFileCore(int lcid)
         {
-        	string lcidCacheKey = lcid.ToString(CultureInfo.InvariantCulture);
-			if (!CachingManager.Cache.ContainsKey(lcidCacheKey, Website.SiteMapCacheGroupName))
+            string lcidCacheKey = lcid.ToString(CultureInfo.InvariantCulture);
+            if (!CachingManager.Cache.ContainsKey(lcidCacheKey, Website.SiteMapCacheGroupName))
             {
                 lock (staticLockValue)
                 {
-					if (!CachingManager.Cache.ContainsKey(lcidCacheKey, Website.SiteMapCacheGroupName)) // re-check because of possible queued thread callers
-					{
-						CachingManager.Cache.Add(lcidCacheKey, GetSiteMapFileWithDepth(lcid), Website.SiteMapCacheGroupName, TimeSpan.FromHours(8));
-					}
+                    if (!CachingManager.Cache.ContainsKey(lcidCacheKey, Website.SiteMapCacheGroupName)) // re-check because of possible queued thread callers
+                    {
+                        CachingManager.Cache.Add(lcidCacheKey, GetSiteMapFileWithDepth(lcid), Website.SiteMapCacheGroupName, TimeSpan.FromHours(8));
+                    }
                 }
             }
-			return CachingManager.Cache.Get<IXPathNavigable>(lcidCacheKey, Website.SiteMapCacheGroupName);
+            return CachingManager.Cache.Get<IXPathNavigable>(lcidCacheKey, Website.SiteMapCacheGroupName);
         }
 
         private static IXPathNavigable GetSiteMapFileWithDepth(int lcid)
         {
-			IXPathNavigable document = Website.SiteMapFiles[(ushort)lcid];
+            IXPathNavigable document = Website.SiteMapFiles[(ushort)lcid];
             XPathNavigator navigator = document.CreateNavigator();
             if (navigator.CanEdit)
             {
                 XPathNodeIterator iterator = navigator.Select("//Page");
                 while (iterator.MoveNext())
                 {
-					if (string.IsNullOrEmpty(iterator.Current.GetAttribute("depth", "")))
-					{
-						iterator.Current.CreateAttribute("", "depth", "", (iterator.Current.Select("ancestor-or-self::Page").Count - 1).ToString(CultureInfo.InvariantCulture));
-					}
+                    if (string.IsNullOrEmpty(iterator.Current.GetAttribute("depth", "")))
+                    {
+                        iterator.Current.CreateAttribute("", "depth", "", (iterator.Current.Select("ancestor-or-self::Page").Count - 1).ToString(CultureInfo.InvariantCulture));
+                    }
                 }
             }
             return document;
@@ -108,7 +108,7 @@ namespace Cuemon.Web
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             XPathNavigator navigator = this.CreateNavigator();
             navigator.MoveToFirstChild();
             writer.WriteRaw(navigator.InnerXml);

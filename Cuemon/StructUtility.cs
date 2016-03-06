@@ -9,7 +9,11 @@ namespace Cuemon
     /// </summary>
     public static class StructUtility
     {
-        internal static int HashCodeForNullValue = -1;
+        /// <summary>
+        /// A hash code representation for a null value.
+        /// </summary>
+        public const int HashCodeForNullValue = -1;
+
         private const int FnvPrime = 0x01000193;
         private const long FnvOffset = 0x811C9DC5;
 
@@ -23,9 +27,9 @@ namespace Cuemon
         /// </exception>
         public static int GetHashCode32<T>(IEnumerable<T> convertibles) where T : struct, IConvertible
         {
-            if (convertibles == null) { throw new ArgumentNullException("convertibles"); }
+            if (convertibles == null) { throw new ArgumentNullException(nameof(convertibles)); }
             long hash = GetHashCode64(convertibles);
-            byte[] temp = ConvertUtility.ToByteArray(hash);
+            byte[] temp = ByteConverter.FromConvertibles(hash);
             byte[] result = new byte[4];
             for (int i = (result.Length - 1); i >= 0; i--)
             {
@@ -44,7 +48,7 @@ namespace Cuemon
         /// </exception>
         public static long GetHashCode64<T>(IEnumerable<T> convertibles) where T : IConvertible
         {
-            if (convertibles == null) { throw new ArgumentNullException("convertibles"); }
+            if (convertibles == null) { throw new ArgumentNullException(nameof(convertibles)); }
             TypeCode code = Type.GetTypeCode(typeof(T));
             unchecked
             {

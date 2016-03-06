@@ -7,8 +7,9 @@ using System.Web;
 using System.Web.SessionState;
 using System.Xml;
 using System.Xml.XPath;
-using Cuemon.Caching;
+using Cuemon.Collections.Generic;
 using Cuemon.Net.Http;
+using Cuemon.Runtime.Caching;
 using Cuemon.Xml;
 
 namespace Cuemon.Web
@@ -104,8 +105,8 @@ namespace Cuemon.Web
                                                     {
                                                         case "Page":
                                                             string url = reader.GetAttribute("friendlyName") ?? reader.GetAttribute("name");
-                                                            bool isUrlOriginallyFullyQualified = UriUtility.IsUri(url, UriKind.Absolute, ConvertUtility.ToArray(UriScheme.Http, UriScheme.Https));
-                                                            string fullyQualifiedUrl = string.Format(CultureInfo.InvariantCulture, context.Request.Url.IsDefaultPort ? "{0}{1}{2}{4}" : "{0}{1}{2}:{3}{4}", 
+                                                            bool isUrlOriginallyFullyQualified = UriUtility.IsUri(url, UriKind.Absolute, EnumerableConverter.ToArray(UriScheme.Http, UriScheme.Https));
+                                                            string fullyQualifiedUrl = string.Format(CultureInfo.InvariantCulture, context.Request.Url.IsDefaultPort ? "{0}{1}{2}{4}" : "{0}{1}{2}:{3}{4}",
                                                                 context.Request.Url.Scheme,
                                                                 Uri.SchemeDelimiter,
                                                                 context.Request.Url.Host,
@@ -147,7 +148,7 @@ namespace Cuemon.Web
         /// <param name="context">An <see cref="T:System.Web.HttpContext"/> object that provides references to the intrinsic server objects (for example, Request, Response, Session, and Server) used to service HTTP requests.</param>
         public void ProcessRequest(HttpContext context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             this.BuildSitemapProtocol(context);
             WriteSiteMapProtocol(context.ApplicationInstance, CachingManager.Cache.Get<byte[]>(SitemapXmlFilename, CacheGroupName));
         }

@@ -41,13 +41,13 @@ namespace Cuemon.Reflection
         /// </exception>
         public MethodSignature(Type caller, MethodBase method)
         {
-            if (method == null) { throw new ArgumentNullException("method"); }
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
             string methodName = string.IsNullOrEmpty(method.Name) ? "NotAvailable" : method.Name;
             bool isPresumedProperty = methodName.StartsWith("get_", StringComparison.OrdinalIgnoreCase) | methodName.StartsWith("set_", StringComparison.OrdinalIgnoreCase);
 
             _isProperty = isPresumedProperty;
             _methodName = isPresumedProperty ? methodName.Remove(0, 4) : methodName;
-            _className = caller == null ? "NotAvailable" : TypeUtility.SanitizeTypeName(caller);
+            _className = caller == null ? "NotAvailable" : StringConverter.FromType(caller);
             _parameters = ParameterSignature.Parse(method);
             _hasParameters = EnumerableUtility.Any(_parameters);
         }
@@ -102,10 +102,10 @@ namespace Cuemon.Reflection
         /// <remarks>This represents a method with one or more parameters or a property indexer.</remarks>
         public MethodSignature(string className, string methodName, bool isProperty, params ParameterSignature[] parameters)
         {
-            if (className == null) { throw new ArgumentNullException("className"); }
-            if (className.Length == 0) { throw new ArgumentEmptyException("className"); }
-            if (methodName == null) { throw new ArgumentNullException("methodName"); }
-            if (methodName.Length == 0) { throw new ArgumentEmptyException("methodName"); }
+            if (className == null) { throw new ArgumentNullException(nameof(className)); }
+            if (className.Length == 0) { throw new ArgumentEmptyException(nameof(className)); }
+            if (methodName == null) { throw new ArgumentNullException(nameof(methodName)); }
+            if (methodName.Length == 0) { throw new ArgumentEmptyException(nameof(methodName)); }
 
             _className = className;
             _methodName = methodName;
@@ -257,7 +257,7 @@ namespace Cuemon.Reflection
         /// <returns>An <see cref="IDictionary{TKey,TValue}"/> containing the merged result of the <paramref name="method"/> parameter signature and <paramref name="runtimeParameterValues"/>.</returns>
         public static IDictionary<string, object> MergeParameters(MethodSignature method, params object[] runtimeParameterValues)
         {
-            Validator.ThrowIfNull(method, "method");
+            Validator.ThrowIfNull(method, nameof(method));
             return MergeParameters(method.Parameters, runtimeParameterValues);
         }
 
@@ -272,7 +272,7 @@ namespace Cuemon.Reflection
             Dictionary<string, object> wrapper = new Dictionary<string, object>();
             if (runtimeParameterValues != null)
             {
-                ParameterSignature[] methodParameters = EnumerableUtility.ToArray(parameters);
+                ParameterSignature[] methodParameters = EnumerableConverter.ToArray(parameters);
                 bool hasEqualNumberOfParameters = methodParameters.Length == runtimeParameterValues.Length;
                 for (int i = 0; i < runtimeParameterValues.Length; i++)
                 {
@@ -283,9 +283,9 @@ namespace Cuemon.Reflection
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents the method signature.
+        /// Returns a <see cref="string" /> that represents the method signature.
         /// </summary>
-        /// <returns>A <see cref="System.String" /> that represents the method signature.</returns>
+        /// <returns>A <see cref="string" /> that represents the method signature.</returns>
         /// <remarks>
         /// The returned string has the following format: <br/>
         /// Method without parameters: [<see cref="ClassName"/>].[<see cref="MethodName"/>]()<br/>

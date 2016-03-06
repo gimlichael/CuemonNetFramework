@@ -1,10 +1,9 @@
 using System;
 using System.Net;
 using System.Reflection;
-using System.Security.Principal;
 using System.Web;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
+using Cuemon.Runtime.Caching;
 using Cuemon.Web.Compilation;
 
 namespace Cuemon.Web

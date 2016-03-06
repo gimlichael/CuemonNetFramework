@@ -1174,9 +1174,9 @@ namespace Cuemon.Threading
 
         private static void ValidateForEach<TSource>(ThreadPoolSettings settings, IEnumerable<TSource> source, object body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
+            Validator.ThrowIfNull(settings, nameof(settings));
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(body, nameof(body));
         }
 
         private static void ForEachCore<TTuple, TSource>(ActFactory<TTuple> factory, IEnumerable<TSource> source, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings) where TTuple : Template<TSource>
@@ -1185,7 +1185,7 @@ namespace Cuemon.Threading
             try
             {
                 PartitionCollection<TSource> partition = new PartitionCollection<TSource>(source, partitionSize);
-                ActWorkItemPool pool = new ActWorkItemPool();
+                List<Exception> aggregatedExceptions = new List<Exception>();
                 while (partition.HasPartitions)
                 {
                     try
@@ -1195,8 +1195,25 @@ namespace Cuemon.Threading
                         foreach (TSource element in partition)
                         {
                             factory.GenericArguments.Arg1 = element;
-                            IActWorkItem work = ActWorkItem.Create(sync, ForEachElementCore, factory.Clone());
-                            pool.ProcessWork(work);
+                            var shallowFactory = factory.Clone();
+                            ThreadPoolUtility.Run(() =>
+                            {
+                                try
+                                {
+                                    shallowFactory.ExecuteMethod();
+                                }
+                                catch (Exception te)
+                                {
+                                    lock (aggregatedExceptions)
+                                    {
+                                        aggregatedExceptions.Add(te);
+                                    }
+                                }
+                                finally
+                                {
+                                    sync.Signal();
+                                }
+                            });
                         }
                         sync.Wait(timeout);
                     }
@@ -1209,22 +1226,11 @@ namespace Cuemon.Threading
                         }
                     }
                 }
+                if (aggregatedExceptions.Count > 0) { throw ExceptionUtility.Refine(new ThreadException(aggregatedExceptions), factory.DelegateInfo, factory.GenericArguments); }
             }
             finally
             {
                 settings.Rollback();
-            }
-        }
-
-        private static void ForEachElementCore<TTuple>(ActFactory<TTuple> factory) where TTuple : Template
-        {
-            try
-            {
-                factory.ExecuteMethod();
-            }
-            finally
-            {
-                factory = null;
             }
         }
 

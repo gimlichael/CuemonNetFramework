@@ -83,7 +83,7 @@ namespace Cuemon.Web.Security
                 string base64Credentials = authorizationHeader.Remove(0, AuthenticationSchemeName.Length + 1);
                 if (StringUtility.IsBase64(base64Credentials))
                 {
-                    string[] credentials = ConvertUtility.ToString(Convert.FromBase64String(base64Credentials), PreambleSequence.Remove, Encoding.ASCII).Split(AuthenticationUtility.BasicAuthenticationCredentialSeparator);
+                    string[] credentials = StringConverter.FromBytes(Convert.FromBase64String(base64Credentials), PreambleSequence.Remove, Encoding.ASCII).Split(AuthenticationUtility.BasicAuthenticationCredentialSeparator);
                     if (credentials.Length == 2 &&
                         !string.IsNullOrEmpty(credentials[0]) &&
                         !string.IsNullOrEmpty(credentials[1]))

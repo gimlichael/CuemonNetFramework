@@ -62,7 +62,7 @@ namespace Cuemon.Web
         #region Methods
         void IHttpModule.Init(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
             context.BeginRequest += OnBeginRequestWrapper;
             context.AuthenticateRequest += OnAuthenticateRequestWrapper;
             context.PostAuthenticateRequest += OnPostAuthenticateRequestWrapper;
@@ -309,7 +309,7 @@ namespace Cuemon.Web
                         try
                         {
                             OnApplicationEnd(domain);
-                            ApplicationLifecycleTracer(HttpContext.Current.ApplicationInstance, "OnApplicationEnd");
+                            ApplicationLifecycleTracer(null, "OnApplicationEnd");
                         }
                         finally
                         {
@@ -332,11 +332,12 @@ namespace Cuemon.Web
         private void ApplicationLifecycleTracer(HttpApplication application, string lifecycleEvent)
         {
             if (!EnableTimeMeasuring) { return; }
-            IHttpHandler httpHandler = application == null ? null : application.Context.CurrentHandler ?? application.Context.Handler;
-            string handler = string.Format(CultureInfo.InvariantCulture, "{0}", httpHandler == null ? "" : TypeUtility.SanitizeTypeName(httpHandler.GetType(), true));
-            string location = string.Format(CultureInfo.InvariantCulture, "{0} [{1}]", application.Request.CurrentExecutionFilePath, HttpRequestUtility.RawUrl(application.Request).AbsolutePath);
-            string optionalHandlerWithLocation = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", handler, handler.Length == 0 ? "" : " -> ", location);
-            Condition.Initialize(TupleUtility.CreateTwo(string.Format(CultureInfo.InvariantCulture, "Application:{0} -> {1}", lifecycleEvent, optionalHandlerWithLocation), Timer.Elapsed), TimeMeasuringCallback, Condition.IsNull)
+            bool applicationIsUnavailable = (application == null || application.Context == null || application.Request == null);
+            IHttpHandler httpHandler = applicationIsUnavailable ? null : application.Context.CurrentHandler ?? application.Context.Handler;
+            string handler = string.Format(CultureInfo.InvariantCulture, "{0}", httpHandler == null ? "" : StringConverter.FromType(httpHandler.GetType(), true));
+            string location = applicationIsUnavailable ? "" : string.Format(CultureInfo.InvariantCulture, "{0} [{1}]", application.Request.CurrentExecutionFilePath, HttpRequestUtility.RawUrl(application.Request).AbsolutePath);
+            string optionalHandlerWithLocation = applicationIsUnavailable ? "" : string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", handler, handler.Length == 0 ? "" : " -> ", location);
+            Condition.Initialize(TupleUtility.CreateTwo(string.Format(CultureInfo.InvariantCulture, "Application:{0}{1}{2}", lifecycleEvent, applicationIsUnavailable ? "" : " -> ", optionalHandlerWithLocation), Timer.Elapsed), TimeMeasuringCallback, Condition.IsNull)
                 .Invoke(tuple => Infrastructure.TraceWriteLifecycleEvent(tuple.Arg1, tuple.Arg2), tuple => TimeMeasuringCallback(tuple.Arg1, tuple.Arg2));
         }
 
@@ -357,7 +358,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked as the first event in the HTTP pipeline chain of execution when ASP.NET responds to a request.</remarks>
         protected virtual void OnBeginRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -367,7 +368,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when a security module is establishing the identity of the user.</remarks>
         protected virtual void OnAuthenticateRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -377,7 +378,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when a security module has established the identity of the user.</remarks>
         protected virtual void OnPostAuthenticateRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -387,7 +388,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when a security module has verified user authorization.</remarks>
         protected virtual void OnAuthorizeRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -397,7 +398,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when the user for the current request has been authorized.</remarks>
         protected virtual void OnPostAuthorizeRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -407,7 +408,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET finishes an authorization event to let the caching modules serve requests from the cache, bypassing execution of the event handler.</remarks>
         protected virtual void OnResolveRequestCache(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
 
@@ -418,7 +419,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET bypasses execution of the current event handler and allows a caching module to serve a request from the cache.</remarks>
         protected virtual void OnPostResolveRequestCache(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -428,7 +429,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when the handler is selected to respond to the request.</remarks>
         protected virtual void OnMapRequestHandler(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -438,7 +439,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET has mapped the current request to the appropriate event handler.</remarks>
         protected virtual void OnPostMapRequestHandler(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -448,7 +449,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when when ASP.NET acquires the current state hat is associated with the current request.</remarks>
         protected virtual void OnAcquireRequestState(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -458,7 +459,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when the request state that is associated with the current request has been obtained.</remarks>
         protected virtual void OnPostAcquireRequestState(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -468,7 +469,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET starts executing an event handler.</remarks>
         protected virtual void OnPreRequestHandlerExecute(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -478,7 +479,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET starts executing an event handler.</remarks>
         protected virtual void OnPostRequestHandlerExecute(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -488,7 +489,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked after ASP.NET finishes executing all request event handlers. This event causes state modules to save the current state data.</remarks>
         protected virtual void OnReleaseRequestState(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -498,7 +499,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET has completed executing all request event handlers and the request state data has been stored.</remarks>
 		protected virtual void OnPostReleaseRequestState(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -508,7 +509,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET finishes executing an event handler in order to let caching modules store responses that will be used to serve subsequent requests from the cache.</remarks>
 		protected virtual void OnUpdateRequestCache(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -518,7 +519,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET finishes updating caching modules and storing responses that are used to serve subsequent requests from the cache.</remarks>
 		protected virtual void OnPostUpdateRequestCache(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -528,7 +529,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET performs any logging for the current request.</remarks>
 		protected virtual void OnLogRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -538,7 +539,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when ASP.NET has completed processing all the event handlers for the LogRequest event.</remarks>
 		protected virtual void OnPostLogRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -548,7 +549,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked as the last event in the HTTP pipeline chain of execution when ASP.NET responds to a request.</remarks>
 		protected virtual void OnEndRequest(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -558,7 +559,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET sends HTTP headers to the client.</remarks>
 		protected virtual void OnPreSendRequestHeaders(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -568,7 +569,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET sends content to the client.</remarks>
 		protected virtual void OnPreSendRequestContent(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -578,7 +579,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked just before ASP.NET sends content to the client but after the processing of <see cref="OnPreSendRequestContent"/>.</remarks>
         protected virtual void OnSendRequestContent(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -589,7 +590,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when an unhandled exception is thrown.</remarks>
         protected virtual void OnError(HttpApplication context, Exception lastException)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -599,7 +600,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked only once as the first event in the HTTP pipeline chain of execution when ASP.NET responds to a request.</remarks>
         protected virtual void OnApplicationStart(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>
@@ -609,7 +610,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when the <paramref name="domain"/> is about to be unloaded.</remarks>
         protected virtual void OnApplicationEnd(AppDomain domain)
         {
-            Validator.ThrowIfNull(domain, "domain");
+            Validator.ThrowIfNull(domain, nameof(domain));
         }
 
         /// <summary>
@@ -619,7 +620,7 @@ namespace Cuemon.Web
         /// <remarks>This method is invoked when the application is disposed.</remarks>
         protected virtual void OnDisposed(HttpApplication context)
         {
-            Validator.ThrowIfNull(context, "context");
+            Validator.ThrowIfNull(context, nameof(context));
         }
 
         /// <summary>

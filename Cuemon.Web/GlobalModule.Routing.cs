@@ -14,7 +14,7 @@ namespace Cuemon.Web
         /// <remarks>This method is called just after any custom implementation of <see cref="OnPostResolveRequestCache"/>.</remarks>
         protected virtual void HandleUrlRouting(HttpApplication context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             HttpRoute route;
             if (HttpRouteTable.TryParse(context.Context, out route))
             {

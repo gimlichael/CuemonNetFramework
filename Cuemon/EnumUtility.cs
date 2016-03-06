@@ -10,6 +10,34 @@ namespace Cuemon
     public static class EnumUtility
     {
         /// <summary>
+        /// Creates an <see cref="IEnumerable{T}"/> sequence from the specified <typeparamref name="TEnum"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <returns>An <see cref="IEnumerable{T}"/> sequence equivalent to <typeparamref name="TEnum"/>.</returns>
+        public static IEnumerable<KeyValuePair<int, string>> ToEnumerable<TEnum>() where TEnum : struct, IConvertible
+        {
+            return ToEnumerable<int, TEnum>();
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IEnumerable{T}"/> sequence from the specified <typeparamref name="TEnum"/>.
+        /// </summary>
+        /// <typeparam name="T">The integral type of the enumeration.</typeparam>
+        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
+        /// <returns>An <see cref="IEnumerable{T}"/> sequence equivalent to <typeparamref name="TEnum"/>.</returns>
+        public static IEnumerable<KeyValuePair<T, string>> ToEnumerable<T, TEnum>() where TEnum : struct, IConvertible where T : struct, IConvertible
+        {
+            Validator.ThrowIfNotEnumType<TEnum>("TEnum");
+            Validator.ThrowIfNotContainsType<T>("T", typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64));
+
+            Array values = Enum.GetValues(typeof(TEnum));
+            foreach (var value in values)
+            {
+                yield return new KeyValuePair<T, string>((T)value, value.ToString());
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified <paramref name="value"/> is an equivalent of <typeparamref name="TEnum"/>.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enumeration to validate.</typeparam>
@@ -79,17 +107,22 @@ namespace Cuemon
         /// <param name="value">A string containing the name or value to convert.</param>
         /// <param name="ignoreCase"><c>true</c> to ignore case; <c>false</c> to regard case.</param>
         /// <returns>An enum of type <typeparamref name="TEnum" /> whose value is represented by <paramref name="value" />.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="TypeArgumentException">
         /// <typeparamref name="TEnum"/> does not represents an enumeration.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> does not represents an enumeration.
         /// </exception>
         public static TEnum Parse<TEnum>(string value, bool ignoreCase) where TEnum : struct, IConvertible
         {
             Validator.ThrowIfNotEnumType<TEnum>("TEnum");
-            Validator.ThrowIfNullOrEmpty(value, "value");
-            return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
+            Validator.ThrowIfNullOrEmpty(value, nameof(value));
+            TEnum result = (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
+            if (Enum.IsDefined(typeof(TEnum), result)) { return result; }
+            throw new ArgumentException("Value does not represents an enumeration.");
         }
 
         /// <summary>
@@ -114,34 +147,6 @@ namespace Cuemon
                 ulong unsignedSource = source.ToUInt64(CultureInfo.InvariantCulture);
                 ulong unsignedValue = value.ToUInt64(CultureInfo.InvariantCulture);
                 return ((unsignedSource & unsignedValue) == unsignedValue);
-            }
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IEnumerable{T}"/> sequence from the specified <typeparamref name="TEnum"/>.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
-        /// <returns>An <see cref="IEnumerable{T}"/> sequence equivalent to <typeparamref name="TEnum"/>.</returns>
-        public static IEnumerable<KeyValuePair<int, string>> ToEnumerable<TEnum>() where TEnum : struct, IConvertible
-        {
-            return ToEnumerable<int, TEnum>();
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IEnumerable{T}"/> sequence from the specified <typeparamref name="TEnum"/>.
-        /// </summary>
-        /// <typeparam name="T">The integral type of the enumeration.</typeparam>
-        /// <typeparam name="TEnum">The type of the enumeration.</typeparam>
-        /// <returns>An <see cref="IEnumerable{T}"/> sequence equivalent to <typeparamref name="TEnum"/>.</returns>
-        public static IEnumerable<KeyValuePair<T, string>> ToEnumerable<T, TEnum>() where TEnum : struct, IConvertible where T : struct, IConvertible
-        {
-            Validator.ThrowIfNotEnumType<TEnum>("TEnum");
-            Validator.ThrowIfNotContainsType<T>("T", typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64));
-
-            Array values = Enum.GetValues(typeof(TEnum));
-            foreach (var value in values)
-            {
-                yield return new KeyValuePair<T, string>((T)value, value.ToString());
             }
         }
     }

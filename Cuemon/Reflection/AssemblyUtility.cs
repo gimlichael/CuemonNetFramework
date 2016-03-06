@@ -2,9 +2,10 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.Collections.Generic;
 using Cuemon.IO;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Reflection
 {
@@ -18,14 +19,26 @@ namespace Cuemon.Reflection
         /// </summary>
         /// <param name="assembly">The assembly to resolve a <see cref="CacheValidator"/> from.</param>
         /// <returns>A <see cref="CacheValidator"/> that fully represents the integrity of the specified <paramref name="assembly"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="assembly"/> is null.
-        /// </exception>
         public static CacheValidator GetCacheValidator(Assembly assembly)
         {
-            if (assembly == null) { throw new ArgumentNullException("assembly"); }
-            if (assembly.ManifestModule is ModuleBuilder) { return CacheValidator.Default; }
-            return FileUtility.GetCacheValidator(assembly.Location);
+            if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return CacheValidator.Default; }
+            if (!string.IsNullOrEmpty(assembly.Location))
+            {
+                var fileValidator = FileUtility.GetCacheValidator(assembly.Location);
+                return fileValidator.CombineWith(StructUtility.GetHashCode64(assembly.FullName));
+            }
+            return new CacheValidator(DateTime.MinValue, DateTime.MaxValue, StructUtility.GetHashCode64(assembly.FullName));
+        }
+
+        /// <summary>
+        /// Returns a <see cref="Version"/> that represents the version number of the specified <paramref name="assembly"/>.
+        /// </summary>
+        /// <param name="assembly">The assembly to resolve a <see cref="Version"/> from.</param>
+        /// <returns>A <see cref="Version"/> that represents the version number of the specified <paramref name="assembly"/>.</returns>
+        public static Version GetAssemblyVersion(Assembly assembly)
+        {
+            if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return VersionUtility.MinValue; }
+            return assembly.GetName().Version;
         }
 
         /// <summary>
@@ -33,14 +46,12 @@ namespace Cuemon.Reflection
         /// </summary>
         /// <param name="assembly">The assembly to resolve a <see cref="Version"/> from.</param>
         /// <returns>A <see cref="Version"/> that represents the file version number of the specified <paramref name="assembly"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="assembly"/> is null.
-        /// </exception>
         public static Version GetFileVersion(Assembly assembly)
         {
-            if (assembly == null) { throw new ArgumentNullException("assembly"); }
-            if (assembly.ManifestModule is ModuleBuilder) { return new Version(0, 0, 0, 0); }
-            return FileUtility.GetFileVersion(assembly.Location);
+            if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return VersionUtility.MinValue; }
+            var fileVersion = GetFileVersionCore(assembly);
+            if (fileVersion != VersionUtility.MaxValue) { return fileVersion; }
+            return GetAssemblyVersion(assembly);
         }
 
         /// <summary>
@@ -48,14 +59,24 @@ namespace Cuemon.Reflection
         /// </summary>
         /// <param name="assembly">The assembly to resolve a <see cref="Version"/> from.</param>
         /// <returns>A <see cref="Version"/> that represents the version of the product this <paramref name="assembly"/> is distributed with.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="assembly"/> is null.
-        /// </exception>
         public static Version GetProductVersion(Assembly assembly)
         {
-            if (assembly == null) { throw new ArgumentNullException("assembly"); }
-            if (assembly.ManifestModule is ModuleBuilder) { return new Version(0, 0, 0, 0); }
-            return FileUtility.GetProductVersion(assembly.Location);
+            if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return VersionUtility.MinValue; }
+            var productVersion = GetProductVersionCore(assembly);
+            if (productVersion != VersionUtility.MaxValue) { return productVersion; }
+            return GetFileVersion(assembly);
+        }
+
+        private static Version GetProductVersionCore(Assembly assembly)
+        {
+            var version = ReflectionUtility.GetAttribute<AssemblyInformationalVersionAttribute>(assembly);
+            return version == null ? VersionUtility.MaxValue : new Version(version.InformationalVersion);
+        }
+
+        private static Version GetFileVersionCore(Assembly assembly)
+        {
+            var version = ReflectionUtility.GetAttribute<AssemblyFileVersionAttribute>(assembly);
+            return version == null ? VersionUtility.MaxValue : new Version(version.Version);
         }
 
         /// <summary>
@@ -71,6 +92,7 @@ namespace Cuemon.Reflection
 
         private static bool HasDebuggableAttributeCore(Assembly assembly)
         {
+            if (assembly == null) { return false; }
             DebuggableAttribute debug = EnumerableUtility.FirstOrDefault(assembly.GetCustomAttributes(typeof(DebuggableAttribute), false)) as DebuggableAttribute;
             if (debug != null)
             {

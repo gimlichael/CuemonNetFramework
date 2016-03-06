@@ -16,8 +16,7 @@ namespace Cuemon.Data
         /// Initializes a new instance of the <see cref="InOperator{T}"/> class.
         /// </summary>
         /// <param name="expressions">The expressions to test for a match in the IN operator of the WHERE clause.</param>
-        protected InOperator(params T[] expressions)
-            : this(expressions as IEnumerable<T>)
+        protected InOperator(params T[] expressions) : this(expressions as IEnumerable<T>)
         {
         }
 
@@ -27,11 +26,11 @@ namespace Cuemon.Data
         /// <param name="expressions">The expressions to test for a match in the IN operator of the WHERE clause.</param>
         protected InOperator(IEnumerable<T> expressions)
         {
-            if (expressions == null) { throw new ArgumentNullException("expressions"); }
+            if (expressions == null) { throw new ArgumentNullException(nameof(expressions)); }
             IList<T> elements = expressions as List<T> ?? new List<T>(expressions);
-            this.ParameterName = string.Format(CultureInfo.InvariantCulture, "@param{0}{1}", StringUtility.CreateRandomString(1, StringUtility.EnglishAlphabetCharactersMajuscule), StringUtility.CreateRandomString(5, StringUtility.EnglishAlphabetCharactersMinuscule));
-            this.Arguments = QueryUtility.GetQueryFragment(QueryFormat.Delimited, EnumerableUtility.Select(elements, ArgumentsSelector));
-            this.Parameters = EnumerableUtility.ToArray(EnumerableUtility.Select(elements, ParametersSelector));
+            ParameterName = string.Format(CultureInfo.InvariantCulture, "@param{0}{1}", StringUtility.CreateRandomString(1, StringUtility.EnglishAlphabetCharactersMajuscule), StringUtility.CreateRandomString(5, StringUtility.EnglishAlphabetCharactersMinuscule));
+            Arguments = QueryUtility.GetQueryFragment(QueryFormat.Delimited, EnumerableUtility.Select(elements, ArgumentsSelector));
+            Parameters = EnumerableConverter.ToArray(EnumerableUtility.Select(elements, ParametersSelector));
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace Cuemon.Data
         /// <remarks>Default is @param{index}.</remarks>
         protected virtual string ArgumentsSelector(T expression, int index)
         {
-            return string.Concat(this.ParameterName, index);
+            return string.Concat(ParameterName, index);
         }
 
         /// <summary>

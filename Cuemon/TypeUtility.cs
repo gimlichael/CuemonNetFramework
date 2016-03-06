@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using Cuemon.Collections.Generic;
 using Cuemon.Reflection;
@@ -97,53 +96,6 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Sanitizes the name of the <paramref name="source"/> with the intend to be understood by humans. 
-        /// </summary>
-        /// <param name="source">The type to sanitize the name from.</param>
-        /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
-        /// <remarks>Only the simple name of the <paramref name="source"/> is returned, not the fully qualified name.</remarks>
-        public static string SanitizeTypeName(Type source)
-        {
-            return SanitizeTypeName(source, false);
-        }
-
-        /// <summary>
-        /// Sanitizes the name of the <paramref name="source"/> with the intend to be understood by humans. 
-        /// </summary>
-        /// <param name="source">The type to sanitize the name from.</param>
-        /// <param name="fullName">Specify <c>true</c> to use the fully qualified name of the <paramref name="source"/>; otherwise, <c>false</c> for the simple name of <paramref name="source"/>.</param>
-        /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
-        public static string SanitizeTypeName(Type source, bool fullName)
-        {
-            return SanitizeTypeName(source, fullName, false);
-        }
-
-        /// <summary>
-        /// Sanitizes the name of the <paramref name="source"/> with the intend to be understood by humans. 
-        /// </summary>
-        /// <param name="source">The type to sanitize the name from.</param>
-        /// <param name="fullName">Specify <c>true</c> to use the fully qualified name of the <paramref name="source"/>; otherwise, <c>false</c> for the simple name of <paramref name="source"/>.</param>
-        /// <param name="excludeGenericArguments">Specify <c>true</c> to exclude generic arguments from the result; otherwise <c>false</c> to include generic arguments should the <paramref name="source"/> be a generic type.</param>
-        /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
-        public static string SanitizeTypeName(Type source, bool fullName, bool excludeGenericArguments)
-        {
-            Validator.ThrowIfNull(source, "source");
-
-            string typeName = SanitizeTypeNameConverter(source, fullName);
-            if (!source.IsGenericType) { return typeName; }
-
-            Type[] parameters = source.GetGenericArguments();
-            int indexOfGraveAccent = typeName.IndexOf('`');
-            typeName = indexOfGraveAccent >= 0 ? typeName.Remove(indexOfGraveAccent) : typeName;
-            return excludeGenericArguments ? typeName : string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", typeName, ConvertUtility.ToDelimitedString(parameters, ", ", SanitizeTypeNameConverter, fullName));
-        }
-
-        private static string SanitizeTypeNameConverter(Type source, bool fullName)
-        {
-            return fullName ? source.FullName : source.Name;
-        }
-
-        /// <summary>
         /// Determines whether the specified source is a nullable <see cref="ValueType"/>.
         /// </summary>
         /// <param name="source">The source type to check for nullable <see cref="ValueType"/>.</param>
@@ -152,7 +104,7 @@ namespace Cuemon
         /// </returns>
         public static bool IsNullable(Type source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             if (!source.IsValueType) { return false; }
             return Nullable.GetUnderlyingType(source) != null;
         }
@@ -184,7 +136,7 @@ namespace Cuemon
         /// <returns>An <see cref="IEnumerable{Type}"/> holding the derived types from the <paramref name="source"/>.</returns>
         public static IEnumerable<Type> GetDescendantOrSelfTypes(Type source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             return GetDescendantOrSelfTypes(source, source.Assembly);
         }
 
@@ -196,8 +148,8 @@ namespace Cuemon
         /// <returns>An <see cref="IEnumerable{Type}"/> holding the derived types from the <paramref name="source"/>.</returns>
         public static IEnumerable<Type> GetDescendantOrSelfTypes(Type source, params Assembly[] assemblies)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (assemblies == null) { throw new ArgumentNullException("assemblies"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (assemblies == null) { throw new ArgumentNullException(nameof(assemblies)); }
             List<Type> derivedTypes = new List<Type>();
             foreach (Assembly assembly in assemblies)
             {
@@ -221,8 +173,8 @@ namespace Cuemon
         /// </exception>
         public static Type GetAncestorOrSelf(Type source, Type sourceBaseLimit)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (sourceBaseLimit == null) { throw new ArgumentNullException("sourceBaseLimit"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (sourceBaseLimit == null) { throw new ArgumentNullException(nameof(sourceBaseLimit)); }
             if (source == sourceBaseLimit) { return source; }
 
             Type sourceBase = source.BaseType;
@@ -241,7 +193,7 @@ namespace Cuemon
         /// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-or-self types from the <paramref name="source"/>.</returns>
         public static IEnumerable<Type> GetAncestorOrSelfTypes(Type source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             List<Type> parentTypes = new List<Type>();
             Type currentType = source;
             while (currentType != null)
@@ -259,7 +211,7 @@ namespace Cuemon
         /// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-and-descendant-or-self types from the <paramref name="source"/>.</returns>
         public static IEnumerable<Type> GetAncestorAndDescendantsOrSelfTypes(Type source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             return GetAncestorAndDescendantsOrSelfTypes(source, source.Assembly);
         }
 
@@ -271,8 +223,8 @@ namespace Cuemon
         /// <returns>An <see cref="IEnumerable{Type}"/> holding the ancestor-and-descendant-or-self types from the <paramref name="source"/>.</returns>
         public static IEnumerable<Type> GetAncestorAndDescendantsOrSelfTypes(Type source, params Assembly[] assemblies)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (assemblies == null) { throw new ArgumentNullException("assemblies"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (assemblies == null) { throw new ArgumentNullException(nameof(assemblies)); }
             IEnumerable<Type> ancestorOrSelfTypes = GetAncestorOrSelfTypes(source);
             IEnumerable<Type> derivedOrSelfTypes = GetDescendantOrSelfTypes(source, assemblies);
             return EnumerableUtility.SortDescending(EnumerableUtility.Distinct(EnumerableUtility.Concat(derivedOrSelfTypes, ancestorOrSelfTypes)), new ReferenceComparer<Type>());
@@ -301,7 +253,7 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsInterface(object source, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
             return ContainsInterface(source.GetType(), targets);
         }
 
@@ -316,7 +268,7 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsInterface(object source, bool inherit, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
             return ContainsInterface(source.GetType(), inherit, targets);
         }
 
@@ -331,8 +283,8 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsInterface(Type source, bool inherit, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            if (targets == null) throw new ArgumentNullException("targets");
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (targets == null) throw new ArgumentNullException(nameof(targets));
             foreach (Type targetType in targets)
             {
                 if (inherit) // search all inheritance chains
@@ -387,7 +339,7 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsAttributeType(object source, bool inherit, params Type[] targets)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             return ContainsAttributeType(source.GetType(), inherit, targets);
         }
 
@@ -415,8 +367,8 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsAttributeType(Type source, bool inherit, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            if (targets == null) throw new ArgumentNullException("targets");
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (targets == null) throw new ArgumentNullException(nameof(targets));
             foreach (Type targetType in targets)
             {
                 if (source.GetCustomAttributes(targetType, inherit).Length > 0) { return true; }
@@ -454,8 +406,8 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsAttributeType(MemberInfo source, bool inherit, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            if (targets == null) throw new ArgumentNullException("targets");
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (targets == null) throw new ArgumentNullException(nameof(targets));
             foreach (Type targetType in targets)
             {
                 if (source.GetCustomAttributes(targetType, inherit).Length > 0) { return true; }
@@ -473,7 +425,7 @@ namespace Cuemon
         /// </returns>
         private static bool ContainsType(IEnumerable sources, params Type[] targets)
         {
-            if (sources == null) throw new ArgumentNullException("sources");
+            if (sources == null) throw new ArgumentNullException(nameof(sources));
             foreach (object source in sources)
             {
                 if (ContainsType(source.GetType(), targets)) { return true; }
@@ -491,7 +443,7 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsType(Type source, params Type[] targets)
         {
-            if (targets == null) throw new ArgumentNullException("targets");
+            if (targets == null) throw new ArgumentNullException(nameof(targets));
             foreach (Type targetType in targets)
             {
                 Type sourceTypeCopy = source;
@@ -521,7 +473,7 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsType(object source, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
             return ContainsType(source.GetType(), targets);
         }
 
@@ -536,7 +488,7 @@ namespace Cuemon
         /// </returns>
         public static bool ContainsType(object source, bool treatSourceAsEnumerable, params Type[] targets)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
             return treatSourceAsEnumerable ? ContainsType((source as IEnumerable), targets) : ContainsType(source.GetType(), targets);
         }
 
@@ -550,7 +502,7 @@ namespace Cuemon
         /// </exception>
 	    public static bool IsComplex(Type source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            if (source == null) { throw new ArgumentNullException(nameof(source)); }
             return !((source.IsClass && source == typeof(string)) ||
                      (source.IsClass && source == typeof(object)) ||
                      (source.IsValueType ||
@@ -575,7 +527,7 @@ namespace Cuemon
         /// <returns><c>true</c> if the specified <paramref name="source"/> does not have a default constructor; otherwise, <c>false</c>.</returns>
         public static bool IsWithoutDefaultConstructor(Type source)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             return (!source.IsValueType || source.GetConstructor(Type.EmptyTypes) == null);
         }
 
@@ -586,7 +538,7 @@ namespace Cuemon
         /// <returns>The default value of <paramref name="type"/>.</returns>
 	    public static object GetDefaultValue(Type type)
         {
-            Validator.ThrowIfNull(type, "type");
+            Validator.ThrowIfNull(type, nameof(type));
             if (type.IsValueType && Nullable.GetUnderlyingType(type) == null) { return Activator.CreateInstance(type); }
             return null;
         }

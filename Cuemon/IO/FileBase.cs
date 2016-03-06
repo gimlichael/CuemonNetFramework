@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using Cuemon.Caching;
+using Cuemon.Collections.Generic;
+using Cuemon.Integrity;
 using Cuemon.Net;
 
 namespace Cuemon.IO
@@ -12,7 +13,7 @@ namespace Cuemon.IO
     public abstract class FileBase
     {
         private CacheValidator _validation = null;
-        private static readonly UriScheme[] ValidUriSchemes = ConvertUtility.ToArray<UriScheme>(UriScheme.File, UriScheme.Http, UriScheme.Ftp);
+        private static readonly UriScheme[] ValidUriSchemes = EnumerableConverter.ToArray<UriScheme>(UriScheme.File, UriScheme.Http, UriScheme.Ftp);
 
         #region Constructors
         private FileBase()
@@ -33,8 +34,8 @@ namespace Cuemon.IO
         /// <param name="fileLocation">The <see cref="Uri"/> of the file to represent.</param>
         protected FileBase(Uri fileLocation)
         {
-            if (fileLocation == null) { throw new ArgumentNullException("fileLocation"); }
-            if (!UriUtility.ContainsScheme(fileLocation, ValidUriSchemes)) { throw new ArgumentException("Only URI's with HTTP, FTP og File schemes is supported.", "fileLocation"); }
+            if (fileLocation == null) { throw new ArgumentNullException(nameof(fileLocation)); }
+            if (!UriUtility.ContainsScheme(fileLocation, ValidUriSchemes)) { throw new ArgumentException("Only URI's with HTTP, FTP og File schemes is supported.", nameof(fileLocation)); }
             this.UriLocation = fileLocation;
             this.CanAccess = fileLocation.IsFile ? FileUtility.CanAccess(fileLocation.LocalPath, FileAccess.Read) : NetUtility.CanAccess(WebRequest.Create(fileLocation));
         }
@@ -67,7 +68,7 @@ namespace Cuemon.IO
                     WebRequest request;
                     DateTime created = DateTime.MinValue;
                     DateTime modified = DateTime.MinValue;
-                    switch (UriUtility.ParseScheme(this.UriLocation.Scheme))
+                    switch (UriSchemeConverter.FromString(this.UriLocation.Scheme))
                     {
                         case UriScheme.File:
                             FileInfo f = new FileInfo(this.UriLocation.LocalPath);
@@ -120,7 +121,7 @@ namespace Cuemon.IO
             if (this.CanAccess)
             {
                 if (this.UriLocation.IsFile) { return File.OpenRead(this.UriLocation.LocalPath); }
-                switch (UriUtility.ParseScheme(this.UriLocation.Scheme))
+                switch (UriSchemeConverter.FromString(this.UriLocation.Scheme))
                 {
                     case UriScheme.File:
                         using (FileWebResponse response = NetUtility.GetFileWebResponse((FileWebRequest)WebRequest.Create(this.UriLocation)))
@@ -139,7 +140,7 @@ namespace Cuemon.IO
                         }
                 }
             }
-            
+
             throw new InvalidOperationException("The current state of this object indicates that the file cannot be accessed, hence it cannot be read.");
         }
         #endregion

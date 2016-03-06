@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.Data.Entity.Mapping;
 using Cuemon.Reflection;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Data.Entity
 {
@@ -26,7 +26,7 @@ namespace Cuemon.Data.Entity
 
         private static IEnumerable<ColumnAttribute> ParseColumnsCore(Type source)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
 
             IDictionary<PropertyInfo, ColumnAttribute[]> tempDictionary = ReflectionUtility.GetPropertyAttributeDecorations<ColumnAttribute>(source, ReflectionUtility.BindingInstancePublicAndPrivateNoneInheritedIncludeStatic);
             List<ColumnAttribute> columnAttributes = new List<ColumnAttribute>();

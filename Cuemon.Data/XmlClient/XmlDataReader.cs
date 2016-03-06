@@ -18,7 +18,7 @@ namespace Cuemon.Data.XmlClient
         /// <paramref name="reader"/> is null.
         /// </exception>
         public XmlDataReader(XmlReader reader)
-            : this(reader, ConvertUtility.ChangeType)
+            : this(reader, ObjectConverter.FromString)
         {
         }
 
@@ -30,13 +30,13 @@ namespace Cuemon.Data.XmlClient
         /// <exception cref="ArgumentNullException">
         /// <paramref name="reader"/> is null -or- <paramref name="parser"/> is null.
         /// </exception>
-        /// <remarks>The default implementation uses <see cref="ConvertUtility.ChangeType(System.String)"/> as <paramref name="parser"/>.</remarks>
+        /// <remarks>The default implementation uses <see cref="ObjectConverter.FromString(string)"/> as <paramref name="parser"/>.</remarks>
         public XmlDataReader(XmlReader reader, Doer<string, object> parser)
             : base(parser)
         {
-            Validator.ThrowIfNull(reader, "reader");
-            Validator.ThrowIfNull(parser, "parser");
-            this.Reader = reader;
+            Validator.ThrowIfNull(reader, nameof(reader));
+            Validator.ThrowIfNull(parser, nameof(parser));
+            Reader = reader;
         }
         #endregion
 
@@ -49,7 +49,7 @@ namespace Cuemon.Data.XmlClient
         /// <value>The level of nesting.</value>
         public override int Depth
         {
-            get { return this.CurrentDepth; }
+            get { return CurrentDepth; }
         }
 
         private int CurrentDepth { get; set; }
@@ -63,7 +63,7 @@ namespace Cuemon.Data.XmlClient
         /// <returns><c>true</c> if there are more elements; otherwise, <c>false</c>.</returns>
         protected override bool ReadNext()
         {
-            return ReadNextCore(this.Reader);
+            return ReadNextCore(Reader);
         }
 
         private bool ReadNextCore(XmlReader reader)
@@ -72,14 +72,14 @@ namespace Cuemon.Data.XmlClient
             string elementName = null;
             while (reader.Read())
             {
-                this.CurrentDepth = reader.Depth;
+                CurrentDepth = reader.Depth;
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Attribute:
-                        this.Parse(reader, ref fields);
+                        Parse(reader, ref fields);
                         while (reader.MoveToNextAttribute())
                         {
-                            this.Parse(reader, ref fields);
+                            Parse(reader, ref fields);
                         }
                         if (reader.MoveToElement()) { goto addFields; }
                         break;
@@ -95,7 +95,7 @@ namespace Cuemon.Data.XmlClient
                         break;
                     case XmlNodeType.CDATA:
                     case XmlNodeType.Text:
-                        if (elementName != null) { this.Parse(elementName, reader, ref fields); }
+                        if (elementName != null) { Parse(elementName, reader, ref fields); }
                         elementName = null;
                         break;
                     case XmlNodeType.EndElement:
@@ -105,8 +105,8 @@ namespace Cuemon.Data.XmlClient
                         break;
                 }
             }
-        addFields:
-            this.SetFields(fields);
+            addFields:
+            SetFields(fields);
             return (fields.Count > 0);
         }
 
@@ -133,10 +133,10 @@ namespace Cuemon.Data.XmlClient
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (this.IsDisposed) { return; }
+            if (IsDisposed) { return; }
             if (disposing)
             {
-                if (this.Reader != null) { this.Reader.Close(); }
+                if (Reader != null) { Reader.Close(); }
             }
             base.Dispose(disposing);
         }

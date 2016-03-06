@@ -28,7 +28,7 @@ namespace Cuemon.Diagnostics
             get { return timeMeasureCompletedValue; }
             set
             {
-                if (value == null) { throw new ArgumentNullException("value"); }
+                if (value == null) { throw new ArgumentNullException(nameof(value)); }
                 timeMeasureCompletedValue = value;
             }
         }
@@ -1379,8 +1379,8 @@ namespace Cuemon.Diagnostics
 
         internal static void DefaultTimeMeasureCompletedCallback(string memberName, TimeSpan elapsed, IDictionary<string, object> data)
         {
-            Validator.ThrowIfNullOrEmpty(memberName, "memberName");
-            Validator.ThrowIfNull(data, "data");
+            Validator.ThrowIfNullOrEmpty(memberName, nameof(memberName));
+            Validator.ThrowIfNull(data, nameof(data));
 
             StringBuilder result = new StringBuilder(String.Format(CultureInfo.InvariantCulture, "{0} took {1}ms to execute.", memberName, Math.Round(elapsed.TotalMilliseconds)));
             if (data.Count > 0)
@@ -1388,7 +1388,7 @@ namespace Cuemon.Diagnostics
                 result.Append(" Parameters: { ");
                 foreach (KeyValuePair<string, object> keyValuePair in data)
                 {
-                    result.AppendFormat(CultureInfo.InvariantCulture, "{0}={1}, ", keyValuePair.Key, ObjectUtility.ToString(keyValuePair.Value));
+                    result.AppendFormat(CultureInfo.InvariantCulture, "{0}={1}, ", keyValuePair.Key, StringConverter.FromObject(keyValuePair.Value));
                 }
                 result.Remove(result.Length - 2, 2);
                 result.Append(" }");

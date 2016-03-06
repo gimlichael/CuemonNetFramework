@@ -1177,20 +1177,37 @@ namespace Cuemon.Threading
 
         private static void ValidateForEach<TSource>(ThreadSettings settings, IEnumerable<TSource> source, object body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(body, "body");
+            Validator.ThrowIfNull(settings, nameof(settings));
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(body, nameof(body));
         }
 
         private static void ForEachCore<TTuple, TSource>(ActFactory<TTuple> factory, IEnumerable<TSource> source, int partitionSize, TimeSpan timeout, ThreadSettings settings) where TTuple : Template<TSource>
         {
             List<Thread> threads = new List<Thread>();
             PartitionCollection<TSource> partition = new PartitionCollection<TSource>(source, partitionSize);
+            List<Exception> aggregatedExceptions = new List<Exception>();
             while (partition.HasPartitions)
             {
                 foreach (TSource element in partition)
                 {
-                    threads.Add(ThreadUtility.StartNew(settings, StartCore, factory.Clone(), element));
+                    factory.GenericArguments.Arg1 = element;
+                    var shallowFactory = factory.Clone();
+                    Thread elementThread = ThreadUtility.StartNew(() =>
+                    {
+                        try
+                        {
+                            shallowFactory.ExecuteMethod();
+                        }
+                        catch (Exception te)
+                        {
+                            lock (aggregatedExceptions)
+                            {
+                                aggregatedExceptions.Add(te);
+                            }
+                        }
+                    });
+                    threads.Add(elementThread);
                 }
 
                 bool useParameterlessJoin = timeout == TimeSpan.MaxValue;
@@ -1207,13 +1224,6 @@ namespace Cuemon.Threading
                 }
                 threads.Clear();
             }
-        }
-
-        private static void StartCore<TTuple, TSource>(ActFactory<TTuple> factory, TSource value) where TTuple : Template<TSource>
-        {
-            if (factory == null) { return; }
-            factory.GenericArguments.Arg1 = value;
-            factory.ExecuteMethod();
         }
     }
 }

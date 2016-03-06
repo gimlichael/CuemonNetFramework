@@ -1,5 +1,5 @@
 ﻿using System.Web;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 
 namespace Cuemon.Web
 {

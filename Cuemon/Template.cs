@@ -42,7 +42,7 @@ namespace Cuemon
         /// <returns>A <see cref="String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return ConvertUtility.ToDelimitedString(ToArray(), ", ", ObjectUtility.ToString);
+            return StringConverter.ToDelimitedString(ToArray(), ", ", StringConverter.FromObject);
         }
 
         /// <summary>

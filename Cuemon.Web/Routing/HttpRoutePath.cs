@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Configuration;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.IO;
+using Cuemon.Runtime.Caching;
 using Cuemon.Web.Configuration;
 
 namespace Cuemon.Web.Routing
@@ -23,8 +23,8 @@ namespace Cuemon.Web.Routing
         /// </summary>
         /// <param name="context">The context of the ASP.NET application.</param>
         public HttpRoutePath(HttpContext context)
-            : this(ValidateContext(context).Request.Url, 
-                   ValidateContext(context).Request.PhysicalPath, 
+            : this(ValidateContext(context).Request.Url,
+                   ValidateContext(context).Request.PhysicalPath,
                    ValidateContext(context).Request.FilePath)
         {
         }
@@ -40,9 +40,9 @@ namespace Cuemon.Web.Routing
         /// </exception>
         public HttpRoutePath(Uri url, string physicalFilePath, string virtualFilePath)
         {
-            Validator.ThrowIfNull(url, "url");
-            Validator.ThrowIfNull(physicalFilePath, "physicalFilePath");
-            Validator.ThrowIfNull(virtualFilePath, "virtualFilePath");
+            Validator.ThrowIfNull(url, nameof(url));
+            Validator.ThrowIfNull(physicalFilePath, nameof(physicalFilePath));
+            Validator.ThrowIfNull(virtualFilePath, nameof(virtualFilePath));
 
             this.Url = url;
             this.PhysicalFilePath = physicalFilePath.ToLowerInvariant();
@@ -54,6 +54,7 @@ namespace Cuemon.Web.Routing
         {
             string virtualFilePathExtension = Path.GetExtension(virtualFilePath);
             if (virtualFilePathExtension == null) { return false; }
+
             foreach (HttpHandlerAction handler in systemHandlers)
             {
                 if (handler.Path.StartsWith("*.", StringComparison.OrdinalIgnoreCase))
@@ -153,7 +154,7 @@ namespace Cuemon.Web.Routing
         /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>. </returns>
         public bool Equals(HttpRoutePath other)
         {
-            if (other == null)  { return false; }
+            if (other == null) { return false; }
             return (this.GetHashCode() == other.GetHashCode());
         }
 
@@ -177,11 +178,11 @@ namespace Cuemon.Web.Routing
         public static bool operator !=(HttpRoutePath routePath1, HttpRoutePath routePath2)
         {
             return routePath1 != null && !routePath1.Equals(routePath2);
-        } 
+        }
 
         private static HttpContext ValidateContext(HttpContext context)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
             return context;
         }
     }

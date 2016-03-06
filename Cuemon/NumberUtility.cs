@@ -6,37 +6,6 @@ using Cuemon.Collections.Generic;
 namespace Cuemon
 {
     /// <summary>
-    /// The accuracy of a rounding for a computed number.
-    /// </summary>
-    public enum RoundOffAccuracy
-    {
-        /// <summary>
-        /// Specifies a rounding to the nearest tenth of a number.
-        /// </summary>
-        NearestTenth = 10,
-        /// <summary>
-        /// Specifies a rounding to the nearest hundredth of a number.
-        /// </summary>
-        NearestHundredth = NearestTenth * NearestTenth,
-        /// <summary>
-        /// Specifies a rounding to the nearest thousandth of a number.
-        /// </summary>
-        NearestThousandth = NearestTenth * NearestHundredth,
-        /// <summary>
-        /// Specifies a rounding to the nearest ten thousandth of a number.
-        /// </summary>
-        NearestTenThousandth = NearestTenth * NearestThousandth,
-        /// <summary>
-        /// Specifies a rounding to the nearest hundred thousandth of a number.
-        /// </summary>
-        NearestHundredThousandth = NearestTenth * NearestTenThousandth,
-        /// <summary>
-        /// Specifies a rounding to the nearest million of a number.
-        /// </summary>
-        NearestMillion = NearestTenth * NearestHundredThousandth
-    }
-
-    /// <summary>
     /// This utility class is designed to make number operations easier to work with.
     /// </summary>
     public static class NumberUtility
@@ -45,7 +14,7 @@ namespace Cuemon
         private static readonly RandomNumberGenerator StrongRandomizerGlobal = RandomNumberGenerator.Create();
 
         [ThreadStatic]
-        private static Random SimpleRandomizerLocal;
+        private static Random _simpleRandomizerLocal;
 
         /// <summary>
         /// Determines whether the specified <paramref name="source"/> is a sequence of countable integrals (hence, integrals being either incremented or decremented with the same cardinality through out the sequence).
@@ -119,45 +88,45 @@ namespace Cuemon
             return Math.Round(value / (long)accuracy) * (long)accuracy;
         }
 
-		/// <summary>
-		/// Converts the specified <paramref name="bytes"/> to its equivalent representation in kilobytes.
-		/// </summary>
-		/// <param name="bytes">The bytes to be converted.</param>
-		/// <returns>A kilobyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
-		public static double BytesToKilobytes(long bytes)
-		{
-			return bytes / 1024f;
-		}
+        /// <summary>
+        /// Converts the specified <paramref name="bytes"/> to its equivalent representation in kilobytes.
+        /// </summary>
+        /// <param name="bytes">The bytes to be converted.</param>
+        /// <returns>A kilobyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
+        public static double BytesToKilobytes(long bytes)
+        {
+            return bytes / 1024f;
+        }
 
-		/// <summary>
-		/// Converts the specified <paramref name="bytes"/> to its equivalent representation in megabytes.
-		/// </summary>
-		/// <param name="bytes">The bytes to be converted.</param>
-		/// <returns>A megabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
-		public static double BytesToMegabytes(long bytes)
-		{
-			return BytesToKilobytes(bytes) / 1024f;
-		}
+        /// <summary>
+        /// Converts the specified <paramref name="bytes"/> to its equivalent representation in megabytes.
+        /// </summary>
+        /// <param name="bytes">The bytes to be converted.</param>
+        /// <returns>A megabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
+        public static double BytesToMegabytes(long bytes)
+        {
+            return BytesToKilobytes(bytes) / 1024f;
+        }
 
-		/// <summary>
-		/// Converts the specified <paramref name="bytes"/> to its equivalent representation in gigabytes.
-		/// </summary>
-		/// <param name="bytes">The bytes to be converted.</param>
-		/// <returns>A gigabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
-		public static double BytesToGigabytes(long bytes)
-		{
-			return BytesToMegabytes(bytes) / 1024f;
-		}
+        /// <summary>
+        /// Converts the specified <paramref name="bytes"/> to its equivalent representation in gigabytes.
+        /// </summary>
+        /// <param name="bytes">The bytes to be converted.</param>
+        /// <returns>A gigabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
+        public static double BytesToGigabytes(long bytes)
+        {
+            return BytesToMegabytes(bytes) / 1024f;
+        }
 
-		/// <summary>
-		/// Converts the specified <paramref name="bytes"/> to its equivalent representation in terabytes.
-		/// </summary>
-		/// <param name="bytes">The bytes to be converted.</param>
-		/// <returns>A terabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
-		public static double BytesToTerabytes(long bytes)
-		{
-			return BytesToGigabytes(bytes) / 1024f;
-		}
+        /// <summary>
+        /// Converts the specified <paramref name="bytes"/> to its equivalent representation in terabytes.
+        /// </summary>
+        /// <param name="bytes">The bytes to be converted.</param>
+        /// <returns>A terabyte representation equivalent to the specified <paramref name="bytes"/>.</returns>
+        public static double BytesToTerabytes(long bytes)
+        {
+            return BytesToGigabytes(bytes) / 1024f;
+        }
 
         /// <summary>
         /// Determines whether the specified <paramref name="value"/> is a prime number.
@@ -169,7 +138,7 @@ namespace Cuemon
         /// </exception>
         public static bool IsPrime(int value)
         {
-            if (value < 0) { throw new ArgumentException("Value must have a value equal or higher than 0.", "value"); }
+            if (value < 0) { throw new ArgumentException("Value must have a value equal or higher than 0.", nameof(value)); }
             if ((value & 1) == 0) { return value == 2; }
             for (long i = 3; (i * i) <= value; i += 2)
             {
@@ -185,7 +154,7 @@ namespace Cuemon
         /// <returns>The factorial number calculated from <paramref name="n"/>, or <see cref="double.PositiveInfinity"/> if <paramref name="n"/> is to high a value.</returns>
         public static double Factorial(double n)
         {
-            if (n < 0) { throw new ArgumentException("n must have a value equal or higher than 0.", "n"); }
+            if (n < 0) { throw new ArgumentException("n must have a value equal or higher than 0.", nameof(n)); }
             double total = 1;
             for (double i = 2; i <= n; ++i)
             {
@@ -316,16 +285,16 @@ namespace Cuemon
         /// </exception>
         public static int GetRandomNumber(int minValue, int maxValue, RandomSeverity severity)
         {
-            if (minValue > maxValue) { throw new ArgumentOutOfRangeException("minValue"); }
+            if (minValue > maxValue) { throw new ArgumentOutOfRangeException(nameof(minValue)); }
             int seed;
-            Random localRandomizer = SimpleRandomizerLocal;
+            Random localRandomizer = _simpleRandomizerLocal;
             switch (severity)
             {
                 case RandomSeverity.Simple:
                     if (localRandomizer == null)
                     {
                         lock (SimpleRandomizerGlobal) { seed = SimpleRandomizerGlobal.Next(); }
-                        SimpleRandomizerLocal = localRandomizer = new Random(seed);
+                        _simpleRandomizerLocal = localRandomizer = new Random(seed);
                     }
                     break;
                 case RandomSeverity.Strong:
@@ -334,28 +303,13 @@ namespace Cuemon
                         byte[] randomNumbers = new byte[4];
                         StrongRandomizerGlobal.GetBytes(randomNumbers);
                         seed = BitConverter.ToInt32(randomNumbers, 0);
-                        SimpleRandomizerLocal = localRandomizer = new Random(seed);
+                        _simpleRandomizerLocal = localRandomizer = new Random(seed);
                     }
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("severity");
+                    throw new ArgumentOutOfRangeException(nameof(severity));
             }
             return localRandomizer.Next(minValue, maxValue);
         }
-    }
-
-    /// <summary>
-    /// Specifies the severity of the generation of a random number.
-    /// </summary>
-    public enum RandomSeverity
-    {
-        /// <summary>
-        /// A fast but less accurate method of generating a random number.
-        /// </summary>
-        Simple,
-        /// <summary>
-        /// A slower but also more accurate way of generating a random number.
-        /// </summary>
-        Strong
     }
 }

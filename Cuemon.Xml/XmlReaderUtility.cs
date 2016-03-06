@@ -48,16 +48,16 @@ namespace Cuemon.Xml
         /// </exception>
         public static IEnumerable<XmlReader> Chunk(XmlReader reader, int size, XmlWriterSettings settings)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (settings == null) { throw new ArgumentNullException("settings"); }
-            if (reader.ReadState != ReadState.Initial) { throw new ArgumentException("The Read method of the XmlReader object has already been called.", "reader"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            if (reader.ReadState != ReadState.Initial) { throw new ArgumentException("The Read method of the XmlReader object has already been called.", nameof(reader)); }
             List<XmlReader> outerReaders = new List<XmlReader>();
             XmlReaderSettings readerSettings = reader.Settings;
             if (MoveToFirstElement(reader))
             {
                 XmlQualifiedEntity rootElement = new XmlQualifiedEntity(reader.Prefix, reader.LocalName, reader.NamespaceURI);
                 List<XmlReader> innerReaders = new List<XmlReader>();
-                Stream result = null;
+                Stream result;
                 while (reader.Read())
                 {
                     if (reader.Depth > 1) { continue; }
@@ -89,8 +89,8 @@ namespace Cuemon.Xml
 
         private static void ChunkCore(XmlWriter writer, IEnumerable<XmlReader> readers, XmlQualifiedEntity rootElement, XmlWriterSettings settings)
         {
-            if (readers == null) { throw new ArgumentNullException("readers"); }
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (readers == null) { throw new ArgumentNullException(nameof(readers)); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             writer.WriteStartElement(rootElement.Prefix, rootElement.LocalName, rootElement.Namespace);
             foreach (XmlReader reader in readers)
             {
@@ -119,8 +119,8 @@ namespace Cuemon.Xml
         /// </exception>
         public static bool MoveToFirstElement(XmlReader reader)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (reader.ReadState != ReadState.Initial) { throw new ArgumentException("The Read method of the XmlReader object has already been called.", "reader"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (reader.ReadState != ReadState.Initial) { throw new ArgumentException("The Read method of the XmlReader object has already been called.", nameof(reader)); }
             while (reader.Read())
             {
                 switch (reader.NodeType)

@@ -21,7 +21,7 @@ namespace Cuemon
         /// </exception>
         public static string ParseInstance<T>(IWrapper<T> wrapper)
         {
-            if (wrapper == null) { throw new ArgumentNullException("wrapper"); }
+            if (wrapper == null) { throw new ArgumentNullException(nameof(wrapper)); }
             switch (Type.GetTypeCode(wrapper.InstanceType))
             {
                 case TypeCode.Boolean:
@@ -55,7 +55,7 @@ namespace Cuemon
                     if (TypeUtility.IsComparer(wrapper.InstanceType) ||
                         TypeUtility.IsEqualityComparer(wrapper.InstanceType))
                     {
-                        return TypeUtility.SanitizeTypeName(wrapper.InstanceType);
+                        return StringConverter.FromType(wrapper.InstanceType);
                     }
 
                     switch (wrapper.InstanceType.Name.ToUpperInvariant())
@@ -65,7 +65,7 @@ namespace Cuemon
                         case "GUID":
                             return wrapper.InstanceAs<Guid>(CultureInfo.InvariantCulture).ToString("D");
                         case "RUNTIMETYPE":
-                            return TypeUtility.SanitizeTypeName(wrapper.InstanceAs<Type>());
+                            return StringConverter.FromType(wrapper.InstanceAs<Type>());
                         default:
                             return wrapper.Instance.ToString();
                     }
@@ -82,7 +82,7 @@ namespace Cuemon
         private T _instance;
         private Type _instanceType;
         private MemberInfo _memberReference;
-        private IDictionary<string, object> _data = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _data = new Dictionary<string, object>();
 
         #region Constructors
         /// <summary>
@@ -107,9 +107,9 @@ namespace Cuemon
         /// </summary>
         /// <param name="instance">The instance that this wrapper object represents.</param>
         /// <param name="memberReference">The member from where <paramref name="instance"/> was referenced.</param>
-        public Wrapper(T instance, MemberInfo memberReference) 
+        public Wrapper(T instance, MemberInfo memberReference)
         {
-            if (memberReference == null) { throw new ArgumentNullException("memberReference"); }
+            if (memberReference == null) { throw new ArgumentNullException(nameof(memberReference)); }
             _instance = instance;
             _instanceType = instance.GetType();
             _memberReference = memberReference;
@@ -203,7 +203,7 @@ namespace Cuemon
         /// </exception>
         public TResult InstanceAs<TResult>(IFormatProvider provider)
         {
-            return (TResult)ConvertUtility.ChangeType(this.Instance, this.InstanceType, provider);
+            return (TResult)ObjectConverter.ChangeType(this.Instance, this.InstanceType, provider);
         }
         #endregion
     }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
+using Cuemon.Collections.Generic;
 using Cuemon.IO;
 using Cuemon.Runtime.Serialization;
 
@@ -33,7 +34,7 @@ namespace Cuemon.Security.Cryptography
         /// <returns>A <see cref="string"/> containing the computed hash value of the specified <paramref name="value"/>.</returns>
         public static string ComputeHash(object value, HashAlgorithmType algorithmType)
         {
-            return ComputeHash(ConvertUtility.ToArray(value), algorithmType);
+            return ComputeHash(EnumerableConverter.ToArray(value), algorithmType);
         }
 
         /// <summary>
@@ -54,10 +55,10 @@ namespace Cuemon.Security.Cryptography
         /// <returns>A <see cref="string"/> containing the computed hash value of the specified object sequence <paramref name="values"/>.</returns>
         public static string ComputeHash(object[] values, HashAlgorithmType algorithmType)
         {
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             if (values.Length == 1) // only one object is needed for hashing; avoid the extra overhead by combining
             {
-                if (values[0] == null) { throw new ArgumentNullException("values"); }
+                if (values[0] == null) { throw new ArgumentNullException(nameof(values)); }
                 return ComputeHash(SerializeObject(values[0]), algorithmType);
             }
             List<Stream> streams = new List<Stream>();
@@ -157,7 +158,7 @@ namespace Cuemon.Security.Cryptography
         /// <returns>A <see cref="string"/> containing the computed hash value of the specified <see cref="string"/> <paramref name="value"/>.</returns>
         public static string ComputeHash(string value, HashAlgorithmType algorithmType, Encoding encoding)
         {
-            return ComputeHash(ConvertUtility.ToByteArray(value, PreambleSequence.Remove, encoding), algorithmType);
+            return ComputeHash(ByteConverter.FromString(value, PreambleSequence.Remove, encoding), algorithmType);
         }
 
         /// <summary>
@@ -190,10 +191,10 @@ namespace Cuemon.Security.Cryptography
         /// <returns>A <see cref="string"/> containing the computed hash value of the specified <see cref="string"/> sequence, <paramref name="values"/>.</returns>
         public static string ComputeHash(string[] values, HashAlgorithmType algorithmType, Encoding encoding)
         {
-            if (values == null) { throw new ArgumentNullException("values"); }
+            if (values == null) { throw new ArgumentNullException(nameof(values)); }
             MemoryStream tempStream = null;
             try
-            { 
+            {
                 tempStream = new MemoryStream();
                 using (StreamWriter writer = new StreamWriter(tempStream, encoding))
                 {
@@ -204,12 +205,12 @@ namespace Cuemon.Security.Cryptography
                     }
                     writer.Flush();
                     tempStream.Position = 0;
-                    Stream stream = StreamUtility.RemovePreamble(tempStream, encoding);
+                    Stream stream = StreamConverter.RemovePreamble(tempStream, encoding);
                     tempStream = null;
                     return ComputeHash(stream, algorithmType);
                 }
             }
-            finally 
+            finally
             {
                 if (tempStream != null) { tempStream.Dispose(); }
             }
@@ -217,8 +218,8 @@ namespace Cuemon.Security.Cryptography
 
         private static string ComputeHashCore(Stream value, byte[] hash, HashAlgorithmType algorithmType, bool leaveStreamOpen)
         {
-            if (algorithmType > HashAlgorithmType.CRC32 || algorithmType < HashAlgorithmType.MD5) { throw new ArgumentOutOfRangeException("algorithmType", "Specified argument was out of the range of valid values."); }
-            
+            if (algorithmType > HashAlgorithmType.CRC32 || algorithmType < HashAlgorithmType.MD5) { throw new ArgumentOutOfRangeException(nameof(algorithmType), "Specified argument was out of the range of valid values."); }
+
             StringBuilder resolvedHash = new StringBuilder();
             HashAlgorithm algorithm = null;
 

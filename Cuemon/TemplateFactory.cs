@@ -18,7 +18,7 @@ namespace Cuemon
         /// <param name="hasDelegate"><c>true</c> if this instance has a valid delegate; otherwise, <c>false</c>.</param>
         protected TemplateFactory(TTuple tuple, bool hasDelegate)
         {
-            Validator.ThrowIfNull(tuple, "tuple");
+            Validator.ThrowIfNull(tuple, nameof(tuple));
             GenericArguments = tuple;
             HasDelegate = hasDelegate;
         }
@@ -71,7 +71,7 @@ namespace Cuemon
 
         private string SecondExceptionString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "There is a delegate specified on the factory, '{0}', but it leads to a null referenced delegate wrapper.", TypeUtility.SanitizeTypeName(DelegateInfo.ReflectedType, true));
+            return string.Format(CultureInfo.InvariantCulture, "There is a delegate specified on the factory, '{0}', but it leads to a null referenced delegate wrapper.", StringConverter.FromType(DelegateInfo.ReflectedType, true));
         }
     }
 }

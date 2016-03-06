@@ -9,8 +9,9 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Xml.XPath;
-using Cuemon.Caching;
+using Cuemon.Integrity;
 using Cuemon.IO;
+using Cuemon.Runtime.Caching;
 using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
 using Cuemon.Xml.Xsl;
@@ -78,7 +79,7 @@ namespace Cuemon.Web.UI
                 {
                     if (this.AutoStyleSheetResolving)
                     {
-                        _stylesheet = ConvertUtility.As<XsltPage>(this.Page).AutoStyleSheetResolver(this.Name);
+                        _stylesheet = Converter.FromObject<XsltPage>(this.Page).AutoStyleSheetResolver(this.Name);
                     }
                 }
                 return _stylesheet;
@@ -166,7 +167,7 @@ namespace Cuemon.Web.UI
         /// </returns>
         public string ToString(Stream value, PreambleSequence sequence)
         {
-            return ConvertUtility.ToString(value, sequence);
+            return StringConverter.FromStream(value, sequence);
         }
 
         /// <summary>
@@ -218,7 +219,7 @@ namespace Cuemon.Web.UI
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public void WriteXml(XmlWriter writer)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
         }
 
         /// <summary>
@@ -308,7 +309,7 @@ namespace Cuemon.Web.UI
         /// Gets a <see cref="CacheValidator"/> object that represents the content of the resource.
         /// </summary>
         /// <returns>A <see cref="CacheValidator" /> object that represents the content of the resource.</returns>
-        public virtual CacheValidator GetCacheValidator()
+	    public virtual CacheValidator GetCacheValidator()
         {
             CacheValidator result = CacheValidator.Default;
             if (this.StyleSheet != null)

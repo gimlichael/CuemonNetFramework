@@ -81,7 +81,7 @@ namespace Cuemon.Security.Cryptography
         /// <param name="cbSize">The number of bytes in the byte array to use as data.</param>
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            if (array == null) { throw new ArgumentNullException("array"); }
+            if (array == null) { throw new ArgumentNullException(nameof(array)); }
             unchecked
             {
                 for (int i = ibStart; i < cbSize; i++)
@@ -98,9 +98,9 @@ namespace Cuemon.Security.Cryptography
         /// <returns>The computed hash code.</returns>
         protected override byte[] HashFinal()
         {
-            return this.HashValue = new byte[] { (byte)((this.HashCoreResult >> 24) & 0xFF), 
-                (byte)((this.HashCoreResult >> 16) & 0xFF), 
-                (byte)((this.HashCoreResult >> 8) & 0xFF), 
+            return new byte[] { (byte)((this.HashCoreResult >> 24) & 0xFF),
+                (byte)((this.HashCoreResult >> 16) & 0xFF),
+                (byte)((this.HashCoreResult >> 8) & 0xFF),
                 (byte)(this.HashCoreResult & 0xFF) };
         }
         #endregion

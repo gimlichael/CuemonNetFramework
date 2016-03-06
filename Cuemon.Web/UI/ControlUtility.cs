@@ -24,7 +24,7 @@ namespace Cuemon.Web.UI
         /// <returns>A partial unique identifier you then can complete with the respective Form og QueryString item name.</returns>
         public static string ResolvePartialUniqueId(Control source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
             int hitCount = 0;
             string lastUniqueId = source.UniqueID;
             foreach (Control formControl in GetDescendantOrSelfControls(source, Filter.Include, typeof(HtmlForm)))
@@ -99,7 +99,7 @@ namespace Cuemon.Web.UI
         /// </returns>
         public static bool ContainsControl(IList<Control> sources)
         {
-            if (sources == null) throw new ArgumentNullException("sources");
+            if (sources == null) throw new ArgumentNullException(nameof(sources));
             foreach (Control source in sources)
             {
                 if (ContainsControl(source)) { return true; }
@@ -116,7 +116,7 @@ namespace Cuemon.Web.UI
         /// </returns>
         public static bool ContainsControl(Control source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
             return ContainsControl(source, source.GetType());
         }
 
@@ -130,7 +130,7 @@ namespace Cuemon.Web.UI
         /// </returns>
         public static bool ContainsControl(Control source, Control targetControl)
         {
-            if (targetControl == null) throw new ArgumentNullException("targetControl");
+            if (targetControl == null) throw new ArgumentNullException(nameof(targetControl));
             return ContainsControl(source, targetControl.GetType());
         }
 
@@ -270,8 +270,6 @@ namespace Cuemon.Web.UI
                 foreach (Control c in control.Controls) { stack.Push(c); }
             }
 
-            stack = null;
-
             return controls;
         }
 
@@ -283,10 +281,10 @@ namespace Cuemon.Web.UI
         /// <returns></returns>
         public static Stream ControlAsStream(Control control, params Type[] excludePropertyBaseTypes)
         {
-            if (control == null) throw new ArgumentNullException("control");
+            if (control == null) throw new ArgumentNullException(nameof(control));
             Type controlType = control.GetType();
             PropertyInfo[] controlProperties = controlType.GetProperties();
-            MemoryStream output = null;
+            MemoryStream output;
             MemoryStream tempOutput = null;
             try
             {
@@ -334,13 +332,13 @@ namespace Cuemon.Web.UI
                 output = tempOutput;
                 tempOutput = null;
             }
-            finally 
+            finally
             {
                 if (tempOutput != null) { tempOutput.Dispose(); }
             }
             return output;
         }
-        
+
         /// <summary>
         /// Create and returns a XML stream representation of the control objects supplied.
         /// </summary>
@@ -349,9 +347,9 @@ namespace Cuemon.Web.UI
         /// <returns></returns>
         public static Stream ControlsAsStream(IEnumerable<Control> controls, params Type[] excludePropertyBaseTypes)
         {
-            if (controls == null) throw new ArgumentNullException("controls");
-            if (excludePropertyBaseTypes == null) throw new ArgumentNullException("excludePropertyBaseTypes");
-            MemoryStream output = null;
+            if (controls == null) throw new ArgumentNullException(nameof(controls));
+            if (excludePropertyBaseTypes == null) throw new ArgumentNullException(nameof(excludePropertyBaseTypes));
+            MemoryStream output;
             MemoryStream tempOutput = null;
             try
             {
@@ -363,7 +361,7 @@ namespace Cuemon.Web.UI
                     {
                         using (Stream stream = ControlAsStream(control, excludePropertyBaseTypes))
                         {
-                            char[] chars = ConvertUtility.ToCharArray(stream, PreambleSequence.Remove);
+                            char[] chars = CharConverter.FromStream(stream, PreambleSequence.Remove);
                             writer.WriteRaw(chars, 0, chars.Length);
                         }
                     }
@@ -374,7 +372,7 @@ namespace Cuemon.Web.UI
                 output = tempOutput;
                 tempOutput = null;
             }
-            finally 
+            finally
             {
                 if (tempOutput != null) { tempOutput.Dispose(); }
             }
@@ -401,7 +399,7 @@ namespace Cuemon.Web.UI
                 case "TextBoxMode":
                 case "DateTime":
                     writeEntry = true;
-                    propertyValue =  controlPropertyValue.ToString();
+                    propertyValue = controlPropertyValue.ToString();
                     break;
                 default:
                     writeEntry = false;
@@ -445,7 +443,6 @@ namespace Cuemon.Web.UI
                             style.AppendFormat("{0}: {1};", name, styles[name]);
                         }
                         writer.WriteString(style.ToString());
-                        style = null;
                     }
                     break;
                 case "ListItemCollection":

@@ -5,9 +5,9 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
-using Cuemon.Caching;
 using Cuemon.Collections.Generic;
 using Cuemon.Reflection;
+using Cuemon.Runtime.Caching;
 
 namespace Cuemon.Web.Compilation
 {

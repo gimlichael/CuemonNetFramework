@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Cuemon.Threading
@@ -167,7 +168,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource> body) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body);
         }
 
         /// <summary>
@@ -336,7 +337,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T> body, T arg) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg);
         }
 
         /// <summary>
@@ -519,7 +520,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2> body, T1 arg1, T2 arg2) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2);
         }
 
         /// <summary>
@@ -716,7 +717,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3> body, T1 arg1, T2 arg2, T3 arg3) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -927,7 +928,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -1152,7 +1153,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4, T5> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -1391,7 +1392,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4, T5, T6> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -1644,7 +1645,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4, T5, T6, T7> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -1911,7 +1912,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7, T8>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -2192,7 +2193,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -2487,7 +2488,7 @@ namespace Cuemon.Threading
         /// </exception>
         public static void For<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(int partitionSize, ThreadPoolSettings settings, TimeSpan timeout, TSource initial, RelationalOperator relational, TSource repeats, AssignmentOperator assignment, Act<TSource, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> body, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10) where TSource : struct, IComparable<TSource>, IEquatable<TSource>, IConvertible
         {
-            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ConvertUtility.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            For(partitionSize, settings, timeout, initial, relational, repeats, assignment, (TSource)ObjectConverter.ChangeType(1, typeof(TSource)), body, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -2540,8 +2541,8 @@ namespace Cuemon.Threading
 
         private static void ValidateFor(ThreadPoolSettings settings, object body)
         {
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfNull(body, "body");
+            Validator.ThrowIfNull(settings, nameof(settings));
+            Validator.ThrowIfNull(body, nameof(body));
         }
 
         private static void ForCore<TTuple, TSource>(ActFactory<TTuple> factory, Doer<TSource, RelationalOperator, TSource, bool> condition, TSource initial, RelationalOperator relational, TSource repeats, Doer<TSource, AssignmentOperator, TSource, TSource> iterator, AssignmentOperator assignment, TSource step, int partitionSize, TimeSpan timeout, ThreadPoolSettings settings)
@@ -2552,18 +2553,36 @@ namespace Cuemon.Threading
             try
             {
                 bool breakout = false;
+                List<Exception> aggregatedExceptions = new List<Exception>();
                 while (true)
                 {
                     int partitioned = partitionSize;
                     try
                     {
                         sync = new CountdownEvent(partitionSize);
-                        ActWorkItemPool pool = new ActWorkItemPool();
                         for (TSource i = initial; condition(i, relational, repeats); i = iterator(i, assignment, step))
                         {
                             factory.GenericArguments.Arg1 = i;
-                            IActWorkItem work = ActWorkItem.Create(sync, ForStepCore, factory.Clone());
-                            pool.ProcessWork(work);
+                            var shallowFactory = factory.Clone();
+                            ThreadPoolUtility.Run(() =>
+                            {
+                                try
+                                {
+                                    shallowFactory.ExecuteMethod();
+                                }
+                                catch (Exception te)
+                                {
+                                    lock (aggregatedExceptions)
+                                    {
+                                        aggregatedExceptions.Add(te);
+                                    }
+                                }
+                                finally
+                                {
+                                    sync.Signal();
+                                }
+
+                            });
                             partitioned--;
                             if (partitioned == 0)
                             {
@@ -2591,22 +2610,11 @@ namespace Cuemon.Threading
 
                     if (breakout) { break; }
                 }
+                if (aggregatedExceptions.Count > 0) { throw ExceptionUtility.Refine(new ThreadException(aggregatedExceptions), factory.DelegateInfo, factory.GenericArguments); }
             }
             finally
             {
                 settings.Rollback();
-            }
-        }
-
-        private static void ForStepCore<TTuple>(ActFactory<TTuple> factory) where TTuple : Template
-        {
-            try
-            {
-                factory.ExecuteMethod();
-            }
-            finally
-            {
-                factory = null;
             }
         }
     }

@@ -17,7 +17,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>default(TSource) if source is empty; otherwise, a random element of <paramref name="source"/>.</returns>
         public static TSource RandomOrDefault<TSource>(IEnumerable<TSource> source)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             return RandomOrDefault(source, DefaultRandomizer);
         }
 
@@ -30,8 +30,8 @@ namespace Cuemon.Collections.Generic
         /// <returns>default(TSource) if source is empty; otherwise, a random element of <paramref name="source"/>.</returns>
         public static TSource RandomOrDefault<TSource>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, TSource> randomizer)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(randomizer, "randomizer");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(randomizer, nameof(randomizer));
             return randomizer(source);
         }
 
@@ -43,17 +43,6 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the input typed as <see cref="IEnumerable{T}"/>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">The array to type as <see cref="IEnumerable{T}"/>.</param>
-        /// <returns>The input <paramref name="source"/> typed as <see cref="IEnumerable{T}"/>.</returns>
-	    public static IEnumerable<TSource> AsEnumerable<TSource>(params TSource[] source)
-        {
-            return source;
-        }
-
-        /// <summary>
         /// Bypasses a specified number of elements in a sequence and then returns the remaining elements.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
@@ -62,7 +51,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> that contains the elements that occur after the specified index in the input <paramref name="source"/>.</returns>
 	    public static IEnumerable<TSource> Skip<TSource>(IEnumerable<TSource> source, int count)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
             {
                 while (count > 0 && enumerator.MoveNext())
@@ -88,7 +77,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> that contains the specified number of elements from the start of the input <paramref name="source"/>.</returns>
 	    public static IEnumerable<TSource> Take<TSource>(IEnumerable<TSource> source, int count)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             if (count > 0)
             {
                 foreach (TSource element in source)
@@ -112,8 +101,8 @@ namespace Cuemon.Collections.Generic
         /// </exception>
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, IEnumerable<TResult>> selector)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (selector == null) { throw new ArgumentNullException("selector"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
             foreach (TSource sourceElement in source)
             {
                 foreach (TResult resultElement in selector(sourceElement))
@@ -136,8 +125,8 @@ namespace Cuemon.Collections.Generic
         /// </exception>
         public static IEnumerable<TResult> Select<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, TResult> selector)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (selector == null) { throw new ArgumentNullException("selector"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
             foreach (TSource sourceElement in source)
             {
                 yield return selector(sourceElement);
@@ -157,8 +146,8 @@ namespace Cuemon.Collections.Generic
         /// </exception>
 	    public static IEnumerable<TResult> Select<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, int, TResult> selector)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (selector == null) { throw new ArgumentNullException("selector"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
             int index = -1;
             foreach (TSource sourceElement in source)
             {
@@ -177,7 +166,7 @@ namespace Cuemon.Collections.Generic
         /// </exception>
         public static bool Any(IEnumerable source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             IEnumerator enumerator = source.GetEnumerator();
             return enumerator.MoveNext();
         }
@@ -193,7 +182,7 @@ namespace Cuemon.Collections.Generic
         /// </exception>
         public static bool Any<TSource>(IEnumerable<TSource> source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
             {
                 return enumerator.MoveNext();
@@ -213,7 +202,7 @@ namespace Cuemon.Collections.Generic
         public static IEnumerable<int> Range(int start, int count)
         {
             long sum = start + count - 1;
-            if (count < 0 || sum > int.MaxValue) { throw new ArgumentOutOfRangeException("count"); }
+            if (count < 0 || sum > Int32.MaxValue) { throw new ArgumentOutOfRangeException(nameof(count)); }
             for (int i = 0; i < count; i++) { yield return start + i; }
         }
 
@@ -229,7 +218,7 @@ namespace Cuemon.Collections.Generic
         /// </exception>
 	    public static IEnumerable<T> RangeOf<T>(int count, Doer<int, T> resolver)
         {
-            if (count < 0) { throw new ArgumentOutOfRangeException("count"); }
+            if (count < 0) { throw new ArgumentOutOfRangeException(nameof(count)); }
             for (int i = 0; i < count; i++) { yield return resolver(i); }
 
         }
@@ -247,8 +236,8 @@ namespace Cuemon.Collections.Generic
         /// </exception>
         public static IEnumerable<TSource> Where<TSource>(IEnumerable<TSource> source, Doer<TSource, bool> predicate)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (predicate == null) { throw new ArgumentNullException("predicate"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(predicate, nameof(predicate));
             foreach (TSource element in source)
             {
                 if (predicate(element)) { yield return element; }
@@ -292,8 +281,8 @@ namespace Cuemon.Collections.Generic
 
         internal static IEnumerable<TSource> Chunk<TSource>(ref IEnumerable<TSource> source, int size, out int processedCount)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (size <= 0) { throw new ArgumentException("Value must be greater than 0.", "size"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfLowerThanOrEqual(size, 0, nameof(size), "Value must be greater than 0.");
             List<TSource> pending = new List<TSource>(source);
             List<TSource> processed = new List<TSource>();
             size = size - 1;
@@ -308,29 +297,118 @@ namespace Cuemon.Collections.Generic
             return processed;
         }
 
-
         /// <summary>
-        /// Creates an array from a <see cref="IEnumerable{T}"/>.
+        /// Retrieves the element that matches the conditions defined by the specified <paramref name="selector"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">An <see cref="IEnumerable{T}"/> to create an array from.</param>
-        /// <returns>An array that contains the elements from the input sequence.</returns>
-        public static TSource[] ToArray<TSource>(IEnumerable<TSource> source)
+        /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
+        /// <param name="source">The sequence to search.</param>
+        /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
+        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        public static TSource SelectOne<TSource>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, TSource> selector)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            List<TSource> elements = source as List<TSource> ?? new List<TSource>(source);
-            return elements.ToArray();
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
+            return selector(source);
         }
 
         /// <summary>
-        /// Cast the elements of an <see cref="IEnumerable"/> to the specified type.
+        /// Retrieves the element that matches the conditions defined by the specified <paramref name="selector"/>.
         /// </summary>
-        /// <typeparam name="TResult">The type to cast the elements of <paramref name="source"/>.</typeparam>
-        /// <param name="source">The <see cref="IEnumerable"/> that contains the elements to be cast to type <typeparamref name="TResult"/>.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> that contains each element of the <paramref name="source"/> sequence cast to the specified type.</returns>
-        public static IEnumerable<TResult> Cast<TResult>(IEnumerable source)
+        /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
+        /// <typeparam name="T">The type of the parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <param name="source">The sequence to search.</param>
+        /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
+        /// <param name="arg">The parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        public static TSource SelectOne<TSource, T>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T, TSource> selector, T arg)
         {
-            foreach (object obj in source) { yield return (TResult)obj; }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
+            return selector(source, arg);
+        }
+
+        /// <summary>
+        /// Retrieves the element that matches the conditions defined by the specified <paramref name="selector"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <param name="source">The sequence to search.</param>
+        /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        public static TSource SelectOne<TSource, T1, T2>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, TSource> selector, T1 arg1, T2 arg2)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
+            return selector(source, arg1, arg2);
+        }
+
+        /// <summary>
+        /// Retrieves the element that matches the conditions defined by the specified <paramref name="selector"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <param name="source">The sequence to search.</param>
+        /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        public static TSource SelectOne<TSource, T1, T2, T3>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, T3, TSource> selector, T1 arg1, T2 arg2, T3 arg3)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
+            return selector(source, arg1, arg2, arg3);
+        }
+
+        /// <summary>
+        /// Retrieves the element that matches the conditions defined by the specified <paramref name="selector"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <param name="source">The sequence to search.</param>
+        /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        public static TSource SelectOne<TSource, T1, T2, T3, T4>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, T3, T4, TSource> selector, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
+            return selector(source, arg1, arg2, arg3, arg4);
+        }
+
+        /// <summary>
+        /// Retrieves the element that matches the conditions defined by the specified <paramref name="selector"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
+        /// <typeparam name="T1">The type of the first parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T2">The type of the second parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T3">The type of the third parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T4">The type of the fourth parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <typeparam name="T5">The type of the fifth parameter of the function delegate <paramref name="selector"/>.</typeparam>
+        /// <param name="source">The sequence to search.</param>
+        /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
+        /// <param name="arg1">The first parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg3">The third parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg4">The fourth parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <param name="arg5">The fifth parameter of the function delegate <paramref name="selector"/>.</param>
+        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        public static TSource SelectOne<TSource, T1, T2, T3, T4, T5>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, T3, T4, T5, TSource> selector, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(selector, nameof(selector));
+            return selector(source, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -342,8 +420,8 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> sequence containing all the elements that match the conditions defined by the specified predicate, if found; otherwise, an empty <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<TSource> FindAll<TSource>(IEnumerable<TSource> source, Doer<TSource, bool> match)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (match == null) { throw new ArgumentNullException("match"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(match, nameof(match));
             List<TSource> temp = new List<TSource>();
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
             {
@@ -590,7 +668,7 @@ namespace Cuemon.Collections.Generic
         /// <remarks>The default value for reference and nullable types is null.</remarks>
         public static TSource FirstOrDefault<TSource>(IEnumerable<TSource> source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             IList<TSource> list = source as IList<TSource>;
             if (list != null)
             {
@@ -618,7 +696,7 @@ namespace Cuemon.Collections.Generic
         /// <remarks>The default value for reference and nullable types is null.</remarks>
         public static TSource LastOrDefault<TSource>(IEnumerable<TSource> source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             IList<TSource> list = source as IList<TSource>;
             TSource last = default(TSource);
             if (list != null)
@@ -645,15 +723,15 @@ namespace Cuemon.Collections.Generic
         /// <returns>The element at the specified position in the <paramref name="source"/> sequence.</returns>
         public static TSource ElementAt<TSource>(IEnumerable<TSource> source, int index)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
-            if (index < 0) { throw new ArgumentOutOfRangeException("index"); }
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfLowerThan(index, 0, nameof(index));
             TSource current;
             IList<TSource> list = source as IList<TSource>;
             if (list != null) { return list[index]; }
             using (IEnumerator<TSource> enumerator = source.GetEnumerator())
             {
                 iteration:
-                if (!enumerator.MoveNext()) { throw new ArgumentOutOfRangeException("index"); }
+                if (!enumerator.MoveNext()) { throw new ArgumentOutOfRangeException(nameof(index)); }
                 if (index == 0) { current = enumerator.Current; }
                 else
                 {
@@ -671,13 +749,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The maximum value in the sequence.</returns>
         public static int Max(IEnumerable<int> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            int highest = int.MinValue;
-            foreach (int item in source)
-            {
-                if (item > highest) { highest = item; }
-            }
-            return highest;
+            return Observe(source, Int32.MinValue, Condition.IsGreaterThan);
         }
 
         /// <summary>
@@ -687,13 +759,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The maximum value in the sequence.</returns>
         public static long Max(IEnumerable<long> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            long highest = long.MinValue;
-            foreach (long item in source)
-            {
-                if (item > highest) { highest = item; }
-            }
-            return highest;
+            return Observe(source, Int64.MinValue, Condition.IsGreaterThan);
         }
 
         /// <summary>
@@ -703,13 +769,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The maximum value in the sequence.</returns>
         public static double Max(IEnumerable<double> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            double highest = double.MinValue;
-            foreach (double item in source)
-            {
-                if (item > highest) { highest = item; }
-            }
-            return highest;
+            return Observe(source, Double.MinValue, Condition.IsGreaterThan);
         }
 
         /// <summary>
@@ -719,13 +779,38 @@ namespace Cuemon.Collections.Generic
         /// <returns>The maximum value in the sequence.</returns>
         public static decimal Max(IEnumerable<decimal> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            decimal highest = decimal.MinValue;
-            foreach (decimal item in source)
+            return Observe(source, Decimal.MinValue, Condition.IsGreaterThan);
+        }
+
+        /// <summary>
+        /// Returns the maximum value in a sequence of <see cref="DateTime"/> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="DateTime"/> values to determine the maximum value of.</param>
+        /// <returns>The maximum value in the sequence.</returns>
+        public static DateTime Max(IEnumerable<DateTime> source)
+        {
+            return Observe(source, DateTime.MinValue, (x, y) => x.Ticks > y.Ticks);
+        }
+
+        private static T Observe<T>(IEnumerable<T> source, T initialValue, Doer<T, T, bool> condition) where T : struct, IConvertible
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            T value = initialValue;
+            foreach (T item in source)
             {
-                if (item > highest) { highest = item; }
+                if (condition(item, value)) { value = item; }
             }
-            return highest;
+            return value;
+        }
+
+        /// <summary>
+        /// Returns the minimum value in a sequence of <see cref="DateTime"/> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="DateTime"/> values to determine the minimum value of.</param>
+        /// <returns>The minimum value in the sequence.</returns>
+        public static DateTime Min(IEnumerable<DateTime> source)
+        {
+            return Observe(source, DateTime.MaxValue, (x, y) => x.Ticks < y.Ticks);
         }
 
         /// <summary>
@@ -735,13 +820,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The minimum value in the sequence.</returns>
         public static int Min(IEnumerable<int> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            int lowest = int.MaxValue;
-            foreach (int item in source)
-            {
-                if (item < lowest) { lowest = item; }
-            }
-            return lowest;
+            return Observe(source, Int32.MaxValue, Condition.IsLowerThan);
         }
 
         /// <summary>
@@ -751,13 +830,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The minimum value in the sequence.</returns>
         public static long Min(IEnumerable<long> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            long lowest = long.MaxValue;
-            foreach (long item in source)
-            {
-                if (item < lowest) { lowest = item; }
-            }
-            return lowest;
+            return Observe(source, Int64.MaxValue, Condition.IsLowerThan);
         }
 
         /// <summary>
@@ -767,13 +840,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The minimum value in the sequence.</returns>
         public static double Min(IEnumerable<double> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            double lowest = double.MaxValue;
-            foreach (double item in source)
-            {
-                if (item < lowest) { lowest = item; }
-            }
-            return lowest;
+            return Observe(source, Double.MaxValue, Condition.IsLowerThan);
         }
 
         /// <summary>
@@ -783,13 +850,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The minimum value in the sequence.</returns>
         public static decimal Min(IEnumerable<decimal> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            decimal lowest = decimal.MaxValue;
-            foreach (decimal item in source)
-            {
-                if (item < lowest) { lowest = item; }
-            }
-            return lowest;
+            return Observe(source, Decimal.MaxValue, Condition.IsLowerThan);
         }
 
         /// <summary>
@@ -799,7 +860,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The number of elements in the input sequence.</returns>
         public static int Count(IEnumerable source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             ICollection temp = source as ICollection;
             if (temp != null) { return temp.Count; }
             int count = 0;
@@ -818,7 +879,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The number of elements in the input sequence.</returns>
         public static int Count<TSource>(IEnumerable<TSource> source)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             ICollection<TSource> temp = source as ICollection<TSource>;
             if (temp != null) { return temp.Count; }
             int count = 0;
@@ -837,7 +898,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>A sequence whose elements correspond to those of the input sequence in reverse order.</returns>
         public static IEnumerable<TSource> Reverse<TSource>(IEnumerable<TSource> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            Validator.ThrowIfNull(source, nameof(source));
             List<TSource> clone = new List<TSource>();
             foreach (TSource t in source) { clone.Add(t); }
             clone.Reverse();
@@ -913,7 +974,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> that contains ascending sorted elements from the source sequence.</returns>
         public static IEnumerable<TSource> SortAscending<TSource>(IEnumerable<TSource> source, Comparison<TSource> comparison)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             List<TSource> sorter = new List<TSource>(source);
             sorter.Sort(comparison);
             return sorter;
@@ -928,7 +989,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="IEnumerable{T}"/> that contains ascending sorted elements from the source sequence.</returns>
         public static IEnumerable<TSource> SortAscending<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
-            if (source == null) { throw new ArgumentNullException("source"); }
+            Validator.ThrowIfNull(source, nameof(source));
             List<TSource> sorter = new List<TSource>(source);
             sorter.Sort(comparer);
             return sorter;
@@ -996,8 +1057,8 @@ namespace Cuemon.Collections.Generic
         /// </returns>
         public static bool Contains<TSource>(IEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(comparer, "comparer");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(comparer, nameof(comparer));
             return Contains(source, value, comparer.Equals);
         }
 
@@ -1013,8 +1074,8 @@ namespace Cuemon.Collections.Generic
         /// </returns>
         public static bool Contains<TSource>(IEnumerable<TSource> source, TSource value, Doer<TSource, TSource, bool> condition)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(condition, "condition");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(condition, nameof(condition));
             foreach (TSource item in source)
             {
                 if (condition(value, item))

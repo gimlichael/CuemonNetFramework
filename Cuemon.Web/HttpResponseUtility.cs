@@ -7,7 +7,8 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using Cuemon.Caching;
+using Cuemon.Collections.Generic;
+using Cuemon.Integrity;
 using Cuemon.Reflection;
 
 namespace Cuemon.Web
@@ -39,7 +40,7 @@ namespace Cuemon.Web
         public static void Redirect(Uri location, string newRelativeLocation)
         {
             GlobalModule.CheckForHttpContextAvailability();
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             Redirect(HttpContext.Current, location, newRelativeLocation);
         }
 
@@ -53,8 +54,8 @@ namespace Cuemon.Web
         /// </exception>
         public static void Redirect(HttpContext context, Uri location)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             context.Response.Redirect(location.OriginalString, false);
             context.ApplicationInstance.CompleteRequest();
         }
@@ -80,7 +81,7 @@ namespace Cuemon.Web
         /// <remarks>Uses the static <see cref="HttpContext.Current"/> to retrieve an instance of the <see cref="HttpResponse"/> object.</remarks>
         public static void RedirectPermanently(Uri location)
         {
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             GlobalModule.CheckForHttpContextAvailability();
             RedirectPermanently(HttpContext.Current, location);
         }
@@ -95,7 +96,7 @@ namespace Cuemon.Web
         /// <remarks>Uses the static <see cref="HttpContext.Current"/> to retrieve an instance of the <see cref="HttpResponse"/> object.</remarks>
         public static void RedirectPermanently(string location)
         {
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             GlobalModule.CheckForHttpContextAvailability();
             RedirectPermanently(HttpContext.Current, location);
         }
@@ -107,8 +108,8 @@ namespace Cuemon.Web
         /// <param name="location">The permanent target location.</param>
         public static void RedirectPermanently(HttpContext context, Uri location)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             RedirectPermanently(context, location.OriginalString);
         }
 
@@ -119,8 +120,8 @@ namespace Cuemon.Web
         /// <param name="location">The permanent target location.</param>
         public static void RedirectPermanently(HttpContext context, string location)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            if (location == null) { throw new ArgumentNullException("location"); }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
             context.Response.StatusDescription = "301 Moved Permanently";
             context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
             context.Response.RedirectLocation = location;
@@ -143,7 +144,7 @@ namespace Cuemon.Web
         /// <param name="response">An instance of the <see cref="HttpResponse"/> object.</param>
         public static void DisableClientSideResourceCache(HttpResponse response)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
             response.Cache.SetNoStore();
             response.Cache.SetCacheability(HttpCacheability.NoCache);
             response.AppendHeader("Pragma", "no-cache");
@@ -183,8 +184,8 @@ namespace Cuemon.Web
         /// </remarks>
         public static void SetClientCompressionMethod(HttpResponse response, HttpRequest request)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (request == null) { throw new ArgumentNullException("request"); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
             IEnumerable<CompressionMethodScheme> compressionMethods = HttpRequestUtility.GetAcceptEncodingHeader(request);
             SetClientCompressionMethod(response, compressionMethods);
         }
@@ -224,8 +225,8 @@ namespace Cuemon.Web
         /// </remarks>
         public static void SetClientCompressionMethod(HttpResponse response, IEnumerable<CompressionMethodScheme> compressionMethods)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (compressionMethods == null) { throw new ArgumentNullException("compressionMethods"); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (compressionMethods == null) { throw new ArgumentNullException(nameof(compressionMethods)); }
             CompressionMethodScheme compressionMethod = HttpRequestUtility.ParseAcceptEncoding(compressionMethods);
             SetClientCompressionMethod(response, compressionMethod);
         }
@@ -243,7 +244,7 @@ namespace Cuemon.Web
         /// </remarks>
         public static void SetClientCompressionMethod(HttpResponse response, CompressionMethodScheme compressionMethod)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
             switch (compressionMethod)
             {
                 case CompressionMethodScheme.Deflate:
@@ -269,9 +270,9 @@ namespace Cuemon.Web
         /// <remarks>This method is backward compatible to IIS 6.0.</remarks>
         public static void RemoveResponseHeader(HttpResponse response, string name)
         {
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (name == null) { throw new ArgumentNullException("name"); }
-            if (name.Length == 0) { throw new ArgumentEmptyException("name"); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (name == null) { throw new ArgumentNullException(nameof(name)); }
+            if (name.Length == 0) { throw new ArgumentEmptyException(nameof(name)); }
             if (HttpRuntimeUtility.SupportsIisIntegratedPipelineMode)
             {
                 if (response.Headers[name] != null) { response.Headers.Remove(name); }
@@ -361,9 +362,9 @@ namespace Cuemon.Web
         /// </remarks>
         public static void SetClientSideContentCacheExpiresHeaders(HttpRequest request, HttpResponse response, CacheValidator validator, DateTime expires, HttpCacheability cacheability)
         {
-            if (request == null) { throw new ArgumentNullException("request"); }
-            if (response == null) { throw new ArgumentNullException("response"); }
-            if (validator == null) { throw new ArgumentNullException("validator"); }
+            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            if (response == null) { throw new ArgumentNullException(nameof(response)); }
+            if (validator == null) { throw new ArgumentNullException(nameof(validator)); }
 
             #region Clear ClientCache Related Headers
             RemoveResponseHeader(response, "Expires");
@@ -581,7 +582,7 @@ namespace Cuemon.Web
                     cacheControl.Append("must-revalidate, ");
                     cacheControl.AppendFormat("max-age={0}, ", ((long)maxage.TotalSeconds).ToString(CultureInfo.InvariantCulture));
                     headers.Add(HttpResponseHeader.Expires, expires.ToString("R", DateTimeFormatInfo.InvariantInfo));
-                    if (!suppressContent) { headers.Add(HttpResponseHeader.LastModified, DateTimeUtility.GetLowestValue(currentUtcDate, validator.GetMostSignificant()).ToString("R", DateTimeFormatInfo.InvariantInfo)); }
+                    if (!suppressContent) { headers.Add(HttpResponseHeader.LastModified, EnumerableUtility.Min(EnumerableConverter.FromArray(currentUtcDate, validator.GetMostSignificant())).ToString("R", DateTimeFormatInfo.InvariantInfo)); }
                     if (validator.Strength != ChecksumStrength.None && entityTag != null) { headers.Add(HttpResponseHeader.ETag, entityTag); }
                 }
             }

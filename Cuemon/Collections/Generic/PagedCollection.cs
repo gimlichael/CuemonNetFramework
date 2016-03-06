@@ -40,9 +40,9 @@ namespace Cuemon.Collections.Generic
         /// <returns>A <see cref="PagedCollection{T}"/> that is the result of <paramref name="match"/>.</returns>
         public static PagedCollection<T> Search<T>(IEnumerable<T> source, Doer<T, PagedSettings, StringComparison, bool> match, PagedSettings settings, StringComparison comparison)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(match, "match");
-            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(match, nameof(match));
+            Validator.ThrowIfNull(settings, nameof(settings));
 
             PagedCollection<T> pagedSource = source as PagedCollection<T>;
             return new PagedCollection<T>(new List<T>(EnumerableUtility.FindAll(pagedSource == null ? source : pagedSource.OriginalSource, match, settings, comparison)), settings);
@@ -57,9 +57,9 @@ namespace Cuemon.Collections.Generic
         /// <returns>A <see cref="PagedCollection{T}"/> that is sorted by the specified <paramref name="sorter"/>.</returns>
         public static PagedCollection<T> Sort<T>(IEnumerable<T> source, Doer<IEnumerable<T>, PagedSettings, IEnumerable<T>> sorter, PagedSettings settings)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(sorter, "sorter");
-            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(sorter, nameof(sorter));
+            Validator.ThrowIfNull(settings, nameof(settings));
 
             PagedCollection<T> pagedSource = source as PagedCollection<T>;
             return new PagedCollection<T>(sorter(pagedSource == null ? source : pagedSource.OriginalSource, settings), settings);
@@ -115,9 +115,9 @@ namespace Cuemon.Collections.Generic
         /// <param name="totalElementCount">The total number of elements in the <paramref name="source"/> sequence.</param>
         public PagedCollection(IEnumerable<T> source, PagedSettings settings, int totalElementCount)
         {
-            Validator.ThrowIfNull(source, "source");
-            Validator.ThrowIfNull(settings, "settings");
-            Validator.ThrowIfLowerThan(totalElementCount, 0, "totalElementCount");
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(settings, nameof(settings));
+            Validator.ThrowIfLowerThan(totalElementCount, 0, nameof(totalElementCount));
             this.OriginalSource = source;
             this.Settings = settings;
             this.TotalElementCount = totalElementCount;
@@ -125,21 +125,21 @@ namespace Cuemon.Collections.Generic
 
         private static IEnumerable<T> ValidateSelector(Doer<PagedSettings, IEnumerable<T>> selector, PagedSettings settings)
         {
-            Validator.ThrowIfNull(selector, "selector");
-            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(selector, nameof(selector));
+            Validator.ThrowIfNull(settings, nameof(settings));
             return selector(settings);
         }
 
         private static int ValidateCounter(Doer<PagedSettings, int> counter, PagedSettings settings)
         {
-            Validator.ThrowIfNull(counter, "counter");
-            Validator.ThrowIfNull(settings, "settings");
+            Validator.ThrowIfNull(counter, nameof(counter));
+            Validator.ThrowIfNull(settings, nameof(settings));
             return counter(settings);
         }
 
         private static IEnumerable<T> ValidateSource(IEnumerable<T> source)
         {
-            Validator.ThrowIfNull(source, "source");
+            Validator.ThrowIfNull(source, nameof(source));
             return source;
         }
         #endregion
@@ -276,8 +276,8 @@ namespace Cuemon.Collections.Generic
         private int GetPageCount()
         {
             if (this.TotalElementCount == 0) { return 0; }
-            double presult = this.TotalElementCount / ConvertUtility.As<double>(this.Settings.PageSize);
-            return ConvertUtility.As<int>(Math.Ceiling(presult));
+            double presult = this.TotalElementCount / Converter.FromObject<double>(this.Settings.PageSize);
+            return Converter.FromObject<int>(Math.Ceiling(presult));
         }
 
         /// <summary>
@@ -299,9 +299,9 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "Count: {0}, PageCount: {1}, PageNumber: {2}, PageSize: {3}, TotalElementCount: {4}", this.Count,

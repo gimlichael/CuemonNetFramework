@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using Cuemon.Threading;
 
 namespace Cuemon
 {
@@ -10,24 +12,6 @@ namespace Cuemon
     public static class TransientFaultUtility
     {
         private static byte _defaultRetryAttempts = 5;
-        private static TimeSpan _defaultRecoveryWaitTime = TimeSpan.FromSeconds(5);
-
-        /// <summary>
-        /// Gets or sets the default amount of time to wait for a transient fault to recover gracefully. Default is 5 seconds.
-        /// </summary>
-        /// <value>The amount of time to wait for a transient fault to recover gracefully.</value>
-        /// <exception cref="System.ArgumentException">
-        /// <paramref name="value"/> is zero.
-        /// </exception>
-        public static TimeSpan DefaultRecoveryWaitTime
-        {
-            get { return _defaultRecoveryWaitTime; }
-            set
-            {
-                if (value == TimeSpan.Zero) { throw new ArgumentException("Value must be greater than zero.", "value"); }
-                _defaultRecoveryWaitTime = value;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the default amount of retry attempts for transient faults. Default is 5 retry attempts.
@@ -41,7 +25,7 @@ namespace Cuemon
             get { return _defaultRetryAttempts; }
             set
             {
-                if (value == 0) { throw new ArgumentException("Value must be greater than zero.", "value"); }
+                if (value == 0) { throw new ArgumentException("Value must be greater than zero.", nameof(value)); }
                 _defaultRetryAttempts = value;
             }
         }
@@ -1089,12 +1073,10 @@ namespace Cuemon
         /// </summary>
         /// <param name="currentAttempt">The current attempt.</param>
         /// <returns>A <see cref="TimeSpan"/> that defines the amount of time to wait for a transient fault to recover gracefully.</returns>
-        /// <remarks>Default implementation is <see cref="DefaultRecoveryWaitTime"/> + 2^ to a maximum of 5; a total of 5 (default) + 32 = 37 seconds.</remarks>
+        /// <remarks>Default implementation is <paramref name="currentAttempt"/> + 2^ to a maximum of 5; eg. 1, 2, 4, 8, 16 to a total of 32 seconds.</remarks>
         public static TimeSpan RecoveryWaitTime(int currentAttempt)
         {
-            TimeSpan sleep = DefaultRecoveryWaitTime;
-            sleep = sleep.Add(TimeSpan.FromSeconds(Math.Pow(2, currentAttempt > 5 ? 5 : currentAttempt)));
-            return sleep;
+            return TimeSpan.FromSeconds(Math.Pow(2, currentAttempt > 5 ? 5 : currentAttempt));
         }
 
         private static void ExecuteActionCore<TTuple>(ActFactory<TTuple> factory, int retryAttempts, Doer<int, TimeSpan> recoveryWaitTimeCallback, Doer<Exception, bool> isTransientFaultCallback) where TTuple : Template
@@ -1102,40 +1084,56 @@ namespace Cuemon
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;
             bool isTransientFault = false;
-            for (int attempts = 0; ;)
+            bool throwExceptions = false;
+            List<Exception> aggregatedExceptions = new List<Exception>();
+
+            CountdownEvent sync = new CountdownEvent(1);
+            try
             {
-                TimeSpan waitTime = recoveryWaitTimeCallback(attempts);
-                try
+                ThreadPoolUtility.Run(() =>
                 {
-                    attempts++;
-                    factory.ExecuteMethod();
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    try
+                    for (int attempts = 0; ;)
                     {
-                        isTransientFault = isTransientFaultCallback(ex);
-                        lastWaitTime = waitTime;
-                        totalWaitTime = totalWaitTime.Add(waitTime);
-                        if (attempts >= retryAttempts) { throw; }
-                        if (!isTransientFault) { throw; }
-                        Thread.Sleep(waitTime);
-                    }
-                    catch (Exception)
-                    {
-                        if (isTransientFault)
+                        TimeSpan waitTime = recoveryWaitTimeCallback(attempts);
+                        try
                         {
-                            TransientFaultException transientException = new TransientFaultException(attempts >= retryAttempts ? "The amount of retry attempts has been reached." : "An unhandled exception occurred during the execution of the current operation.", ex);
-                            transientException.Data.Add("Attempts", (attempts).ToString(CultureInfo.InvariantCulture));
-                            transientException.Data.Add("RecoveryWaitTimeInSeconds", lastWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                            transientException.Data.Add("TotalRecoveryWaitTimeInSeconds", totalWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                            throw transientException;
+                            factory.ExecuteMethod();
+                            return;
                         }
-                        throw;
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+                                lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, ex); }
+                                isTransientFault = isTransientFaultCallback(ex);
+                                lastWaitTime = waitTime;
+                                totalWaitTime = totalWaitTime.Add(waitTime);
+                                if (attempts >= retryAttempts) { throw; }
+                                if (!isTransientFault) { throw; }
+                                if (sync != null) { sync.AddCount(1); }
+                                attempts++;
+                                Thread.Sleep(waitTime);
+                            }
+                            catch (Exception)
+                            {
+                                throwExceptions = true;
+                                if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, ex, attempts, retryAttempts, lastWaitTime, totalWaitTime); }
+                                return;
+                            }
+                        }
+                        finally
+                        {
+                            if (sync != null) { sync.Signal(); }
+                        }
                     }
-                }
+                });
+                sync.Wait(TimeSpan.MaxValue);
             }
+            finally
+            {
+                if (sync != null) { sync.Dispose(); }
+            }
+            if (throwExceptions) { throw new ThreadException(aggregatedExceptions); }
         }
 
         private static TResult ExecuteFunctionCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory, int retryAttempts, Doer<int, TimeSpan> recoveryWaitTimeCallback, Doer<Exception, bool> isTransientFaultCallback) where TTuple : Template
@@ -1143,102 +1141,143 @@ namespace Cuemon
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;
             bool isTransientFault = false;
-            for (int attempts = 0; ;)
+            bool throwExceptions = false;
+            List<Exception> aggregatedExceptions = new List<Exception>();
+            CountdownEvent sync = new CountdownEvent(1);
+            TResult taskResult = default(TResult);
+            try
             {
-                TResult result = default(TResult);
-                bool exceptionThrown = false;
-                TimeSpan waitTime = recoveryWaitTimeCallback(attempts);
-                try
+                ThreadPoolUtility.Run(() =>
                 {
-                    attempts++;
-                    result = factory.ExecuteMethod();
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    try
+                    for (int attempts = 0; ;)
                     {
-                        isTransientFault = isTransientFaultCallback(ex);
-                        lastWaitTime = waitTime;
-                        totalWaitTime = totalWaitTime.Add(waitTime);
-                        if (attempts >= retryAttempts) { throw; }
-                        if (!isTransientFault) { throw; }
-                        Thread.Sleep(waitTime);
-                    }
-                    catch (Exception)
-                    {
-                        exceptionThrown = true;
-                        if (isTransientFault)
+                        bool exceptionThrown = false;
+                        TimeSpan waitTime = recoveryWaitTimeCallback(attempts);
+                        try
                         {
-                            TransientFaultException transientException = new TransientFaultException(attempts >= retryAttempts ? "The amount of retry attempts has been reached." : "An unhandled exception occurred during the execution of the current operation.", ex);
-                            transientException.Data.Add("Attempts", (attempts).ToString(CultureInfo.InvariantCulture));
-                            transientException.Data.Add("RecoveryWaitTimeInSeconds", lastWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                            transientException.Data.Add("TotalRecoveryWaitTimeInSeconds", totalWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                            throw transientException;
+                            taskResult = factory.ExecuteMethod();
+                            return;
                         }
-                        throw;
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+                                lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, ex); }
+                                isTransientFault = isTransientFaultCallback(ex);
+                                lastWaitTime = waitTime;
+                                totalWaitTime = totalWaitTime.Add(waitTime);
+                                if (attempts >= retryAttempts) { throw; }
+                                if (!isTransientFault) { throw; }
+                                if (sync != null) { sync.AddCount(1); }
+                                attempts++;
+                                Thread.Sleep(waitTime);
+                            }
+                            catch (Exception)
+                            {
+                                throwExceptions = true;
+                                exceptionThrown = true;
+                                if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, ex, attempts, retryAttempts, lastWaitTime, totalWaitTime); }
+                                return;
+                            }
+                        }
+                        finally
+                        {
+                            if (exceptionThrown)
+                            {
+                                IDisposable disposable = taskResult as IDisposable;
+                                if (disposable != null) { disposable.Dispose(); }
+                            }
+                            if (sync != null) { sync.Signal(); }
+                        }
                     }
-                }
-                finally
-                {
-                    if (exceptionThrown)
-                    {
-                        IDisposable disposable = result as IDisposable;
-                        if (disposable != null) { disposable.Dispose(); }
-                    }
-                }
+                });
+                sync.Wait(TimeSpan.MaxValue);
             }
+            finally
+            {
+                if (sync != null) { sync.Dispose(); }
+            }
+            if (throwExceptions) { throw new ThreadException(aggregatedExceptions); }
+            return taskResult;
         }
 
         private static TSuccess TryExecuteFunctionCore<TTuple, TSuccess, TResult>(TesterDoerFactory<TTuple, TResult, TSuccess> factory, out TResult result, int retryAttempts, Doer<int, TimeSpan> recoveryWaitTimeCallback, Doer<Exception, bool> isTransientFaultCallback) where TTuple : Template
         {
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;
+            bool throwExceptions = false;
             bool isTransientFault = false;
-            for (int attempts = 0; ;)
+            List<Exception> aggregatedExceptions = new List<Exception>();
+            Template<TSuccess, TResult> taskResult = TupleUtility.CreateTwo(default(TSuccess), default(TResult));
+            CountdownEvent sync = new CountdownEvent(1);
+            try
             {
-                result = default(TResult);
-                bool exceptionThrown = false;
-                TimeSpan waitTime = recoveryWaitTimeCallback(attempts);
-                try
+                ThreadPoolUtility.Run(() =>
                 {
-                    attempts++;
-                    return factory.ExecuteMethod(out result);
-                }
-                catch (Exception ex)
-                {
-                    try
+                    for (int attempts = 0; ;)
                     {
-                        isTransientFault = isTransientFaultCallback(ex);
-                        lastWaitTime = waitTime;
-                        totalWaitTime = totalWaitTime.Add(waitTime);
-                        if (attempts >= retryAttempts) { throw; }
-                        if (!isTransientFault) { throw; }
-                        Thread.Sleep(waitTime);
-                    }
-                    catch (Exception)
-                    {
-                        exceptionThrown = true;
-                        if (isTransientFault)
+                        var encapsulatedSuccess = default(TSuccess);
+                        var encapsulatedResult = default(TResult);
+                        bool exceptionThrown = false;
+                        TimeSpan waitTime = recoveryWaitTimeCallback(attempts);
+                        try
                         {
-                            TransientFaultException transientException = new TransientFaultException(attempts >= retryAttempts ? "The amount of retry attempts has been reached." : "An unhandled exception occurred during the execution of the current operation.", ex);
-                            transientException.Data.Add("Attempts", (attempts).ToString(CultureInfo.InvariantCulture));
-                            transientException.Data.Add("RecoveryWaitTimeInSeconds", lastWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                            transientException.Data.Add("TotalRecoveryWaitTimeInSeconds", totalWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                            throw transientException;
+                            encapsulatedSuccess = factory.ExecuteMethod(out encapsulatedResult);
+                            taskResult = TupleUtility.CreateTwo(encapsulatedSuccess, encapsulatedResult);
+                            return;
                         }
-                        throw;
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+                                lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, ex); }
+                                isTransientFault = isTransientFaultCallback(ex);
+                                lastWaitTime = waitTime;
+                                totalWaitTime = totalWaitTime.Add(waitTime);
+                                if (attempts >= retryAttempts) { throw; }
+                                if (!isTransientFault) { throw; }
+                                if (sync != null) { sync.AddCount(1); }
+                                attempts++;
+                                Thread.Sleep(waitTime);
+                            }
+                            catch (Exception)
+                            {
+                                throwExceptions = true;
+                                exceptionThrown = true;
+                                if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, ex, attempts, retryAttempts, lastWaitTime, totalWaitTime); }
+                                return;
+                            }
+                        }
+                        finally
+                        {
+                            if (exceptionThrown)
+                            {
+                                IDisposable disposable = encapsulatedResult as IDisposable;
+                                if (disposable != null) { disposable.Dispose(); }
+                            }
+                            if (sync != null) { sync.Signal(); }
+                        }
                     }
-                }
-                finally
-                {
-                    if (exceptionThrown)
-                    {
-                        IDisposable disposable = result as IDisposable;
-                        if (disposable != null) { disposable.Dispose(); }
-                    }
-                }
+                });
+                sync.Wait(TimeSpan.MaxValue);
             }
+            finally
+            {
+                if (sync != null) { sync.Dispose(); }
+            }
+
+            if (throwExceptions) { throw new ThreadException(aggregatedExceptions); }
+            result = taskResult.Arg2;
+            return taskResult.Arg1;
+        }
+
+        private static void InsertTransientFaultException(IList<Exception> aggregatedExceptions, Exception ex, int attempts, int retryAttempts, TimeSpan lastWaitTime, TimeSpan totalWaitTime)
+        {
+            TransientFaultException transientException = new TransientFaultException(attempts >= retryAttempts ? "The amount of retry attempts has been reached." : "An unhandled exception occurred during the execution of the current operation.", ex);
+            transientException.Data.Add("Attempts", (attempts).ToString(CultureInfo.InvariantCulture));
+            transientException.Data.Add("RecoveryWaitTimeInSeconds", lastWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+            transientException.Data.Add("TotalRecoveryWaitTimeInSeconds", totalWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+            lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, transientException); }
         }
     }
 }

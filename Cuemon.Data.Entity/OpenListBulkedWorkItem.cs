@@ -9,7 +9,7 @@ using Cuemon.Reflection;
 namespace Cuemon.Data.Entity
 {
     internal static class OpenListBulkedWorkItem
-	{
+    {
         internal static Entity InvokeIncognito(EntityDataAdapter adapter, Type entitiesEntityType, IDictionary<string, object> entityDataset, IEnumerable<ColumnAttribute> primaryKeyColumns, IEnumerable<ColumnAttribute> entityColumns)
         {
             IEnumerable<FieldInfo> fields = ReflectionUtility.GetFields(entitiesEntityType);
@@ -29,7 +29,7 @@ namespace Cuemon.Data.Entity
                         break;
                     }
                 }
-                constructorParams.Add(ConvertUtility.ChangeType(matchingPrimaryKeyColumn, matchingColumnFieldType));
+                constructorParams.Add(ObjectConverter.ChangeType(matchingPrimaryKeyColumn, matchingColumnFieldType));
                 #endregion
             }
 
@@ -60,5 +60,5 @@ namespace Cuemon.Data.Entity
             EntityMapper.InvokeBusinessEntityFromRepository(entityDataset, newEntity, entitiesEntityType, entityColumns);
             return newEntity;
         }
-	}
+    }
 }

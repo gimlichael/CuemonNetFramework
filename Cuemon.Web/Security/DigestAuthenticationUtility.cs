@@ -7,7 +7,7 @@ using Cuemon.Security.Cryptography;
 namespace Cuemon.Web.Security
 {
     /// <summary>
-    /// Provide a isolated set of members to work with HTTP Digest access authentication.
+    /// Provides an isolated set of members to work with HTTP Digest access authentication.
     /// </summary>
     public static class DigestAuthenticationUtility
     {
@@ -116,11 +116,11 @@ namespace Cuemon.Web.Security
         /// <returns><c>true</c> if the specified <paramref name="nonce"/> has expired compared to <paramref name="timeToLive"/>; otherwise, <c>false</c>.</returns>
         public static bool DefaultNonceExpiredParser(string nonce, TimeSpan timeToLive)
         {
-            Validator.ThrowIfNullOrEmpty(nonce, "nonce");
+            Validator.ThrowIfNullOrEmpty(nonce, nameof(nonce));
             byte[] rawNonce;
-            if (StringUtility.TryParseBase64(nonce, out rawNonce))
+            if (ByteConverter.TryFromBase64String(nonce, out rawNonce))
             {
-                string nonceProtocol = ConvertUtility.ToString(rawNonce, PreambleSequence.Remove, Encoding.UTF8);
+                string nonceProtocol = StringConverter.FromBytes(rawNonce, PreambleSequence.Remove, Encoding.UTF8);
                 DateTime nonceTimestamp = DateTime.ParseExact(nonceProtocol.Substring(0, nonceProtocol.LastIndexOf(':')), "u", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
                 TimeSpan difference = (DateTime.UtcNow - nonceTimestamp);
                 return (difference > timeToLive);
@@ -137,11 +137,11 @@ namespace Cuemon.Web.Security
         /// <returns>A nonce protocol in the format of '<paramref name="timestamp"/>:H(<paramref name="timestamp"/><paramref name="entityTag"/><paramref name="privateKey"/>)'.</returns>
         public static string DefaultNonceGenerator(DateTime timestamp, string entityTag, byte[] privateKey)
         {
-            Validator.ThrowIfNullOrEmpty(entityTag, "entityTag");
-            Validator.ThrowIfNull(privateKey, "privateKey");
+            Validator.ThrowIfNullOrEmpty(entityTag, nameof(entityTag));
+            Validator.ThrowIfNull(privateKey, nameof(privateKey));
             string nonceHash = ComputeNonceHash(timestamp, entityTag, privateKey);
             string nonceProtocol = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", timestamp.ToString("u", CultureInfo.InvariantCulture), nonceHash);
-            return Convert.ToBase64String(ConvertUtility.ToByteArray(nonceProtocol, PreambleSequence.Remove, Encoding.UTF8));
+            return Convert.ToBase64String(ByteConverter.FromString(nonceProtocol, PreambleSequence.Remove, Encoding.UTF8));
         }
 
         /// <summary>
@@ -173,10 +173,10 @@ namespace Cuemon.Web.Security
 
         private static void ValidateCredentials(IDictionary<string, string> credentials, params string[] requiredCredentials)
         {
-            Validator.ThrowIfNull(credentials, "credentials");
+            Validator.ThrowIfNull(credentials, nameof(credentials));
             foreach (var requiredCredential in requiredCredentials)
             {
-                if (!credentials.ContainsKey(requiredCredential)) { throw new ArgumentException("One or more required credentials are missing.", "credentials"); }
+                if (!credentials.ContainsKey(requiredCredential)) { throw new ArgumentException("One or more required credentials are missing.", nameof(credentials)); }
             }
         }
 

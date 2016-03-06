@@ -18,7 +18,7 @@ namespace Cuemon.Diagnostics
         /// </summary>
         /// <param name="value">The object signed with a <see cref="LogAttribute"/>.</param>
         /// <remarks><see cref="FileExceptionLog"/> defaults to using an instance of <see cref="UTF8Encoding"/> unless specified otherwise.</remarks>
-        public FileExceptionLog(object value) : this(value, string.Format(CultureInfo.InvariantCulture, @"{0}\ExceptionLog\{1}.log", Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), FileUtility.ParseFileName(StringUtility.FormatDateTime(DateTime.UtcNow, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeBasic, 2))))
+        public FileExceptionLog(object value) : this(value, string.Format(CultureInfo.InvariantCulture, @"{0}\ExceptionLog\{1}.log", Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), FileUtility.ParseFileName(StringFormatter.FromDateTime(DateTime.UtcNow, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeBasic, 2))))
         {
         }
 
@@ -85,7 +85,7 @@ namespace Cuemon.Diagnostics
             if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
             using (FileStream stream = new FileStream(this.FileName, FileMode.Create, FileAccess.Write))
             {
-                byte[] file = ConvertUtility.ToByteArray(this.WriteLog());
+                byte[] file = ByteConverter.FromStream(this.WriteLog());
                 stream.Write(file, 0, file.Length);
                 stream.Flush();
             }

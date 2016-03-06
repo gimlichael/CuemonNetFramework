@@ -39,7 +39,7 @@ namespace Cuemon.Web.UI.WebControls
         {
             if (WebsiteUtility.FastSession != null)
             {
-				if (this.PageName == null) { return; }
+                if (this.PageName == null) { return; }
                 string debugKey = string.Format(CultureInfo.InvariantCulture, "{0}{1}", WebsiteUtility.CuemonDebugViewKey, this.PageName.ToLowerInvariant());
                 if (WebsiteUtility.FastSession[debugKey] != null)
                 {
@@ -51,9 +51,9 @@ namespace Cuemon.Web.UI.WebControls
                         stream.Position = 0;
                         using (Stream output = XmlUtility.ConvertEncoding(stream, this.Page.Response.ContentEncoding, PreambleSequence.Remove))
                         {
-                            this.DebugXml = ConvertUtility.ToString(output, PreambleSequence.Remove, this.Page.Response.ContentEncoding);
+                            this.DebugXml = StringConverter.FromStream(output, PreambleSequence.Remove, this.Page.Response.ContentEncoding);
                         }
-                    }   
+                    }
                 }
             }
         }
