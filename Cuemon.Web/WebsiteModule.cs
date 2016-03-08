@@ -427,7 +427,7 @@ namespace Cuemon.Web
                         application.Request.Url.Host,
                         application.Request.Url.Port,
                         application.Request.Url.AbsolutePath,
-                        HttpRequestUtility.ParseFieldValuePairs(HttpRequestUtility.SanitizeFieldValuePairs(application.Request.QueryString, FieldValueFilter.Remove, EnumerableConverter.ToArray("lcid")))));
+                        HttpRequestUtility.ParseFieldValuePairs(HttpRequestUtility.SanitizeFieldValuePairs(application.Request.QueryString, FieldValueFilter.Remove, EnumerableUtility.Yield("lcid")))));
                     application.Context.Response.Redirect(url.PathAndQuery);
                 }
                 catch (FormatException) // someone is messing with our value

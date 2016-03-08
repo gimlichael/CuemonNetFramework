@@ -13,7 +13,7 @@ namespace Cuemon.IO
     public abstract class FileBase
     {
         private CacheValidator _validation = null;
-        private static readonly UriScheme[] ValidUriSchemes = EnumerableConverter.ToArray<UriScheme>(UriScheme.File, UriScheme.Http, UriScheme.Ftp);
+        private static readonly UriScheme[] ValidUriSchemes = EnumerableConverter.AsArray(UriScheme.File, UriScheme.Http, UriScheme.Ftp);
 
         #region Constructors
         private FileBase()

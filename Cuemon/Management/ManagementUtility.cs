@@ -169,7 +169,7 @@ namespace Cuemon.Management
         /// </exception>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName)
         {
-            return GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), EnumerableConverter.ToArray<string>("*"));
+            return GetPerformanceMonitorCounters(categoryName, TimeSpan.FromMilliseconds(64), EnumerableUtility.Yield("*"));
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Cuemon.Management
         /// <remarks>If the calculated sample value of a counter depends on two counter reads, a delay has to be used before the result is accurate. The recommended delay time is one second to allow the counter to perform the next incremental read, but is default 64 milliseconds for performance considerations.</remarks>
         public static IReadOnlyCollection<PerformanceMonitorCounter> GetPerformanceMonitorCounters(string categoryName, TimeSpan sampleDelay)
         {
-            return GetPerformanceMonitorCounters(categoryName, sampleDelay, EnumerableConverter.ToArray<string>("*"));
+            return GetPerformanceMonitorCounters(categoryName, sampleDelay, EnumerableUtility.Yield("*"));
         }
 
         /// <summary>

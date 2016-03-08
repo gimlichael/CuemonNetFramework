@@ -29,7 +29,7 @@ namespace Cuemon.IO
         /// <param name="path">The directory that this <see cref="FileDependency" /> will monitor. When the directory changes, this <see cref="FileDependency" /> will notify any subscribing objects of the change.</param>
         /// <param name="filter">The type of files to watch. For example, "*.xslt" watches for changes to all XSLT files.</param>
         public FileDependency(string path, string filter)
-            : this(EnumerableConverter.ToArray<string>(path), filter)
+            : this(EnumerableUtility.Yield(path), filter)
         {
         }
 

@@ -105,7 +105,7 @@ namespace Cuemon.Web
                                                     {
                                                         case "Page":
                                                             string url = reader.GetAttribute("friendlyName") ?? reader.GetAttribute("name");
-                                                            bool isUrlOriginallyFullyQualified = UriUtility.IsUri(url, UriKind.Absolute, EnumerableConverter.ToArray(UriScheme.Http, UriScheme.Https));
+                                                            bool isUrlOriginallyFullyQualified = UriUtility.IsUri(url, UriKind.Absolute, EnumerableConverter.AsArray(UriScheme.Http, UriScheme.Https));
                                                             string fullyQualifiedUrl = string.Format(CultureInfo.InvariantCulture, context.Request.Url.IsDefaultPort ? "{0}{1}{2}{4}" : "{0}{1}{2}:{3}{4}",
                                                                 context.Request.Url.Scheme,
                                                                 Uri.SchemeDelimiter,
