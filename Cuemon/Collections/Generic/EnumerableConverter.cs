@@ -21,17 +21,6 @@ namespace Cuemon.Collections.Generic
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="values"/> to a one-dimensional array of the specified type, with zero-based indexing.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the array of <paramref name="values"/>.</typeparam>
-        /// <param name="values">The values to create the <see cref="Array"/> from.</param>
-        /// <returns>A one-dimensional <see cref="Array"/> of the specified <see typeparamref="TSource"/> with a length equal to the values specified.</returns>
-        public static TSource[] ToArray<TSource>(params TSource[] values)
-        {
-            return values;
-        }
-
-        /// <summary>
         /// Creates an array from a <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
