@@ -34,7 +34,7 @@ namespace Cuemon.Security.Cryptography
         /// <returns>A <see cref="string"/> containing the computed hash value of the specified <paramref name="value"/>.</returns>
         public static string ComputeHash(object value, HashAlgorithmType algorithmType)
         {
-            return ComputeHash(EnumerableUtility.Yield(value), algorithmType);
+            return ComputeHash(EnumerableConverter.AsArray(value), algorithmType);
         }
 
         /// <summary>
