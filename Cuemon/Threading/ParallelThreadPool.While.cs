@@ -1294,7 +1294,7 @@ namespace Cuemon.Threading
                         {
                             factory.GenericArguments.Arg1 = result;
                             var shallowFactory = factory.Clone();
-                            ThreadPoolUtility.Run(() =>
+                            ThreadPoolUtility.Run(ce =>
                             {
                                 try
                                 {
@@ -1309,9 +1309,9 @@ namespace Cuemon.Threading
                                 }
                                 finally
                                 {
-                                    sync.Signal();
+                                    ce.Signal();
                                 }
-                            });
+                            }, sync);
                             partitioned--;
                             if (partitioned == 0) { break; }
                         }

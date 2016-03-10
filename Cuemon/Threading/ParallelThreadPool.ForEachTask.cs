@@ -1287,7 +1287,7 @@ namespace Cuemon.Threading
                             factory.GenericArguments.Arg1 = element;
                             var shallowFactory = factory.Clone();
                             var current = sorter;
-                            ThreadPoolUtility.Run(() =>
+                            ThreadPoolUtility.Run(ce =>
                             {
                                 try
                                 {
@@ -1307,9 +1307,9 @@ namespace Cuemon.Threading
                                 }
                                 finally
                                 {
-                                    sync.Signal();
+                                    ce.Signal();
                                 }
-                            });
+                            }, sync);
                             sorter++;
                         }
                         sync.Wait(timeout);
