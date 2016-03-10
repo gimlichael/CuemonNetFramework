@@ -25,7 +25,13 @@ namespace Cuemon.Data
         private static readonly object Sync = new object();
 
         #region Constructors
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataManager"/> class.
+        /// </summary>
+        protected DataManager()
+        {
+            EnableTransientFaultRecovery = true;
+        }
         #endregion
 
         #region Properties
@@ -39,7 +45,7 @@ namespace Cuemon.Data
         /// Gets or sets a value indicating whether transient faults should be attempted gracefully recovered. Default is <c>true</c>.
         /// </summary>
         /// <value><c>true</c> if transient faults should be attempted gracefully recovered; otherwise, <c>false</c>.</value>
-        public bool EnableTransientFaultRecovery { get; set; } = true;
+        public virtual bool EnableTransientFaultRecovery { get; }
 
         /// <summary>
         /// Gets or sets the amount of retry attempts for transient faults. Default value is specified by <see cref="TransientFaultUtility.DefaultRetryAttempts"/>.
@@ -331,33 +337,23 @@ namespace Cuemon.Data
             {
                 try
                 {
-                    return EnableTransientFaultRecovery ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteCore, command) : ExecuteCore(command);
+                    return ExecuteCore(command, dbCommand =>
+                    {
+                        try
+                        {
+                            return dbCommand.ExecuteNonQuery();
+                        }
+                        finally
+                        {
+                            if (dbCommand.Connection.State != ConnectionState.Closed) { dbCommand.Connection.Close(); }
+                        }
+                    });
                 }
                 finally
                 {
                     command.Parameters.Clear();
                 }
             }
-        }
-
-        private static int ExecuteCore(IDbCommand command)
-        {
-            try
-            {
-                return OpenConnection(command).ExecuteNonQuery();
-            }
-            finally
-            {
-                if (command.Connection.State != ConnectionState.Closed) { command.Connection.Close(); }
-            }
-        }
-
-        private static IDbCommand OpenConnection(IDbCommand command)
-        {
-            if (command == null) { throw new ArgumentNullException(nameof(command)); }
-            if (command.Connection == null) { throw new ArgumentNullException(nameof(command), "No connection was set for this command object."); }
-            if (command.Connection.State != ConnectionState.Open) { command.Connection.Open(); }
-            return command;
         }
 
         /// <summary>
@@ -414,18 +410,13 @@ namespace Cuemon.Data
             {
                 try
                 {
-                    return EnableTransientFaultRecovery ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteReaderCore, command) : ExecuteReaderCore(command);
+                    return ExecuteCore(command, dbCommand => dbCommand.ExecuteReader(CommandBehavior.CloseConnection));
                 }
                 finally
                 {
                     command.Parameters.Clear();
                 }
             }
-        }
-
-        private static IDataReader ExecuteReaderCore(IDbCommand command)
-        {
-            return OpenConnection(command).ExecuteReader(CommandBehavior.CloseConnection);
         }
 
         /// <summary>
@@ -506,24 +497,22 @@ namespace Cuemon.Data
             {
                 try
                 {
-                    return EnableTransientFaultRecovery ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteScalarCore, command) : ExecuteScalarCore(command);
+                    return ExecuteCore(command, dbCommand =>
+                    {
+                        try
+                        {
+                            return dbCommand.ExecuteScalar();
+                        }
+                        finally
+                        {
+                            if (dbCommand.Connection.State != ConnectionState.Closed) { dbCommand.Connection.Close(); }
+                        }
+                    });
                 }
                 finally
                 {
                     command.Parameters.Clear();
                 }
-            }
-        }
-
-        private static object ExecuteScalarCore(IDbCommand command)
-        {
-            try
-            {
-                return OpenConnection(command).ExecuteScalar();
-            }
-            finally
-            {
-                if (command.Connection.State != ConnectionState.Closed) { command.Connection.Close(); }
             }
         }
 
@@ -754,6 +743,20 @@ namespace Cuemon.Data
         }
 
         /// <summary>
+        /// Core method for executing methods on the <paramref name="command"/> object.
+        /// </summary>
+        /// <typeparam name="T">The type to return.</typeparam>
+        /// <param name="command">The command to invoke a method on.</param>
+        /// <param name="commandInvoker">The function delegate that will invoke a method on the <paramref name="command"/> object.</param>
+        /// <returns>A value of <typeparamref name="T"/> that is equal to the invoked method of the <paramref name="command"/> object.</returns>
+        protected virtual T ExecuteCore<T>(IDbCommand command, Doer<IDbCommand, T> commandInvoker)
+        {
+            return EnableTransientFaultRecovery
+                ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, commandInvoker, OpenConnection(command))
+                : commandInvoker(OpenConnection(command));
+        }
+
+        /// <summary>
         /// Core method for executing all commands.
         /// </summary>
         /// <param name="dataCommand">The data command to execute.</param>
@@ -771,7 +774,9 @@ namespace Cuemon.Data
             if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
             lock (_instanceLock)
             {
-                return EnableTransientFaultRecovery ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteCommandCoreCore, dataCommand, parameters) : ExecuteCommandCoreCore(dataCommand, parameters);
+                return EnableTransientFaultRecovery
+                    ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteCommandCoreCore, dataCommand, parameters)
+                    : ExecuteCommandCoreCore(dataCommand, parameters);
             }
         }
 
@@ -779,6 +784,21 @@ namespace Cuemon.Data
         {
             IDbCommand command = GetCommandCore(dataCommand, parameters);
             command.CommandTimeout = (int)dataCommand.Timeout.TotalSeconds;
+            return command;
+        }
+
+        private IDbCommand OpenConnection(IDbCommand command)
+        {
+            if (command == null) { throw new ArgumentNullException(nameof(command)); }
+            if (command.Connection == null) { throw new ArgumentNullException(nameof(command), "No connection was set for this command object."); }
+            return EnableTransientFaultRecovery
+                ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, OpenConnectionCore, command)
+                : OpenConnectionCore(command);
+        }
+
+        private IDbCommand OpenConnectionCore(IDbCommand command)
+        {
+            if (command.Connection.State != ConnectionState.Open) { command.Connection.Open(); }
             return command;
         }
 
