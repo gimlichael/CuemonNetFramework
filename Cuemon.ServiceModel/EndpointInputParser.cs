@@ -100,13 +100,10 @@ namespace Cuemon.ServiceModel
         private static void ParseComplexTypes(DataPairCollection result, string endpointParameterName, Type endpointParameterType, Doer<string, bool> predicate, Doer<string, string> resolver)
         {
             ConstructorInfo ctor = endpointParameterType.GetConstructor(Type.EmptyTypes);
-            if (ctor == null)
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
-"Unable to deserialize endpoint parameter '{0} ({1})' as no default constructor could be found.",
-    endpointParameterName,
-    StringConverter.FromType(endpointParameterType)));
-            }
+            if (ctor == null) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                "Unable to deserialize endpoint parameter '{0} ({1})' as no default constructor could be found.",
+                    endpointParameterName,
+                    StringConverter.FromType(endpointParameterType))); }
 
             object instance = ctor.Invoke(null);
             Type instanceType = instance.GetType();
@@ -232,10 +229,11 @@ namespace Cuemon.ServiceModel
                         {
                             if (dataReader.Contains(endpointParameterType.Key))
                             {
+                                var value = dataReader[endpointParameterType.Key].ToString();
                                 ParseSimpleTypes(result,
                                     endpointParameterType.Key,
                                     endpointParameterType.Value,
-                                    s => dataReader[endpointParameterType.Key].ToString());
+                                    s => value);
                             }
                         }
                     }
