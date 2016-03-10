@@ -1090,7 +1090,7 @@ namespace Cuemon
             CountdownEvent sync = new CountdownEvent(1);
             try
             {
-                ThreadPoolUtility.Run(() =>
+                ThreadPoolUtility.Run(ce =>
                 {
                     for (int attempts = 0; ;)
                     {
@@ -1106,11 +1106,11 @@ namespace Cuemon
                             {
                                 lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, ex); }
                                 isTransientFault = isTransientFaultCallback(ex);
-                                lastWaitTime = waitTime;
-                                totalWaitTime = totalWaitTime.Add(waitTime);
                                 if (attempts >= retryAttempts) { throw; }
                                 if (!isTransientFault) { throw; }
-                                if (sync != null) { sync.AddCount(1); }
+                                lastWaitTime = waitTime;
+                                totalWaitTime = totalWaitTime.Add(waitTime);
+                                if (ce != null) { ce.AddCount(1); }
                                 attempts++;
                                 Thread.Sleep(waitTime);
                             }
@@ -1123,10 +1123,10 @@ namespace Cuemon
                         }
                         finally
                         {
-                            if (sync != null) { sync.Signal(); }
+                            if (ce != null) { ce.Signal(); }
                         }
                     }
-                });
+                }, sync);
                 sync.Wait(TimeSpan.MaxValue);
             }
             finally
@@ -1147,7 +1147,7 @@ namespace Cuemon
             TResult taskResult = default(TResult);
             try
             {
-                ThreadPoolUtility.Run(() =>
+                ThreadPoolUtility.Run(ce =>
                 {
                     for (int attempts = 0; ;)
                     {
@@ -1164,11 +1164,11 @@ namespace Cuemon
                             {
                                 lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, ex); }
                                 isTransientFault = isTransientFaultCallback(ex);
-                                lastWaitTime = waitTime;
-                                totalWaitTime = totalWaitTime.Add(waitTime);
                                 if (attempts >= retryAttempts) { throw; }
                                 if (!isTransientFault) { throw; }
-                                if (sync != null) { sync.AddCount(1); }
+                                lastWaitTime = waitTime;
+                                totalWaitTime = totalWaitTime.Add(waitTime);
+                                if (ce != null) { ce.AddCount(1); }
                                 attempts++;
                                 Thread.Sleep(waitTime);
                             }
@@ -1187,10 +1187,10 @@ namespace Cuemon
                                 IDisposable disposable = taskResult as IDisposable;
                                 if (disposable != null) { disposable.Dispose(); }
                             }
-                            if (sync != null) { sync.Signal(); }
+                            if (ce != null) { ce.Signal(); }
                         }
                     }
-                });
+                }, sync);
                 sync.Wait(TimeSpan.MaxValue);
             }
             finally
@@ -1212,7 +1212,7 @@ namespace Cuemon
             CountdownEvent sync = new CountdownEvent(1);
             try
             {
-                ThreadPoolUtility.Run(() =>
+                ThreadPoolUtility.Run(ce =>
                 {
                     for (int attempts = 0; ;)
                     {
@@ -1232,11 +1232,11 @@ namespace Cuemon
                             {
                                 lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, ex); }
                                 isTransientFault = isTransientFaultCallback(ex);
-                                lastWaitTime = waitTime;
-                                totalWaitTime = totalWaitTime.Add(waitTime);
                                 if (attempts >= retryAttempts) { throw; }
                                 if (!isTransientFault) { throw; }
-                                if (sync != null) { sync.AddCount(1); }
+                                lastWaitTime = waitTime;
+                                totalWaitTime = totalWaitTime.Add(waitTime);
+                                if (ce != null) { ce.AddCount(1); }
                                 attempts++;
                                 Thread.Sleep(waitTime);
                             }
@@ -1255,10 +1255,10 @@ namespace Cuemon
                                 IDisposable disposable = encapsulatedResult as IDisposable;
                                 if (disposable != null) { disposable.Dispose(); }
                             }
-                            if (sync != null) { sync.Signal(); }
+                            if (ce != null) { ce.Signal(); }
                         }
                     }
-                });
+                }, sync);
                 sync.Wait(TimeSpan.MaxValue);
             }
             finally
