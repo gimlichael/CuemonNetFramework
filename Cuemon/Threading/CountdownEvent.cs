@@ -24,15 +24,6 @@ namespace Cuemon.Threading
         #endregion
 
         #region Properties
-
-        private ManualResetEvent ResetEvent
-        {
-            get
-            {
-                ThrowIfDisposed();
-                return _resetEvent;
-            }
-        }
         #endregion
 
         #region Methods
@@ -42,7 +33,10 @@ namespace Cuemon.Threading
         protected override void Set()
         {
             ThrowIfDisposed();
-            if (ResetEventHasValidState) { ResetEvent.Set(); }
+            lock (_resetEvent)
+            {
+                if (ResetEventHasValidState) { _resetEvent.Set(); }
+            }
         }
 
         /// <summary>
@@ -53,7 +47,7 @@ namespace Cuemon.Threading
         {
             ThrowIfDisposed();
             if (IsSet) { return; }
-            if (ResetEventHasValidState) { ResetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false); }
+            if (ResetEventHasValidState) { _resetEvent.WaitOne(timeout == TimeSpan.MaxValue ? int.MaxValue : (int)timeout.TotalMilliseconds, false); }
             if (ElapsedTime > timeout) { throw new TimeoutException(); }
         }
 
@@ -64,16 +58,19 @@ namespace Cuemon.Threading
         private void Dispose(bool disposing)
         {
             if (_isDisposed || !disposing) { return; }
-            _isDisposed = true;
-            _resetEvent.Close();
+            lock (_resetEvent)
+            {
+                _isDisposed = true;
+                _resetEvent.Close();
+            }
         }
 
         private bool ResetEventHasValidState
         {
             get
             {
-                return (ResetEvent != null &&
-                       !ResetEvent.SafeWaitHandle.IsClosed);
+                return (_resetEvent != null &&
+                       !_resetEvent.SafeWaitHandle.IsClosed);
             }
         }
 
