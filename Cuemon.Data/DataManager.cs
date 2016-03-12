@@ -19,19 +19,12 @@ namespace Cuemon.Data
     /// </summary>
     public abstract class DataManager
     {
-        private readonly object _instanceLock = new object();
         private byte _transientFaultRetryAttempts = TransientFaultUtility.DefaultRetryAttempts;
         private static IReadOnlyDictionary<string, string> _connectionStringSettingsImpl;
         private static readonly object Sync = new object();
 
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataManager"/> class.
-        /// </summary>
-        protected DataManager()
-        {
-            EnableTransientFaultRecovery = true;
-        }
+
         #endregion
 
         #region Properties
@@ -45,7 +38,7 @@ namespace Cuemon.Data
         /// Gets or sets a value indicating whether transient faults should be attempted gracefully recovered. Default is <c>true</c>.
         /// </summary>
         /// <value><c>true</c> if transient faults should be attempted gracefully recovered; otherwise, <c>false</c>.</value>
-        public virtual bool EnableTransientFaultRecovery { get; }
+        public virtual bool EnableTransientFaultRecovery { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the amount of retry attempts for transient faults. Default value is specified by <see cref="TransientFaultUtility.DefaultRetryAttempts"/>.
@@ -272,7 +265,7 @@ namespace Cuemon.Data
             }
             finally
             {
-                if (tempStream != null) { tempStream.Dispose(); }
+                tempStream?.Dispose();
             }
             return stream;
         }
@@ -324,39 +317,6 @@ namespace Cuemon.Data
         public abstract DataManager Clone();
 
         /// <summary>
-        /// Executes the command statement and returns the number of rows affected.
-        /// </summary>
-        /// <param name="dataCommand">The data command to execute.</param>
-        /// <param name="parameters">The parameters to use in the command.</param>
-        /// <returns>
-        /// A <b><see cref="System.Int32"/></b> value.
-        /// </returns>
-        public int Execute(IDataCommand dataCommand, params IDataParameter[] parameters)
-        {
-            using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
-            {
-                try
-                {
-                    return ExecuteCore(command, dbCommand =>
-                    {
-                        try
-                        {
-                            return dbCommand.ExecuteNonQuery();
-                        }
-                        finally
-                        {
-                            if (dbCommand.Connection.State != ConnectionState.Closed) { dbCommand.Connection.Close(); }
-                        }
-                    });
-                }
-                finally
-                {
-                    command.Parameters.Clear();
-                }
-            }
-        }
-
-        /// <summary>
         /// Executes the command statement and returns <c>true</c> if one or more records exists; otherwise <c>false</c>.
         /// </summary>
         /// <param name="dataCommand">The data command to execute.</param>
@@ -395,29 +355,6 @@ namespace Cuemon.Data
         /// <param name="parameters">The parameters to use in the command.</param>
         /// <returns><see cref="Decimal"/></returns>
         public abstract decimal ExecuteIdentityDecimal(IDataCommand dataCommand, params IDataParameter[] parameters);
-
-        /// <summary>
-        /// Executes the command statement and returns an object supporting the IDataReader interface.
-        /// </summary>
-        /// <param name="dataCommand">The data command to execute.</param>
-        /// <param name="parameters">The parameters to use in the command.</param>
-        /// <returns>
-        /// An object supporting the <b><see cref="System.Data.IDataReader"/></b> interface.
-        /// </returns>
-        public IDataReader ExecuteReader(IDataCommand dataCommand, params IDataParameter[] parameters)
-        {
-            using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
-            {
-                try
-                {
-                    return ExecuteCore(command, dbCommand => dbCommand.ExecuteReader(CommandBehavior.CloseConnection));
-                }
-                finally
-                {
-                    command.Parameters.Clear();
-                }
-            }
-        }
 
         /// <summary>
         /// Executes the command statement and returns an IXPathNavigable object.
@@ -481,38 +418,6 @@ namespace Cuemon.Data
             using (IDataReader reader = ExecuteReader(dataCommand, parameters))
             {
                 return ReaderToString(reader);
-            }
-        }
-
-        /// <summary>
-        /// Executes the command statement, and returns the value from the first column of the first row in the result set.
-        /// Additional columns or rows are ignored.
-        /// </summary>
-        /// <param name="dataCommand">The data command to execute.</param>
-        /// <param name="parameters">The parameters to use in the command.</param>
-        /// <returns>The first column of the first row in the result from <paramref name="dataCommand"/>.</returns>
-        public object ExecuteScalar(IDataCommand dataCommand, params IDataParameter[] parameters)
-        {
-            using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
-            {
-                try
-                {
-                    return ExecuteCore(command, dbCommand =>
-                    {
-                        try
-                        {
-                            return dbCommand.ExecuteScalar();
-                        }
-                        finally
-                        {
-                            if (dbCommand.Connection.State != ConnectionState.Closed) { dbCommand.Connection.Close(); }
-                        }
-                    });
-                }
-                finally
-                {
-                    command.Parameters.Clear();
-                }
             }
         }
 
@@ -743,17 +648,102 @@ namespace Cuemon.Data
         }
 
         /// <summary>
-        /// Core method for executing methods on the <paramref name="command"/> object.
+        /// Executes the command statement and returns the number of rows affected.
+        /// </summary>
+        /// <param name="dataCommand">The data command to execute.</param>
+        /// <param name="parameters">The parameters to use in the command.</param>
+        /// <returns>
+        /// A <b><see cref="System.Int32"/></b> value.
+        /// </returns>
+        public int Execute(IDataCommand dataCommand, params IDataParameter[] parameters)
+        {
+            return ExecuteCore(dataCommand, parameters, dbCommand =>
+            {
+                try
+                {
+                    return dbCommand.ExecuteNonQuery();
+                }
+                finally
+                {
+                    if (dbCommand.Connection.State != ConnectionState.Closed) { dbCommand.Connection.Close(); }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Executes the command statement, and returns the value from the first column of the first row in the result set.
+        /// Additional columns or rows are ignored.
+        /// </summary>
+        /// <param name="dataCommand">The data command to execute.</param>
+        /// <param name="parameters">The parameters to use in the command.</param>
+        /// <returns>The first column of the first row in the result from <paramref name="dataCommand"/>.</returns>
+        public object ExecuteScalar(IDataCommand dataCommand, params IDataParameter[] parameters)
+        {
+            return ExecuteCore(dataCommand, parameters, dbCommand =>
+            {
+                try
+                {
+                    return dbCommand.ExecuteScalar();
+                }
+                finally
+                {
+                    if (dbCommand.Connection.State != ConnectionState.Closed) { dbCommand.Connection.Close(); }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Executes the command statement and returns an object supporting the IDataReader interface.
+        /// </summary>
+        /// <param name="dataCommand">The data command to execute.</param>
+        /// <param name="parameters">The parameters to use in the command.</param>
+        /// <returns>
+        /// An object supporting the <b><see cref="System.Data.IDataReader"/></b> interface.
+        /// </returns>
+        public IDataReader ExecuteReader(IDataCommand dataCommand, params IDataParameter[] parameters)
+        {
+            return ExecuteCore(dataCommand, parameters, dbCommand => dbCommand.ExecuteReader(CommandBehavior.CloseConnection));
+        }
+
+        /// <summary>
+        /// Core method for executing methods on the <see cref="IDbCommand"/> object resolved from the virtual <see cref="ExecuteCommandCore"/> method.
         /// </summary>
         /// <typeparam name="T">The type to return.</typeparam>
-        /// <param name="command">The command to invoke a method on.</param>
-        /// <param name="commandInvoker">The function delegate that will invoke a method on the <paramref name="command"/> object.</param>
-        /// <returns>A value of <typeparamref name="T"/> that is equal to the invoked method of the <paramref name="command"/> object.</returns>
-        protected virtual T ExecuteCore<T>(IDbCommand command, Doer<IDbCommand, T> commandInvoker)
+        /// <param name="dataCommand">The data command to execute.</param>
+        /// <param name="parameters">The parameters to use in the command.</param>
+        /// <param name="sqlInvoker">The function delegate that will invoke a method on the resolved <see cref="IDbCommand"/> from the virtual <see cref="ExecuteCommandCore"/> method.</param>
+        /// <returns>A value of <typeparamref name="T"/> that is equal to the invoked method of the <see cref="IDbCommand"/> object.</returns>
+        protected virtual T ExecuteCore<T>(IDataCommand dataCommand, IDataParameter[] parameters, Doer<IDbCommand, T> sqlInvoker)
         {
-            return EnableTransientFaultRecovery
-                ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, commandInvoker, OpenConnection(command))
-                : commandInvoker(OpenConnection(command));
+            if (EnableTransientFaultRecovery)
+            {
+                return TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, () =>
+                {
+                    using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
+                    {
+                        try
+                        {
+                            return sqlInvoker(command);
+                        }
+                        finally
+                        {
+                            command.Parameters.Clear();
+                        }
+                    }
+                });
+            }
+
+            using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
+            {
+                try
+                {
+                    return sqlInvoker(command);
+                }
+                finally
+                {
+                    command.Parameters.Clear();
+                }
+            }
         }
 
         /// <summary>
@@ -771,18 +761,8 @@ namespace Cuemon.Data
         /// </remarks>
         protected virtual IDbCommand ExecuteCommandCore(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
-            if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
-            lock (_instanceLock)
-            {
-                return EnableTransientFaultRecovery
-                    ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, ExecuteCommandCoreCore, dataCommand, parameters)
-                    : ExecuteCommandCoreCore(dataCommand, parameters);
-            }
-        }
-
-        private IDbCommand ExecuteCommandCoreCore(IDataCommand dataCommand, params IDataParameter[] parameters)
-        {
-            IDbCommand command = GetCommandCore(dataCommand, parameters);
+            if (dataCommand == null) { throw new ArgumentNullException(nameof(dataCommand)); }
+            IDbCommand command = OpenConnection(GetCommandCore(dataCommand, parameters));
             command.CommandTimeout = (int)dataCommand.Timeout.TotalSeconds;
             return command;
         }
@@ -791,13 +771,6 @@ namespace Cuemon.Data
         {
             if (command == null) { throw new ArgumentNullException(nameof(command)); }
             if (command.Connection == null) { throw new ArgumentNullException(nameof(command), "No connection was set for this command object."); }
-            return EnableTransientFaultRecovery
-                ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, OpenConnectionCore, command)
-                : OpenConnectionCore(command);
-        }
-
-        private IDbCommand OpenConnectionCore(IDbCommand command)
-        {
             if (command.Connection.State != ConnectionState.Open) { command.Connection.Open(); }
             return command;
         }
