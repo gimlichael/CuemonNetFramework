@@ -11,6 +11,7 @@ namespace Cuemon.Threading
     {
         private volatile bool _isDisposed;
         private readonly ManualResetEvent _resetEvent;
+        private readonly object _padLock = new object();
 
         #region Constructors
         /// <summary>
@@ -33,7 +34,7 @@ namespace Cuemon.Threading
         protected override void Set()
         {
             ThrowIfDisposed();
-            lock (_resetEvent)
+            lock (_padLock)
             {
                 if (ResetEventHasValidState) { _resetEvent.Set(); }
             }
@@ -58,7 +59,7 @@ namespace Cuemon.Threading
         private void Dispose(bool disposing)
         {
             if (_isDisposed || !disposing) { return; }
-            lock (_resetEvent)
+            lock (_padLock)
             {
                 _isDisposed = true;
                 _resetEvent.Close();

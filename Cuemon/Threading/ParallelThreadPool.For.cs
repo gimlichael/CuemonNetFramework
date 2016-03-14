@@ -2564,7 +2564,7 @@ namespace Cuemon.Threading
                         {
                             factory.GenericArguments.Arg1 = i;
                             var shallowFactory = factory.Clone();
-                            ThreadPoolUtility.Run(ce =>
+                            ThreadPoolUtility.RunAction(ce =>
                             {
                                 try
                                 {

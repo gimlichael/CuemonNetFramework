@@ -1287,7 +1287,7 @@ namespace Cuemon.Threading
                             factory.GenericArguments.Arg1 = element;
                             var shallowFactory = factory.Clone();
                             var current = sorter;
-                            ThreadPoolUtility.Run(ce =>
+                            ThreadPoolUtility.RunAction(ce =>
                             {
                                 try
                                 {

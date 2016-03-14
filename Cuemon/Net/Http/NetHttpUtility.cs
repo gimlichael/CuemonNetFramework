@@ -45,8 +45,15 @@ namespace Cuemon.Net.Http
             try
             {
                 TimeSpan timeout = TimeSpan.FromMilliseconds(state.Timeout);
-                result.Invoke(timeout);
-                if (!result.OperationComplete) { throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "The HTTP request {0} took longer than the specified timeout value of {1}.", state.RequestUri.OriginalString, timeout)); }
+                try
+                {
+                    result.Invoke();
+                    result.Wait(timeout);
+                }
+                catch (TimeoutException)
+                {
+                    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "The HTTP request {0} took longer than the specified timeout value of {1}.", state.RequestUri.OriginalString, timeout));
+                }
 
                 vexingResult = result.ToAsyncCallResult();
                 WebException vexingException = vexingResult.Exception as WebException;

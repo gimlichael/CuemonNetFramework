@@ -738,10 +738,10 @@ namespace Cuemon
         /// </summary>
         /// <param name="callback">The method to be called when the operation has completed.</param>
         /// <param name="state">An optional object that contains information about the asynchronous operation.</param>
-        public void BeginExecuteMethod(AsyncCallback callback, object state)
+        public IAsyncResult BeginExecuteMethod(AsyncCallback callback, object state)
         {
             ThrowIfNoValidDelegate(Condition.IsNull(Method));
-            Method.BeginInvoke(GenericArguments, callback, state);
+            return Method.BeginInvoke(GenericArguments, callback, state);
         }
 
         /// <summary>

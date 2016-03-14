@@ -1193,7 +1193,7 @@ namespace Cuemon.Threading
                 {
                     factory.GenericArguments.Arg1 = element;
                     var shallowFactory = factory.Clone();
-                    Thread elementThread = ThreadUtility.StartNew(() =>
+                    Thread elementThread = ThreadUtility.StartNew(settings, () =>
                     {
                         try
                         {
