@@ -351,7 +351,7 @@ namespace Cuemon.Runtime.Caching
                     {
                         if (cache.HasExpired(current))
                         {
-                            ThreadPoolUtility.Run(RemoveExpired, cache.Key, cache.Group);
+                            ThreadPoolUtility.RunAction(RemoveExpired, cache.Key, cache.Group);
                         }
                         else
                         {
@@ -371,7 +371,7 @@ namespace Cuemon.Runtime.Caching
 
         private void CacheExpired(object sender, CacheEventArgs e)
         {
-            ThreadPoolUtility.Run(RemoveExpired, e.Cache.Key, e.Cache.Group);
+            ThreadPoolUtility.RunAction(RemoveExpired, e.Cache.Key, e.Cache.Group);
             e.Cache.Expired -= CacheExpired;
         }
 

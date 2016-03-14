@@ -188,6 +188,7 @@
     <Compile Include="Threading\ThreadException.cs" />
     <Compile Include="Threading\ThreadPoolInfo.cs" />
     <Compile Include="Threading\ThreadPoolSettings.cs" />
+    <Compile Include="Threading\ThreadPoolTask.cs" />
     <Compile Include="Threading\ThreadPoolUtility.cs" />
     <Compile Include="Threading\ParallelThreadPool.For.cs" />
     <Compile Include="Threading\ParallelThreadPool.ForEach.cs" />

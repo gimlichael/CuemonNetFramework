@@ -6,6 +6,7 @@ namespace Cuemon.Collections
     /// <summary>
     /// Provides a collection of <see cref="DataPair"/>.
     /// </summary>
+    [Serializable]
     public class DataPairDictionary : Dictionary<string, DataPair>
     {
         /// <summary>

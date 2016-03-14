@@ -169,6 +169,7 @@ namespace Cuemon
         /// <returns>A <see cref="DateSpan"/> that corresponds to <paramref name="start"/> and <paramref name="end"/> of the interval.</returns>
         public static DateSpan Parse(string start, string end, CultureInfo culture)
         {
+            Validator.ThrowIfNull(culture, nameof(culture));
             return new DateSpan(DateTime.Parse(start, culture), DateTime.Parse(end, culture), culture.Calendar);
         }
 

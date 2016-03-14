@@ -65,7 +65,7 @@ namespace Cuemon.Data.CsvClient
         /// <exception cref="ArgumentEmptyException">
         /// <paramref name="header"/> is empty -or- <paramref name="delimiter"/> is empty.
         /// </exception>
-        /// <remarks>The default implementation uses <see cref="ObjectConverter.FromString"/> as <paramref name="parser"/>.</remarks>
+        /// <remarks>The default implementation uses <see cref="ObjectConverter.FromString(string)"/> as <paramref name="parser"/>.</remarks>
         public CsvDataReader(StreamReader reader, string header, string delimiter, Doer<string, object> parser) : base(parser)
         {
             Validator.ThrowIfNull(reader, nameof(reader));

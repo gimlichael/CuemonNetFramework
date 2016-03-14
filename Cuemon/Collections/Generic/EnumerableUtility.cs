@@ -303,7 +303,7 @@ namespace Cuemon.Collections.Generic
         /// <typeparam name="TSource">The type of the elements of the sequence.</typeparam>
         /// <param name="source">The sequence to search.</param>
         /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
-        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        /// <returns>A <typeparamref name="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
         public static TSource SelectOne<TSource>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, TSource> selector)
         {
             Validator.ThrowIfNull(source, nameof(source));
@@ -319,7 +319,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">The sequence to search.</param>
         /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
         /// <param name="arg">The parameter of the function delegate <paramref name="selector"/>.</param>
-        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        /// <returns>A <typeparamref name="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
         public static TSource SelectOne<TSource, T>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T, TSource> selector, T arg)
         {
             Validator.ThrowIfNull(source, nameof(source));
@@ -337,7 +337,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="selector">The function delegate that defines the condition of the element to retrieve.</param>
         /// <param name="arg1">The first parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
-        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        /// <returns>A <typeparamref name="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
         public static TSource SelectOne<TSource, T1, T2>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, TSource> selector, T1 arg1, T2 arg2)
         {
             Validator.ThrowIfNull(source, nameof(source));
@@ -357,7 +357,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="arg1">The first parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg3">The third parameter of the function delegate <paramref name="selector"/>.</param>
-        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        /// <returns>A <typeparamref name="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
         public static TSource SelectOne<TSource, T1, T2, T3>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, T3, TSource> selector, T1 arg1, T2 arg2, T3 arg3)
         {
             Validator.ThrowIfNull(source, nameof(source));
@@ -379,7 +379,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="arg2">The second parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg3">The third parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg4">The fourth parameter of the function delegate <paramref name="selector"/>.</param>
-        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        /// <returns>A <typeparamref name="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
         public static TSource SelectOne<TSource, T1, T2, T3, T4>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, T3, T4, TSource> selector, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
             Validator.ThrowIfNull(source, nameof(source));
@@ -403,7 +403,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="arg3">The third parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg4">The fourth parameter of the function delegate <paramref name="selector"/>.</param>
         /// <param name="arg5">The fifth parameter of the function delegate <paramref name="selector"/>.</param>
-        /// <returns>A <see cref="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
+        /// <returns>A <typeparamref name="TSource"/> element that matched the conditions defined by the specified <paramref name="selector"/>.</returns>
         public static TSource SelectOne<TSource, T1, T2, T3, T4, T5>(IEnumerable<TSource> source, Doer<IEnumerable<TSource>, T1, T2, T3, T4, T5, TSource> selector, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             Validator.ThrowIfNull(source, nameof(source));
