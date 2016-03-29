@@ -97,7 +97,9 @@
     <Compile Include="Collections\Specialized\NameValueCollectionConverter.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="ConvertibleConverter.cs" />
+    <Compile Include="DateTimeConverter.cs" />
     <Compile Include="DateTimeFormatPattern.cs" />
+    <Compile Include="DoubleConverter.cs" />
     <Compile Include="GuidConverter.cs" />
     <Compile Include="Infrastructure.cs" />
     <Compile Include="IO\Compression\CompressionType.cs" />
