@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -10,10 +9,6 @@ namespace Cuemon.Runtime.Serialization
     /// </summary>
     public abstract class JsonWriter : IDisposable
     {
-        private StreamWriter _writer;
-        private readonly Encoding _encoding;
-        private bool _isDisposed;
-
         /// <summary>
         /// Represents the begin-array character as defined in RFC 4627.
         /// </summary>
@@ -44,11 +39,6 @@ namespace Cuemon.Runtime.Serialization
         /// </summary>
         public static readonly string ValueSeperator = ",";
 
-        /// <summary>
-        /// Represents the null literal as defined in RFC 4627.
-        /// </summary>
-        public static readonly string NullValue = "null";
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonWriter"/> class.
@@ -69,8 +59,8 @@ namespace Cuemon.Runtime.Serialization
             if (output == null) { throw new ArgumentNullException(nameof(output)); }
             if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
             ValidateEncoding(encoding);
-            _writer = new StreamWriter(output, encoding);
-            _encoding = encoding;
+            Writer = new StreamWriter(output, encoding);
+            Encoding = encoding;
         }
         #endregion
 
@@ -104,21 +94,15 @@ namespace Cuemon.Runtime.Serialization
         /// <value>
         /// 	<c>true</c> if this instance is disposed; otherwise, <c>false</c>.
         /// </value>
-        protected bool IsDisposed
-        {
-            get { return _isDisposed; }
-            private set { _isDisposed = value; }
-        }
+        protected bool IsDisposed { get; private set; }
 
-        private StreamWriter Writer { get { return _writer; } }
+        private StreamWriter Writer { get; set; }
 
         /// <summary>
         /// Gets the character encoding used by this instance of the <see cref="JsonWriter"/>.
         /// </summary>
-        public Encoding Encoding
-        {
-            get { return _encoding; }
-        }
+        public Encoding Encoding { get; }
+
         #endregion
 
         #region Methods
@@ -131,8 +115,8 @@ namespace Cuemon.Runtime.Serialization
         public static void ValidateEncoding(Encoding encoding)
         {
             if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
-            if (encoding.Equals(Encoding.UTF8) || encoding.Equals(Encoding.Unicode) || encoding.Equals(Encoding.BigEndianUnicode) || encoding.Equals(Encoding.UTF32)) { return; }
-            throw new ArgumentOutOfRangeException(nameof(encoding), "Encoding value must be either UTF-8, UTF-16 or UTF-32 as specified by RFC 4627.");
+            if (encoding.Equals(Encoding.UTF8) || encoding.Equals(Encoding.Unicode) || encoding.Equals(Encoding.BigEndianUnicode)) { return; }
+            throw new ArgumentOutOfRangeException(nameof(encoding), "Encoding value must be either UTF-8 or UTF-16 as specified by RFC 4627.");
         }
 
         /// <summary>
@@ -393,14 +377,6 @@ namespace Cuemon.Runtime.Serialization
         }
 
         /// <summary>
-        /// Writes a literal null value as defined in RFC 4627.
-        /// </summary>
-        public void WriteNull()
-        {
-            Writer.Write(NullValue);
-        }
-
-        /// <summary>
         /// Clears all buffers for the current writer and causes any buffered data to be written to the underlying stream.
         /// </summary>
         public void Flush()
@@ -431,12 +407,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(string value)
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                WriteNull();
-                return;
-            }
-            Writer.Write(string.Concat("\"", StringUtility.Escape(value), "\""));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -445,7 +416,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(bool value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant());
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -454,7 +425,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(byte value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -464,7 +435,7 @@ namespace Cuemon.Runtime.Serialization
         /// <remarks><paramref name="value"/> is converted to a Base64 encoded string.</remarks>
         public void WriteObjectValue(byte[] value)
         {
-            WriteObjectValue(Convert.ToBase64String(value));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -473,7 +444,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(char value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -482,7 +453,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(DateTime value)
         {
-            WriteObjectValue(StringFormatter.FromDateTime(value, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeBasic, 2));
+            WriteObjectValue(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -491,7 +462,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(decimal value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -500,7 +471,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(double value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -509,7 +480,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(float value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -518,7 +489,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(Guid value)
         {
-            WriteObjectValue(value.ToString());
+            WriteObjectValue(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -527,7 +498,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(int value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -536,7 +507,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(long value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -545,7 +516,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(sbyte value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -554,7 +525,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(short value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -563,7 +534,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(uint value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -572,7 +543,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(ulong value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -581,7 +552,7 @@ namespace Cuemon.Runtime.Serialization
         /// <param name="value">The value of the JSON object.</param>
         public void WriteObjectValue(ushort value)
         {
-            Writer.Write(value.ToString(CultureInfo.InvariantCulture));
+            Writer.Write(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -591,63 +562,7 @@ namespace Cuemon.Runtime.Serialization
         /// <remarks><paramref name="value"/> is checked and written accordingly by the <see cref="IConvertible"/> interface.</remarks>
         public void WriteObjectValue(object value)
         {
-            IConvertible convertible = value as IConvertible;
-            if (convertible != null)
-            {
-                switch (convertible.GetTypeCode())
-                {
-                    case TypeCode.Byte:
-                        WriteObjectValue(convertible.ToByte(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.SByte:
-                        WriteObjectValue(convertible.ToSByte(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Int16:
-                        WriteObjectValue(convertible.ToInt16(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Int32:
-                        WriteObjectValue(convertible.ToInt32(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.UInt16:
-                        WriteObjectValue(convertible.ToUInt16(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Empty:
-                        WriteNull();
-                        break;
-                    case TypeCode.Char:
-                        WriteObjectValue(convertible.ToChar(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Boolean:
-                        WriteObjectValue(convertible.ToBoolean(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.UInt32:
-                        WriteObjectValue(convertible.ToUInt32(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Double:
-                        WriteObjectValue(convertible.ToDouble(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Single:
-                        WriteObjectValue(convertible.ToSingle(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Decimal:
-                        WriteObjectValue(convertible.ToDecimal(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.String:
-                        WriteObjectValue(convertible.ToString(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.DateTime:
-                        WriteObjectValue(convertible.ToDateTime(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.Int64:
-                        WriteObjectValue(convertible.ToInt64(CultureInfo.InvariantCulture));
-                        break;
-                    case TypeCode.UInt64:
-                        WriteObjectValue(convertible.ToUInt64(CultureInfo.InvariantCulture));
-                        break;
-                }
-                return;
-            }
-            if (value != null) { WriteObjectValue(value.ToString()); }
+            WriteObjectValue(JsonConverter.ToString(value));
         }
 
         /// <summary>
@@ -659,13 +574,13 @@ namespace Cuemon.Runtime.Serialization
             if (IsDisposed) { return; }
             if (disposing)
             {
-                if (_writer != null)
+                if (Writer != null)
                 {
-                    _writer.Close();
-                    _writer.Dispose();
+                    Writer.Close();
+                    Writer.Dispose();
                 }
             }
-            _writer = null;
+            Writer = null;
             IsDisposed = true;
         }
 
