@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Cuemon.Reflection;
 
 namespace Cuemon.Runtime.Caching
 {
@@ -867,9 +868,9 @@ namespace Cuemon.Runtime.Caching
             };
         }
 
-        private static string CalculateCompositeKey(params object[] args)
+        private static string CalculateCompositeKey(Delegate del, params object[] args)
         {
-            int result = 0;
+            int result = del == null || del.Method == null ? NullHashCode.GetHashCode() : MethodSignature.Create(del.Method).ToString().GetHashCode();
             for (int i = 0; i < args.Length; i++)
             {
                 object current = args[i] ?? NullHashCode;
