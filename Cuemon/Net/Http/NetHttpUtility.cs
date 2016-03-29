@@ -56,10 +56,11 @@ namespace Cuemon.Net.Http
                 }
 
                 vexingResult = result.ToAsyncCallResult();
-                WebException vexingException = vexingResult.Exception as WebException;
-                if (vexingException != null)
+                if (vexingResult.Exception != null)
                 {
-                    if (vexingException.Status == WebExceptionStatus.ProtocolError)
+                    var exceptions = ExceptionUtility.Flatten(vexingResult.Exception);
+                    var vexingException = ExceptionUtility.Parse<WebException>(exceptions);
+                    if (vexingException != null && vexingException.Status == WebExceptionStatus.ProtocolError)
                     {
                         vexingResult.Result = vexingException.Response;
                         vexingResult.Exception = null;
