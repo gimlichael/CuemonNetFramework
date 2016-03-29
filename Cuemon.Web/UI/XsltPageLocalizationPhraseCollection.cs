@@ -47,7 +47,7 @@ namespace Cuemon.Web.UI
         #region Properties
         private XmlDocument CachedPhraseFile(string phraseFile)
         {
-            string cacheKey = HashUtility.ComputeHash(phraseFile);
+            string cacheKey = HashUtility.ComputeHash(phraseFile).ToHexadecimal();
             if (!CachingManager.Cache.ContainsKey(cacheKey))
             {
                 lock (staticLockValue)
@@ -74,7 +74,7 @@ namespace Cuemon.Web.UI
 
         private XslCompiledTransform CachedPhraseStyleSheetFile(string phraseStyleSheetFile)
         {
-            string cacheKey = HashUtility.ComputeHash(phraseStyleSheetFile);
+            string cacheKey = HashUtility.ComputeHash(phraseStyleSheetFile).ToHexadecimal();
             if (!CachingManager.Cache.ContainsKey(cacheKey))
             {
                 lock (staticLockValue)

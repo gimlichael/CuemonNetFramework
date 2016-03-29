@@ -1259,7 +1259,7 @@ namespace Cuemon.Reflection
         {
             if (EnableResourceCaching)
             {
-                string key = HashUtility.ComputeHash(String.Format(CultureInfo.InvariantCulture, "{0}|{1}", source.Assembly.GetName().Name.ToUpperInvariant(), name.ToUpperInvariant()));
+                string key = HashUtility.ComputeHash(String.Format(CultureInfo.InvariantCulture, "{0}|{1}", source.Assembly.GetName().Name.ToUpperInvariant(), name.ToUpperInvariant())).ToHexadecimal();
                 return GetResourceFromAssemblyCache(key) ?? AddResourceToAssemblyCache(key, source.Assembly.GetManifestResourceStream(name));
             }
 

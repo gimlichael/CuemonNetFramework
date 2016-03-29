@@ -54,7 +54,7 @@ namespace Cuemon.Web.Configuration
         private static IXPathNavigable OpenWebConfigurationCore(string path)
         {
             string webConfigLocation = GetWebConfigLocation(path);
-            string cacheKey = HashUtility.ComputeHash(webConfigLocation);
+            string cacheKey = HashUtility.ComputeHash(webConfigLocation).ToHexadecimal();
             if (!CachingManager.Cache.ContainsKey(cacheKey))
             {
                 Uri fileUri = new Uri(webConfigLocation);

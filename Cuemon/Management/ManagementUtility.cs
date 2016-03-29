@@ -28,7 +28,7 @@ namespace Cuemon.Management
         /// </returns>
         public static bool IsWindowsManagementInstrumentationRunning()
         {
-            string key = HashUtility.ComputeHash("IsWindowsManagementInstrumentationRunning()");
+            string key = HashUtility.ComputeHash("IsWindowsManagementInstrumentationRunning()").ToHexadecimal();
             return CachingManager.Cache.GetOrAdd(key, ServiceControllerResolver, TimeSpan.FromMinutes(15));
         }
 

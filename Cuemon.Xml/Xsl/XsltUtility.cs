@@ -648,7 +648,7 @@ namespace Cuemon.Xml.Xsl
             ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ServicePointManagerUtility.ValidateRemoteCertificate);
             if (EnableXslCompiledTransformCaching && !bypassCache)
             {
-                string hashKey = HashUtility.ComputeHash(styleSheet, HashAlgorithmType.MD5, true);
+                string hashKey = HashUtility.ComputeHash(styleSheet, HashAlgorithmType.MD5, true).ToHexadecimal();
                 return CachingManager.Cache.GetOrAdd(hashKey, CacheGroupName, () =>
                 {
                     return GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver);
@@ -679,7 +679,7 @@ namespace Cuemon.Xml.Xsl
         {
             if (EnableXslCompiledTransformCaching)
             {
-                string hashKey = HashUtility.ComputeHash(styleSheet.OriginalString);
+                string hashKey = HashUtility.ComputeHash(styleSheet.OriginalString).ToHexadecimal();
                 return CachingManager.Cache.GetOrAdd(hashKey, CacheGroupName, () =>
                 {
                     return GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver);

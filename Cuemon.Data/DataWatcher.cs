@@ -103,7 +103,7 @@ namespace Cuemon.Data
                         values.Add(readerValues);
                     }
                 }
-                currentSignature = HashUtility.ComputeHash(values);
+                currentSignature = HashUtility.ComputeHash(values).ToHexadecimal();
                 values.Clear();
                 values = null;
 

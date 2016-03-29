@@ -58,7 +58,7 @@ namespace Cuemon.Runtime.Serialization
         /// <returns>A MD5 signature of the following properties: <see cref="Name"/>, <see cref="Value"/> and <see cref="NodeNumber"/>.</returns>
         public virtual string GetSignature()
         {
-            return HashUtility.ComputeHash(string.Concat(Name, Value, NodeNumber));
+            return HashUtility.ComputeHash(string.Concat(Name, Value, NodeNumber)).ToHexadecimal();
         }
 
         /// <summary>

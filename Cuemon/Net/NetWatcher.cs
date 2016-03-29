@@ -134,7 +134,7 @@ namespace Cuemon.Net
                             using (FileStream stream = new FileStream(this.RequestUri.LocalPath, FileMode.Open, FileAccess.Read))
                             {
                                 stream.Position = 0;
-                                currentSignature = HashUtility.ComputeHash(stream);
+                                currentSignature = HashUtility.ComputeHash(stream).ToHexadecimal();
                             }
                         }
                         break;
@@ -147,7 +147,7 @@ namespace Cuemon.Net
                             switch (request.Method)
                             {
                                 case WebRequestMethods.Ftp.DownloadFile:
-                                    currentSignature = HashUtility.ComputeHash(StreamUtility.CopyStream(response.GetResponseStream()));
+                                    currentSignature = HashUtility.ComputeHash(StreamUtility.CopyStream(response.GetResponseStream())).ToHexadecimal();
                                     break;
                                 case WebRequestMethods.Ftp.GetDateTimestamp:
                                     utcLastModified = response.LastModified.ToUniversalTime();
@@ -164,7 +164,7 @@ namespace Cuemon.Net
                             {
                                 case WebRequestMethods.Http.Get:
                                     string etag = response.Headers[HttpResponseHeader.ETag];
-                                    currentSignature = string.IsNullOrEmpty(etag) ? HashUtility.ComputeHash(StreamUtility.CopyStream(response.GetResponseStream())) : etag;
+                                    currentSignature = string.IsNullOrEmpty(etag) ? HashUtility.ComputeHash(StreamUtility.CopyStream(response.GetResponseStream())).ToHexadecimal() : etag;
                                     break;
                                 case WebRequestMethods.Http.Head:
                                     utcLastModified = response.LastModified.ToUniversalTime();

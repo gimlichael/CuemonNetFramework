@@ -52,7 +52,7 @@ namespace Cuemon.Xml
         /// </returns>
         public override string GetSignature()
         {
-            return HashUtility.ComputeHash(string.Concat(this.Name, this.Value, this.NodeNumber, Enum.GetName(typeof(XPathNodeType), this.NodeType)));
+            return HashUtility.ComputeHash(string.Concat(this.Name, this.Value, this.NodeNumber, Enum.GetName(typeof(XPathNodeType), this.NodeType))).ToHexadecimal();
         }
     }
 }

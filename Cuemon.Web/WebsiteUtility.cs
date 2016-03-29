@@ -21,7 +21,7 @@ namespace Cuemon.Web
 	public static class WebsiteUtility
 	{
 		internal static IList<string> RequestPipelineProcessingExtension = new List<string>();
-		internal static readonly string SessionCacheGroup = HashUtility.ComputeHash("SurrogateSession");
+		internal static readonly string SessionCacheGroup = HashUtility.ComputeHash("SurrogateSession").ToHexadecimal();
 		
 		/// <summary>
 		/// Get the key for the special debug view in a Cuemon enabled website.
@@ -112,7 +112,7 @@ namespace Cuemon.Web
 		{
 			if (request == null) throw new ArgumentNullException("request");
 			if (session == null) throw new ArgumentNullException("session");
-			string key = HashUtility.ComputeHash(string.Format(CultureInfo.InvariantCulture, "{0}{1}", request.RawUrl.ToUpperInvariant(), session.SessionID));
+			string key = HashUtility.ComputeHash(string.Format(CultureInfo.InvariantCulture, "{0}{1}", request.RawUrl.ToUpperInvariant(), session.SessionID)).ToHexadecimal();
 			lock (refreshList)
 			{
 				if (refreshList.ContainsKey(key))

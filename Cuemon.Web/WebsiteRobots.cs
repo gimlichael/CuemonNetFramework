@@ -44,7 +44,7 @@ namespace Cuemon.Web
         #region Properties
         private IXPathNavigable GetRobotsExclusionFileCore(string exclusionFile)
         {
-            string cacheKey = HashUtility.ComputeHash(exclusionFile);
+            string cacheKey = HashUtility.ComputeHash(exclusionFile).ToHexadecimal();
             Uri fileUri = new Uri(exclusionFile);
             if (!CachingManager.Cache.ContainsKey(cacheKey))
             {

@@ -136,6 +136,10 @@
     <Compile Include="Collections\DataPairCollection.cs" />
     <Compile Include="Reflection\MethodBaseConverter.cs" />
     <Compile Include="SearchType.cs" />
+    <Compile Include="Security\Cryptography\HashAlgorithmType.cs" />
+    <Compile Include="Security\Cryptography\HashResult.cs" />
+    <Compile Include="Security\Cryptography\HmacAlgorithmType.cs" />
+    <Compile Include="Security\Cryptography\HmacUtility.cs" />
     <Compile Include="Security\SecurityTokenSettings.cs" />
     <Compile Include="StandardizedDateTimeFormatPattern.cs" />
     <Compile Include="StringConverter.cs" />

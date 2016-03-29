@@ -170,7 +170,7 @@ namespace Cuemon.Xml.Xsl
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
             if (resolver == null) { throw new ArgumentNullException(nameof(resolver)); }
-            string cacheKey = HashUtility.ComputeHash(value, HashAlgorithmType.MD5, true);
+            string cacheKey = HashUtility.ComputeHash(value, HashAlgorithmType.MD5, true).ToHexadecimal();
             return CachingManager.Cache.GetOrAdd(cacheKey, CacheGroupName, () =>
             {
                 StringBuilder tempXslts = new StringBuilder("<root>");

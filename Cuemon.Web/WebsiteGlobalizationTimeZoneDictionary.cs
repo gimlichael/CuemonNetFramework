@@ -212,7 +212,7 @@ namespace Cuemon.Web
         /// </returns>
         public string ComputeHash(Stream value)
         {
-            return HashUtility.ComputeHash(value);
+            return HashUtility.ComputeHash(value).ToHexadecimal();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Cuemon.Web
         /// </returns>
         public string ComputeHash(Stream value, HashAlgorithmType algorithmType)
         {
-            return HashUtility.ComputeHash(value, algorithmType);
+            return HashUtility.ComputeHash(value, algorithmType).ToHexadecimal();
         }
         #endregion
     }

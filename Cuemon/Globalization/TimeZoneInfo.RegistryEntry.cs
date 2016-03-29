@@ -111,7 +111,7 @@ namespace Cuemon.Globalization
             [EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
             private TZI InitializeTZI(byte[] tziValue)
             {
-                string hashKey = HashUtility.ComputeHash(tziValue);
+                string hashKey = HashUtility.ComputeHash(tziValue).ToHexadecimal();
                 if (CachingManager.Cache.ContainsKey(hashKey, CacheGroupName)) { return CachingManager.Cache.Get<TZI>(hashKey, CacheGroupName); }
 
                 if (tziValue.Length != Marshal.SizeOf(this.TziInitialized)) { throw new ArgumentException("Information size is incorrect", nameof(tziValue)); }

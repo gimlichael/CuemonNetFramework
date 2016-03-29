@@ -681,8 +681,8 @@ namespace Cuemon.Web.UI
             lock (_locker) { GlobalModule.MostSignificantValidator = CacheValidator.GetMostSignificant(GlobalModule.MostSignificantValidator, this.GetCacheValidator()); }
             if (this.IsCurrentRequestRefresh && !this.IsPostBack) // we have an assumed refresh - render this page for the client, and store the result for 1 minute
             {
-                Doer<string, string> computeHash = CachingManager.Cache.Memoize<string, string>(HashUtility.ComputeHash);
-                string cacheKey = computeHash(string.Concat(this.Request.Url.OriginalString.ToLowerInvariant(), "_Render(HtmlTextWriter)"));
+                Doer<string, HashResult> computeHash = CachingManager.Cache.Memoize<string, HashResult>(HashUtility.ComputeHash);
+                string cacheKey = computeHash(string.Concat(this.Request.Url.OriginalString.ToLowerInvariant(), "_Render(HtmlTextWriter)")).ToHexadecimal();
                 string surrogateResult = CachingManager.Cache.GetOrAdd(cacheKey, CacheGroupName, () =>
                 {
                     StringWriter stringWriter = null;
@@ -775,9 +775,9 @@ namespace Cuemon.Web.UI
 
         private string RenderCached()
         {
-            Doer<string, string> computeHash = CachingManager.Cache.Memoize<string, string>(HashUtility.ComputeHash);
+            Doer<string, HashResult> computeHash = CachingManager.Cache.Memoize<string, HashResult>(HashUtility.ComputeHash);
             string rawUrl = this.Request.RawUrl.ToLowerInvariant(); // we have to use rawurl because of the SEO-rewrite of URL-pages (we cannot rely on this.Name (absolutePath)).
-            string cacheKey = this.Website != null ? computeHash(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", rawUrl, this.Website.Globalization.CurrentCultureInfo.LCID, this.Website.Globalization.CurrentTimeZone.StandardName)) : computeHash(rawUrl);
+            string cacheKey = this.Website != null ? computeHash(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", rawUrl, this.Website.Globalization.CurrentCultureInfo.LCID, this.Website.Globalization.CurrentTimeZone.StandardName)).ToHexadecimal() : computeHash(rawUrl).ToHexadecimal();
 
             byte[] cachedResult = CachingManager.Cache.GetOrAdd(cacheKey, CacheGroupName, () =>
             {
@@ -1086,9 +1086,9 @@ namespace Cuemon.Web.UI
         /// </summary>
         public XPathNodeIterator GetCustomXmlNodes()
         {
-            Doer<string, string> computeHash = CachingManager.Cache.Memoize<string, string>(HashUtility.ComputeHash);
+            Doer<string, HashResult> computeHash = CachingManager.Cache.Memoize<string, HashResult>(HashUtility.ComputeHash);
             Uri uriLocation = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}.xml", this.Server.MapPath(this.Name)));
-            string cacheKey = computeHash(string.Concat(uriLocation.LocalPath.ToLowerInvariant(), "_GetCustomXmlNodes()"));
+            string cacheKey = computeHash(string.Concat(uriLocation.LocalPath.ToLowerInvariant(), "_GetCustomXmlNodes()")).ToHexadecimal();
             XPathNodeIterator iterator = CachingManager.Cache.GetOrAdd(cacheKey, CacheGroupName, CustomXmlNodesResolver, uriLocation, CustomXmlNodesDependencies);
             return iterator.Clone(); // always return a cloned iterator, as any actions done on the iterator is followed back to the cache
         }
