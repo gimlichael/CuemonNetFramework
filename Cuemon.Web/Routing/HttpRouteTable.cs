@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using Cuemon.Collections.Generic;
-using Cuemon.Web.Compilation;
 
 namespace Cuemon.Web.Routing
 {
@@ -55,27 +53,12 @@ namespace Cuemon.Web.Routing
             return route != null;
         }
 
-        /// <summary>
-        /// Gets or sets the function delegate that will retrieve the ASP.NET <see cref="IHttpHandler"/> types.
-        /// </summary>
-        /// <value>The function delegate for retrieving ASP.NET <see cref="IHttpHandler"/> types.</value>
-        /// <remarks>If no function delegate is assigned, a default implementation of <see cref="CompilationUtility.GetReferencedHandlerTypes"/> is used.</remarks>
-        public static Doer<IReadOnlyCollection<Type>> ReferencedHandlerTypes { get; set; }
-
-        private static IReadOnlyCollection<Type> GetDefaultReferencedHandlerTypes()
-        {
-            if (ReferencedHandlerTypes == null) { ReferencedHandlerTypes = CompilationUtility.GetReferencedHandlerTypes; }
-            return ReferencedHandlerTypes();
-        }
-
         private static HttpRoute ParseCore(HttpContext context, IDictionary<string, object> data)
         {
             HttpRoutePath currentPath = new HttpRoutePath(context);
             foreach (HttpRoute route in Routes)
             {
                 if (!IsDataEqual(route.Data, data)) { continue; }
-                IReadOnlyCollection<Type> handlers = GetDefaultReferencedHandlerTypes();
-                if (!handlers.Contains(route.HandlerType)) { continue; }
                 if (currentPath.HasPhysicalFile && currentPath.IsHandler)
                 {
                     if (currentPath.VirtualFilePath.StartsWith(route.VirtualFilePath ?? "", StringComparison.OrdinalIgnoreCase))
