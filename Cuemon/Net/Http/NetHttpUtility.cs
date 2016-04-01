@@ -427,7 +427,7 @@ namespace Cuemon.Net.Http
         private static HttpWebResponse HttpCore(HttpWebRequest request)
         {
             AsyncCallResult<HttpWebRequest, WebResponse> asyncResponse = WebResponseFromAsync(request.BeginGetResponse, request.EndGetResponse, request);
-            if (asyncResponse.Exception != null) { throw new ArgumentException("An error occurred while invoking the asynchronous operation.", asyncResponse.Exception); }
+            if (asyncResponse.Exception != null) { throw new ArgumentException("An error occurred while invoking the asynchronous operation.", nameof(request), asyncResponse.Exception); }
             return asyncResponse.ResultAs<HttpWebResponse>();
         }
 
