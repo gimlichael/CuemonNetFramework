@@ -24,10 +24,18 @@ namespace Cuemon.Runtime.Caching
         #region Constructors
         private CacheCollection()
         {
+            EnableExpirationTimer = true;
+            ExpirationTimer = new Timer(ExpirationTimerInvoking, null, TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(20));
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets a value indicating whether a timer regularly should clean up expired cache items.
+        /// </summary>
+        /// <value><c>true</c> if a timer regularly should clean up expired cache items; otherwise, <c>false</c>.</value>
+        public bool EnableExpirationTimer { get; set; }
+
         /// <summary>
         /// Gets the cached item with the specified <paramref name="key"/>.
         /// </summary>
@@ -52,7 +60,7 @@ namespace Cuemon.Runtime.Caching
             }
         }
 
-        private Timer ExpirationTimer { get; set; }
+        internal Timer ExpirationTimer { get; set; }
         #endregion
 
         #region Methods
@@ -328,7 +336,17 @@ namespace Cuemon.Runtime.Caching
 
         private void ExpirationTimerInvoking(object o)
         {
-            HandleExpiration();
+            if (!EnableExpirationTimer) { return; }
+            DateTime current = DateTime.UtcNow;
+            List<Cache> snapshot = new List<Cache>(_innerCaches.Values);
+            if (snapshot.Count > 0)
+            {
+                foreach (Cache cache in snapshot)
+                {
+                    if (cache == null) { continue; }
+                    if (cache.CanExpire && cache.HasExpired(current)) { RemoveExpired(cache.Key, cache.Group); }
+                }
+            }
         }
 
         private void RemoveExpired(string key, string group)
@@ -336,36 +354,39 @@ namespace Cuemon.Runtime.Caching
             Remove(key, group);
         }
 
-        private void HandleExpiration()
+        /// <summary>
+        /// Removes the value with the specified key from the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+        /// </summary>
+        /// <param name="key">The key of the element to remove.</param>
+        /// <returns>
+        /// true if the element is successfully found and removed; otherwise, false.  This method returns false if <paramref name="key"/> is not found in the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+        /// </returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// 	<paramref name="key"/> is null.
+        /// </exception>
+        public bool Remove(string key)
         {
-            bool isTimerRequired = false;
-            DateTime current = DateTime.UtcNow;
-            IList<Cache> groupCaches = GetCaches();
+            return Remove(key, NoGroup);
+        }
 
-            if (groupCaches.Count > 0)
+        /// <summary>
+        /// Removes the value with the specified key from the associated specified group of the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+        /// </summary>
+        /// <param name="key">The key of the element to remove.</param>
+        /// <param name="group">The associated group to the key of the element to remove.</param>
+        /// <returns>
+        /// <c>true</c> if the element is successfully found and removed; otherwise, <c>false</c>.  This method returns <c>false</c> if <paramref name="key"/> combined with <paramref name="group"/>  is not found in the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+        /// </returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// 	<paramref name="key"/> is null.
+        /// </exception>
+        public bool Remove(string key, string group)
+        {
+            Validator.ThrowIfNull(key, nameof(key));
+            long groupKey = GenerateGroupKey(key, group);
+            lock (_innerCaches)
             {
-                foreach (Cache cache in groupCaches)
-                {
-                    if (cache == null) { continue; }
-                    if (cache.CanExpire)
-                    {
-                        if (cache.HasExpired(current))
-                        {
-                            ThreadPoolUtility.RunAction(RemoveExpired, cache.Key, cache.Group);
-                        }
-                        else
-                        {
-                            isTimerRequired = true;
-                        }
-                    }
-                }
-            }
-
-            if (isTimerRequired) { return; }
-            if (ExpirationTimer != null)
-            {
-                ExpirationTimer.Dispose();
-                ExpirationTimer = null;
+                return _innerCaches.Remove(groupKey);
             }
         }
 
@@ -373,11 +394,6 @@ namespace Cuemon.Runtime.Caching
         {
             ThreadPoolUtility.RunAction(RemoveExpired, e.Cache.Key, e.Cache.Group);
             e.Cache.Expired -= CacheExpired;
-        }
-
-        private IList<Cache> GetCaches()
-        {
-            return GetCaches(NoGroup);
         }
 
         private IList<Cache> GetCaches(string group)
@@ -554,42 +570,6 @@ namespace Cuemon.Runtime.Caching
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Removes the value with the specified key from the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
-        /// </summary>
-        /// <param name="key">The key of the element to remove.</param>
-        /// <returns>
-        /// true if the element is successfully found and removed; otherwise, false.  This method returns false if <paramref name="key"/> is not found in the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
-        /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="key"/> is null.
-        /// </exception>
-        public bool Remove(string key)
-        {
-            return Remove(key, NoGroup);
-        }
-
-        /// <summary>
-        /// Removes the value with the specified key from the associated specified group of the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
-        /// </summary>
-        /// <param name="key">The key of the element to remove.</param>
-        /// <param name="group">The associated group to the key of the element to remove.</param>
-        /// <returns>
-        /// <c>true</c> if the element is successfully found and removed; otherwise, <c>false</c>.  This method returns <c>false</c> if <paramref name="key"/> combined with <paramref name="group"/>  is not found in the <see cref="T:System.Collections.Generic.Dictionary`2"/>.
-        /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="key"/> is null.
-        /// </exception>
-        public bool Remove(string key, string group)
-        {
-            Validator.ThrowIfNull(key, nameof(key));
-            long groupKey = GenerateGroupKey(key, group);
-            lock (_innerCaches)
-            {
-                return _innerCaches.Remove(groupKey);
-            }
         }
 
         private IEnumerable<KeyValuePair<long, object>> CreateImpostor()

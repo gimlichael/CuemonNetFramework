@@ -2200,15 +2200,15 @@ namespace Cuemon.Runtime.Caching
                 Validator.ThrowIfLowerThan(slidingExpiration().Ticks, TimeSpan.Zero.Ticks, nameof(slidingExpiration), "The specified sliding expiration cannot be less than TimeSpan.Zero.");
                 Validator.ThrowIfGreaterThan(slidingExpiration().Ticks, TimeSpan.FromDays(365).Ticks, nameof(slidingExpiration), "The specified sliding expiration cannot exceed one year.");
             }
-            long groupKey = GenerateGroupKey(key, group);
             bool wasAddedToCache = false;
-            if (!_innerCaches.TryGetValue(groupKey, out result))
+            if (!TryGetCache(key, group, out result))
             {
                 lock (_innerCaches)
                 {
-                    if (!_innerCaches.TryGetValue(groupKey, out result))
+                    if (!TryGetCache(key, group, out result))
                     {
-                        result = WrapCacheInThreadSafeDelegate(value, key, @group, absoluteExpiration, slidingExpiration, dependenciesFactory).Value;
+                        long groupKey = GenerateGroupKey(key, group);
+                        result = WrapCacheInThreadSafeDelegate(value, key, group, absoluteExpiration, slidingExpiration, dependenciesFactory).Value;
                         _innerCaches.Add(groupKey, result);
                         wasAddedToCache = true;
                     }
@@ -2222,10 +2222,9 @@ namespace Cuemon.Runtime.Caching
         {
             return new PadLock<Cache>(() =>
             {
-                Cache cache = new Cache(key, value(), @group, dependenciesFactory == null ? null : dependenciesFactory.ExecuteMethod(), absoluteExpiration == null ? DateTime.MaxValue : absoluteExpiration(), slidingExpiration == null ? TimeSpan.Zero : slidingExpiration());
+                Cache cache = new Cache(key, value(), group, dependenciesFactory == null ? null : dependenciesFactory.ExecuteMethod(), absoluteExpiration == null ? DateTime.MaxValue : absoluteExpiration(), slidingExpiration == null ? TimeSpan.Zero : slidingExpiration());
                 cache.Expired += CacheExpired;
                 cache.StartDependencies();
-                if (cache.CanExpire && ExpirationTimer == null) { ExpirationTimer = new Timer(ExpirationTimerInvoking, null, TimeSpan.Zero, TimeSpan.FromMinutes(30)); }
                 return cache;
             });
         }
