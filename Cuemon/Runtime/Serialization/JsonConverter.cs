@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 
 namespace Cuemon.Runtime.Serialization
 {
@@ -14,6 +15,74 @@ namespace Cuemon.Runtime.Serialization
         public static readonly string NullValue = "null";
 
         /// <summary>
+        /// The function delegate that will handle JSON ASCII conversions.
+        /// </summary>
+        public static Doer<int, string> JsonAsciiConverter = JsonEscape;
+
+        /// <summary>
+        /// The function delegate that will handle JSON Unicode conversions.
+        /// </summary>
+        public static Doer<int, string> JsonUnicodeConverter = UnicodeEscape;
+
+        /// <summary>
+        /// JSON escapes the specified <paramref name="value"/> using the two function delegates; <see cref="JsonAsciiConverter"/> and <see cref="JsonUnicodeConverter"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="String"/> to escape.</param>
+        /// <returns>A JSON escaped <see cref="string"/> that is equivalent to <paramref name="value"/>.</returns>
+        public static string Escape(string value)
+        {
+            if (value == null) { return NullValue; }
+            StringBuilder builder = new StringBuilder(value.Length);
+            foreach (char character in value)
+            {
+                if (ShouldEscape(character))
+                {
+                    builder.Append(character < byte.MaxValue ? JsonAsciiConverter(character) : JsonUnicodeConverter(character));
+                }
+                else
+                {
+                    builder.Append(character);
+                }
+            }
+            return builder.ToString();
+        }
+
+        private static string JsonEscape(int c)
+        {
+            switch (c)
+            {
+                case 34:
+                    return @"\""";
+                case 92:
+                    return @"\\";
+                case 47:
+                    return @"\/";
+                case 8:
+                    return @"\b";
+                case 12:
+                    return @"\f";
+                case 10:
+                    return @"\n";
+                case 13:
+                    return @"\r";
+                case 9:
+                    return @"\t";
+                default:
+                    return Convert.ToChar(c).ToString();
+            }
+        }
+
+        private static string UnicodeEscape(int c)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "%u{0:x4}", c);
+        }
+
+        private static bool ShouldEscape(int c)
+        {
+            return (c == 34 || c == 92 || c == 47 || c == 8 || c == 12 || c == 10 || c == 13 || c == 9) || (c > 126);
+        }
+
+        /// <summary>
         /// Returns the string value of a JSON object as defined in RFC 4627.
         /// </summary>
         /// <param name="value">The value of the JSON object.</param>
@@ -24,7 +93,7 @@ namespace Cuemon.Runtime.Serialization
             {
                 return NullValue;
             }
-            return string.Concat("\"", StringUtility.Escape(value), "\"");
+            return string.Concat("\"", Escape(value), "\"");
         }
 
         /// <summary>
