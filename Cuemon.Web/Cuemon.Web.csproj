@@ -148,6 +148,11 @@
     <Compile Include="Security\BasicAuthenticationModule.cs" />
     <Compile Include="Security\DigestAccessAuthenticationModule.cs" />
     <Compile Include="Security\DigestAuthenticationUtility.cs" />
+    <Compile Include="Security\JsonWebToken.cs" />
+    <Compile Include="Security\JsonWebTokenConverter.cs" />
+    <Compile Include="Security\JsonWebTokenHashAlgorithm.cs" />
+    <Compile Include="Security\JsonWebTokenHeader.cs" />
+    <Compile Include="Security\JsonWebTokenPayload.cs" />
     <Compile Include="Security\WebSecurityUtility.cs" />
     <Compile Include="SessionState\HttpFastSessionState.cs" />
     <Compile Include="SiteMapProtocolHandler.cs" />
