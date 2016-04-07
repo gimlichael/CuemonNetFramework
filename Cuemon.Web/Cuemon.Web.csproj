@@ -151,6 +151,7 @@
     <Compile Include="Security\JsonWebToken.cs" />
     <Compile Include="Security\JsonWebTokenConverter.cs" />
     <Compile Include="Security\JsonWebTokenHashAlgorithm.cs" />
+    <Compile Include="Security\JsonWebTokenHashAlgorithmConverter.cs" />
     <Compile Include="Security\JsonWebTokenHeader.cs" />
     <Compile Include="Security\JsonWebTokenPayload.cs" />
     <Compile Include="Security\WebSecurityUtility.cs" />

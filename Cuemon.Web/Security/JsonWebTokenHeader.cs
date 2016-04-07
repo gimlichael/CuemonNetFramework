@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Cuemon.Runtime.Serialization;
 
@@ -47,7 +46,7 @@ namespace Cuemon.Web.Security
         public override string ToString()
         {
             List<string> header = new List<string>();
-            header.Add(string.Format(CultureInfo.InvariantCulture, "\"alg\": {0}", JsonConverter.ToString(JsonWebTokenConverter.FromJsonWebTokenHashAlgorithm(Algorithm))));
+            header.Add(string.Format(CultureInfo.InvariantCulture, "\"alg\": {0}", JsonConverter.ToString(JsonWebTokenHashAlgorithmConverter.ToString(Algorithm))));
             header.Add(string.Format(CultureInfo.InvariantCulture, "\"typ\": {0}", JsonConverter.ToString(Type)));
             return string.Format(CultureInfo.InvariantCulture, "{{ {0} }}", StringConverter.ToDelimitedString(header, ", "));
         }
