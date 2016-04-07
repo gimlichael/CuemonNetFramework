@@ -9,6 +9,9 @@ namespace Cuemon.Runtime.Serialization
     /// </summary>
     public static class JsonConverter
     {
+        private static Doer<int, string> _jsonUnicodeConverter = UnicodeEscape;
+        private static Doer<int, string> _jsonAsciiConverter = JsonEscape;
+
         /// <summary>
         /// Represents the null literal as defined in RFC 4627.
         /// </summary>
@@ -17,17 +20,33 @@ namespace Cuemon.Runtime.Serialization
         /// <summary>
         /// The function delegate that will handle JSON ASCII conversions.
         /// </summary>
-        public static Doer<int, string> JsonAsciiConverter = JsonEscape;
+        public static Doer<int, string> JsonAsciiConverter
+        {
+            get { return _jsonAsciiConverter; }
+            set
+            {
+                Validator.ThrowIfNull(value, nameof(value));
+                _jsonAsciiConverter = value;
+            }
+        }
 
         /// <summary>
         /// The function delegate that will handle JSON Unicode conversions.
         /// </summary>
-        public static Doer<int, string> JsonUnicodeConverter = UnicodeEscape;
+        public static Doer<int, string> JsonUnicodeConverter
+        {
+            get { return _jsonUnicodeConverter; }
+            set
+            {
+                Validator.ThrowIfNull(value, nameof(value));
+                _jsonUnicodeConverter = value;
+            }
+        }
 
         /// <summary>
         /// JSON escapes the specified <paramref name="value"/> using the two function delegates; <see cref="JsonAsciiConverter"/> and <see cref="JsonUnicodeConverter"/>.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> to escape.</param>
+        /// <param name="value">The <see cref="string"/> to escape.</param>
         /// <returns>A JSON escaped <see cref="string"/> that is equivalent to <paramref name="value"/>.</returns>
         public static string Escape(string value)
         {

@@ -21,6 +21,11 @@ namespace Cuemon.Web.Security
         public const char DigestAuthenticationCredentialSeparator = ',';
 
         /// <summary>
+        /// The value of the header credential separator of a HTTP JSON Web Token authentication.
+        /// </summary>
+        public const char JwtAuthenticationCredentialSeparator = '.';
+
+        /// <summary>
         /// The value of the ETag header for an HTTP response.
         /// </summary>
         public const string HttpEtagHeader = "Etag";
