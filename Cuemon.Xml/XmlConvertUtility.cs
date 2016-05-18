@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
-using Cuemon.IO;
+using Cuemon.Collections.Generic;
 using Cuemon.Runtime.Serialization;
 using Cuemon.Xml.XPath;
 
@@ -89,7 +89,7 @@ namespace Cuemon.Xml
             if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
             MemoryStream tempOutput = null;
-            MemoryStream output = null;
+            MemoryStream output;
             try
             {
                 tempOutput = new MemoryStream();
@@ -116,23 +116,6 @@ namespace Cuemon.Xml
             writer.WriteStartElement(XmlUtility.SanitizeElementName(exceptionType.Name));
             writer.WriteAttributeString("namespace", exceptionType.Namespace);
             WriteExceptionCore(writer, exception, includeStackTrace);
-
-            IEnumerable<Exception> innerExceptions = ExceptionUtility.Flatten(exception);
-            if (innerExceptions != null)
-            {
-                int endElementsToWrite = 0;
-                foreach (Exception inner in innerExceptions)
-                {
-                    exceptionType = inner.GetType();
-                    writer.WriteStartElement(XmlUtility.SanitizeElementName(exceptionType.Name));
-                    writer.WriteAttributeString("namespace", exceptionType.Namespace);
-                    WriteExceptionCore(writer, inner, includeStackTrace);
-                    endElementsToWrite++;
-                }
-
-                LoopUtility.For(endElementsToWrite, WriteEndElement, writer);
-            }
-
             writer.WriteEndElement();
         }
 
@@ -156,7 +139,7 @@ namespace Cuemon.Xml
             if (exception.StackTrace != null && includeStackTrace)
             {
                 writer.WriteStartElement("StackTrace");
-                string[] lines = exception.StackTrace.Split(new string[] { StringUtility.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lines = exception.StackTrace.Split(new[] { StringUtility.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string line in lines)
                 {
                     writer.WriteElementString("Frame", line.Trim());
@@ -164,7 +147,7 @@ namespace Cuemon.Xml
                 writer.WriteEndElement();
             }
 
-            if (exception.Data.Count > 0 && includeStackTrace)
+            if (exception.Data.Count > 0)
             {
                 writer.WriteStartElement("Data");
                 foreach (DictionaryEntry entry in exception.Data)
@@ -175,6 +158,26 @@ namespace Cuemon.Xml
                 }
                 writer.WriteEndElement();
             }
+
+            WriteInnerExceptions(writer, exception, includeStackTrace);
+        }
+
+        private static void WriteInnerExceptions(XmlWriter writer, Exception exception, bool includeStackTrace)
+        {
+            var innerExceptions = new List<Exception>(ExceptionUtility.Flatten(exception));
+            if (innerExceptions.Count > 0)
+            {
+                int endElementsToWrite = 0;
+                foreach (var inner in innerExceptions)
+                {
+                    Type exceptionType = inner.GetType();
+                    writer.WriteStartElement(XmlUtility.SanitizeElementName(exceptionType.Name));
+                    writer.WriteAttributeString("namespace", exceptionType.Namespace);
+                    WriteExceptionCore(writer, inner, includeStackTrace);
+                    endElementsToWrite++;
+                }
+                LoopUtility.For(endElementsToWrite, WriteEndElement, writer);
+            }
         }
 
         /// <summary>
@@ -182,7 +185,7 @@ namespace Cuemon.Xml
         /// </summary>
         /// <param name="xmlValue">The XML to convert to a JSON representation.</param>
         /// <returns>A UTF-8 encoded JSON representation of the specified <paramref name="xmlValue"/> and whose value is equivalent to <paramref name="xmlValue"/>.</returns>
-        /// <remarks>The JSON representation is in compliance with RFC 4627. Take note, that all string values is escaped using <see cref="StringUtility.Escape"/>. This is by design and to help ensure compatibility with a wide range of data.</remarks>
+        /// <remarks>The JSON representation is in compliance with RFC 4627. Take note, that all string values is escaped using <see cref="JsonConverter.Escape"/>. This is by design and to help ensure compatibility with a wide range of data.</remarks>
         public static Stream ToJson(Stream xmlValue)
         {
             return ToJson(xmlValue, Encoding.UTF8);
@@ -196,7 +199,7 @@ namespace Cuemon.Xml
         /// <returns>A JSON representation of the specified <paramref name="xmlValue"/> and whose value is equivalent to <paramref name="xmlValue"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">This exception is thrown when <paramref name="encoding"/> is not within the boundaries of RFC 4627.</exception>
         /// <exception cref="ArgumentNullException">This exception is thrown should either of <paramref name="xmlValue"/> or <paramref name="encoding"/> have the value of null.</exception>
-        /// <remarks>The JSON representation is in compliance with RFC 4627. Take note, that all string values is escaped using <see cref="StringUtility.Escape"/>. This is by design and to help ensure compatibility with a wide range of data.</remarks>
+        /// <remarks>The JSON representation is in compliance with RFC 4627. Take note, that all string values is escaped using <see cref="JsonConverter.Escape"/>. This is by design and to help ensure compatibility with a wide range of data.</remarks>
         public static Stream ToJson(Stream xmlValue, Encoding encoding)
         {
             if (xmlValue == null) throw new ArgumentNullException(nameof(xmlValue));
@@ -273,7 +276,7 @@ namespace Cuemon.Xml
                     break;
             }
 
-            if (instance.WriteValueSeperator())
+            if (instance.WriteValueSeparator())
             {
                 if ((!instance.WriteStartArray() &&
                     (!instance.IsPartOfArray() && instance.NodeType == XPathNodeType.Attribute)) ||
@@ -285,7 +288,7 @@ namespace Cuemon.Xml
 
             if (instance.Instances.Count > 0)
             {
-                instance.Instances.Sort(new Comparison<JsonInstance>(JsonInstanceCollection.Compare));
+                instance.Instances.Sort(JsonInstanceCollection.Compare);
                 foreach (XmlJsonInstance childInstance in instance.Instances)
                 {
                     WriteJsonInstance(writer, childInstance);
@@ -307,7 +310,7 @@ namespace Cuemon.Xml
                         writer.WriteEndObject();
                     }
 
-                    if (instance.WriteValueSeperator()) { writer.WriteValueSeperator(); }
+                    if (instance.WriteValueSeparator()) { writer.WriteValueSeperator(); }
                     break;
             }
         }

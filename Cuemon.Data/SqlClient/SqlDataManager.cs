@@ -433,8 +433,8 @@ namespace Cuemon.Data.SqlClient
         /// <returns></returns>
         protected override IDbCommand GetCommandCore(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
-            if (dataCommand == null) throw new ArgumentNullException(nameof(dataCommand));
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            if (dataCommand == null) { throw new ArgumentNullException(nameof(dataCommand)); }
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
             SqlCommand command = null;
             SqlCommand tempCommand = null;
             try

@@ -174,7 +174,7 @@ namespace Cuemon.Threading
     public class AsyncCall : IAsyncResult
     {
         /// <summary>
-        /// A syncronization lock.
+        /// A synchronization lock.
         /// </summary>
         protected readonly object PadLock = new object();
         private readonly DateTime _utcCreated = DateTime.UtcNow;

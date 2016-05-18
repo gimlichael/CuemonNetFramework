@@ -11,7 +11,7 @@ using Cuemon.Reflection;
 namespace Cuemon
 {
     /// <summary>
-    /// This utility class is designed to make <see cref="String"/> related conversions easier to work with.
+    /// This utility class is designed to make <see cref="string"/> related conversions easier to work with.
     /// </summary>
     public static class StringConverter
     {
@@ -68,7 +68,7 @@ namespace Cuemon
         /// Converts the specified <paramref name="value"/> to its equivalent hexadecimal representation.
         /// </summary>
         /// <param name="value">The byte array to be converted.</param>
-        /// <returns>A hexadecimal <see cref="String"/> representation of the elements in <paramref name="value"/>.</returns>
+        /// <returns>A hexadecimal <see cref="string"/> representation of the elements in <paramref name="value"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="value"/> is null.
         /// </exception>
@@ -82,7 +82,7 @@ namespace Cuemon
         /// Converts the specified <paramref name="value"/> to its equivalent hexadecimal representation.
         /// </summary>
         /// <param name="value">The string to be converted.</param>
-        /// <returns>A hexadecimal <see cref="String"/> representation of the characters in <paramref name="value"/>.</returns>
+        /// <returns>A hexadecimal <see cref="string"/> representation of the characters in <paramref name="value"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="value"/> is null.
         /// </exception>
@@ -96,7 +96,7 @@ namespace Cuemon
         /// </summary>
         /// <param name="value">The string to be converted.</param>
         /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <returns>A hexadecimal <see cref="String"/> representation of the characters in <paramref name="value"/>.</returns>
+        /// <returns>A hexadecimal <see cref="string"/> representation of the characters in <paramref name="value"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="value"/> is null.
         /// </exception>
@@ -111,7 +111,7 @@ namespace Cuemon
         /// <param name="value">The string to be converted.</param>
         /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
         /// <param name="encoding">The preferred encoding to apply to the result.</param>
-        /// <returns>A hexadecimal <see cref="String"/> representation of the characters in <paramref name="value"/>.</returns>
+        /// <returns>A hexadecimal <see cref="string"/> representation of the characters in <paramref name="value"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="value"/> is null - or - <paramref name="encoding"/> is null.
         /// </exception>
@@ -123,10 +123,10 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="String"/> representation.
+        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="string"/> representation.
         /// </summary>
         /// <param name="hexadecimalValue">The hexadecimal string to be converted.</param>
-        /// <returns>A <see cref="String"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
+        /// <returns>A <see cref="string"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="hexadecimalValue"/> is null.
         /// </exception>
@@ -136,11 +136,11 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="String"/> representation.
+        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="string"/> representation.
         /// </summary>
         /// <param name="hexadecimalValue">The hexadecimal string to be converted.</param>
         /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <returns>A <see cref="String"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
+        /// <returns>A <see cref="string"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="hexadecimalValue"/> is null.
         /// </exception>
@@ -150,12 +150,12 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="String"/> representation.
+        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="string"/> representation.
         /// </summary>
         /// <param name="hexadecimalValue">The hexadecimal string to be converted.</param>
         /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
         /// <param name="encoding">The preferred encoding to apply to the result.</param>
-        /// <returns>A <see cref="String"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
+        /// <returns>A <see cref="string"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="hexadecimalValue"/> is null - or - <paramref name="encoding"/> is null.
         /// </exception>
@@ -228,7 +228,7 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified pascal-case representation <paramref name="value"/> to a human readable string.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> to convert.</param>
+        /// <param name="value">The <see cref="string"/> to convert.</param>
         /// <returns>A human readable string from the specified pascal-case representation <paramref name="value"/>.</returns>
         public static string FromPascalCasing(string value)
         {
@@ -258,8 +258,8 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified <paramref name="value"/> to a pascal-case representation, using culture-independent casing rules.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to convert.</param>
-        /// <returns>A pascal-case representation of the specified <see cref="String"/> value.</returns>
+        /// <param name="value">The <see cref="string"/> value to convert.</param>
+        /// <returns>A pascal-case representation of the specified <see cref="string"/> value.</returns>
         public static string ToPascalCasing(string value)
         {
             return ToPascalCasing(value, CultureInfo.InvariantCulture);
@@ -268,9 +268,9 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified <paramref name="value"/> to a pascal-case representation, using the casing rules of the specified culture.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to convert.</param>
+        /// <param name="value">The <see cref="string"/> value to convert.</param>
         /// <param name="culture">The <see cref="CultureInfo"/> to support.</param>
-        /// <returns>A pascal-case representation of the specified <see cref="String"/> value.</returns>
+        /// <returns>A pascal-case representation of the specified <see cref="string"/> value.</returns>
         public static string ToPascalCasing(string value, CultureInfo culture)
         {
             Validator.ThrowIfNullOrEmpty(value, nameof(value));
@@ -280,8 +280,8 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified <paramref name="value"/> to a camel-case representation, using culture-independent casing rules.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to convert.</param>
-        /// <returns>A camel-case representation of the specified <see cref="String"/> value.</returns>
+        /// <param name="value">The <see cref="string"/> value to convert.</param>
+        /// <returns>A camel-case representation of the specified <see cref="string"/> value.</returns>
         public static string ToCamelCasing(string value)
         {
             return ToCamelCasing(value, CultureInfo.InvariantCulture);
@@ -290,9 +290,9 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified <paramref name="value"/> to a camel-case representation, using the casing rules of the specified culture.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to convert.</param>
+        /// <param name="value">The <see cref="string"/> value to convert.</param>
         /// <param name="culture">The <see cref="CultureInfo"/> to support.</param>
-        /// <returns>A camel-case representation of the specified <see cref="String"/> value.</returns>
+        /// <returns>A camel-case representation of the specified <see cref="string"/> value.</returns>
         public static string ToCamelCasing(string value, CultureInfo culture)
         {
             Validator.ThrowIfNullOrEmpty(value, nameof(value));
@@ -303,8 +303,8 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified <paramref name="value"/> to an international Morse code representation.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to convert.</param>
-        /// <returns>An international Morse code representation of the specified <see cref="String"/> value.</returns>
+        /// <param name="value">The <see cref="string"/> value to convert.</param>
+        /// <returns>An international Morse code representation of the specified <see cref="string"/> value.</returns>
         /// <remarks>Any characters not supported by the international Morse code specifications is excluded from the result.</remarks>
         public static string ToMorseCode(string value)
         {
@@ -314,7 +314,7 @@ namespace Cuemon
         /// <summary>
         /// Converts the specified <paramref name="value"/> to an international Morse code representation.
         /// </summary>
-        /// <param name="value">The <see cref="String"/> value to convert.</param>
+        /// <param name="value">The <see cref="string"/> value to convert.</param>
         /// <param name="includeUnsupportedCharacters">if set to <c>true</c> characters not supported by the internal Morse code is left intact in the result for a general impression.</param>
         /// <returns>An international Morse code representation of the specified <paramref name="value"/> parameter.</returns>
         public static string ToMorseCode(string value, bool includeUnsupportedCharacters)
@@ -522,10 +522,10 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="value"/> to its equivalent <see cref="String"/> sequence.
+        /// Converts the specified <paramref name="value"/> to its equivalent <see cref="string"/> sequence.
         /// </summary>
         /// <param name="value">The value to convert into a sequence.</param>
-        /// <returns>A <see cref="String"/> sequence equivalent to the specified <paramref name="value"/>.</returns>
+        /// <returns>A <see cref="string"/> sequence equivalent to the specified <paramref name="value"/>.</returns>
         public static IEnumerable<string> FromChars(IEnumerable<char> value)
         {
             Validator.ThrowIfNull(value, nameof(value));
@@ -533,10 +533,10 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Renders the <paramref name="exception"/> to a human readable <see cref="String"/>.
+        /// Renders the <paramref name="exception"/> to a human readable <see cref="string"/>.
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/> to render human readable.</param>
-        /// <returns>A human readable <see cref="String"/> variant of the specified <paramref name="exception"/>.</returns>
+        /// <returns>A human readable <see cref="string"/> variant of the specified <paramref name="exception"/>.</returns>
         /// <remarks>The rendered <paramref name="exception"/> defaults to using an instance of <see cref="Encoding.Unicode"/> unless specified otherwise.</remarks>
         public static string FromException(Exception exception)
         {
@@ -544,23 +544,23 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Renders the <paramref name="exception"/> to a human readable <see cref="String"/>.
+        /// Renders the <paramref name="exception"/> to a human readable <see cref="string"/>.
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/> to render human readable.</param>
         /// <param name="encoding">The encoding to use when rendering the <paramref name="exception"/>.</param>
-        /// <returns>A human readable <see cref="String"/> variant of the specified <paramref name="exception"/>.</returns>
+        /// <returns>A human readable <see cref="string"/> variant of the specified <paramref name="exception"/>.</returns>
         public static string FromException(Exception exception, Encoding encoding)
         {
             return FromException(exception, encoding, false);
         }
 
         /// <summary>
-        /// Renders the <paramref name="exception"/> to a human readable <see cref="String"/>.
+        /// Renders the <paramref name="exception"/> to a human readable <see cref="string"/>.
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/> to render human readable.</param>
         /// <param name="encoding">The encoding to use when rendering the <paramref name="exception"/>.</param>
         /// <param name="includeStackTrace">if set to <c>true</c> the stack trace of the exception is included in the rendered result.</param>
-        /// <returns>A human readable <see cref="String"/> variant of the specified <paramref name="exception"/>.</returns>
+        /// <returns>A human readable <see cref="string"/> variant of the specified <paramref name="exception"/>.</returns>
         public static string FromException(Exception exception, Encoding encoding, bool includeStackTrace)
         {
             Validator.ThrowIfNull(exception, nameof(exception));
@@ -593,55 +593,45 @@ namespace Cuemon
 
         private static void WriteException(TextWriter writer, Exception exception, bool includeStackTrace)
         {
-            WriteException(writer, exception, null, 3, includeStackTrace);
-            IEnumerable<Exception> innerExceptions = ExceptionUtility.Flatten(exception);
-            if (innerExceptions != null)
-            {
-                foreach (Exception inner in innerExceptions)
-                {
-                    WriteException(writer, inner, exception, 3, includeStackTrace);
-                    exception = inner;
-                }
-            }
+            Type exceptionType = exception.GetType();
+            writer.Write("{0}.{1}{2}: {3}", exceptionType.Namespace, exceptionType.Name, string.IsNullOrEmpty(exception.Source) ? "" : " in " + exception.Source, exception.Message);
+            WriteExceptionCore(writer, exception, includeStackTrace);
         }
 
-        private static void WriteException(TextWriter writer, Exception exception, Exception parentException, byte indentTabSize, bool includeStackTrace)
+        private static void WriteExceptionCore(TextWriter writer, Exception exception, bool includeStackTrace)
         {
-            Type exceptionType = exception.GetType();
-
-            string smallIndent = StringUtility.CreateFixedString('\x20', indentTabSize);
-            string largeIndent = StringUtility.CreateFixedString('\x20', indentTabSize * 2);
-
-            if (parentException != null)
-            {
-                writer.WriteLine("InnerException [of {0}]:", parentException.GetType().Name);
-            }
-            writer.WriteLine("{0}{1} ({2})", parentException != null ? smallIndent : "", exceptionType.Name, exceptionType.Namespace);
-            if (!String.IsNullOrEmpty(exception.Source))
-            {
-                writer.WriteLine("{0}Source:", parentException != null ? smallIndent : "");
-                writer.WriteLine("{0}{1}", parentException != null ? largeIndent : smallIndent, exception.Source);
-            }
-            if (!String.IsNullOrEmpty(exception.Message))
-            {
-                string[] message = exception.Message.Split(StringUtility.Linefeed.ToCharArray());
-                writer.WriteLine("{0}Message:", parentException != null ? smallIndent : "");
-                writer.WriteLine("{0}{1}", parentException != null ? largeIndent : smallIndent, String.Join(String.Format(CultureInfo.InvariantCulture, "{0}{1}", StringUtility.Linefeed, parentException != null ? largeIndent : smallIndent), message));
-            }
-
             if (exception.StackTrace != null && includeStackTrace)
             {
-                writer.WriteLine("{0}StackTrace:", parentException != null ? smallIndent : "");
-                writer.WriteLine("{0}{1}", parentException != null ? smallIndent : "", exception.StackTrace);
+                writer.WriteLine();
+                string[] lines = exception.StackTrace.Split(new[] { StringUtility.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string line in lines)
+                {
+                    writer.WriteLine("   {0}", line.Trim());
+                }
             }
 
-            if (exception.Data.Count > 0 && includeStackTrace)
+            if (exception.Data.Count > 0)
             {
-                writer.WriteLine("{0}Data:", parentException != null ? smallIndent : "");
+                writer.WriteLine("   Data");
                 foreach (DictionaryEntry entry in exception.Data)
                 {
-                    writer.WriteLine("{0}Key: {1}", parentException != null ? largeIndent : smallIndent, entry.Key);
-                    writer.WriteLine("{0}Value: {1}", parentException != null ? largeIndent : smallIndent, entry.Value);
+                    writer.WriteLine("      {0}: {1}", entry.Key, entry.Value);
+                }
+            }
+
+            WriteInnerExceptions(writer, exception, includeStackTrace);
+        }
+
+        private static void WriteInnerExceptions(TextWriter writer, Exception exception, bool includeStackTrace)
+        {
+            var innerExceptions = new List<Exception>(ExceptionUtility.Flatten(exception));
+            if (innerExceptions.Count > 0)
+            {
+                foreach (var inner in innerExceptions)
+                {
+                    Type exceptionType = inner.GetType();
+                    writer.Write("{0}.{1}{2}: {3}", exceptionType.Namespace, exceptionType.Name, string.IsNullOrEmpty(inner.Source) ? "" : " in " + inner.Source, inner.Message);
+                    WriteExceptionCore(writer, inner, includeStackTrace);
                 }
             }
         }
@@ -667,7 +657,7 @@ namespace Cuemon
         /// Returns a <see cref="string" /> that represents the specified <paramref name="instance"/>.
         /// </summary>
         /// <param name="instance">The instance to represent.</param>
-        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overriden; otherwise, <c>false</c> to use default behaviour, where an overriden method will return without further processing.</param>
+        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overridden; otherwise, <c>false</c> to use default behavior, where an overridden method will return without further processing.</param>
         /// <returns>A <see cref="string" /> that represents the specified <paramref name="instance"/>.</returns>
         /// <remarks>
         /// When determining the representation of the specified <paramref name="instance"/>, these rules applies: <br/>
@@ -685,7 +675,7 @@ namespace Cuemon
         /// Returns a <see cref="string" /> that represents the specified <paramref name="instance"/>.
         /// </summary>
         /// <param name="instance">The instance to represent.</param>
-        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overriden; otherwise, <c>false</c> to use default behaviour, where an overriden method will return without further processing.</param>
+        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overridden; otherwise, <c>false</c> to use default behavior, where an overridden method will return without further processing.</param>
         /// <param name="provider">An object that supplies culture-specific formatting information.</param>
         /// <returns>A <see cref="string" /> that represents the specified <paramref name="instance"/>.</returns>
         /// <remarks>
@@ -704,7 +694,7 @@ namespace Cuemon
         /// Returns a <see cref="string" /> that represents the specified <paramref name="instance"/>.
         /// </summary>
         /// <param name="instance">The instance to represent.</param>
-        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overriden; otherwise, <c>false</c> to use default behaviour, where an overriden method will return without further processing.</param>
+        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overridden; otherwise, <c>false</c> to use default behavior, where an overridden method will return without further processing.</param>
         /// <param name="provider">An object that supplies culture-specific formatting information.</param>
         /// <param name="delimiter">The delimiter specification for when representing public properties of <paramref name="instance"/>.</param>
         /// <returns>A <see cref="string" /> that represents the specified <paramref name="instance"/>.</returns>
@@ -724,7 +714,7 @@ namespace Cuemon
         /// Returns a <see cref="string" /> that represents the specified <paramref name="instance"/>.
         /// </summary>
         /// <param name="instance">The instance to represent.</param>
-        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overriden; otherwise, <c>false</c> to use default behaviour, where an overriden method will return without further processing.</param>
+        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overridden; otherwise, <c>false</c> to use default behavior, where an overridden method will return without further processing.</param>
         /// <param name="provider">An object that supplies culture-specific formatting information.</param>
         /// <param name="delimiter">The delimiter specification for when representing public properties of <paramref name="instance"/>.</param>
         /// <param name="propertyConverter">The function delegate that convert <see cref="PropertyInfo"/> objects to human-readable content.</param>
@@ -745,7 +735,7 @@ namespace Cuemon
         /// Returns a <see cref="string" /> that represents the specified <paramref name="instance"/>.
         /// </summary>
         /// <param name="instance">The instance to represent.</param>
-        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overriden; otherwise, <c>false</c> to use default behaviour, where an overriden method will return without further processing.</param>
+        /// <param name="bypassOverrideCheck">Specify <c>true</c> to bypass the check for if a ToString() method is overridden; otherwise, <c>false</c> to use default behavior, where an overridden method will return without further processing.</param>
         /// <param name="provider">An object that supplies culture-specific formatting information.</param>
         /// <param name="delimiter">The delimiter specification for when representing public properties of <paramref name="instance"/>.</param>
         /// <param name="propertyConverter">The function delegate that convert <see cref="PropertyInfo"/> objects to human-readable content.</param>
@@ -776,7 +766,7 @@ namespace Cuemon
             }
 
             Type instanceType = instance.GetType();
-            StringBuilder instanceSignature = new StringBuilder(String.Format(provider, "{0}", FromType(instanceType, true)));
+            StringBuilder instanceSignature = new StringBuilder(string.Format(provider, "{0}", FromType(instanceType, true)));
             IEnumerable<PropertyInfo> properties = EnumerableUtility.Where(propertiesReader(instanceType, propertiesReaderBindingAttr), IndexParametersLengthIsZeroPredicate);
             instanceSignature.AppendFormat(" {{ {0} }}", ToDelimitedString(properties, delimiter, propertyConverter, instance, provider));
             return instanceSignature.ToString();
@@ -793,19 +783,19 @@ namespace Cuemon
             {
                 if (TypeUtility.IsComplex(property.PropertyType))
                 {
-                    return String.Format(provider, "{0}={1}", property.Name, FromType(property.PropertyType, true));
+                    return string.Format(provider, "{0}={1}", property.Name, FromType(property.PropertyType, true));
                 }
                 object instanceValue = ReflectionUtility.GetPropertyValue(instance, property);
-                return String.Format(provider, "{0}={1}", property.Name, instanceValue ?? "<null>");
+                return string.Format(provider, "{0}={1}", property.Name, instanceValue ?? "<null>");
             }
-            return String.Format(provider, "{0}=<no getter>", property.Name);
+            return string.Format(provider, "{0}=<no getter>", property.Name);
         }
 
         /// <summary>
         /// Converts the name of the <paramref name="source"/> with the intend to be understood by humans. 
         /// </summary>
         /// <param name="source">The type to sanitize the name from.</param>
-        /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
+        /// <returns>A sanitized <see cref="string"/> representation of <paramref name="source"/>.</returns>
         /// <remarks>Only the simple name of the <paramref name="source"/> is returned, not the fully qualified name.</remarks>
         public static string FromType(Type source)
         {
@@ -817,7 +807,7 @@ namespace Cuemon
         /// </summary>
         /// <param name="source">The type to sanitize the name from.</param>
         /// <param name="fullName">Specify <c>true</c> to use the fully qualified name of the <paramref name="source"/>; otherwise, <c>false</c> for the simple name of <paramref name="source"/>.</param>
-        /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
+        /// <returns>A sanitized <see cref="string"/> representation of <paramref name="source"/>.</returns>
         public static string FromType(Type source, bool fullName)
         {
             return FromType(source, fullName, false);
@@ -829,7 +819,7 @@ namespace Cuemon
         /// <param name="source">The type to sanitize the name from.</param>
         /// <param name="fullName">Specify <c>true</c> to use the fully qualified name of the <paramref name="source"/>; otherwise, <c>false</c> for the simple name of <paramref name="source"/>.</param>
         /// <param name="excludeGenericArguments">Specify <c>true</c> to exclude generic arguments from the result; otherwise <c>false</c> to include generic arguments should the <paramref name="source"/> be a generic type.</param>
-        /// <returns>A sanitized <see cref="String"/> representation of <paramref name="source"/>.</returns>
+        /// <returns>A sanitized <see cref="string"/> representation of <paramref name="source"/>.</returns>
         public static string FromType(Type source, bool fullName, bool excludeGenericArguments)
         {
             Validator.ThrowIfNull(source, nameof(source));
@@ -840,7 +830,7 @@ namespace Cuemon
             Type[] parameters = source.GetGenericArguments();
             int indexOfGraveAccent = typeName.IndexOf('`');
             typeName = indexOfGraveAccent >= 0 ? typeName.Remove(indexOfGraveAccent) : typeName;
-            return excludeGenericArguments ? typeName : String.Format(CultureInfo.InvariantCulture, "{0}<{1}>", typeName, ToDelimitedString(parameters, ", ", FromTypeConverter, fullName));
+            return excludeGenericArguments ? typeName : string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", typeName, ToDelimitedString(parameters, ", ", FromTypeConverter, fullName));
         }
 
         private static string FromTypeConverter(Type source, bool fullName)
@@ -1185,11 +1175,11 @@ namespace Cuemon
 
         private static string ToDelimitedStringCore<TTuple, TSource>(DoerFactory<TTuple, string> factory, IEnumerable<TSource> source, string delimiter, string format) where TTuple : Template<TSource>
         {
-            bool hasCustomFormat = !String.IsNullOrEmpty(format);
+            bool hasCustomFormat = !string.IsNullOrEmpty(format);
             if (hasCustomFormat)
             {
                 int foundArguments;
-                if (!StringUtility.ParseFormat(format, 1, out foundArguments)) { throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "You can only specify 1 formatting argument for the desired value. Actual result was {0} formatting arguments: \"{1}\".", foundArguments, format), nameof(format)); }
+                if (!StringUtility.ParseFormat(format, 1, out foundArguments)) { throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "You can only specify 1 formatting argument for the desired value. Actual result was {0} formatting arguments: \"{1}\".", foundArguments, format), nameof(format)); }
             }
             format = hasCustomFormat ? format + "{1}" : "{0}{1}";
             StringBuilder delimitedValues = new StringBuilder();

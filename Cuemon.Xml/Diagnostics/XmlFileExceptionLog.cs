@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Cuemon.Diagnostics;
 
-namespace Cuemon.Xml.Diagnostics
+namespace Cuemon.Diagnostics
 {
     /// <summary>
     /// A simple <see cref="Exception"/> log handler which supports writing to a text-file in XML format.
@@ -20,8 +19,8 @@ namespace Cuemon.Xml.Diagnostics
         /// <remarks><see cref="XmlFileExceptionLog"/> defaults to using an instance of <see cref="UTF8Encoding"/> unless specified otherwise.</remarks>
         public XmlFileExceptionLog(object value) : base(value)
         {
-            string extension = Path.GetExtension(base.FileName);
-            if (!string.IsNullOrEmpty(extension)) { base.FileName = base.FileName.Replace(extension, ".xml"); }
+            string extension = Path.GetExtension(FileName);
+            if (!string.IsNullOrEmpty(extension)) { FileName = FileName.Replace(extension, ".xml"); }
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace Cuemon.Xml.Diagnostics
         #region Methods
         private XmlExceptionLog XmlExceptionLog
         {
-            get { return _xmlExceptionLog ?? (_xmlExceptionLog = new XmlExceptionLog(this.Name, this.Source, this.Encoding)); }
+            get { return _xmlExceptionLog ?? (_xmlExceptionLog = new XmlExceptionLog(Name, Source, Encoding)); }
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace Cuemon.Xml.Diagnostics
         /// <param name="computerName">The name of the computer to associate the <paramref name="exception"/> with.</param>
         public override void WriteEntry(Exception exception, LogEntrySeverity severity, string computerName)
         {
-            this.XmlExceptionLog.WriteEntry(exception, severity, computerName);
+            XmlExceptionLog.WriteEntry(exception, severity, computerName);
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Cuemon.Xml.Diagnostics
         /// <returns>A rendered <see cref="T:System.IO.Stream"/> of all entries written to the log.</returns>
         public override Stream WriteLog()
         {
-            return this.XmlExceptionLog.WriteLog();
+            return XmlExceptionLog.WriteLog();
         }
         #endregion
     }

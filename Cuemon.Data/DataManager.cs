@@ -715,35 +715,27 @@ namespace Cuemon.Data
         /// <returns>A value of <typeparamref name="T"/> that is equal to the invoked method of the <see cref="IDbCommand"/> object.</returns>
         protected virtual T ExecuteCore<T>(IDataCommand dataCommand, IDataParameter[] parameters, Doer<IDbCommand, T> sqlInvoker)
         {
-            if (EnableTransientFaultRecovery)
-            {
-                return TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, () =>
-                {
-                    using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
-                    {
-                        try
-                        {
-                            return sqlInvoker(command);
-                        }
-                        finally
-                        {
-                            command.Parameters.Clear();
-                        }
-                    }
-                });
-            }
+            return EnableTransientFaultRecovery
+                ? TransientFaultUtility.ExecuteFunction(RetryAttempts, TransientFaultRecoveryWaitTime, IsTransientFault, () => InvokeCommandCore(dataCommand, parameters, sqlInvoker))
+                : InvokeCommandCore(dataCommand, parameters, sqlInvoker);
+        }
 
-            using (IDbCommand command = ExecuteCommandCore(dataCommand, parameters))
+        private T InvokeCommandCore<T>(IDataCommand dataCommand, IDataParameter[] parameters, Doer<IDbCommand, T> sqlInvoker)
+        {
+            T result;
+            IDbCommand command = null;
+            try
             {
-                try
+                using (command = ExecuteCommandCore(dataCommand, parameters))
                 {
-                    return sqlInvoker(command);
-                }
-                finally
-                {
-                    command.Parameters.Clear();
+                    result = sqlInvoker(command);
                 }
             }
+            finally
+            {
+                if (command != null) { command.Parameters.Clear(); }
+            }
+            return result;
         }
 
         /// <summary>
@@ -762,17 +754,26 @@ namespace Cuemon.Data
         protected virtual IDbCommand ExecuteCommandCore(IDataCommand dataCommand, params IDataParameter[] parameters)
         {
             if (dataCommand == null) { throw new ArgumentNullException(nameof(dataCommand)); }
-            IDbCommand command = OpenConnection(GetCommandCore(dataCommand, parameters));
-            command.CommandTimeout = (int)dataCommand.Timeout.TotalSeconds;
+            IDbCommand command = null;
+            try
+            {
+                command = GetCommandCore(dataCommand, parameters);
+                command.CommandTimeout = (int)dataCommand.Timeout.TotalSeconds;
+                OpenConnection(command);
+            }
+            catch (Exception)
+            {
+                if (command != null) { command.Parameters.Clear(); }
+                throw;
+            }
             return command;
         }
 
-        private IDbCommand OpenConnection(IDbCommand command)
+        private void OpenConnection(IDbCommand command)
         {
             if (command == null) { throw new ArgumentNullException(nameof(command)); }
             if (command.Connection == null) { throw new ArgumentNullException(nameof(command), "No connection was set for this command object."); }
             if (command.Connection.State != ConnectionState.Open) { command.Connection.Open(); }
-            return command;
         }
 
         /// <summary>

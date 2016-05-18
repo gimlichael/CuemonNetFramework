@@ -105,6 +105,7 @@
     <Compile Include="IO\Compression\CompressionType.cs" />
     <Compile Include="IO\StreamConverter.cs" />
     <Compile Include="IO\TextReaderConverter.cs" />
+    <Compile Include="Net\Mail\MailDistributor.cs" />
     <Compile Include="Net\WebHeaderCollectionConverter.cs" />
     <Compile Include="ObjectConverter.cs" />
     <Compile Include="RandomSeverity.cs" />

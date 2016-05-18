@@ -144,7 +144,7 @@ namespace Cuemon.Runtime.Serialization
         ///   <c>true</c> if this <see cref="JsonInstance"/> is in a state, where a <see cref="JsonWriter.ValueSeperator"/> should be written; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>Because of the complexity when generating JSON, this property should be treated as a hint-only. Additional logic is assumed necessary.</remarks>
-        public virtual bool WriteValueSeperator()
+        public virtual bool WriteValueSeparator()
         {
             if (Parent == null) { return false; }
             IList<JsonInstance> instances = Parent.Instances;

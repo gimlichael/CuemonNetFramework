@@ -3,10 +3,9 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
-using Cuemon.Diagnostics;
-using Cuemon.IO;
+using Cuemon.Xml;
 
-namespace Cuemon.Xml.Diagnostics
+namespace Cuemon.Diagnostics
 {
     /// <summary>
     /// A simple <see cref="Exception"/> log handler in XML format.
@@ -67,12 +66,12 @@ namespace Cuemon.Xml.Diagnostics
             try
             {
                 output = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(output, XmlWriterUtility.CreateSettings(this.Encoding, true)))
+                using (XmlWriter writer = XmlWriter.Create(output, XmlWriterUtility.CreateSettings(Encoding, true)))
                 {
-                    writer.WriteRaw(XmlConvertUtility.ToXmlElement(exception, this.Encoding, true).OuterXml);
+                    writer.WriteRaw(XmlConvertUtility.ToXmlElement(exception, Encoding, true).OuterXml);
                     writer.Flush();
                     output.Position = 0;
-                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, PreambleSequence.Remove, this.Encoding, true), severity, computerName);
+                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, PreambleSequence.Remove, Encoding, true), severity, computerName);
                     output = null;
                 }
             }
@@ -89,18 +88,18 @@ namespace Cuemon.Xml.Diagnostics
         /// <returns>A rendered <see cref="T:System.IO.Stream"/> of all entries written to the <see cref="XmlExceptionLog"/>.</returns>
         public override Stream WriteLog()
         {
-            MemoryStream output = null;
+            MemoryStream output;
             MemoryStream tempOutput = null;
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(this.Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
                 {
                     writer.WriteStartElement("ExceptionLog");
-                    writer.WriteElementString("Name", this.Name);
-                    writer.WriteElementString("Source", this.Source);
+                    writer.WriteElementString("Name", Name);
+                    writer.WriteElementString("Source", Source);
                     writer.WriteStartElement("Entries");
-                    foreach (LogEntry entry in this.Entries)
+                    foreach (LogEntry entry in Entries)
                     {
                         writer.WriteStartElement("Entry");
                         writer.WriteAttributeString("created", StringFormatter.FromDateTime(entry.Created, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeExtended));

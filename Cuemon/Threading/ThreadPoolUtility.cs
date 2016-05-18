@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Cuemon.Threading
@@ -563,6 +564,26 @@ namespace Cuemon.Threading
             Validator.ThrowIfNull(method, nameof(method));
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return QueueUserWorkItemCore(factory);
+        }
+
+        /// <summary>
+        /// Waits for all of the provided <paramref name="tasks"/> objects to complete execution.
+        /// </summary>
+        /// <param name="tasks">A sequence of <see cref="ThreadPoolTask"/> instances on which to wait.</param>
+        public static void WaitAll(IEnumerable<ThreadPoolTask> tasks)
+        {
+            Validator.ThrowIfNull(tasks, nameof(tasks));
+            foreach (var task in tasks) { task.Wait(); }
+        }
+
+        /// <summary>
+        /// Waits for all of the provided <paramref name="tasks"/> objects to complete execution.
+        /// </summary>
+        /// <param name="tasks">A sequence of <see cref="ThreadPoolTask"/> instances on which to wait.</param>
+        public static void WaitAll<T>(IEnumerable<ThreadPoolTask<T>> tasks)
+        {
+            Validator.ThrowIfNull(tasks, nameof(tasks));
+            foreach (var task in tasks) { task.Wait(); }
         }
 
         private static ThreadPoolTask<T> QueueUserWorkItemCore<TTuple, T>(DoerFactory<TTuple, T> factory) where TTuple : Template
