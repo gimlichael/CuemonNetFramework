@@ -15,7 +15,7 @@ namespace Cuemon.Data
         /// <param name="orderByColumn">The column on which to perform a sorting operation.</param>
         public DataTransferSorter(string orderByColumn)
         {
-            this.OrderByColumn = orderByColumn;
+            OrderByColumn = orderByColumn;
         }
 
         /// <summary>
@@ -50,12 +50,12 @@ namespace Cuemon.Data
 
         private Type TypeSelector(DataTransferRow row)
         {
-            return row.Columns.Get(this.OrderByColumn).DataType;
+            return row.Columns[OrderByColumn].DataType;
         }
 
         private object ValueSelector(DataTransferRow row)
         {
-            return row.Columns.Get(this.OrderByColumn).Value;
+            return row[OrderByColumn];
         }
     }
 }

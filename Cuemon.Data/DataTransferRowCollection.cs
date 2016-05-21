@@ -12,12 +12,7 @@ namespace Cuemon.Data
     /// </summary>
     public sealed class DataTransferRowCollection : IEnumerable<DataTransferRow>
     {
-        private readonly Collection<DataTransferRow> _dataTransferRows = new Collection<DataTransferRow>();
-
-        private string ColumnNamesSelector(KeyValuePair<string, Type> keyValuePair)
-        {
-            return keyValuePair.Key;
-        }
+        private IEnumerable<string> _columnNames;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataTransferRowCollection"/> class.
@@ -25,18 +20,29 @@ namespace Cuemon.Data
         /// <param name="reader">The reader to convert.</param>
         internal DataTransferRowCollection(IDataReader reader)
         {
-            Validator.ThrowIfNull(reader, "reader");
-            Validator.ThrowIfTrue(reader.IsClosed, "reader", "Reader was closed.");
+            Validator.ThrowIfNull(reader, nameof(reader));
+            Validator.ThrowIfTrue(reader.IsClosed, nameof(reader), "Reader was closed.");
 
             int rowNumber = 1;
-            IList<KeyValuePair<string, Type>> columns = null;
             while (reader.Read())
             {
-                this.DataTransferRows.Add(new DataTransferRow(reader, rowNumber, ref columns));
+                if (Columns == null) { Columns = new DataTransferColumnCollection(reader); }
+                DataTransferRows.Add(new DataTransferRow(this, rowNumber));
+                int fieldCount = reader.FieldCount;
+                var values = new object[fieldCount];
+                reader.GetValues(values);
+                for (int i = 0; i < fieldCount; i++)
+                {
+                    Type columnType = reader[i].GetType();
+                    Data.Add(values[i] == null ? TypeUtility.GetDefaultValue(columnType) : Convert.IsDBNull(values[i]) ? null : values[i]);
+                }
                 rowNumber++;
             }
-            this.ColumnNames = EnumerableUtility.Select(columns, ColumnNamesSelector);
         }
+
+        internal DataTransferColumnCollection Columns { get; }
+
+        internal List<object> Data { get; } = new List<object>();
 
         /// <summary>
         /// Gets the column names that is present in this <see cref="DataTransferRow"/>.
@@ -44,14 +50,13 @@ namespace Cuemon.Data
         /// <value>The column names of a table-row in a database.</value>
         public IEnumerable<string> ColumnNames
         {
-            get;
-            private set;
+            get
+            {
+                return _columnNames ?? (_columnNames = EnumerableUtility.Select(Columns, column => column.Name));
+            }
         }
 
-        private Collection<DataTransferRow> DataTransferRows
-        {
-            get { return _dataTransferRows; }
-        }
+        private Collection<DataTransferRow> DataTransferRows { get; } = new Collection<DataTransferRow>();
 
         /// <summary>
         /// Gets the <see cref="DataTransferRow"/> at the specified index.
@@ -60,7 +65,7 @@ namespace Cuemon.Data
         /// <returns>The specified <see cref="DataTransferRow"/>.</returns>
         public DataTransferRow this[int index]
         {
-            get { return this.DataTransferRows[index]; }
+            get { return DataTransferRows[index]; }
         }
 
         /// <summary>
@@ -80,7 +85,7 @@ namespace Cuemon.Data
         /// <returns>true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.</returns>
         public bool Contains(DataTransferRow item)
         {
-            return this.DataTransferRows.Contains(item);
+            return DataTransferRows.Contains(item);
         }
 
         /// <summary>
@@ -90,7 +95,7 @@ namespace Cuemon.Data
         /// <returns>The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
         public int Count
         {
-            get { return this.DataTransferRows.Count; }
+            get { return DataTransferRows.Count; }
         }
 
 
@@ -101,7 +106,7 @@ namespace Cuemon.Data
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.</returns>
         public IEnumerator<DataTransferRow> GetEnumerator()
         {
-            return this.DataTransferRows.GetEnumerator();
+            return DataTransferRows.GetEnumerator();
         }
 
 
@@ -112,12 +117,12 @@ namespace Cuemon.Data
         /// <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
         public int IndexOf(DataTransferRow item)
         {
-            return this.DataTransferRows.IndexOf(item);
+            return DataTransferRows.IndexOf(item);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

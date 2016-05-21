@@ -15,16 +15,16 @@ namespace Cuemon.Data
         /// </summary>
         /// <param name="reader">The reader to be converted.</param>
         /// <returns>A <see cref="DataTransferRowCollection"/> that is the result of the specified <paramref name="reader"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="reader"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// <paramref name="reader"/> is closed.
         /// </exception>
         public static DataTransferRowCollection GetRows(IDataReader reader)
         {
-            Validator.ThrowIfNull(reader, "reader");
-            Validator.ThrowIfTrue(reader.IsClosed, "reader", "Reader was closed.");
+            Validator.ThrowIfNull(reader, nameof(reader));
+            Validator.ThrowIfTrue(reader.IsClosed, nameof(reader), "Reader was closed.");
             return new DataTransferRowCollection(reader);
         }
 
@@ -45,10 +45,10 @@ namespace Cuemon.Data
         /// </summary>
         /// <param name="reader">The read-initialized reader to be converted.</param>
         /// <returns>A <see cref="DataTransferColumnCollection"/> that is the result of the specified and read-initialized <paramref name="reader"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="reader"/> is null.
         /// </exception>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// <paramref name="reader"/> is closed.
         /// </exception>
         /// <exception cref="InvalidOperationException">
@@ -56,10 +56,9 @@ namespace Cuemon.Data
         /// </exception>
         public static DataTransferColumnCollection GetColumns(IDataReader reader)
         {
-            Validator.ThrowIfNull(reader, "reader");
-            Validator.ThrowIfTrue(reader.IsClosed, "reader", "Reader was closed.");
-            IList<KeyValuePair<string, Type>> columns = null;
-            return new DataTransferColumnCollection(reader, ref columns);
+            Validator.ThrowIfNull(reader, nameof(reader));
+            Validator.ThrowIfTrue(reader.IsClosed, nameof(reader), "Reader was closed.");
+            return new DataTransferColumnCollection(reader);
         }
     }
 }
