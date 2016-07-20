@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Cuemon.Web.Routing;
+using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.IO.Compression;
 using System.Security.Principal;
 using System.Web;
@@ -96,6 +98,13 @@ namespace Cuemon.Web
                     module.ParseCompressionHeaders = true;
                     break;
             }
+        }
+
+        internal static string GetCompressedFileExtension(HttpRoutePath routePath, CompressionMethodScheme compression)
+        {
+            string extension = string.Concat(".", compression.ToString().ToLowerInvariant());
+            string originalExtension = Path.GetExtension(routePath.PhysicalFilePath);
+            return string.Concat(extension, originalExtension).ToLowerInvariant();
         }
     }
 }

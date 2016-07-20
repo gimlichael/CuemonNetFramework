@@ -13,8 +13,6 @@ namespace Cuemon.Web
 {
     public partial class GlobalModule
     {
-        private const string CompressionCacheGroup = "ParseResourceCompression";
-
         /// <summary>
         /// Gets or sets a value indicating whether identity impersonation is enabled. Default is false.
         /// </summary>
@@ -118,21 +116,7 @@ namespace Cuemon.Web
             if (!context.Response.BufferOutput) { return; }
             if (context.Response.SuppressContent) { return; }
             if (!this.IsValidForCompression(context)) { return; }
-
-            HttpRoutePath path = new HttpRoutePath(context.Context);
-            bool hasCachedResource = false;
-            if (path.HasPhysicalFile && !path.IsHandler && path.PhysicalFileMimeType != null)
-            {
-                string resource = ParseResourceCompression(path, compression);
-                string resourceExtension = GetCompressedFileExtension(path, compression);
-                hasCachedResource = resource.EndsWith(resourceExtension, StringComparison.OrdinalIgnoreCase);
-                if (hasCachedResource)
-                {
-                    context.Context.RewritePath(string.Format(CultureInfo.InvariantCulture, "{0}{1}", resource, path.Url.Query), false);
-                }
-                context.Response.ContentType = path.PhysicalFileMimeType.ContentType;
-            }
-            Infrastructure.ApplyCompression(context, this, compression, () => !hasCachedResource);
+            Infrastructure.ApplyCompression(context, this, compression, () => true);
         }
 
         /// <summary>
@@ -147,7 +131,6 @@ namespace Cuemon.Web
         protected virtual bool IsValidForCompression(HttpApplication context)
         {
             if (context == null) { return false; }
-
             Doer<FileMapping, bool> compress = CachingManager.Cache.Memoize<FileMapping, bool>(IsValidForCompressionCore);
             HttpRoutePath path = new HttpRoutePath(context.Context);
             FileMapping mimeType = path.IsHandler ? MimeUtility.ParseContentType(context.Response.ContentType) : path.PhysicalFileMimeType;
@@ -174,171 +157,6 @@ namespace Cuemon.Web
                 "application/x-web-app-manifest+json",
                 "application/xhtml+xml",
                 "application/xml")));
-        }
-
-        private static string GetCompressedFileExtension(HttpRoutePath routePath, CompressionMethodScheme compression)
-        {
-            string extension = string.Concat(".", compression.ToString().ToLowerInvariant());
-            string originalExtension = Path.GetExtension(routePath.PhysicalFilePath);
-            return string.Concat(extension, originalExtension).ToLowerInvariant();
-        }
-
-        /// <summary>
-        /// Returns a virtual file path of the specified <paramref name="pathToResource"/> while determining if a compressed equivalent can and should be written to the file system.
-        /// </summary>
-        /// <param name="pathToResource">The HTTP route path to a resource.</param>
-        /// <param name="compression">The compression to apply to the <paramref name="pathToResource"/>.</param>
-        /// <returns>A virtual file path of the specified <paramref name="pathToResource"/>.</returns>
-        protected string ParseResourceCompression(HttpRoutePath pathToResource, CompressionMethodScheme compression)
-        {
-            return ParseResourceCompression(pathToResource, compression, DefaultVirtualPathResolver);
-        }
-
-        /// <summary>
-        /// Returns a virtual file path of the specified <paramref name="pathToResource"/> while determining if a compressed equivalent can and should be written to the file system.
-        /// </summary>
-        /// <param name="pathToResource">The HTTP route path to a resource.</param>
-        /// <param name="compression">The compression to apply to the <paramref name="pathToResource"/>.</param>
-        /// <param name="virtualPathResolver">The function delegate that will resolve the virtual file path from the specified <paramref name="pathToResource"/>.</param>
-        /// <returns>A virtual file path of the specified <paramref name="pathToResource"/>.</returns>
-        protected virtual string ParseResourceCompression(HttpRoutePath pathToResource, CompressionMethodScheme compression, Doer<HttpRoutePath, CompressionMethodScheme, string> virtualPathResolver)
-        {
-            Validator.ThrowIfNull(pathToResource, nameof(pathToResource));
-            Validator.ThrowIfNull(virtualPathResolver, nameof(virtualPathResolver));
-
-            Doer<string, bool> canWriteFileToDisk = CachingManager.Cache.Memoize<string, bool>(CanWriteFileToDisk);
-            bool enableResourceCompression = canWriteFileToDisk(Path.GetDirectoryName(pathToResource.PhysicalFilePath));
-
-            switch (compression)
-            {
-                case CompressionMethodScheme.Deflate:
-                case CompressionMethodScheme.GZip:
-                    break;
-                case CompressionMethodScheme.Identity:
-                case CompressionMethodScheme.Compress:
-                case CompressionMethodScheme.None:
-                    enableResourceCompression = false; // we do not support these for compression
-                    break;
-            }
-
-            if (!enableResourceCompression) { return pathToResource.VirtualFilePath; }
-            return virtualPathResolver(pathToResource, compression);
-        }
-
-        private static string DefaultVirtualPathResolver(HttpRoutePath pathToResource, CompressionMethodScheme compression)
-        {
-            string pathToCompressedFile;
-            string virtualPathToCompressedFile;
-            if (!CachingManager.Cache.TryGetValue(pathToResource.VirtualFilePath, CompressionCacheGroup, out virtualPathToCompressedFile))
-            {
-                using (Mutex mutex = new Mutex(false, string.Concat(virtualPathToCompressedFile, "_mutex")))
-                {
-                    try
-                    {
-                        mutex.WaitOne();
-                        if (!CachingManager.Cache.TryGetValue(pathToResource.VirtualFilePath, CompressionCacheGroup, out virtualPathToCompressedFile))
-                        {
-                            string newExtension = GetCompressedFileExtension(pathToResource, compression);
-                            pathToCompressedFile = Path.ChangeExtension(pathToResource.PhysicalFilePath, newExtension).ToLowerInvariant();
-                            virtualPathToCompressedFile = Path.ChangeExtension(pathToResource.VirtualFilePath, newExtension).ToLowerInvariant();
-                            WriteFileQueued(pathToResource, pathToCompressedFile, compression, virtualPathToCompressedFile);
-                        }
-                    }
-                    finally
-                    {
-                        mutex.ReleaseMutex();
-                    }
-                }
-            }
-            return virtualPathToCompressedFile;
-        }
-
-        private static void WriteFileQueued(HttpRoutePath path, string pathToCompressedFile, CompressionMethodScheme compression, string virtualPathToTempFile)
-        {
-            if (EnableIdentityImpersonate)
-            {
-                Infrastructure.InvokeWitImpersonationContextOrDefault(WindowsIdentity.GetCurrent, WriteFileQueuedCore, TupleUtility.CreateFour(path, pathToCompressedFile, compression, virtualPathToTempFile));
-                return;
-            }
-            WriteFileQueuedCore(TupleUtility.CreateFour(path, pathToCompressedFile, compression, virtualPathToTempFile));
-        }
-
-        private static void WriteFileQueuedCore(Template<HttpRoutePath, string, CompressionMethodScheme, string> parameters)
-        {
-            HttpRoutePath path = parameters.Arg1;
-            string pathToCompressedFile = parameters.Arg2;
-            CompressionMethodScheme compression = parameters.Arg3;
-            string virtualPathToTempFile = parameters.Arg4;
-
-            string lockpath = string.Concat(path.PhysicalFilePath, ".locked");
-            if (File.Exists(lockpath)) { return; }
-            if (CachingManager.Cache.ContainsKey(path.VirtualFilePath, CompressionCacheGroup)) { return; }
-            try
-            {
-                using (FileStream temp = File.Create(lockpath)) { temp.Flush(); }
-                using (FileStream temp = File.OpenRead(path.PhysicalFilePath))
-                {
-                    File.WriteAllBytes(pathToCompressedFile, CompressBytes(temp, compression));
-                }
-                string directory = Path.GetDirectoryName(path.PhysicalFilePath);
-                string filename = Path.GetFileName(path.PhysicalFilePath);
-                string compressedFilename = Path.GetFileName(pathToCompressedFile);
-                CachingManager.Cache.Add(path.VirtualFilePath, virtualPathToTempFile, CompressionCacheGroup, new FileDependency(directory, filename), new FileDependency(directory, compressedFilename));
-            }
-            finally
-            {
-                File.Delete(lockpath);
-            }
-        }
-
-        /// <summary>
-        /// Determines whether the specified <paramref name="physicalFilePath"/> can be written to the disk.
-        /// </summary>
-        /// <param name="physicalFilePath">The physical file path on the disk.</param>
-        /// <returns><c>true</c> if the specified <paramref name="physicalFilePath"/> can be written to the disk; otherwise, <c>false</c>.</returns>
-        protected bool CanWriteFileToDisk(string physicalFilePath)
-        {
-            bool hadException = false;
-            string tempFile = null;
-            try
-            {
-                tempFile = string.Concat(physicalFilePath, StringUtility.CreateRandomString(6) + ".tmp");
-                using (StreamWriter writer = File.CreateText(tempFile))
-                {
-                    writer.Flush();
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                hadException = true;
-                return false;
-            }
-            finally
-            {
-                if (!hadException && tempFile != null) { File.Delete(tempFile); }
-            }
-        }
-
-        private static byte[] CompressBytes(Stream temp, CompressionMethodScheme compression)
-        {
-            CompressionType compressionType;
-            switch (compression)
-            {
-                case CompressionMethodScheme.GZip:
-                    compressionType = CompressionType.GZip;
-                    break;
-                case CompressionMethodScheme.Deflate:
-                    compressionType = CompressionType.Deflate;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(compression), "For now only GZip and DEFLATE is supported.");
-            }
-
-            using (Stream compressedTemp = CompressionUtility.CompressStream(temp, compressionType))
-            {
-                return ByteConverter.FromStream(compressedTemp);
-            }
         }
 
         /// <summary>
