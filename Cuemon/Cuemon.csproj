@@ -211,6 +211,7 @@
     <Compile Include="TypeArgumentException.cs" />
     <Compile Include="TypeArgumentOutOfRangeException.cs" />
     <Compile Include="TypeCodeConverter.cs" />
+    <Compile Include="UriConverter.cs" />
     <Compile Include="UriScheme.cs" />
     <Compile Include="UriSchemeConverter.cs" />
     <Compile Include="Validator.cs" />

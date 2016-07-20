@@ -75,6 +75,30 @@ namespace Cuemon
         }
 
         /// <summary>
+        /// Determines whether the specified value is a protocol-relative URI string.
+        /// </summary>
+        /// <param name="value">The string value representing the protocol-relative URI.</param>
+        /// <returns><c>true</c> if the specified <paramref name="value"/> is a protocol-relative URI; otherwise, <c>false</c>.</returns>
+        public static bool IsProtocolRelativeUri(string value)
+        {
+            return IsProtocolRelativeUri(value, StringUtility.NetworkPathReference);
+        }
+
+        /// <summary>
+        /// Determines whether the specified value is a protocol-relative URI string.
+        /// </summary>
+        /// <param name="value">The string value representing the protocol-relative URI.</param>
+        /// <param name="relativeReference">The relative reference that <paramref name="value"/> must begin with. Default is <see cref="StringUtility.NetworkPathReference"/>.</param>
+        /// <returns><c>true</c> if the specified <paramref name="value"/> is a protocol-relative URI; otherwise, <c>false</c>.</returns>
+        public static bool IsProtocolRelativeUri(string value, string relativeReference)
+        {
+            Validator.ThrowIfNullOrEmpty(value, nameof(value));
+            Validator.ThrowIfNullOrEmpty(relativeReference, nameof(relativeReference));
+            Uri ignoreUri;
+            return TesterDoerUtility.TryExecuteFunction(() => UriConverter.FromProtocolRelativeUri(value, UriScheme.Https, relativeReference), out ignoreUri);
+        }
+
+        /// <summary>
         /// Determines whether an URI string contains one of the <see cref="UriScheme"/> values.
         /// </summary>
         /// <param name="value">The URI string to evaluate.</param>
