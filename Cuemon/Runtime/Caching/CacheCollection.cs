@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cuemon.Collections.Generic;
-using Cuemon.Threading;
 
 namespace Cuemon.Runtime.Caching
 {
@@ -338,7 +337,7 @@ namespace Cuemon.Runtime.Caching
         {
             if (!EnableExpirationTimer) { return; }
             DateTime current = DateTime.UtcNow;
-            List<Cache> snapshot = new List<Cache>(_innerCaches.Values);
+            var snapshot = CreateSnapshot();
             if (snapshot.Count > 0)
             {
                 foreach (Cache cache in snapshot)
@@ -347,6 +346,11 @@ namespace Cuemon.Runtime.Caching
                     if (cache.CanExpire && cache.HasExpired(current)) { RemoveExpired(cache.Key, cache.Group); }
                 }
             }
+        }
+
+        private void CacheExpired(object sender, CacheEventArgs e)
+        {
+            e.Cache.Expired -= CacheExpired;
         }
 
         private void RemoveExpired(string key, string group)
@@ -390,17 +394,18 @@ namespace Cuemon.Runtime.Caching
             }
         }
 
-        private void CacheExpired(object sender, CacheEventArgs e)
+        private IList<Cache> CreateSnapshot()
         {
-            ThreadPoolUtility.RunAction(RemoveExpired, e.Cache.Key, e.Cache.Group);
-            e.Cache.Expired -= CacheExpired;
+            var snapshot = new List<Cache>();
+            lock (_innerCaches) { snapshot.AddRange(_innerCaches.Values); }
+            return snapshot;
         }
 
         private IList<Cache> GetCaches(string group)
         {
             DateTime current = DateTime.UtcNow;
             List<Cache> groupCaches = new List<Cache>();
-            List<Cache> snapshot = new List<Cache>(_innerCaches.Values);
+            var snapshot = CreateSnapshot();
             foreach (Cache cache in snapshot)
             {
                 if (cache == null) { continue; } // this can happen if a cache has been removed
@@ -551,36 +556,23 @@ namespace Cuemon.Runtime.Caching
 
         private bool TryGetCache(string key, string group, out Cache cache)
         {
-            DateTime current = DateTime.UtcNow;
-            long groupKey = GenerateGroupKey(key, group);
-            bool hasItem = _innerCaches.TryGetValue(groupKey, out cache);
-            if (hasItem)
+            lock (_innerCaches)
             {
-                if (cache.CanExpire && !cache.HasExpired(current))
+                DateTime current = DateTime.UtcNow;
+                long groupKey = GenerateGroupKey(key, group);
+                if (_innerCaches.TryGetValue(groupKey, out cache))
                 {
-                    cache.Refresh();
+                    bool hasCacheExpired = cache.HasExpired(current);
+                    if (cache.CanExpire && hasCacheExpired)
+                    {
+                        RemoveExpired(key, group);
+                        return false;
+                    }
+                    if (cache.CanExpire && !hasCacheExpired) { cache.Refresh(); }
                     return true;
                 }
-
-                if (cache.CanExpire && cache.HasExpired(current))
-                {
-                    RemoveExpired(key, group);
-                    return false;
-                }
-                return true;
             }
             return false;
-        }
-
-        private IEnumerable<KeyValuePair<long, object>> CreateImpostor()
-        {
-            foreach (KeyValuePair<long, Cache> keyValuePair in _innerCaches)
-            {
-                if (keyValuePair.Value != null)
-                {
-                    yield return new KeyValuePair<long, object>(keyValuePair.Key, keyValuePair.Value.Value);
-                }
-            }
         }
 
         /// <summary>
@@ -601,8 +593,18 @@ namespace Cuemon.Runtime.Caching
         /// <remarks>All keys are hashed internally and will not provide useful information.</remarks>
         public IEnumerator<KeyValuePair<long, object>> GetEnumerator()
         {
-            List<KeyValuePair<long, object>> impostor = new List<KeyValuePair<long, object>>(CreateImpostor());
-            return impostor.GetEnumerator();
+            lock (_innerCaches)
+            {
+                var impostor = new List<KeyValuePair<long, object>>();
+                foreach (KeyValuePair<long, Cache> keyValuePair in _innerCaches)
+                {
+                    if (keyValuePair.Value != null)
+                    {
+                        impostor.Add(new KeyValuePair<long, object>(keyValuePair.Key, keyValuePair.Value.Value));
+                    }
+                }
+                return impostor.GetEnumerator();
+            }
         }
         #endregion
     }

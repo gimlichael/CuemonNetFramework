@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Cuemon.Threading;
 
 namespace Cuemon.Runtime.Caching
@@ -2163,66 +2162,55 @@ namespace Cuemon.Runtime.Caching
             return (TResult)GetOrAddCore(f1, key, group, null, null, f2).Value;
         }
 
-        private Cache GetOrAddCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory, string key, string group, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
+        private Cache GetOrAddCore<TTuple, TResult>(DoerFactory<TTuple, TResult> valueFactory, string key, string group, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
             where TTuple : Template
         {
-            return GetOrAddCore(factory.ExecuteMethod, key, group, absoluteExpiration, slidingExpiration, dependenciesFactory);
+            lock (_innerCaches)
+            {
+                Cache result;
+                TryGetOrAddCore(valueFactory, key, group, out result, absoluteExpiration, slidingExpiration, dependenciesFactory);
+                return result;
+            }
         }
 
-        private Cache GetOrAddCore<TTuple, TResult>(Doer<TResult> value, string key, string group, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
-            where TTuple : Template
-        {
-            Cache result;
-            TryGetOrAddCore(value, key, group, out result, absoluteExpiration, slidingExpiration, dependenciesFactory);
-            return result;
-        }
-
-        private bool TryGetOrAddCore<TResult>(Doer<TResult> value, string key, string group, out TResult result, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null)
-        {
-            return TryGetOrAddCore<Template, TResult>(value, key, group, out result, absoluteExpiration, slidingExpiration);
-        }
-
-        private bool TryGetOrAddCore<TTuple, TResult>(Doer<TResult> value, string key, string group, out TResult result, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
+        private bool TryGetOrAddCore<TTuple, TResult>(DoerFactory<TTuple, TResult> valueFactory, string key, string group, out TResult result, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
             where TTuple : Template
         {
             Cache innerResult;
-            bool wasAddedToCache = TryGetOrAddCore(value, key, group, out innerResult, absoluteExpiration, slidingExpiration, dependenciesFactory);
+            bool wasAddedToCache = TryGetOrAddCore(valueFactory, key, group, out innerResult, absoluteExpiration, slidingExpiration, dependenciesFactory);
             result = (TResult)innerResult.Value;
             return wasAddedToCache;
         }
 
-        private bool TryGetOrAddCore<TTuple, TResult>(Doer<TResult> value, string key, string group, out Cache result, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
+        private bool TryGetOrAddCore<TTuple, TResult>(DoerFactory<TTuple, TResult> valueFactory, string key, string group, out Cache result, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
             where TTuple : Template
         {
-            Validator.ThrowIfNull(key, nameof(key));
-            if (slidingExpiration != null)
+            lock (_innerCaches)
             {
-                Validator.ThrowIfLowerThan(slidingExpiration().Ticks, TimeSpan.Zero.Ticks, nameof(slidingExpiration), "The specified sliding expiration cannot be less than TimeSpan.Zero.");
-                Validator.ThrowIfGreaterThan(slidingExpiration().Ticks, TimeSpan.FromDays(365).Ticks, nameof(slidingExpiration), "The specified sliding expiration cannot exceed one year.");
-            }
-            bool wasAddedToCache = false;
-            if (!TryGetCache(key, group, out result))
-            {
-                lock (_innerCaches)
+                Validator.ThrowIfNull(key, nameof(key));
+                if (slidingExpiration != null)
                 {
-                    if (!TryGetCache(key, group, out result))
-                    {
-                        long groupKey = GenerateGroupKey(key, group);
-                        result = WrapCacheInThreadSafeDelegate(value, key, group, absoluteExpiration, slidingExpiration, dependenciesFactory).Value;
-                        _innerCaches.Add(groupKey, result);
-                        wasAddedToCache = true;
-                    }
+                    Validator.ThrowIfLowerThan(slidingExpiration().Ticks, TimeSpan.Zero.Ticks, nameof(slidingExpiration), "The specified sliding expiration cannot be less than TimeSpan.Zero.");
+                    Validator.ThrowIfGreaterThan(slidingExpiration().Ticks, TimeSpan.FromDays(365).Ticks, nameof(slidingExpiration), "The specified sliding expiration cannot exceed one year.");
                 }
+
+                if (!TryGetCache(key, group, out result))
+                {
+                    long groupKey = GenerateGroupKey(key, group);
+                    result = WrapCacheInThreadSafeDelegate(valueFactory, key, group, absoluteExpiration, slidingExpiration, dependenciesFactory).Value;
+                    _innerCaches.Add(groupKey, result);
+                    return true;
+                }
+                return false;
             }
-            return wasAddedToCache;
         }
 
-        private PadLock<Cache> WrapCacheInThreadSafeDelegate<TTuple, TResult>(Doer<TResult> value, string key, string group, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
+        private PadLock<Cache> WrapCacheInThreadSafeDelegate<TTuple, TResult>(DoerFactory<TTuple, TResult> valueFactory, string key, string group, Doer<DateTime> absoluteExpiration = null, Doer<TimeSpan> slidingExpiration = null, DoerFactory<TTuple, IEnumerable<IDependency>> dependenciesFactory = null)
             where TTuple : Template
         {
             return new PadLock<Cache>(() =>
             {
-                Cache cache = new Cache(key, value(), group, dependenciesFactory == null ? null : dependenciesFactory.ExecuteMethod(), absoluteExpiration == null ? DateTime.MaxValue : absoluteExpiration(), slidingExpiration == null ? TimeSpan.Zero : slidingExpiration());
+                Cache cache = new Cache(key, valueFactory.ExecuteMethod(), group, dependenciesFactory == null ? null : dependenciesFactory.ExecuteMethod(), absoluteExpiration == null ? DateTime.MaxValue : absoluteExpiration(), slidingExpiration == null ? TimeSpan.Zero : slidingExpiration());
                 cache.Expired += CacheExpired;
                 cache.StartDependencies();
                 return cache;

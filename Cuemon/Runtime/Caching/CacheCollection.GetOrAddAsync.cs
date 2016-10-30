@@ -29,7 +29,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create(() => default(TResult)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -63,7 +63,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create(() => default(TResult)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -98,7 +98,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create(() => default(TResult)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -133,7 +133,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver)))
+            if (TryGetOrAddCore(DoerFactory.Create(() => default(TResult)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver)))
             {
                 var factory = DoerFactory.Create(resolver);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -169,7 +169,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def) => default(TResult), default(T)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -207,7 +207,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def) => default(TResult), default(T)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -246,7 +246,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def) => default(TResult), default(T)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -285,7 +285,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg)))
+            if (TryGetOrAddCore(DoerFactory.Create(x => default(TResult), default(T)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg)))
             {
                 var factory = DoerFactory.Create(resolver, arg);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -325,7 +325,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2) => default(TResult), default(T1), default(T2)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -367,7 +367,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2) => default(TResult), default(T1), default(T2)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -410,7 +410,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2) => default(TResult), default(T1), default(T2)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -453,7 +453,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2) => default(TResult), default(T1), default(T2)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -497,7 +497,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3) => default(TResult), default(T1), default(T2), default(T3)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -543,7 +543,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3) => default(TResult), default(T1), default(T2), default(T3)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -590,7 +590,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3) => default(TResult), default(T1), default(T2), default(T3)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -637,7 +637,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3) => default(TResult), default(T1), default(T2), default(T3)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -685,7 +685,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4) => default(TResult), default(T1), default(T2), default(T3), default(T4)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -735,7 +735,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4) => default(TResult), default(T1), default(T2), default(T3), default(T4)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -786,7 +786,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4) => default(TResult), default(T1), default(T2), default(T3), default(T4)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -837,7 +837,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4) => default(TResult), default(T1), default(T2), default(T3), default(T4)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -889,7 +889,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -943,7 +943,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -998,7 +998,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1053,7 +1053,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1109,7 +1109,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1167,7 +1167,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1226,7 +1226,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1285,7 +1285,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1345,7 +1345,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1407,7 +1407,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1470,7 +1470,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1533,7 +1533,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1597,7 +1597,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1663,7 +1663,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1730,7 +1730,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1797,7 +1797,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1865,7 +1865,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -1935,7 +1935,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -2006,7 +2006,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -2077,7 +2077,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -2149,7 +2149,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9, def10) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9), default(T10)), key, group, out result))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -2223,7 +2223,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, () => absoluteExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9, def10) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9), default(T10)), key, group, out result, () => absoluteExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -2297,7 +2297,7 @@ namespace Cuemon.Runtime.Caching
         {
             Validator.ThrowIfNull(resolver, nameof(resolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, () => slidingExpiration))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9, def10) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9), default(T10)), key, group, out result, null, () => slidingExpiration))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
@@ -2372,7 +2372,7 @@ namespace Cuemon.Runtime.Caching
             Validator.ThrowIfNull(resolver, nameof(resolver));
             Validator.ThrowIfNull(dependencyResolver, nameof(dependencyResolver));
             TResult result;
-            if (TryGetOrAddCore(() => default(TResult), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)))
+            if (TryGetOrAddCore(DoerFactory.Create((def1, def2, def3, def4, def5, def6, def7, def8, def9, def10) => default(TResult), default(T1), default(T2), default(T3), default(T4), default(T5), default(T6), default(T7), default(T8), default(T9), default(T10)), key, group, out result, null, null, DoerFactory.Create(dependencyResolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)))
             {
                 var factory = DoerFactory.Create(resolver, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
                 factory.BeginExecuteMethod(CacheAsyncState<TResult>.Callback, new CacheAsyncState<TResult>(this, key, group).With(factory));
