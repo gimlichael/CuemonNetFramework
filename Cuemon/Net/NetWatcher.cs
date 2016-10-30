@@ -15,6 +15,7 @@ namespace Cuemon.Net
     public sealed class NetWatcher : Watcher
     {
         private readonly object _locker = new object();
+        private static readonly string SignatureDefault = StringUtility.CreateRandomString(32);
 
         #region Constructors
         NetWatcher()
@@ -78,15 +79,16 @@ namespace Cuemon.Net
                 case UriScheme.File:
                 case UriScheme.Ftp:
                 case UriScheme.Http:
+                case UriScheme.Https:
                     break;
                 default:
-                    throw new ArgumentException("The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP or HTTP.", nameof(requestUri));
+                    throw new ArgumentException("The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP, HTTP or HTTPS.", nameof(requestUri));
             }
-            this.RequestUri = requestUri;
-            this.Scheme = scheme;
-            this.UtcCreated = DateTime.UtcNow;
-            this.CheckResponseData = checkResponseData;
-            this.Signature = null;
+            RequestUri = requestUri;
+            Scheme = scheme;
+            UtcCreated = DateTime.UtcNow;
+            CheckResponseData = checkResponseData;
+            Signature = SignatureDefault;
         }
         #endregion
 
@@ -122,16 +124,16 @@ namespace Cuemon.Net
         {
             lock (_locker)
             {
-                string currentSignature = null;
-                string listenerHeader = string.Format(CultureInfo.InvariantCulture, "Cuemon.Net.NetWatcher; Interval={0} seconds", this.Period.TotalSeconds);
+                string currentSignature = SignatureDefault;
+                string listenerHeader = string.Format(CultureInfo.InvariantCulture, "Cuemon.Net.NetWatcher; Interval={0} seconds", Period.TotalSeconds);
                 DateTime utcLastModified = DateTime.UtcNow;
-                switch (this.Scheme)
+                switch (Scheme)
                 {
                     case UriScheme.File:
-                        utcLastModified = File.GetLastWriteTimeUtc(this.RequestUri.LocalPath);
-                        if (this.CheckResponseData)
+                        utcLastModified = File.GetLastWriteTimeUtc(RequestUri.LocalPath);
+                        if (CheckResponseData)
                         {
-                            using (FileStream stream = new FileStream(this.RequestUri.LocalPath, FileMode.Open, FileAccess.Read))
+                            using (FileStream stream = new FileStream(RequestUri.LocalPath, FileMode.Open, FileAccess.Read))
                             {
                                 stream.Position = 0;
                                 currentSignature = HashUtility.ComputeHash(stream).ToHexadecimal();
@@ -139,9 +141,9 @@ namespace Cuemon.Net
                         }
                         break;
                     case UriScheme.Ftp:
-                        WebRequest request = WebRequest.Create(this.RequestUri);
+                        WebRequest request = WebRequest.Create(RequestUri);
                         request.Headers.Add("Listener-Object", listenerHeader);
-                        request.Method = this.CheckResponseData ? WebRequestMethods.Ftp.DownloadFile : WebRequestMethods.Ftp.GetDateTimestamp;
+                        request.Method = CheckResponseData ? WebRequestMethods.Ftp.DownloadFile : WebRequestMethods.Ftp.GetDateTimestamp;
                         using (FtpWebResponse response = NetUtility.GetFtpWebResponse((FtpWebRequest)request))
                         {
                             switch (request.Method)
@@ -156,9 +158,10 @@ namespace Cuemon.Net
                         }
                         break;
                     case UriScheme.Http:
+                    case UriScheme.Https:
                         HttpWebRequestSettings settings = new HttpWebRequestSettings();
                         settings.Headers.Add("Listener-Object", listenerHeader);
-                        using (HttpWebResponse response = this.CheckResponseData ? NetHttpUtility.HttpGet(this.RequestUri, settings) : NetHttpUtility.HttpHead(this.RequestUri, settings))
+                        using (HttpWebResponse response = CheckResponseData ? NetHttpUtility.HttpGet(RequestUri, settings) : NetHttpUtility.HttpHead(RequestUri, settings))
                         {
                             switch (response.Method)
                             {
@@ -173,25 +176,25 @@ namespace Cuemon.Net
                         }
                         break;
                     default:
-                        throw new InvalidOperationException("Only allowed schemes for now is File, FTP or HTTP.");
+                        throw new InvalidOperationException("Only allowed schemes for now is File, FTP, HTTP or HTTPS.");
                 }
 
-                if (this.CheckResponseData)
+                if (CheckResponseData)
                 {
-                    if (this.Signature == null) { this.Signature = currentSignature; }
-                    if (!this.Signature.Equals(currentSignature, StringComparison.OrdinalIgnoreCase))
+                    if (Signature == SignatureDefault) { Signature = currentSignature; }
+                    if (!Signature.Equals(currentSignature, StringComparison.OrdinalIgnoreCase))
                     {
-                        this.SetUtcLastModified(utcLastModified);
-                        this.OnChangedRaised();
+                        SetUtcLastModified(utcLastModified);
+                        OnChangedRaised();
                     }
-                    this.Signature = currentSignature;
+                    Signature = currentSignature;
                     return;
                 }
 
-                if (utcLastModified > this.UtcCreated)
+                if (utcLastModified > UtcCreated)
                 {
-                    this.SetUtcLastModified(utcLastModified);
-                    this.OnChangedRaised();
+                    SetUtcLastModified(utcLastModified);
+                    OnChangedRaised();
                 }
             }
         }

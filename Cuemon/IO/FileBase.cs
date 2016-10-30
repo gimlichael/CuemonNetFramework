@@ -12,8 +12,8 @@ namespace Cuemon.IO
     /// </summary>
     public abstract class FileBase
     {
-        private CacheValidator _validation = null;
-        private static readonly UriScheme[] ValidUriSchemes = EnumerableConverter.AsArray(UriScheme.File, UriScheme.Http, UriScheme.Ftp);
+        private CacheValidator _validation;
+        private static readonly UriScheme[] ValidUriSchemes = EnumerableConverter.AsArray(UriScheme.File, UriScheme.Http, UriScheme.Https, UriScheme.Ftp);
 
         #region Constructors
         private FileBase()
@@ -36,8 +36,8 @@ namespace Cuemon.IO
         {
             if (fileLocation == null) { throw new ArgumentNullException(nameof(fileLocation)); }
             if (!UriUtility.ContainsScheme(fileLocation, ValidUriSchemes)) { throw new ArgumentException("Only URI's with HTTP, FTP og File schemes is supported.", nameof(fileLocation)); }
-            this.UriLocation = fileLocation;
-            this.CanAccess = fileLocation.IsFile ? FileUtility.CanAccess(fileLocation.LocalPath, FileAccess.Read) : NetUtility.CanAccess(WebRequest.Create(fileLocation));
+            UriLocation = fileLocation;
+            CanAccess = fileLocation.IsFile ? FileUtility.CanAccess(fileLocation.LocalPath, FileAccess.Read) : NetUtility.CanAccess(WebRequest.Create(fileLocation));
         }
         #endregion
 
@@ -63,20 +63,20 @@ namespace Cuemon.IO
         {
             if (_validation == null)
             {
-                if (this.CanAccess)
+                if (CanAccess)
                 {
                     WebRequest request;
                     DateTime created = DateTime.MinValue;
                     DateTime modified = DateTime.MinValue;
-                    switch (UriSchemeConverter.FromString(this.UriLocation.Scheme))
+                    switch (UriSchemeConverter.FromString(UriLocation.Scheme))
                     {
                         case UriScheme.File:
-                            FileInfo f = new FileInfo(this.UriLocation.LocalPath);
+                            FileInfo f = new FileInfo(UriLocation.LocalPath);
                             created = f.CreationTimeUtc;
                             modified = f.LastWriteTimeUtc;
                             break;
                         case UriScheme.Ftp:
-                            request = WebRequest.Create(this.UriLocation);
+                            request = WebRequest.Create(UriLocation);
                             request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
                             using (FtpWebResponse response = NetUtility.GetFtpWebResponse((FtpWebRequest)request))
                             {
@@ -85,7 +85,8 @@ namespace Cuemon.IO
                             }
                             break;
                         case UriScheme.Http:
-                            request = WebRequest.Create(this.UriLocation);
+                        case UriScheme.Https:
+                            request = WebRequest.Create(UriLocation);
                             request.Method = WebRequestMethods.Http.Head;
                             using (HttpWebResponse response = NetUtility.GetHttpWebResponse((HttpWebRequest)request))
                             {
@@ -118,23 +119,24 @@ namespace Cuemon.IO
         /// <returns>A <see cref="Stream"/> object.</returns>
         public Stream ToStream()
         {
-            if (this.CanAccess)
+            if (CanAccess)
             {
-                if (this.UriLocation.IsFile) { return File.OpenRead(this.UriLocation.LocalPath); }
-                switch (UriSchemeConverter.FromString(this.UriLocation.Scheme))
+                if (UriLocation.IsFile) { return File.OpenRead(UriLocation.LocalPath); }
+                switch (UriSchemeConverter.FromString(UriLocation.Scheme))
                 {
                     case UriScheme.File:
-                        using (FileWebResponse response = NetUtility.GetFileWebResponse((FileWebRequest)WebRequest.Create(this.UriLocation)))
+                        using (FileWebResponse response = NetUtility.GetFileWebResponse((FileWebRequest)WebRequest.Create(UriLocation)))
                         {
                             return StreamUtility.CopyStream(response.GetResponseStream());
                         }
                     case UriScheme.Ftp:
-                        using (FtpWebResponse response = NetUtility.GetFtpWebResponse((FtpWebRequest)WebRequest.Create(this.UriLocation)))
+                        using (FtpWebResponse response = NetUtility.GetFtpWebResponse((FtpWebRequest)WebRequest.Create(UriLocation)))
                         {
                             return StreamUtility.CopyStream(response.GetResponseStream());
                         }
                     case UriScheme.Http:
-                        using (HttpWebResponse response = NetUtility.GetHttpWebResponse((HttpWebRequest)WebRequest.Create(this.UriLocation)))
+                    case UriScheme.Https:
+                        using (HttpWebResponse response = NetUtility.GetHttpWebResponse((HttpWebRequest)WebRequest.Create(UriLocation)))
                         {
                             return StreamUtility.CopyStream(response.GetResponseStream());
                         }

@@ -92,10 +92,10 @@ namespace Cuemon.Net
         public NetDependency(IEnumerable<Uri> values, bool checkResponseData, TimeSpan dueTime, TimeSpan period)
         {
             if (values == null) { throw new ArgumentNullException(nameof(values)); }
-            this.Uris = values;
-            this.CheckResponseData = checkResponseData;
-            this.DueTime = dueTime;
-            this.Period = period;
+            Uris = values;
+            CheckResponseData = checkResponseData;
+            DueTime = dueTime;
+            Period = period;
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Cuemon.Net
         /// </value>
         public override bool HasChanged
         {
-            get { return (this.UtcLastModified > this.UtcCreated); }
+            get { return (UtcLastModified > UtcCreated); }
         }
 
         private IEnumerable<Uri> Uris { get; set; }
@@ -327,23 +327,24 @@ namespace Cuemon.Net
         /// <summary>
         /// Starts and performs the necessary dependency tasks of this instance.
         /// </summary>
-        /// <exception cref="System.ArgumentException">The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP or HTTP.;uris</exception>
+        /// <exception cref="ArgumentException">The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP, HTTP or HTTPS.</exception>
 		public override void Start()
         {
             List<NetWatcher> watchers = new List<NetWatcher>();
-            foreach (Uri uri in this.Uris)
+            foreach (Uri uri in Uris)
             {
                 switch (UriSchemeConverter.FromString(uri.Scheme))
                 {
                     case UriScheme.File:
                     case UriScheme.Ftp:
                     case UriScheme.Http:
-                        NetWatcher watcher = null;
+                    case UriScheme.Https:
+                        NetWatcher watcher;
                         NetWatcher tempWatcher = null;
                         try
                         {
-                            tempWatcher = new NetWatcher(uri, this.DueTime, this.Period, this.CheckResponseData);
-                            tempWatcher.Changed += new EventHandler<WatcherEventArgs>(WatcherChanged);
+                            tempWatcher = new NetWatcher(uri, DueTime, Period, CheckResponseData);
+                            tempWatcher.Changed += WatcherChanged;
                             watcher = tempWatcher;
                             tempWatcher = null;
                         }
@@ -354,34 +355,34 @@ namespace Cuemon.Net
                         watchers.Add(watcher);
                         break;
                     default:
-                        throw new ArgumentException("The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP or HTTP.", "values");
+                        throw new ArgumentException("The provided Uri does not have a valid scheme attached. Allowed schemes for now is File, FTP, HTTP or HTTPS.", "values");
                 }
             }
-            this.Watchers = watchers.ToArray();
-            this.UtcCreated = DateTime.UtcNow;
-            this.SetUtcLastModified(this.UtcCreated);
+            Watchers = watchers.ToArray();
+            UtcCreated = DateTime.UtcNow;
+            SetUtcLastModified(UtcCreated);
         }
 
         private void WatcherChanged(object sender, WatcherEventArgs args)
         {
-            this.SetUtcLastModified(DateTime.UtcNow);
-            if (!this.HasChanged) { return; }
-            if (this.Watchers != null)
+            SetUtcLastModified(DateTime.UtcNow);
+            if (!HasChanged) { return; }
+            if (Watchers != null)
             {
                 lock (_locker)
                 {
-                    if (this.Watchers != null)
+                    if (Watchers != null)
                     {
-                        foreach (NetWatcher watcher in this.Watchers)
+                        foreach (NetWatcher watcher in Watchers)
                         {
-                            watcher.Changed -= new EventHandler<WatcherEventArgs>(WatcherChanged);
+                            watcher.Changed -= WatcherChanged;
                             watcher.Dispose();
                         }
                     }
-                    this.Watchers = null;
+                    Watchers = null;
                 }
             }
-            this.OnDependencyChangedRaised(new DependencyEventArgs(this.UtcLastModified));
+            OnDependencyChangedRaised(new DependencyEventArgs(UtcLastModified));
         }
         #endregion
     }
