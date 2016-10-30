@@ -34,8 +34,8 @@ namespace Cuemon
         /// <param name="instance">The instance to intermediate.</param>
         internal DefaultOr(T instance)
         {
-            this.IsDefault = Condition.IsDefault(instance);
-            this.Instance = this.IsDefault ? Activator.CreateInstance<T>() : instance;
+            IsDefault = Condition.IsDefault(instance);
+            Instance = IsDefault ? Activator.CreateInstance<T>() : instance;
         }
         #endregion
 
