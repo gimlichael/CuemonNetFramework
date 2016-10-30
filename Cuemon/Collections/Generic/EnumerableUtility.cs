@@ -4,11 +4,30 @@ using System.Collections.Generic;
 
 namespace Cuemon.Collections.Generic
 {
+    internal class EnumerableUtility<TElement>
+    {
+        public static readonly TElement[] Empty = new TElement[0];
+    }
+
     /// <summary>
     /// This utility class provides a set of static methods for querying objects that implement <see cref="IEnumerable{T}"/>. 
     /// </summary>
     public static class EnumerableUtility
     {
+        /// <summary>
+        /// Returns an empty <see cref="T:System.Collections.Generic.IEnumerable`1" /> that has the specified type argument.
+        /// </summary>
+        /// <returns>
+        /// An empty <see cref="T:System.Collections.Generic.IEnumerable`1" /> whose type argument is <typeparamref name="TResult" />.
+        /// </returns>
+        /// <typeparam name="TResult">
+        /// The type to assign to the type parameter of the returned generic <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+        /// </typeparam>
+        public static IEnumerable<TResult> Empty<TResult>()
+        {
+            return EnumerableUtility<TResult>.Empty;
+        }
+
         /// <summary>
         /// Returns a random element of a sequence of elements, or a default value if no element is found.
         /// </summary>
@@ -96,7 +115,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">A sequence of values to invoke a transform function on.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> whose elements are the result of invoking the one-to-many transform function on each element of the <paramref name="source"/> sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.
         /// </exception>
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, IEnumerable<TResult>> selector)
@@ -120,7 +139,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">A sequence of values to invoke a transform function on.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> whose elements are the result of invoking the transform function on each element of <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.
         /// </exception>
         public static IEnumerable<TResult> Select<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, TResult> selector)
@@ -141,7 +160,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">A sequence of values to invoke a transform function on.</param>
         /// <param name="selector">A transform function to apply to each <paramref name="source"/> element; the second parameter of the function represents the index of the <paramref name="source"/> element.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> whose elements are the result of invoking the transform function on each element of <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.
         /// </exception>
 	    public static IEnumerable<TResult> Select<TSource, TResult>(IEnumerable<TSource> source, Doer<TSource, int, TResult> selector)
@@ -161,7 +180,7 @@ namespace Cuemon.Collections.Generic
         /// </summary>
         /// <param name="source">The <see cref="IEnumerable"/> to check for emptiness.</param>
         /// <returns><c>true</c> if the source sequence contains any elements; otherwise, <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
         public static bool Any(IEnumerable source)
@@ -177,7 +196,7 @@ namespace Cuemon.Collections.Generic
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IEnumerable{T}"/> to check for emptiness.</param>
         /// <returns><c>true</c> if the source sequence contains any elements; otherwise, <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
         public static bool Any<TSource>(IEnumerable<TSource> source)
@@ -195,7 +214,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="start">The value of the first integer in the sequence.</param>
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <returns>An <see cref="IEnumerable{Int32}"/> that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/> is less than 0 or <br/>
         /// <paramref name="start"/> + <paramref name="count"/> is larger than <see cref="int.MaxValue"/>.
         /// </exception>
@@ -213,7 +232,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="count">The number of objects of <typeparamref name="T"/> to generate.</param>
         /// <param name="resolver">The function delegate that will resolve the value of <typeparamref name="T"/>; the parameter passed to the delegate represents the index of the element to return.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> that contains a range of <typeparamref name="T"/> elements.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/> is less than 0.
         /// </exception>
 	    public static IEnumerable<T> RangeOf<T>(int count, Doer<int, T> resolver)
@@ -230,7 +249,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">An <see cref="IEnumerable{T}"/> to filter.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> that contains elements from the input sequence that satisfy the condition.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null or <br/>
         /// <paramref name="predicate"/> is null.
         /// </exception>
@@ -250,7 +269,7 @@ namespace Cuemon.Collections.Generic
         /// <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
         /// <param name="source">An <see cref="IEnumerable{T}" /> to chunk into smaller slices for a batch run or similar.</param>
         /// <returns>An <see cref="IEnumerable{T}" /> that contains no more than 128 elements from the <paramref name="source" /> sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
         /// <remarks>The original <paramref name="source"/> is reduced equivalent to the number of elements in the returned sequence.</remarks>
@@ -266,7 +285,7 @@ namespace Cuemon.Collections.Generic
         /// <param name="source">An <see cref="IEnumerable{T}" /> to chunk into smaller slices for a batch run or similar.</param>
         /// <param name="size">The amount of elements to process at a time.</param>
         /// <returns>An <see cref="IEnumerable{T}" /> that contains no more than the specified <paramref name="size" /> of elements from the <paramref name="source" /> sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
         /// <exception cref="System.ArgumentException">
@@ -662,7 +681,7 @@ namespace Cuemon.Collections.Generic
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IEnumerable{T}"/> to return the first element of.</param>
         /// <returns>default(TSource) if source is empty; otherwise, the first element in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
         /// <remarks>The default value for reference and nullable types is null.</remarks>
@@ -690,7 +709,7 @@ namespace Cuemon.Collections.Generic
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IEnumerable{T}"/> to return the last element of.</param>
         /// <returns>default(TSource) if source is empty; otherwise, the last element in <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
         /// <remarks>The default value for reference and nullable types is null.</remarks>
