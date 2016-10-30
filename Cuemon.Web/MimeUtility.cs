@@ -67,21 +67,9 @@ namespace Cuemon.Web
         /// <param name="mimeTypes">The MIME types to use as source for the <paramref name="extensions"/>.</param>
         /// <param name="extensions">The file extensions to parse against <paramref name="mimeTypes"/>.</param>
         /// <returns>A sequence of <see cref="FileMapping"/> objects matching the specified <paramref name="extensions"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="extensions"/> is null.
-        /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        /// <paramref name="extensions"/> has a length of zero.
-        /// </exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        /// <paramref name="extensions"/> has at least one invalid value.
-        /// </exception>
         public static IEnumerable<FileMapping> ParseFileExtensions(IEnumerable<FileMapping> mimeTypes, params string[] extensions)
         {
-            if (extensions == null) { throw new ArgumentNullException(nameof(extensions)); }
-            if (extensions.Length == 0) { throw new ArgumentOutOfRangeException(nameof(extensions), "At least one file extension must be specified."); }
-            if (!HasExtension(extensions)) { throw new ArgumentOutOfRangeException(nameof(extensions), "At least one file extension seems to be invalid."); }
-
+            if (extensions == null || extensions.Length == 0 || !HasExtension(extensions)) { return EnumerableUtility.Empty<FileMapping>(); }
             Doer<IEnumerable<FileMapping>, IList<string>, IEnumerable<FileMapping>> parseMimeTypeCore = CachingManager.Cache.Memoize<IEnumerable<FileMapping>, IList<string>, IEnumerable<FileMapping>>(ParseMimeTypeCore, TimeSpan.FromMinutes(20));
             return parseMimeTypeCore(mimeTypes, new List<string>(extensions));
         }
