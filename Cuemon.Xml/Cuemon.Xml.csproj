@@ -91,6 +91,7 @@
     <Compile Include="XmlJsonInstance.cs" />
     <Compile Include="XmlObfuscator.cs" />
     <Compile Include="XmlReaderUtility.cs" />
+    <Compile Include="Serialization\XmlSerializationMethod.cs" />
     <Compile Include="XmlUriResolver.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

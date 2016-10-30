@@ -25,7 +25,7 @@ namespace Cuemon.Xml.Serialization
             ParseWriteXml(writer, node, enumerableCaller, serializationRules.Instance.DefaultSerializationMethod);
         }
 
-        internal static void ParseWriteXml(XmlWriter writer, IHierarchy<object> node, bool enumerableCaller, SerializationMethod method)
+        internal static void ParseWriteXml(XmlWriter writer, IHierarchy<object> node, bool enumerableCaller, XmlSerializationMethod method)
         {
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             if (node == null) { throw new ArgumentNullException(nameof(node)); }
@@ -156,12 +156,12 @@ namespace Cuemon.Xml.Serialization
             return instance ?? new XmlQualifiedEntity(XmlUtility.SanitizeElementName(rootOrElementName), ns);
         }
 
-        internal static void WriteValue(XmlWriter writer, IHierarchy<object> node, SerializationMethod method, Doer<IWrapper<object>, string> parser)
+        internal static void WriteValue(XmlWriter writer, IHierarchy<object> node, XmlSerializationMethod method, Doer<IWrapper<object>, string> parser)
         {
             WriteValue(writer, node, method, parser, false);
         }
 
-        internal static void WriteValue(XmlWriter writer, IHierarchy<object> node, SerializationMethod method, Doer<IWrapper<object>, string> parser, bool enumerableCaller)
+        internal static void WriteValue(XmlWriter writer, IHierarchy<object> node, XmlSerializationMethod method, Doer<IWrapper<object>, string> parser, bool enumerableCaller)
         {
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             if (node == null) { throw new ArgumentNullException(nameof(node)); }
@@ -181,10 +181,10 @@ namespace Cuemon.Xml.Serialization
             {
                 switch (method)
                 {
-                    case SerializationMethod.XmlAttributeAttribute:
+                    case XmlSerializationMethod.XmlAttribute:
                         hasAttributeAttribute = true;
                         break;
-                    case SerializationMethod.XmlElementAttribute:
+                    case XmlSerializationMethod.XmlElement:
                         hasElementAttribute = true;
                         break;
                 }
