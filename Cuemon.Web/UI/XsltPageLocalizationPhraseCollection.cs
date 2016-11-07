@@ -91,7 +91,7 @@ namespace Cuemon.Web.UI
                         }
                         else
                         {
-                            CachingManager.Cache.Add(cacheKey, transform, new NetDependency(phraseStyleSheetFile));
+                            CachingManager.Cache.Add(cacheKey, transform, new NetDependency(new Uri(phraseStyleSheetFile)));
                         }
                     }
                 }

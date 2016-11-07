@@ -103,9 +103,16 @@
     <Compile Include="GuidConverter.cs" />
     <Compile Include="Infrastructure.cs" />
     <Compile Include="IO\Compression\CompressionType.cs" />
+    <Compile Include="IO\FileRequestDependency.cs" />
+    <Compile Include="IO\FileRequestWatcher.cs" />
     <Compile Include="IO\StreamConverter.cs" />
     <Compile Include="IO\TextReaderConverter.cs" />
+    <Compile Include="Net\FtpRequestDependency.cs" />
+    <Compile Include="Net\FtpRequestWatcher.cs" />
+    <Compile Include="Net\Http\HttpRequestDependency.cs" />
+    <Compile Include="Net\Http\HttpRequestWatcher.cs" />
     <Compile Include="Net\Mail\MailDistributor.cs" />
+    <Compile Include="Net\RequestWatcher.cs" />
     <Compile Include="Net\WebHeaderCollectionConverter.cs" />
     <Compile Include="ObjectConverter.cs" />
     <Compile Include="RandomSeverity.cs" />
@@ -139,6 +146,8 @@
     <Compile Include="Collections\DataPairCollection.cs" />
     <Compile Include="Reflection\MethodBaseConverter.cs" />
     <Compile Include="Runtime\Serialization\JsonConverter.cs" />
+    <Compile Include="Runtime\WatcherDependency.cs" />
+    <Compile Include="Runtime\WatcherOptions.cs" />
     <Compile Include="SearchType.cs" />
     <Compile Include="Security\Cryptography\HashAlgorithmType.cs" />
     <Compile Include="Security\Cryptography\HashResult.cs" />
@@ -313,7 +322,6 @@
     <Compile Include="IO\FileBase.cs" />
     <Compile Include="IO\XmlFile.cs" />
     <Compile Include="Net\NetDependency.cs" />
-    <Compile Include="Net\NetWatcher.cs" />
     <Compile Include="Net\NetUtility.cs" />
     <Compile Include="NumberUtility.cs" />
     <Compile Include="ParseException.cs" />

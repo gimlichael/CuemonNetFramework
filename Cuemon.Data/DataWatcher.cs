@@ -23,9 +23,9 @@ namespace Cuemon.Data
         /// </summary>
         /// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
         /// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
-        /// <param name="parameters">An optional sequence of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
-        /// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval of two minutes using a MD5 hash check on the query result. The signaling is default delayed 15 seconds before first invoke.</remarks>
-        public DataWatcher(DataManager manager, IDataCommand command, params IDataParameter[] parameters) : this(manager, command, TimeSpan.FromMinutes(2), parameters)
+        /// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
+        /// <remarks>Monitors the provided <paramref name="command"/> for changes, using a MD5 hash check on the query result.</remarks>
+        public DataWatcher(DataManager manager, IDataCommand command, params IDataParameter[] parameters) : this(manager, command, null, parameters)
         {
         }
 
@@ -34,35 +34,20 @@ namespace Cuemon.Data
         /// </summary>
         /// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
         /// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
-        /// <param name="period">The time interval between periodic signaling for changes of the provided <paramref name="command"/>.</param>
+        /// <param name="setup">The <see cref="WatcherOptions"/> which need to be configured.</param>
         /// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
-        /// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval specified by <paramref name="period"/> using a MD5 hash check on the query result. The signaling is default delayed 15 seconds before first invoke.</remarks>
-        public DataWatcher(DataManager manager, IDataCommand command, TimeSpan period, params IDataParameter[] parameters) : this(manager, command, TimeSpan.FromSeconds(15), period, TimeSpan.Zero, parameters)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataWatcher"/> class.
-        /// </summary>
-        /// <param name="manager">The <see cref="DataManager"/> to be used for the underlying data operations.</param>
-        /// <param name="command">The <see cref="IDataCommand"/> to execute and monitor for changes.</param>
-        /// <param name="dueTime">The amount of time to delay before the associated <see cref="Watcher"/> starts signaling. Specify negative one (-1) milliseconds to prevent the signaling from starting. Specify zero (0) to start the signaling immediately.</param>
-        /// <param name="period">The time interval between periodic signaling for changes of the provided <paramref name="command"/>.</param>
-        /// <param name="dueTimeOnChanged">The amount of time to postpone a <see cref="Watcher.Changed"/> event. Specify zero (0) to disable postponing.</param>
-        /// <param name="parameters">An optional array of <see cref="IDataParameter"/> to use with the associated <paramref name="command"/>.</param>
-        /// <remarks>Monitors the provided <paramref name="command"/> for changes in an interval specified by <paramref name="period"/> using a MD5 hash check on the query result.</remarks>
-        public DataWatcher(DataManager manager, IDataCommand command, TimeSpan dueTime, TimeSpan period, TimeSpan dueTimeOnChanged, params IDataParameter[] parameters) : base(dueTime, period, dueTimeOnChanged)
+        /// <remarks>Monitors the provided <paramref name="command"/> for changes as defined by the <paramref name="setup"/> delegate, using a MD5 hash check on the query result.</remarks>
+        public DataWatcher(DataManager manager, IDataCommand command, Act<WatcherOptions> setup, params IDataParameter[] parameters) : base(setup)
         {
             if (command == null) { throw new ArgumentNullException(nameof(command)); }
-            this.Manager = manager;
-            this.Command = command;
-            this.Parameters = parameters;
-            this.Signature = null;
+            Manager = manager;
+            Command = command;
+            Parameters = parameters;
+            Checksum = DefaultChecksum;
         }
         #endregion
 
         #region Properties
-        private string Signature { get; set; }
         /// <summary>
         /// Gets the associated <see cref="IDataCommand"/> of this <see cref="DataWatcher"/>.
         /// </summary>
@@ -90,11 +75,10 @@ namespace Cuemon.Data
         {
             lock (_locker)
             {
-                string currentSignature = null;
                 DateTime utcLastModified = DateTime.UtcNow;
                 List<object[]> values = new List<object[]>();
-                DataManager manager = this.Manager.Clone();
-                using (IDataReader reader = manager.ExecuteReader(this.Command, this.Parameters))
+                DataManager manager = Manager.Clone();
+                using (IDataReader reader = manager.ExecuteReader(Command, Parameters))
                 {
                     while (reader.Read())
                     {
@@ -103,17 +87,16 @@ namespace Cuemon.Data
                         values.Add(readerValues);
                     }
                 }
-                currentSignature = HashUtility.ComputeHash(values).ToHexadecimal();
+                string currentChecksum = HashUtility.ComputeHash(values).ToHexadecimal();
                 values.Clear();
-                values = null;
 
-                if (this.Signature == null) { this.Signature = currentSignature; }
-                if (!this.Signature.Equals(currentSignature, StringComparison.OrdinalIgnoreCase))
+                if (Checksum == DefaultChecksum) { Checksum = currentChecksum; }
+                if (!Checksum.Equals(currentChecksum, StringComparison.OrdinalIgnoreCase))
                 {
-                    this.SetUtcLastModified(utcLastModified);
-                    this.OnChangedRaised();
+                    SetUtcLastModified(utcLastModified);
+                    OnChangedRaised();
                 }
-                this.Signature = currentSignature;
+                Checksum = currentChecksum;
             }
         }
         #endregion

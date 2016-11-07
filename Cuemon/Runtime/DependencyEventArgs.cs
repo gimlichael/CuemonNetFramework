@@ -7,8 +7,6 @@ namespace Cuemon.Runtime
     /// </summary>
     public class DependencyEventArgs : EventArgs
     {
-        private readonly DateTime _utcLastModified = DateTime.MinValue;
-
         DependencyEventArgs()
         {
         }
@@ -16,20 +14,24 @@ namespace Cuemon.Runtime
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyEventArgs"/> class.
         /// </summary>
-        public DependencyEventArgs(DateTime utcLastModified)
+        public DependencyEventArgs(DateTime utcLastModified, string watcherStatus = "")
         {
-            _utcLastModified = utcLastModified;
+            UtcLastModified = utcLastModified;
+            WatcherStatus = watcherStatus;
         }
+
+        /// <summary>
+        /// Gets the watcher status from when a <see cref="Dependency"/> was last changed.
+        /// </summary>
+        /// <value>The watcher status from when a <see cref="Dependency"/> was last changed.</value>
+        public string WatcherStatus { get; }
 
         /// <summary>
         /// Gets the <see cref="DateTime"/> value from when a <see cref="Dependency"/> was last changed, or a <see cref="DateTime.MinValue"/> if an empty event.
         /// </summary>
         /// <value>The <see cref="DateTime"/> value from when a <see cref="Dependency"/> was last changed, or a <see cref="DateTime.MinValue"/> if an empty event.</value>
         /// <remarks>This property is measured in Coordinated Universal Time (UTC) (also known as Greenwich Mean Time).</remarks>
-        public DateTime UtcLastModified
-        {
-            get { return _utcLastModified; }
-        }
+        public DateTime UtcLastModified { get; } = DateTime.MinValue;
 
         /// <summary>
         /// Represents an event with no event data.

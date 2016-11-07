@@ -83,10 +83,10 @@ namespace Cuemon.Net.Http
         }
 
         /// <summary>
-        /// Creates and returns an UTF-8 encoded <see cref="String"/> containing the body from the specified <paramref name="response"/>. Default expected <see cref="HttpStatusCode"/> is <see cref="HttpStatusCode.OK"/>. Any preamble sequence is preserved.
+        /// Creates and returns an UTF-8 encoded <see cref="string"/> containing the body from the specified <paramref name="response"/>. Default expected <see cref="HttpStatusCode"/> is <see cref="HttpStatusCode.OK"/>. Any preamble sequence is preserved.
         /// </summary>
-        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="String"/> from.</param>
-        /// <returns>A <see cref="String"/> containing the body of the response.</returns>
+        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="string"/> from.</param>
+        /// <returns>A <see cref="string"/> containing the body of the response.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="response"/> is null.
         /// </exception>
@@ -99,11 +99,11 @@ namespace Cuemon.Net.Http
         }
 
         /// <summary>
-        /// Creates and returns an UTF-8 encoded <see cref="String"/> containing the body from the specified <paramref name="response"/>. Any preamble sequence is preserved.
+        /// Creates and returns an UTF-8 encoded <see cref="string"/> containing the body from the specified <paramref name="response"/>. Any preamble sequence is preserved.
         /// </summary>
-        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="String"/> from.</param>
-        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="String"/>.</param>
-        /// <returns>A <see cref="String"/> containing the body of the response.</returns>
+        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="string"/> from.</param>
+        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="string"/>.</param>
+        /// <returns>A <see cref="string"/> containing the body of the response.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="response"/> is null or<br/>
         /// <paramref name="expectedStatusCodes"/> is null.
@@ -120,12 +120,12 @@ namespace Cuemon.Net.Http
         }
 
         /// <summary>
-        /// Creates and returns an UTF-8 encoded <see cref="String"/> containing the body from the specified <paramref name="response"/>.
+        /// Creates and returns an UTF-8 encoded <see cref="string"/> containing the body from the specified <paramref name="response"/>.
         /// </summary>
-        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="String"/> from.</param>
+        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="string"/> from.</param>
         /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="String"/>.</param>
-        /// <returns>A <see cref="String"/> containing the body of the response.</returns>
+        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="string"/>.</param>
+        /// <returns>A <see cref="string"/> containing the body of the response.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="response"/> is null or<br/>
         /// <paramref name="expectedStatusCodes"/> is null.
@@ -142,13 +142,13 @@ namespace Cuemon.Net.Http
         }
 
         /// <summary>
-        /// Creates and returns a <see cref="String"/> containing the body from the specified <paramref name="response"/>.
+        /// Creates and returns a <see cref="string"/> containing the body from the specified <paramref name="response"/>.
         /// </summary>
-        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="String"/> from.</param>
+        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="string"/> from.</param>
         /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
         /// <param name="encoding">The preferred encoding to apply to the result.</param>
-        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="String"/>.</param>
-        /// <returns>A <see cref="String"/> containing the body of the response.</returns>
+        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="string"/>.</param>
+        /// <returns>A <see cref="string"/> containing the body of the response.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="response"/> is null or<br/>
         /// <paramref name="expectedStatusCodes"/> is null.
@@ -391,13 +391,8 @@ namespace Cuemon.Net.Http
             }
         }
 
-        private static HttpWebResponse HttpCore(Uri location, string method, Stream content, HttpWebRequestSettings settings)
+        internal static HttpWebRequest CreateRequest(Uri location, string method, HttpWebRequestSettings settings)
         {
-            if (method == null) { throw new ArgumentNullException(nameof(method)); }
-            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
-            if (location == null) { throw new ArgumentNullException(nameof(location)); }
-            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
-
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(location);
             request.Method = method.ToUpperInvariant();
             request.AllowAutoRedirect = settings.AllowAutoRedirect;
@@ -411,9 +406,18 @@ namespace Cuemon.Net.Http
             request.ReadWriteTimeout = (int)settings.ReadWriteTimeout.TotalMilliseconds;
             request.SendChunked = settings.SendChunked;
             request.Timeout = (int)settings.Timeout.TotalMilliseconds;
-
             ParseRequestHeaders(request, settings.Headers);
+            return request;
+        }
 
+        private static HttpWebResponse HttpCore(Uri location, string method, Stream content, HttpWebRequestSettings settings)
+        {
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
+            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+
+            var request = CreateRequest(location, method, settings);
             if (content != null)
             {
                 request.ContentLength = content.Length;

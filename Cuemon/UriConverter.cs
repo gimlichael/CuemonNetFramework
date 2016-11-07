@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Cuemon
@@ -33,6 +34,21 @@ namespace Cuemon
             Validator.ThrowIfFalse(value.StartsWith(relativeReference, StringComparison.OrdinalIgnoreCase), nameof(value), string.Format(CultureInfo.InvariantCulture, "The specified value did not start with the the expected value of: {0}.", relativeReference));
             int relativeReferenceLength = relativeReference.Length;
             return new Uri(value.Remove(0, relativeReferenceLength).Insert(0, string.Format(CultureInfo.InvariantCulture, "{0}{1}", StringConverter.FromUriScheme(protocol), Uri.SchemeDelimiter)));
+        }
+
+        /// <summary>
+        /// Converts the specified sequence of <paramref name="uriStrings"/> to its equivalent sequence of <see cref="Uri"/> values.
+        /// </summary>
+        /// <param name="uriStrings">The sequence of <see cref="string"/> values to be converted.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> that is equivalent to the sequence of valid <paramref name="uriStrings"/>.</returns>
+        public static IEnumerable<Uri> FromStringSequence(IEnumerable<string> uriStrings)
+        {
+            if (uriStrings == null) { yield break; }
+            foreach (string uri in uriStrings)
+            {
+                Uri realUri;
+                if (UriUtility.TryParse(uri, UriKind.Absolute, out realUri)) { yield return realUri; }
+            }
         }
     }
 }

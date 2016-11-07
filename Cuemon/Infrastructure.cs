@@ -36,5 +36,10 @@ namespace Cuemon
             if (wrapper != null) { return wrapper.Method; }
             return null;
         }
+
+        internal static bool IsOrdinalIgnoreCaseEqual(string a, string b)
+        {
+            return a.Equals(b, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
