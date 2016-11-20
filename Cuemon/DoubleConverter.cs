@@ -8,6 +8,36 @@ namespace Cuemon
     public static class DoubleConverter
     {
         /// <summary>
+        /// Represents the number of ticks in 1 nanosecond. This field is constant.
+        /// </summary>
+        public const double TicksPerNanosecond = 0.01;
+
+        /// <summary>
+        /// Represents the number of ticks in 1 microsecond. This field is constant.
+        /// </summary>
+        public const double TicksPerMicrosecond = TicksPerNanosecond * 1000;
+
+        /// <summary>
+        /// Gets the total number of nanoseconds represented by the specified <see cref="TimeSpan"/> structure.
+        /// </summary>
+        /// <param name="ts">The <see cref="TimeSpan"/> to extend.</param>
+        /// <returns>The total number of nanoseconds represented by the specified <see cref="TimeSpan"/> structure.</returns>
+        public static double ToTotalNanoseconds(TimeSpan ts)
+        {
+            return ts.Ticks / TicksPerNanosecond;
+        }
+
+        /// <summary>
+        /// Gets the total number of microseconds represented by the specified <see cref="TimeSpan"/> structure.
+        /// </summary>
+        /// <param name="ts">The <see cref="TimeSpan"/> to extend.</param>
+        /// <returns>The total number of microseconds represented by the specified <see cref="TimeSpan"/> structure.</returns>
+        public static double ToTotalMicroseconds(TimeSpan ts)
+        {
+            return ts.Ticks / TicksPerMicrosecond;
+        }
+
+        /// <summary>
         /// Converts the specified <paramref name="value"/> to an equivalent Epoc time representation.
         /// </summary>
         /// <param name="value">The <see cref="DateTime"/> value to be converted.</param>

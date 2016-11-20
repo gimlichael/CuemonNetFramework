@@ -13,7 +13,6 @@ using Cuemon.Annotations;
 using Cuemon.Collections;
 using Cuemon.Integrity;
 using Cuemon.Collections.Generic;
-using Cuemon.Diagnostics;
 using Cuemon.Net.Http;
 using Cuemon.Reflection;
 using Cuemon.Runtime.Caching;
@@ -27,7 +26,7 @@ namespace Cuemon.ServiceModel
     /// <summary>
     /// Defines the contract that a class must implement in order to process a request for a matching route pattern while providing ways for diagnostics, monitoring and performance measuring in your services for the Microsoft .NET Framework version 2.0 SP1 and forward.
     /// </summary>
-    public abstract partial class Endpoint : Instrumentation, IHttpHandler
+    public abstract partial class Endpoint : IHttpHandler
     {
         #region Constructors
         /// <summary>
@@ -35,8 +34,6 @@ namespace Cuemon.ServiceModel
         /// </summary>
         protected Endpoint()
         {
-            EnableMethodPerformanceTiming = true;
-            EnablePropertyPerformanceTiming = true;
             XmlSerializationUtility.SkipPropertyCallback = PropertyFilter;
         }
         #endregion

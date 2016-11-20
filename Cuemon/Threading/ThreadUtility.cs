@@ -686,7 +686,7 @@ namespace Cuemon.Threading
             }
             else
             {
-                MethodSignature signature = MethodSignature.Create(method);
+                MethodDescriptor signature = MethodDescriptor.Create(method);
                 thread.Name = signature.ToString();
             }
             thread.Priority = settings.Priority;

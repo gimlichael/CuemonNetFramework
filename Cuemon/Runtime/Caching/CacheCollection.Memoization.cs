@@ -925,7 +925,7 @@ namespace Cuemon.Runtime.Caching
 
         private static string CalculateCompositeKey(Delegate del, params object[] args)
         {
-            int result = del == null || del.Method == null ? NullHashCode.GetHashCode() : MethodSignature.Create(del.Method).ToString().GetHashCode();
+            int result = del == null || del.Method == null ? NullHashCode.GetHashCode() : MethodDescriptor.Create(del.Method).ToString().GetHashCode();
             for (int i = 0; i < args.Length; i++)
             {
                 object current = args[i] ?? NullHashCode;
