@@ -58,6 +58,29 @@ namespace Cuemon.Data.SqlCeClient
                 return _connectionString;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the callback delegate that will provide options for transient fault handling.
+        /// </summary>
+        /// <value>An <see cref="Action{T}" /> with the options for transient fault handling.</value>
+        /// <remarks>
+        /// This implementation is compatible with transient related faults on Microsoft SQL Azure including the latest addition of error code 10928 and 10929.<br/>
+        /// Microsoft SQL Server is supported as well.
+        /// </remarks>
+        public override Act<TransientFaultHandlingOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
+        {
+            options.EnableTransientFaultRecovery = true;
+            options.TransientFaultParserCallback = exception =>
+            {
+                if (exception == null) { return false; }
+                SqlCeException sqlCeException = exception as SqlCeException;
+                if (sqlCeException != null)
+                {
+                    return sqlCeException.Message.StartsWith("Timeout expired.", StringComparison.OrdinalIgnoreCase);
+                }
+                return exception.Message.StartsWith("Timeout expired.", StringComparison.OrdinalIgnoreCase);
+            };
+        };
         #endregion
 
         #region Methods
@@ -186,22 +209,6 @@ namespace Cuemon.Data.SqlCeClient
                 if (tempCommand != null) { tempCommand.Dispose(); }
             }
             return command;
-        }
-
-        /// <summary>
-        /// Determines whether the specified <paramref name="exception" /> contains clues that would suggest a transient fault.
-        /// </summary>
-        /// <param name="exception">The <see cref="T:System.Exception" /> to parse for clues that would suggest a transient fault that should be retried.</param>
-        /// <returns><c>true</c> if the specified <paramref name="exception" /> contains clues that would suggest a transient fault; otherwise, <c>false</c>.</returns>
-        protected override bool IsTransientFault(Exception exception)
-        {
-            if (exception == null) { return false; }
-            SqlCeException sqlCeException = exception as SqlCeException;
-            if (sqlCeException != null)
-            {
-                return sqlCeException.Message.StartsWith("Timeout expired.", StringComparison.OrdinalIgnoreCase);
-            }
-            return exception.Message.StartsWith("Timeout expired.", StringComparison.OrdinalIgnoreCase);
         }
         #endregion
     }
