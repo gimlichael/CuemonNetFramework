@@ -309,7 +309,10 @@ namespace Cuemon.Xml.Xsl
         {
             if (iterator == null) throw new ArgumentNullException(nameof(iterator));
             iterator.MoveNext();
-            return StringUtility.Escape(StringConverter.FromStream(XmlUtility.PurgeNamespaceDeclarations(StreamConverter.FromString(iterator.Current.OuterXml)), PreambleSequence.Remove));
+            return StringUtility.Escape(StringConverter.FromStream(XmlUtility.PurgeNamespaceDeclarations(StreamConverter.FromString(iterator.Current.OuterXml)), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            }));
         }
 
         /// <summary>

@@ -365,12 +365,11 @@ namespace Cuemon.Xml.Xsl
         /// </summary>
         /// <param name="input">The <see cref="System.IO.Stream"/> object containing the XML input document.</param>
         /// <param name="styleSheet">The string containing the XSLT style sheet.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <param name="encoding">The text encoding to use.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
-        public static Stream Transform(Stream input, string styleSheet, PreambleSequence sequence, Encoding encoding)
+        public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup)
         {
-            return Transform(input, styleSheet, sequence, encoding, null as XsltArgumentList);
+            return Transform(input, styleSheet, setup, null as XsltArgumentList);
         }
 
         /// <summary>
@@ -378,13 +377,12 @@ namespace Cuemon.Xml.Xsl
         /// </summary>
         /// <param name="input">The <see cref="System.IO.Stream"/> object containing the XML input document.</param>
         /// <param name="styleSheet">The string containing the XSLT style sheet.</param>
-        /// <param name="encoding">The text encoding to use.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="argumentList">The XSLT arguments to use in your style sheet.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
-        public static Stream Transform(Stream input, string styleSheet, PreambleSequence sequence, Encoding encoding, XsltArgumentList argumentList)
+        public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, XsltArgumentList argumentList)
         {
-            return Transform(input, styleSheet, sequence, encoding, argumentList, null);
+            return Transform(input, styleSheet, setup, argumentList, null);
         }
 
         /// <summary>
@@ -392,14 +390,14 @@ namespace Cuemon.Xml.Xsl
         /// </summary>
         /// <param name="input">The <see cref="System.IO.Stream"/> object containing the XML input document.</param>
         /// <param name="styleSheet">The string containing the XSLT style sheet.</param>
-        /// <param name="encoding">The text encoding to use.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="argumentList">The XSLT arguments to use in your style sheet.</param>
         /// <param name="resolver">The <see cref="XmlResolver"/> used to resolve any style sheets referenced in XSLT import and include elements. If this is null, an instance of <see cref="XmlUrlResolver"/> is instantiated.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
-        public static Stream Transform(Stream input, string styleSheet, PreambleSequence sequence, Encoding encoding, XsltArgumentList argumentList, XmlResolver resolver)
+        public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, XsltArgumentList argumentList, XmlResolver resolver)
         {
-            return TransformCore(input, GetCompiledTransform(StreamConverter.FromString(styleSheet, sequence, encoding), encoding, false, resolver), argumentList);
+            var options = DelegateUtility.ConfigureAction(setup);
+            return TransformCore(input, GetCompiledTransform(StreamConverter.FromString(styleSheet, setup), options.Encoding, false, resolver), argumentList);
         }
 
         /// <summary>
@@ -407,13 +405,12 @@ namespace Cuemon.Xml.Xsl
         /// </summary>
         /// <param name="input">The <see cref="System.IO.Stream"/> object containing the XML input document.</param>
         /// <param name="styleSheet">The string containing the XSLT style sheet.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <param name="encoding">The text encoding to use.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="parameters">The XSLT parameters to use in your style sheet.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
-        public static Stream Transform(Stream input, string styleSheet, PreambleSequence sequence, Encoding encoding, params IXsltParameter[] parameters)
+        public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, params IXsltParameter[] parameters)
         {
-            return Transform(input, styleSheet, sequence, encoding, null, parameters);
+            return Transform(input, styleSheet, setup, null, parameters);
         }
 
         /// <summary>
@@ -421,14 +418,14 @@ namespace Cuemon.Xml.Xsl
         /// </summary>
         /// <param name="input">The <see cref="System.IO.Stream"/> object containing the XML input document.</param>
         /// <param name="styleSheet">The string containing the XSLT style sheet.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <param name="encoding">The text encoding to use.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="resolver">The <see cref="XmlResolver"/> used to resolve any style sheets referenced in XSLT import and include elements. If this is null, an instance of <see cref="XmlUrlResolver"/> is instantiated.</param>
         /// <param name="parameters">The XSLT parameters to use in your style sheet.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
-        public static Stream Transform(Stream input, string styleSheet, PreambleSequence sequence, Encoding encoding, XmlResolver resolver, params IXsltParameter[] parameters)
+        public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, XmlResolver resolver, params IXsltParameter[] parameters)
         {
-            return TransformCore(input, GetCompiledTransform(StreamConverter.FromString(styleSheet, sequence, encoding), encoding, false, resolver), null, parameters);
+            var options = DelegateUtility.ConfigureAction(setup);
+            return TransformCore(input, GetCompiledTransform(StreamConverter.FromString(styleSheet, setup), options.Encoding, false, resolver), null, parameters);
         }
 
         /// <summary>
@@ -649,10 +646,7 @@ namespace Cuemon.Xml.Xsl
             if (EnableXslCompiledTransformCaching && !bypassCache)
             {
                 string hashKey = HashUtility.ComputeHash(styleSheet, HashAlgorithmType.MD5, true).ToHexadecimal();
-                return CachingManager.Cache.GetOrAdd(hashKey, CacheGroupName, () =>
-                {
-                    return GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver);
-                }, SlidingExpirationValue);
+                return CachingManager.Cache.GetOrAdd(hashKey, CacheGroupName, () => GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver), SlidingExpirationValue);
             }
             return GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver);
         }
@@ -680,10 +674,7 @@ namespace Cuemon.Xml.Xsl
             if (EnableXslCompiledTransformCaching)
             {
                 string hashKey = HashUtility.ComputeHash(styleSheet.OriginalString).ToHexadecimal();
-                return CachingManager.Cache.GetOrAdd(hashKey, CacheGroupName, () =>
-                {
-                    return GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver);
-                }, SlidingExpirationValue);
+                return CachingManager.Cache.GetOrAdd(hashKey, CacheGroupName, () => GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver), SlidingExpirationValue);
             }
 
             return GetCompiledTransformCore(styleSheet, encoding, enableDebug, resolver);

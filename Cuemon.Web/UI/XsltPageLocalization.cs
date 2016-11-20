@@ -77,8 +77,11 @@ namespace Cuemon.Web.UI
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
-            writer.WriteRaw(this.Phrases.ToString(this.Phrases.ToXml(true), PreambleSequence.Remove));
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
+            writer.WriteRaw(this.Phrases.ToString(this.Phrases.ToXml(true), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            }));
         }
         #endregion
     }

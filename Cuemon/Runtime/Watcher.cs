@@ -53,8 +53,7 @@ namespace Cuemon.Runtime
         /// <param name="setup">The <see cref="WatcherOptions"/> which need to be configured.</param>
         protected Watcher(Act<WatcherOptions> setup)
         {
-            WatcherOptions options = new WatcherOptions();
-            setup?.Invoke(options);
+            WatcherOptions options = DelegateUtility.ConfigureAction(setup);
             UtcLastModified = DateTime.UtcNow;
             DueTime = options.DueTime;
             Period = options.Period;

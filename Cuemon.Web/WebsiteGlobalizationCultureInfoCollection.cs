@@ -47,10 +47,10 @@ namespace Cuemon.Web
         #region Properties
         private WebsiteGlobalization Globalization
         {
-            get 
+            get
             {
                 if (_globalization == null) { throw new InvalidOperationException("This object is not in a valid state - do not use parameterless constructor!"); }
-                return _globalization; 
+                return _globalization;
             }
         }
 
@@ -69,7 +69,7 @@ namespace Cuemon.Web
         /// <value></value>
         public WebsiteGlobalizationCultureInfo this[int index]
         {
-            get 
+            get
             {
                 return InnerCollection[index];
             }
@@ -133,10 +133,13 @@ namespace Cuemon.Web
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) throw new ArgumentNullException("writer");
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
             foreach (WebsiteGlobalizationCultureInfo cultureInfo in this)
             {
-                writer.WriteRaw(cultureInfo.ToString(cultureInfo.ToXml(true), PreambleSequence.Remove));
+                writer.WriteRaw(cultureInfo.ToString(cultureInfo.ToXml(true), options =>
+                {
+                    options.Preamble = PreambleSequence.Remove;
+                }));
             }
         }
 

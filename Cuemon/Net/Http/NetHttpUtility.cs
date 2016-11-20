@@ -6,6 +6,7 @@ using System.Text;
 using Cuemon.Collections.Generic;
 using Cuemon.Collections.Specialized;
 using Cuemon.IO;
+using Cuemon.Text;
 using Cuemon.Threading;
 
 namespace Cuemon.Net.Http
@@ -116,37 +117,18 @@ namespace Cuemon.Net.Http
         /// </exception>
         public static string ResponseAsString(HttpWebResponse response, params HttpStatusCode[] expectedStatusCodes)
         {
-            return ResponseAsString(response, PreambleSequence.Keep, expectedStatusCodes);
-        }
-
-        /// <summary>
-        /// Creates and returns an UTF-8 encoded <see cref="string"/> containing the body from the specified <paramref name="response"/>.
-        /// </summary>
-        /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="string"/> from.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="string"/>.</param>
-        /// <returns>A <see cref="string"/> containing the body of the response.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="response"/> is null or<br/>
-        /// <paramref name="expectedStatusCodes"/> is null.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// <paramref name="expectedStatusCodes"/> is empty.
-        /// </exception>
-        /// <exception cref="System.Net.WebException">
-        /// The specified <paramref name="expectedStatusCodes"/> did not contain the resulting <see cref="HttpWebResponse.StatusCode"/>.
-        /// </exception>
-        public static string ResponseAsString(HttpWebResponse response, PreambleSequence sequence, params HttpStatusCode[] expectedStatusCodes)
-        {
-            return ResponseAsString(response, sequence, Encoding.UTF8, expectedStatusCodes);
+            return ResponseAsString(response, options =>
+            {
+                options.Encoding = Encoding.UTF8;
+                options.Preamble = PreambleSequence.Keep;
+            }, expectedStatusCodes);
         }
 
         /// <summary>
         /// Creates and returns a <see cref="string"/> containing the body from the specified <paramref name="response"/>.
         /// </summary>
         /// <param name="response">The <see cref="HttpWebResponse"/> to retrieve the <see cref="string"/> from.</param>
-        /// <param name="sequence">Determines whether too keep or remove any preamble sequences.</param>
-        /// <param name="encoding">The preferred encoding to apply to the result.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="expectedStatusCodes">One or more expected status codes in order to return a <see cref="string"/>.</param>
         /// <returns>A <see cref="string"/> containing the body of the response.</returns>
         /// <exception cref="System.ArgumentNullException">
@@ -159,13 +141,12 @@ namespace Cuemon.Net.Http
         /// <exception cref="System.Net.WebException">
         /// The specified <paramref name="expectedStatusCodes"/> did not contain the resulting <see cref="HttpWebResponse.StatusCode"/>.
         /// </exception>
-        public static string ResponseAsString(HttpWebResponse response, PreambleSequence sequence, Encoding encoding, params HttpStatusCode[] expectedStatusCodes)
+        public static string ResponseAsString(HttpWebResponse response, Act<EncodingOptions> setup, params HttpStatusCode[] expectedStatusCodes)
         {
             if (response == null) { throw new ArgumentNullException(nameof(response)); }
-            if (encoding == null) { throw new ArgumentNullException(nameof(encoding)); }
             if (expectedStatusCodes == null) { throw new ArgumentNullException(nameof(expectedStatusCodes)); }
             if (expectedStatusCodes.Length == 0) { throw new ArgumentEmptyException(nameof(expectedStatusCodes), "You must specify at least one status code to accept as a valid response."); }
-            return StringConverter.FromStream(ResponseAsStream(response, expectedStatusCodes), sequence, encoding);
+            return StringConverter.FromStream(ResponseAsStream(response, expectedStatusCodes), setup);
         }
 
         /// <summary>
@@ -278,7 +259,7 @@ namespace Cuemon.Net.Http
             if (method == null) { throw new ArgumentNullException(nameof(method)); }
             if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
             if (location == null) { throw new ArgumentNullException(nameof(location)); }
-            return HttpCore(location, method, null, HttpWebRequestSettings.CreateDefault());
+            return HttpCore(location, method, null, null);
         }
 
         /// <summary>
@@ -286,15 +267,14 @@ namespace Cuemon.Net.Http
         /// </summary>
         /// <param name="method">The request method to use to contact the Internet resource.</param>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
-        public static HttpWebResponse Http(string method, Uri location, HttpWebRequestSettings settings)
+        public static HttpWebResponse Http(string method, Uri location, Act<HttpWebRequestOptions> setup)
         {
             if (method == null) { throw new ArgumentNullException(nameof(method)); }
             if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
             if (location == null) { throw new ArgumentNullException(nameof(location)); }
-            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
-            return HttpCore(location, method, null, settings);
+            return HttpCore(location, method, null, setup);
         }
 
         /// <summary>
@@ -302,17 +282,16 @@ namespace Cuemon.Net.Http
         /// </summary>
         /// <param name="method">The request method to use to contact the Internet resource.</param>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
         /// <param name="content">The content value of the HTTP request body.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a HTTP-specific response from an Internet resource.</returns>
-        public static HttpWebResponse Http(string method, Uri location, HttpWebRequestSettings settings, Stream content)
+        public static HttpWebResponse Http(string method, Uri location, Stream content, Act<HttpWebRequestOptions> setup)
         {
             if (method == null) { throw new ArgumentNullException(nameof(method)); }
             if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
             if (location == null) { throw new ArgumentNullException(nameof(location)); }
-            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
             if (content == null) { throw new ArgumentNullException(nameof(content)); }
-            return HttpCore(location, method, content, settings);
+            return HttpCore(location, method, content, setup);
         }
 
         /// <summary>
@@ -331,9 +310,10 @@ namespace Cuemon.Net.Http
             if (content == null) { throw new ArgumentNullException(nameof(content)); }
             if (contentType == null) { throw new ArgumentNullException(nameof(contentType)); }
             if (contentType.Length == 0) { throw new ArgumentEmptyException(nameof(contentType)); }
-            HttpWebRequestSettings settings = HttpWebRequestSettings.CreateDefault();
-            settings.Headers.Add(HttpRequestHeader.ContentType, contentType);
-            return HttpCore(location, method, content, settings);
+            return HttpCore(location, method, content, options =>
+            {
+                options.Headers.Add(HttpRequestHeader.ContentType, contentType);
+            });
         }
 
 
@@ -391,33 +371,25 @@ namespace Cuemon.Net.Http
             }
         }
 
-        internal static HttpWebRequest CreateRequest(Uri location, string method, HttpWebRequestSettings settings)
+        internal static HttpWebRequest CreateRequest(Uri location, string method, Act<HttpWebRequestOptions> setup, Stream content = null)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(location);
+            HttpWebRequestOptions options = HttpWebRequestOptions.Create(setup);
             request.Method = method.ToUpperInvariant();
-            request.AllowAutoRedirect = settings.AllowAutoRedirect;
-            request.AllowWriteStreamBuffering = settings.AllowWriteStreamBuffering;
-            request.AutomaticDecompression = settings.AutomaticDecompression;
-            request.KeepAlive = settings.KeepAlive;
-            request.MaximumAutomaticRedirections = settings.MaximumAutomaticRedirections;
-            request.MaximumResponseHeadersLength = settings.MaximumResponseHeadersLength;
-            request.Pipelined = settings.Pipelined;
-            request.Proxy = settings.Proxy;
-            request.ReadWriteTimeout = (int)settings.ReadWriteTimeout.TotalMilliseconds;
-            request.SendChunked = settings.SendChunked;
-            request.Timeout = (int)settings.Timeout.TotalMilliseconds;
-            ParseRequestHeaders(request, settings.Headers);
-            return request;
-        }
-
-        private static HttpWebResponse HttpCore(Uri location, string method, Stream content, HttpWebRequestSettings settings)
-        {
-            if (method == null) { throw new ArgumentNullException(nameof(method)); }
-            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
-            if (location == null) { throw new ArgumentNullException(nameof(location)); }
-            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
-
-            var request = CreateRequest(location, method, settings);
+            request.AllowAutoRedirect = options.AllowAutoRedirect;
+            request.AllowWriteStreamBuffering = options.AllowWriteStreamBuffering;
+            request.AutomaticDecompression = options.AutomaticDecompression;
+            request.KeepAlive = options.KeepAlive;
+            request.MaximumAutomaticRedirections = options.MaximumAutomaticRedirections;
+            request.MaximumResponseHeadersLength = options.MaximumResponseHeadersLength;
+            request.Pipelined = options.Pipelined;
+            request.Proxy = options.Proxy;
+            request.ReadWriteTimeout = (int)options.ReadWriteTimeout.TotalMilliseconds;
+            request.SendChunked = options.SendChunked;
+            request.Timeout = (int)options.Timeout.TotalMilliseconds;
+            request.CookieContainer = options.CookieJar;
+            ParseRequestHeaders(request, options.Headers);
+            options.RequestCallback?.Invoke(request);
             if (content != null)
             {
                 request.ContentLength = content.Length;
@@ -425,6 +397,15 @@ namespace Cuemon.Net.Http
                 StreamUtility.CopyStream(content, requestBody);
             }
 
+            return request;
+        }
+
+        private static HttpWebResponse HttpCore(Uri location, string method, Stream content, Act<HttpWebRequestOptions> setup)
+        {
+            if (method == null) { throw new ArgumentNullException(nameof(method)); }
+            if (method.Length == 0) { throw new ArgumentEmptyException(nameof(method)); }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); }
+            var request = CreateRequest(location, method, setup, content);
             return HttpCore(request);
         }
 
@@ -442,18 +423,18 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a <see cref="HttpMethods.Options"/> response from an Internet resource.</returns>
         public static HttpWebResponse HttpOptions(Uri location)
         {
-            return HttpOptions(location, HttpWebRequestSettings.CreateDefault());
+            return HttpOptions(location, null);
         }
 
         /// <summary>
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Options"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpOptions(Uri location, HttpWebRequestSettings settings)
+        public static HttpWebResponse HttpOptions(Uri location, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Options.ToString(), location, settings);
+            return Http(HttpMethods.Options.ToString(), location, setup);
         }
 
         /// <summary>
@@ -463,18 +444,18 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a <see cref="HttpMethods.Delete"/> response from an Internet resource.</returns>
         public static HttpWebResponse HttpDelete(Uri location)
         {
-            return HttpDelete(location, HttpWebRequestSettings.CreateDefault());
+            return HttpDelete(location, null);
         }
 
         /// <summary>
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Delete"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpDelete(Uri location, HttpWebRequestSettings settings)
+        public static HttpWebResponse HttpDelete(Uri location, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Delete.ToString(), location, settings);
+            return Http(HttpMethods.Delete.ToString(), location, setup);
         }
 
         /// <summary>
@@ -484,18 +465,18 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a <see cref="HttpMethods.Trace"/> response from an Internet resource.</returns>
         public static HttpWebResponse HttpTrace(Uri location)
         {
-            return HttpTrace(location, HttpWebRequestSettings.CreateDefault());
+            return HttpTrace(location, null);
         }
 
         /// <summary>
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Trace"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpTrace(Uri location, HttpWebRequestSettings settings)
+        public static HttpWebResponse HttpTrace(Uri location, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Trace.ToString(), location, settings);
+            return Http(HttpMethods.Trace.ToString(), location, setup);
         }
 
         /// <summary>
@@ -505,18 +486,18 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a <see cref="HttpMethods.Head"/> response from an Internet resource.</returns>
         public static HttpWebResponse HttpHead(Uri location)
         {
-            return HttpHead(location, HttpWebRequestSettings.CreateDefault());
+            return HttpHead(location, null);
         }
 
         /// <summary>
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Head"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpHead(Uri location, HttpWebRequestSettings settings)
+        public static HttpWebResponse HttpHead(Uri location, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Head.ToString(), location, settings);
+            return Http(HttpMethods.Head.ToString(), location, setup);
         }
 
         /// <summary>
@@ -526,18 +507,18 @@ namespace Cuemon.Net.Http
         /// <returns>Returns a <see cref="HttpMethods.Get"/> response from an Internet resource.</returns>
         public static HttpWebResponse HttpGet(Uri location)
         {
-            return HttpGet(location, HttpWebRequestSettings.CreateDefault());
+            return HttpGet(location, null);
         }
 
         /// <summary>
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Get"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpGet(Uri location, HttpWebRequestSettings settings)
+        public static HttpWebResponse HttpGet(Uri location, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Get.ToString(), location, settings);
+            return Http(HttpMethods.Get.ToString(), location, setup);
         }
 
         /// <summary>
@@ -556,12 +537,12 @@ namespace Cuemon.Net.Http
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
         /// <param name="content">The content value of the HTTP request body.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Put"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpPut(Uri location, HttpWebRequestSettings settings, Stream content)
+        public static HttpWebResponse HttpPut(Uri location, Stream content, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Put.ToString(), location, settings, content);
+            return Http(HttpMethods.Put.ToString(), location, content, setup);
         }
 
         /// <summary>
@@ -580,12 +561,12 @@ namespace Cuemon.Net.Http
         /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
         /// </summary>
         /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
-        /// <param name="settings">The settings that will be applied doing the HTTP request.</param>
         /// <param name="content">The content value of the HTTP request body.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
         /// <returns>Returns a <see cref="HttpMethods.Post"/> response from an Internet resource.</returns>
-        public static HttpWebResponse HttpPost(Uri location, HttpWebRequestSettings settings, Stream content)
+        public static HttpWebResponse HttpPost(Uri location, Stream content, Act<HttpWebRequestOptions> setup)
         {
-            return Http(HttpMethods.Post.ToString(), location, settings, content);
+            return Http(HttpMethods.Post.ToString(), location, content, setup);
         }
 
         /// <summary>

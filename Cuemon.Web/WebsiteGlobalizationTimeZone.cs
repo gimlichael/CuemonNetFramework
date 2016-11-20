@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Cuemon.Globalization;
+using Cuemon.Text;
 using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
 
@@ -96,7 +97,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object using UTF-16 for the encoding with the little endian byte order.
+        /// Creates and returns a XML stream representation of the current object using UTF-16 for the encoding with the little endian byte order.
         /// </summary>
         /// <returns>A <b><see cref="System.IO.Stream"/></b> object.</returns>
         public Stream ToXml()
@@ -105,7 +106,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object using UTF-16 for the encoding with the little endian byte order.
+        /// Creates and returns a XML stream representation of the current object using UTF-16 for the encoding with the little endian byte order.
         /// </summary>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c>. The default is false.</param>
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
@@ -115,7 +116,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object using UTF-16 for the encoding with the little endian byte order.
+        /// Creates and returns a XML stream representation of the current object using UTF-16 for the encoding with the little endian byte order.
         /// </summary>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c>. The default is false.</param>
         /// <param name="qualifiedRootEntity">A <see cref="XmlQualifiedEntity"/> that overrides and represents the fully qualified name of the XML root element.</param>
@@ -126,7 +127,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c> The default is false.</param>
         /// <param name="qualifiedRootEntity">A <see cref="XmlQualifiedEntity"/> that overrides and represents the fully qualified name of the XML root element.</param>
@@ -140,7 +141,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="encoding">The text encoding to use.</param>
         /// <returns>
@@ -152,7 +153,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="encoding">The text encoding to use.</param>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c> The default is false.</param>
@@ -165,7 +166,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="encoding">The text encoding to use.</param>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c> The default is false.</param>
@@ -179,26 +180,26 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
         /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
-        /// <returns>A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
+        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
+        /// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
         public string ToString(Stream value)
         {
-            return this.ToString(value, PreambleSequence.Keep);
+            return StringConverter.FromStream(value);
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using the preferred encoding with the option to keep or remove any byte order (preamble sequence).
         /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
-        /// <param name="sequence">Specifies whether too keep or remove any preamble sequence from the decoded content.</param>
+        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>
-        /// A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.
+        /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
         /// </returns>
-        public string ToString(Stream value, PreambleSequence sequence)
+        public string ToString(Stream value, Act<EncodingOptions> setup)
         {
-            return StringConverter.FromStream(value, sequence);
+            return StringConverter.FromStream(value, setup);
         }
         #endregion
     }

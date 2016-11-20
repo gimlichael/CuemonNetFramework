@@ -93,7 +93,7 @@ namespace Cuemon.Web
                 {
                     if (name == theme.Name) { return theme; }
                 }
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No theme with the parameter value of '{0}' exists!", name), "name");
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "No theme with the parameter value of '{0}' exists!", name), nameof(name));
             }
         }
         #endregion
@@ -149,10 +149,13 @@ namespace Cuemon.Web
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) throw new ArgumentNullException("writer");
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
             foreach (WebsiteTheme theme in this)
             {
-                writer.WriteRaw(theme.ToString(theme.ToXml(true), PreambleSequence.Remove));
+                writer.WriteRaw(theme.ToString(theme.ToXml(true), options =>
+                {
+                    options.Preamble = PreambleSequence.Remove;
+                }));
             }
         }
 

@@ -51,7 +51,11 @@ namespace Cuemon.Web.UI.WebControls
                         stream.Position = 0;
                         using (Stream output = XmlUtility.ConvertEncoding(stream, this.Page.Response.ContentEncoding, PreambleSequence.Remove))
                         {
-                            this.DebugXml = StringConverter.FromStream(output, PreambleSequence.Remove, this.Page.Response.ContentEncoding);
+                            this.DebugXml = StringConverter.FromStream(output, options =>
+                            {
+                                options.Encoding = Page.Response.ContentEncoding;
+                                options.Preamble = PreambleSequence.Remove;
+                            });
                         }
                     }
                 }

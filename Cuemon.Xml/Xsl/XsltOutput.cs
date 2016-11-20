@@ -181,7 +181,11 @@ namespace Cuemon.Xml.Xsl
                 }
                 tempXslts.Append("</root>");
 
-                Stream compiledXslts = StreamConverter.FromString(tempXslts.ToString(), PreambleSequence.Remove, encoding);
+                Stream compiledXslts = StreamConverter.FromString(tempXslts.ToString(), options =>
+                {
+                    options.Encoding = encoding;
+                    options.Preamble = PreambleSequence.Remove;
+                });
                 compiledXslts = XmlUtility.PurgeNamespaceDeclarations(compiledXslts, false, encoding);
                 IXPathNavigable document = XPathUtility.CreateXPathNavigableDocument(compiledXslts);
                 XPathNavigator navigator = document.CreateNavigator();

@@ -115,6 +115,7 @@
     <Compile Include="Net\RequestWatcher.cs" />
     <Compile Include="Net\WebHeaderCollectionConverter.cs" />
     <Compile Include="ObjectConverter.cs" />
+    <Compile Include="PreambleSequence.cs" />
     <Compile Include="RandomSeverity.cs" />
     <Compile Include="Reflection\AssemblyUtility.cs" />
     <Compile Include="RoundOffAccuracy.cs" />
@@ -136,11 +137,11 @@
     <Compile Include="Globalization\CulturalRegion.cs" />
     <Compile Include="HorizontalDirection.cs" />
     <Compile Include="IO\InternalStreamWriter.cs" />
-    <Compile Include="IO\StreamWriterSettings.cs" />
+    <Compile Include="IO\StreamWriterOptions.cs" />
     <Compile Include="IO\StreamWriterUtility.cs" />
     <Compile Include="Collections\Generic\ISortableTable.cs" />
     <Compile Include="Mapping.cs" />
-    <Compile Include="Net\Http\HttpWebRequestSettings.cs" />
+    <Compile Include="Net\Http\HttpWebRequestOptions.cs" />
     <Compile Include="IndexMapping.cs" />
     <Compile Include="DataPair.cs" />
     <Compile Include="Collections\DataPairCollection.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="IO\FileMapping.cs" />
     <Compile Include="SafeNativeMethods.cs" />
     <Compile Include="SortOrder.cs" />
+    <Compile Include="Text\EncodingOptions.cs" />
     <Compile Include="Threading\CountdownEventBase.cs" />
     <Compile Include="Threading\CountdownEventSlim.cs" />
     <Compile Include="Threading\ISynchronization.cs" />

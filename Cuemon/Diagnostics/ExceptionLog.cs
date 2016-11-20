@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using Cuemon.IO;
 
 namespace Cuemon.Diagnostics
 {
@@ -108,7 +107,10 @@ namespace Cuemon.Diagnostics
                     tempOutput.Position = 0;
                     output = tempOutput;
                     tempOutput = null;
-                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, PreambleSequence.Remove), severity, computerName);
+                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, options =>
+                    {
+                        options.Preamble = PreambleSequence.Remove;
+                    }), severity, computerName);
                 }
                 output = null;
             }

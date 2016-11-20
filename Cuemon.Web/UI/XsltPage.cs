@@ -728,7 +728,11 @@ namespace Cuemon.Web.UI
                 }
 
                 Stream output = this.TransformedOutput;
-                renderedContent = this.ToString(output, PreambleSequence.Keep, this.Response.ContentEncoding);
+                renderedContent = this.ToString(output, options =>
+                {
+                    options.Encoding = Response.ContentEncoding;
+                    options.Preamble = PreambleSequence.Keep;
+                });
                 if (EnableDebug) { this.SnapshotOfXmlForDebugging = StreamUtility.CopyStream(this.XmlForRendering, true); }
                 writer.Write(renderedContent); // always transform with Website as part of the transformation.
             }
@@ -783,7 +787,11 @@ namespace Cuemon.Web.UI
             {
                 return ByteConverter.FromStream(this.Transform(this.XmlForRendering));
             });
-            return StringConverter.FromBytes(cachedResult, PreambleSequence.Remove, this.Response.ContentEncoding);
+            return StringConverter.FromBytes(cachedResult, options =>
+            {
+                options.Encoding = Response.ContentEncoding;
+                options.Preamble = PreambleSequence.Remove;
+            });
         }
 
         private void ParseRender()
@@ -1044,40 +1052,26 @@ namespace Cuemon.Web.UI
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
         /// </summary>
         /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
         /// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
         public string ToString(Stream value)
         {
-            return this.ToString(value, PreambleSequence.Keep);
-        }
-
-        /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
-        /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <param name="sequence">Specifies whether too keep or remove any preamble sequence from the decoded content.</param>
-        /// <returns>
-        /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
-        /// </returns>
-        public string ToString(Stream value, PreambleSequence sequence)
-        {
-            return StringConverter.FromStream(value, sequence);
+            return StringConverter.FromStream(value);
         }
 
         /// <summary>
         /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using the preferred encoding with the option to keep or remove any byte order (preamble sequence).
         /// </summary>
         /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <param name="sequence">Specifies whether too keep or remove any preamble sequence from the decoded content.</param>
-        /// <param name="encoding">The preferred encoding to use.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>
         /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
         /// </returns>
-        public virtual string ToString(Stream value, PreambleSequence sequence, Encoding encoding)
+        public virtual string ToString(Stream value, Act<EncodingOptions> setup)
         {
-            return StringConverter.FromStream(value, sequence, encoding);
+            return StringConverter.FromStream(value, setup);
         }
 
         /// <summary>
@@ -1153,16 +1147,25 @@ namespace Cuemon.Web.UI
             writer.WriteAttributeString("isPostBack", this.IsPostBack.ToString().ToLowerInvariant());
             writer.WriteAttributeString("isCurrentRequestRefresh", this.IsCurrentRequestRefresh.ToString().ToLowerInvariant());
 
-            writer.WriteRaw(this.Localization.ToString(this.Localization.ToXml(true), PreambleSequence.Remove));
+            writer.WriteRaw(this.Localization.ToString(this.Localization.ToXml(true), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            }));
 
             XPathNodeIterator iterator = this.GetCustomXmlNodes();
             while (iterator.MoveNext()) { writer.WriteRaw(iterator.Current.OuterXml); }
 
-            char[] chars = CharConverter.FromStream(BuildControls(), PreambleSequence.Remove);
+            char[] chars = CharConverter.FromStream(BuildControls(), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            });
             writer.WriteRaw(chars, 0, chars.Length);
 
             writer.WriteStartElement("HttpContext");
-            writer.WriteRaw(this.ContextItems.ToString(this.ContextItems.ToXml(true), PreambleSequence.Remove));
+            writer.WriteRaw(this.ContextItems.ToString(this.ContextItems.ToXml(true), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            }));
             writer.WriteEndElement();
         }
 

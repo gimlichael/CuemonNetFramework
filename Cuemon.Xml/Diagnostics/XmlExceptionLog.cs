@@ -71,7 +71,11 @@ namespace Cuemon.Diagnostics
                     writer.WriteRaw(XmlConvertUtility.ToXmlElement(exception, Encoding, true).OuterXml);
                     writer.Flush();
                     output.Position = 0;
-                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, PreambleSequence.Remove, Encoding, true), severity, computerName);
+                    base.WriteEntry(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", exception.GetType().Name, exception.Source), exception.Message, StringConverter.FromStream(output, options =>
+                    {
+                        options.Encoding = Encoding;
+                        options.Preamble = PreambleSequence.Remove;
+                    }, true), severity, computerName);
                     output = null;
                 }
             }

@@ -56,7 +56,7 @@ namespace Cuemon.Web
 
         private WebsiteSecurity Security
         {
-            get 
+            get
             {
                 if (_security == null) { throw new InvalidOperationException("This object is not in a valid state - do not use parameterless constructor!"); }
                 return _security;
@@ -78,7 +78,7 @@ namespace Cuemon.Web
         /// <value></value>
         public WebsiteSecurityIPRestriction this[int index]
         {
-            get 
+            get
             {
                 return this.InnerCollection[index];
             }
@@ -124,10 +124,13 @@ namespace Cuemon.Web
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) throw new ArgumentNullException("writer");
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
             foreach (WebsiteSecurityIPRestriction ipRestriction in this)
             {
-                writer.WriteRaw(ipRestriction.ToString(ipRestriction.ToXml(true), PreambleSequence.Remove));
+                writer.WriteRaw(ipRestriction.ToString(ipRestriction.ToXml(true), options =>
+                {
+                    options.Preamble = PreambleSequence.Remove;
+                }));
             }
         }
 

@@ -9,6 +9,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Cuemon.Globalization;
 using Cuemon.IO;
+using Cuemon.Text;
 using Cuemon.Web.Configuration;
 using Cuemon.Xml;
 using Cuemon.Xml.Serialization;
@@ -24,10 +25,10 @@ namespace Cuemon.Web
         private WebsiteGlobalizationTimeZone _timeZone;
         private readonly WebsiteGlobalization _globalization;
         private readonly WebsiteGlobalizationCultureInfoElement _cultureInfoElement;
-        private XmlFile phraseXmlFileValue;
-        private XmlFile phraseStyleSheetXmlFileValue;
-        private XmlFile siteMapXmlFileValue;
-        private readonly object instanceLockValue = new object();
+        private XmlFile _phraseXmlFileValue;
+        private XmlFile _phraseStyleSheetXmlFileValue;
+        private XmlFile _siteMapXmlFileValue;
+        private readonly object _instanceLockValue = new object();
 
         #region Constructors
         /// <summary>
@@ -100,7 +101,7 @@ namespace Cuemon.Web
         {
             get
             {
-                if (phraseXmlFileValue == null)
+                if (_phraseXmlFileValue == null)
                 {
                     string file = this.CultureInfoElement.PhraseFile;
                     if (!string.IsNullOrEmpty(file))
@@ -110,9 +111,9 @@ namespace Cuemon.Web
                             file = this.Globalization.Website.ContentApplicationPath + file;
                         }
                     }
-                    phraseXmlFileValue = new XmlFile(file);
+                    _phraseXmlFileValue = new XmlFile(file);
                 }
-                return phraseXmlFileValue;
+                return _phraseXmlFileValue;
             }
         }
 
@@ -124,7 +125,7 @@ namespace Cuemon.Web
         {
             get
             {
-                if (phraseStyleSheetXmlFileValue == null)
+                if (_phraseStyleSheetXmlFileValue == null)
                 {
                     string file = this.CultureInfoElement.PhraseStyleSheetFile;
                     if (!string.IsNullOrEmpty(file))
@@ -133,10 +134,10 @@ namespace Cuemon.Web
                         {
                             file = this.Globalization.Website.ContentApplicationPath + file;
                         }
-                        phraseStyleSheetXmlFileValue = new XmlFile(file);
+                        _phraseStyleSheetXmlFileValue = new XmlFile(file);
                     }
                 }
-                return phraseStyleSheetXmlFileValue;
+                return _phraseStyleSheetXmlFileValue;
             }
         }
 
@@ -148,7 +149,7 @@ namespace Cuemon.Web
         {
             get
             {
-                if (siteMapXmlFileValue == null)
+                if (_siteMapXmlFileValue == null)
                 {
                     string file = this.CultureInfoElement.SiteMapFile;
                     if (!string.IsNullOrEmpty(file))
@@ -158,9 +159,9 @@ namespace Cuemon.Web
                             file = this.Globalization.Website.ContentApplicationPath + file;
                         }
                     }
-                    siteMapXmlFileValue = new XmlFile(file);
+                    _siteMapXmlFileValue = new XmlFile(file);
                 }
-                return siteMapXmlFileValue;
+                return _siteMapXmlFileValue;
             }
         }
 
@@ -175,7 +176,7 @@ namespace Cuemon.Web
             {
                 if (_timeZone == null)
                 {
-                    lock (instanceLockValue)
+                    lock (_instanceLockValue)
                     {
                         if (_timeZone == null)
                         {
@@ -231,7 +232,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object using UTF-16 for the encoding with the little endian byte order.
+        /// Creates and returns a XML stream representation of the current object using UTF-16 for the encoding with the little endian byte order.
         /// </summary>
         /// <returns>A <b><see cref="System.IO.Stream"/></b> object.</returns>
         public Stream ToXml()
@@ -240,7 +241,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object using UTF-16 for the encoding with the little endian byte order.
+        /// Creates and returns a XML stream representation of the current object using UTF-16 for the encoding with the little endian byte order.
         /// </summary>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c>. The default is false.</param>
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
@@ -250,7 +251,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object using UTF-16 for the encoding with the little endian byte order.
+        /// Creates and returns a XML stream representation of the current object using UTF-16 for the encoding with the little endian byte order.
         /// </summary>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c>. The default is false.</param>
         /// <param name="qualifiedRootEntity">A <see cref="XmlQualifiedEntity"/> that overrides and represents the fully qualified name of the XML root element.</param>
@@ -261,7 +262,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c> The default is false.</param>
         /// <param name="qualifiedRootEntity">A <see cref="XmlQualifiedEntity"/> that overrides and represents the fully qualified name of the XML root element.</param>
@@ -275,7 +276,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="encoding">The text encoding to use.</param>
         /// <returns>
@@ -287,7 +288,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="encoding">The text encoding to use.</param>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c> The default is false.</param>
@@ -300,7 +301,7 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Creates and returns a XML stream represenation of the current object.
+        /// Creates and returns a XML stream representation of the current object.
         /// </summary>
         /// <param name="encoding">The text encoding to use.</param>
         /// <param name="omitXmlDeclaration">if set to <c>true</c> omit the XML declaration; otherwise <c>false</c> The default is false.</param>
@@ -314,26 +315,26 @@ namespace Cuemon.Web
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
         /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
-        /// <returns>A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
+        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
+        /// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
         public string ToString(Stream value)
         {
-            return this.ToString(value, PreambleSequence.Keep);
+            return StringConverter.FromStream(value);
         }
 
         /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="string"/> representation using UTF-16 for the encoding with the option to keep the little endian byte order (preamble sequence).
+        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using the preferred encoding with the option to keep or remove any byte order (preamble sequence).
         /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="string"/> representation for.</param>
-        /// <param name="sequence">Specifies whether too keep or remove any preamble sequence from the decoded content.</param>
+        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
+        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>
-        /// A <see cref="string"/> containing the decoded content of the specified <see cref="Stream"/> object.
+        /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
         /// </returns>
-        public string ToString(Stream value, PreambleSequence sequence)
+        public string ToString(Stream value, Act<EncodingOptions> setup)
         {
-            return StringConverter.FromStream(value, sequence);
+            return StringConverter.FromStream(value, setup);
         }
         #endregion
     }

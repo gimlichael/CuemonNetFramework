@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Cuemon.Security.Cryptography;
+using Cuemon.Text;
 
 namespace Cuemon.Security
 {
@@ -61,7 +62,12 @@ namespace Cuemon.Security
         /// <returns>A security token easily adopted into various services in the following XML format of the <see cref="SecurityToken.ToString()"/> method.</returns>
         public static byte[] CreateEncryptedSecurityToken(SecurityToken token, string securityKey, string securityInitializationVector, Encoding encoding)
         {
-            return CreateEncryptedSecurityToken(token, ByteConverter.FromString(securityKey, PreambleSequence.Remove, encoding), ByteConverter.FromString(securityInitializationVector, PreambleSequence.Remove, encoding));
+            Act<EncodingOptions> setup = options =>
+            {
+                options.Encoding = encoding;
+                options.Preamble = PreambleSequence.Remove;
+            };
+            return CreateEncryptedSecurityToken(token, ByteConverter.FromString(securityKey, setup), ByteConverter.FromString(securityInitializationVector, setup));
         }
 
         /// <summary>
@@ -89,7 +95,11 @@ namespace Cuemon.Security
         public static byte[] CreateEncryptedSecurityToken(SecurityToken token, byte[] securityKey, byte[] securityInitializationVector)
         {
             if (token == null) { throw new ArgumentNullException(nameof(token)); }
-            byte[] securityToken = AdvancedEncryptionStandardUtility.Encrypt(ByteConverter.FromString(token.ToString(), PreambleSequence.Remove, Encoding.UTF8), securityKey, securityInitializationVector);
+            byte[] securityToken = AdvancedEncryptionStandardUtility.Encrypt(ByteConverter.FromString(token.ToString(), options =>
+            {
+                options.Encoding = Encoding.UTF8;
+                options.Preamble = PreambleSequence.Remove;
+            }), securityKey, securityInitializationVector);
             return securityToken;
         }
 
@@ -117,7 +127,12 @@ namespace Cuemon.Security
         /// <returns>An instance of the <see cref="SecurityToken"/> object.</returns>
         public static SecurityToken ParseEncryptedSecurityToken(byte[] securityToken, string securityKey, string securityInitializationVector, Encoding encoding)
         {
-            return ParseEncryptedSecurityToken(securityToken, ByteConverter.FromString(securityKey, PreambleSequence.Remove, encoding), ByteConverter.FromString(securityInitializationVector, PreambleSequence.Remove, encoding));
+            Act<EncodingOptions> setup = options =>
+            {
+                options.Encoding = encoding;
+                options.Preamble = PreambleSequence.Remove;
+            };
+            return ParseEncryptedSecurityToken(securityToken, ByteConverter.FromString(securityKey, setup), ByteConverter.FromString(securityInitializationVector, setup));
         }
 
         /// <summary>
@@ -130,7 +145,11 @@ namespace Cuemon.Security
         /// <returns>An instance of the <see cref="SecurityToken"/> object.</returns>
         public static SecurityToken ParseEncryptedSecurityToken(byte[] securityToken, byte[] securityKey, byte[] securityInitializationVector)
         {
-            return SecurityToken.Parse(StringConverter.FromBytes(AdvancedEncryptionStandardUtility.Decrypt(securityToken, securityKey, securityInitializationVector), PreambleSequence.Remove, Encoding.UTF8));
+            return SecurityToken.Parse(StringConverter.FromBytes(AdvancedEncryptionStandardUtility.Decrypt(securityToken, securityKey, securityInitializationVector), options =>
+            {
+                options.Encoding = Encoding.UTF8;
+                options.Preamble = PreambleSequence.Remove;
+            }));
         }
     }
 }

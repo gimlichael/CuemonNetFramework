@@ -217,7 +217,10 @@ namespace Cuemon.Web.UI
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             foreach (XsltPageLocalizationPhrase phrase in this)
             {
-                writer.WriteRaw(phrase.ToString(phrase.ToXml(true), PreambleSequence.Remove));
+                writer.WriteRaw(phrase.ToString(phrase.ToXml(true), options =>
+                {
+                    options.Preamble = PreambleSequence.Remove;
+                }));
             }
         }
         #endregion

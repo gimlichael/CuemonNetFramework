@@ -116,7 +116,10 @@ namespace Cuemon.Web
         /// <returns>A <see cref="System.String"/> representing the Robots Exclusion Protocol.</returns>
         public string RenderRobotsExclusionProtocol()
         {
-            return StringConverter.FromStream(XsltUtility.Transform(this.ToXml(), new Uri(this.ExclusionStyleSheetFile), false, new XsltParameter("hostHeader", "", HttpContext.Current.Request.Url.Host)), PreambleSequence.Remove);
+            return StringConverter.FromStream(XsltUtility.Transform(this.ToXml(), new Uri(this.ExclusionStyleSheetFile), false, new XsltParameter("hostHeader", "", HttpContext.Current.Request.Url.Host)), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            });
         }
 
         /// <summary>

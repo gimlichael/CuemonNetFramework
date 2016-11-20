@@ -85,9 +85,10 @@ namespace Cuemon.Net.Http
                 DateTime utcLastModified = DateTime.UtcNow;
                 string currentChecksum = DefaultChecksum;
                 string listenerHeader = string.Format(CultureInfo.InvariantCulture, "Cuemon.Net.Http.HttpRequestWatcher; Interval={0} seconds", Period.TotalSeconds);
-                HttpWebRequestSettings settings = new HttpWebRequestSettings();
-                settings.Headers.Add("Listener-Object", listenerHeader);
-                HttpWebRequest request = NetHttpUtility.CreateRequest(Location, UseResponseData ? WebRequestMethods.Http.Get : WebRequestMethods.Http.Head, settings);
+                HttpWebRequest request = NetHttpUtility.CreateRequest(Location, UseResponseData ? WebRequestMethods.Http.Get : WebRequestMethods.Http.Head, options =>
+                {
+                    options.Headers.Add("Listener-Object", listenerHeader);
+                });
                 WatcherSignalCallback?.Invoke(request);
                 using (HttpWebResponse response = NetHttpUtility.Http(request))
                 {

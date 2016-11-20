@@ -108,7 +108,11 @@ namespace Cuemon.Web
         {
             if (content == null) { return null; }
             if (content.Length == 0) { return content; }
-            string contentAsString = StringConverter.FromStream(content, PreambleSequence.Remove, encoding, true);
+            string contentAsString = StringConverter.FromStream(content, options =>
+            {
+                options.Encoding = encoding;
+                options.Preamble = PreambleSequence.Remove;
+            }, true);
             int arguments;
             if (StringUtility.ParseFormat(contentAsString, out arguments))
             {

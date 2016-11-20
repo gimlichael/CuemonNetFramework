@@ -9,11 +9,11 @@ namespace Cuemon.IO
     {
         private readonly IFormatProvider _provider;
 
-        internal InternalStreamWriter(Stream output, StreamWriterSettings settings) : base(output, settings.Encoding, settings.BufferSize)
+        internal InternalStreamWriter(Stream output, StreamWriterOptions options) : base(output, options.Encoding, options.BufferSize)
         {
-            _provider = settings.FormatProvider;
-            this.AutoFlush = settings.AutoFlush;
-            this.NewLine = settings.NewLine;
+            _provider = options.FormatProvider;
+            this.AutoFlush = options.AutoFlush;
+            this.NewLine = options.NewLine;
             this.TryLeaveStreamOpen();
         }
 

@@ -21,7 +21,11 @@ namespace Cuemon.Security.Cryptography
         /// <returns>A random 128 bit generated initialization vector (IV).</returns>
         public static byte[] GenerateInitializationVector()
         {
-            return ByteConverter.FromString(StringUtility.CreateRandomString(BlockSize / 8), PreambleSequence.Remove, Encoding.UTF8);
+            return ByteConverter.FromString(StringUtility.CreateRandomString(BlockSize / 8), options =>
+            {
+                options.Encoding = Encoding.UTF8;
+                options.Preamble = PreambleSequence.Remove;
+            });
         }
 
         /// <summary>
@@ -47,7 +51,11 @@ namespace Cuemon.Security.Cryptography
                     result = StringUtility.CreateRandomString(256 / 8);
                     break;
             }
-            return ByteConverter.FromString(result, PreambleSequence.Remove, Encoding.UTF8);
+            return ByteConverter.FromString(result, options =>
+            {
+                options.Encoding = Encoding.UTF8;
+                options.Preamble = PreambleSequence.Remove;
+            });
         }
 
         private static byte[] CryptoTransformCore(byte[] value, byte[] key, byte[] initializationVector, AdvancedEncryptionStandardCommand command)

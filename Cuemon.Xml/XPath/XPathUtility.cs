@@ -32,7 +32,11 @@ namespace Cuemon.Xml.XPath
         public static IXPathNavigable CreateXPathNavigableDocument(string value, Encoding encoding)
         {
             if (string.IsNullOrEmpty(value)) { throw new ArgumentNullException(nameof(value)); }
-            using (Stream stream = StreamConverter.FromString(value, PreambleSequence.Keep, encoding))
+            using (Stream stream = StreamConverter.FromString(value, options =>
+            {
+                options.Encoding = encoding;
+                options.Preamble = PreambleSequence.Keep;
+            }))
             {
                 return CreateXPathNavigableDocument(stream);
             }

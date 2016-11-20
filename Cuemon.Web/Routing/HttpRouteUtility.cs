@@ -139,7 +139,7 @@ namespace Cuemon.Web.Routing
                         if (parameter == null) { continue; }
                         if (IsRouteHexString(routeAttribute, parameter.Name))
                         {
-                            result.Add(StringConverter.FromHexadecimal(compoundRequestParameters[i], PreambleSequence.Remove, Encoding.UTF8)); // todo: support dynamic encoding from request
+                            result.Add(StringConverter.FromHexadecimal(compoundRequestParameters[i])); // todo: support dynamic encoding from request
                         }
                         else
                         {
@@ -158,7 +158,7 @@ namespace Cuemon.Web.Routing
                             if (parameter == null) { continue; }
                             if (IsRouteHexString(routeAttribute, parameter.Name))
                             {
-                                result.Add(StringConverter.FromHexadecimal(requestQuerystring[key], PreambleSequence.Remove, Encoding.UTF8)); // todo: support dynamic encoding from request
+                                result.Add(StringConverter.FromHexadecimal(requestQuerystring[key])); // todo: support dynamic encoding from request
                             }
                             else
                             {

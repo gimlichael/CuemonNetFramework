@@ -361,7 +361,10 @@ namespace Cuemon.Web.UI
                     {
                         using (Stream stream = ControlAsStream(control, excludePropertyBaseTypes))
                         {
-                            char[] chars = CharConverter.FromStream(stream, PreambleSequence.Remove);
+                            char[] chars = CharConverter.FromStream(stream, options =>
+                            {
+                                options.Preamble = PreambleSequence.Remove;
+                            });
                             writer.WriteRaw(chars, 0, chars.Length);
                         }
                     }

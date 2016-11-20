@@ -220,7 +220,11 @@ namespace Cuemon.ServiceModel
                 else if (asPlain)
                 {
                     // todo: serialize here
-                    outputAsBytes = ByteConverter.FromString(result.ToString(), PreambleSequence.Remove, context.Response.ContentEncoding);
+                    outputAsBytes = ByteConverter.FromString(result.ToString(), options =>
+                    {
+                        options.Encoding = context.Response.ContentEncoding;
+                        options.Preamble = PreambleSequence.Remove;
+                    });
                 }
                 else
                 {

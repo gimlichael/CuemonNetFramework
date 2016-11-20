@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon.Reflection;
 
 namespace Cuemon
 {
@@ -291,6 +292,19 @@ namespace Cuemon
                 temp?.Dispose();
             }
             return result;
+        }
+
+        /// <summary>
+        /// Provides a generic way to support the options pattern which enables using custom options classes to represent a group of related settings.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of the custom options class.</typeparam>
+        /// <param name="setup">The delegate that will configure the public read-write properties of <typeparamref name="TOptions"/>.</param>
+        /// <returns>A default constructed instance of <typeparamref name="TOptions"/> initialized with the options of <paramref name="setup"/>.</returns>
+        public static TOptions ConfigureAction<TOptions>(Act<TOptions> setup)
+        {
+            TOptions options = ActivatorUtility.CreateInstance<TOptions>();
+            setup?.Invoke(options);
+            return options;
         }
     }
 }

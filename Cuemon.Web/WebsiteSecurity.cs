@@ -35,10 +35,10 @@ namespace Cuemon.Web
         #region Properties
         internal Website Website
         {
-            get 
+            get
             {
                 if (_website == null) { throw new InvalidOperationException("This object is not in a valid state - do not use parameterless constructor!"); }
-                return _website; 
+                return _website;
             }
         }
 
@@ -93,10 +93,13 @@ namespace Cuemon.Web
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
         public override void WriteXml(XmlWriter writer)
         {
-            if (writer == null) { throw new ArgumentNullException("writer"); }
+            if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             writer.WriteAttributeString("defaultHasAccess", this.DefaultHasAccess.ToString().ToLowerInvariant());
             writer.WriteAttributeString("defaultRedirectOnDeniedAccess", this.DefaultTransferOnStatusCodeForbidden);
-            writer.WriteRaw(this.IPRestrictions.ToString(this.IPRestrictions.ToXml(true), PreambleSequence.Remove));
+            writer.WriteRaw(this.IPRestrictions.ToString(this.IPRestrictions.ToXml(true), options =>
+            {
+                options.Preamble = PreambleSequence.Remove;
+            }));
         }
         #endregion
     }

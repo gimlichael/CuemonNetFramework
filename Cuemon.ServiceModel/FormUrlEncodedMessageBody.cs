@@ -42,7 +42,11 @@ namespace Cuemon.ServiceModel
 
         private static NameValueCollection FormUrlEncodedDeserializer(Stream entityBody, ContentType mimeType, Encoding encoding)
         {
-            string form = StringConverter.FromStream(entityBody, PreambleSequence.Remove, encoding);
+            string form = StringConverter.FromStream(entityBody, options =>
+            {
+                options.Encoding = encoding;
+                options.Preamble = PreambleSequence.Remove;
+            });
             return HttpRequestUtility.ParseFieldValuePairs(form);
         }
     }
