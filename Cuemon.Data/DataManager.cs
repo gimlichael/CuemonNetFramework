@@ -31,7 +31,7 @@ namespace Cuemon.Data
         /// Gets or sets the callback delegate that will provide options for transient fault handling.
         /// </summary>
         /// <value>An <see cref="Act{T}"/> with the options for transient fault handling.</value>
-        public abstract Act<TransientFaultHandlingOptions> TransientFaultHandlingOptionsCallback { get; set; }
+        public abstract Act<TransientOperationOptions> TransientFaultHandlingOptionsCallback { get; set; }
 
         /// <summary>
         /// Gets the string used to open the connection.
@@ -697,7 +697,7 @@ namespace Cuemon.Data
         /// <returns>A value of <typeparamref name="T"/> that is equal to the invoked method of the <see cref="IDbCommand"/> object.</returns>
         protected virtual T ExecuteCore<T>(IDataCommand dataCommand, IDataParameter[] parameters, Doer<IDbCommand, T> sqlInvoker)
         {
-            return TransientFaultHandling.WithFunc(() => InvokeCommandCore(dataCommand, parameters, sqlInvoker), TransientFaultHandlingOptionsCallback);
+            return TransientOperation.WithFunc(() => InvokeCommandCore(dataCommand, parameters, sqlInvoker), TransientFaultHandlingOptionsCallback);
         }
 
         private T InvokeCommandCore<T>(IDataCommand dataCommand, IDataParameter[] parameters, Doer<IDbCommand, T> sqlInvoker)
@@ -725,10 +725,10 @@ namespace Cuemon.Data
         /// <param name="parameters">The parameters to use in the command.</param>
         /// <returns>System.Data.Common.DbCommand</returns>
         /// <remarks>
-        /// If <see cref="TransientFaultHandlingOptionsCallback"/> has the <see cref="TransientFaultHandlingOptions.EnableTransientFaultRecovery"/> set to <c>true</c>, this method will with it's default implementation try to gracefully recover from transient faults when the following condition is met:<br/>
-        /// <see cref="TransientFaultHandlingOptions.RetryAttempts"/> is less than the current attempt starting from 1 with a maximum of <see cref="Byte.MaxValue"/> retries<br/>
-        /// <see cref="TransientFaultHandlingOptions.TransientFaultParserCallback"/> must evaluate to <c>true</c><br/>
-        /// In case of a transient failure the default implementation will use <see cref="TransientFaultHandlingOptions.RecoveryWaitTimeCallback"/>.<br/>
+        /// If <see cref="TransientFaultHandlingOptionsCallback"/> has the <see cref="TransientOperationOptions.EnableRecovery"/> set to <c>true</c>, this method will with it's default implementation try to gracefully recover from transient faults when the following condition is met:<br/>
+        /// <see cref="TransientOperationOptions.RetryAttempts"/> is less than the current attempt starting from 1 with a maximum of <see cref="Byte.MaxValue"/> retries<br/>
+        /// <see cref="TransientOperationOptions.DetectionStrategyCallback"/> must evaluate to <c>true</c><br/>
+        /// In case of a transient failure the default implementation will use <see cref="TransientOperationOptions.RetryStrategyCallback"/>.<br/>
         /// In any other case the originating exception is thrown.
         /// </remarks>
         protected virtual IDbCommand ExecuteCommandCore(IDataCommand dataCommand, params IDataParameter[] parameters)

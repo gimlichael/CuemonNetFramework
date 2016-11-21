@@ -69,10 +69,10 @@ namespace Cuemon.Data.SqlClient
         /// This implementation is compatible with transient related faults on Microsoft SQL Azure including the latest addition of error code 10928 and 10929.<br/>
         /// Microsoft SQL Server is supported as well.
         /// </remarks>
-        public override Act<TransientFaultHandlingOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
+        public override Act<TransientOperationOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
         {
-            options.EnableTransientFaultRecovery = true;
-            options.TransientFaultParserCallback = exception =>
+            options.EnableRecovery = true;
+            options.DetectionStrategyCallback = exception =>
             {
                 if (exception == null) { return false; }
 
@@ -331,7 +331,7 @@ namespace Cuemon.Data.SqlClient
             if (destinationTable == null) { throw new ArgumentNullException(nameof(destinationTable)); }
             if (destinationTable.Length == 0) { throw new ArgumentEmptyException(nameof(destinationTable)); }
 
-            TransientFaultHandling.WithAction(ExecuteBulkCore, source, mappings, destinationTable, options, timeout);
+            TransientOperation.WithAction(ExecuteBulkCore, source, mappings, destinationTable, options, timeout);
         }
 
         private void ExecuteBulkCore(IDataReader source, IEnumerable<SqlBulkCopyColumnMapping> mappings, string destinationTableName, SqlBulkCopyOptions options, TimeSpan timeout)

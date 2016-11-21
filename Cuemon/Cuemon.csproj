@@ -221,7 +221,7 @@
     <Compile Include="TimeSpanConverter.cs" />
     <Compile Include="TimeUnit.cs" />
     <Compile Include="Transactions\TransactionUtility.cs" />
-    <Compile Include="TransientFaultHandlingOptions.cs" />
+    <Compile Include="TransientOperationOptions.cs" />
     <Compile Include="TupleUtility.cs" />
     <Compile Include="TypeArgumentException.cs" />
     <Compile Include="TypeArgumentOutOfRangeException.cs" />
@@ -247,7 +247,7 @@
     <Compile Include="Security\Cryptography\PolynomialRepresentation.cs" />
     <Compile Include="TransientFaultException.cs" />
     <Compile Include="EnumUtility.cs" />
-    <Compile Include="TransientFaultHandling.cs" />
+    <Compile Include="TransientOperation.cs" />
     <Compile Include="TesterDoerUtility.cs" />
     <Compile Include="Management\PerformanceMonitorCounter.cs" />
     <Compile Include="PlatformUtility.cs" />

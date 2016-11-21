@@ -67,10 +67,10 @@ namespace Cuemon.Data.SqlCeClient
         /// This implementation is compatible with transient related faults on Microsoft SQL Azure including the latest addition of error code 10928 and 10929.<br/>
         /// Microsoft SQL Server is supported as well.
         /// </remarks>
-        public override Act<TransientFaultHandlingOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
+        public override Act<TransientOperationOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
         {
-            options.EnableTransientFaultRecovery = true;
-            options.TransientFaultParserCallback = exception =>
+            options.EnableRecovery = true;
+            options.DetectionStrategyCallback = exception =>
             {
                 if (exception == null) { return false; }
                 SqlCeException sqlCeException = exception as SqlCeException;
