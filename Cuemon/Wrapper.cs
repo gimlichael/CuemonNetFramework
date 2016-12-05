@@ -39,7 +39,7 @@ namespace Cuemon
                 case TypeCode.Double:
                     return wrapper.InstanceAs<IConvertible>().ToString(CultureInfo.InvariantCulture);
                 case TypeCode.DateTime:
-                    return wrapper.InstanceAs<DateTime>().ToString("s", CultureInfo.InvariantCulture);
+                    return wrapper.InstanceAs<DateTime>().ToString("O", CultureInfo.InvariantCulture);
                 case TypeCode.String:
                     return wrapper.Instance.ToString();
                 default:
@@ -66,6 +66,8 @@ namespace Cuemon
                             return wrapper.InstanceAs<Guid>(CultureInfo.InvariantCulture).ToString("D");
                         case "RUNTIMETYPE":
                             return StringConverter.FromType(wrapper.InstanceAs<Type>());
+                        case "URI":
+                            return wrapper.InstanceAs<Uri>().OriginalString;
                         default:
                             return wrapper.Instance.ToString();
                     }
@@ -183,7 +185,7 @@ namespace Cuemon
         /// </exception>
         public TResult InstanceAs<TResult>()
         {
-            return this.InstanceAs<TResult>(CultureInfo.InvariantCulture);
+            return InstanceAs<TResult>(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -203,7 +205,7 @@ namespace Cuemon
         /// </exception>
         public TResult InstanceAs<TResult>(IFormatProvider provider)
         {
-            return (TResult)ObjectConverter.ChangeType(this.Instance, this.InstanceType, provider);
+            return (TResult)ObjectConverter.ChangeType(Instance, InstanceType, provider);
         }
         #endregion
     }
