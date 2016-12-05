@@ -975,7 +975,13 @@ namespace Cuemon.Xml.Serialization
             Validator.ThrowIfNull(serializable, "serializable");
             Stream output = null;
             MemoryStream tempOutput = null;
-            IHierarchy<object> serializableNode = ReflectionUtility.GetObjectHierarchy(serializable, MaxSerializationDepth, SkipPropertiesCallback, SkipPropertyCallback);
+            IHierarchy<object> serializableNode = ReflectionUtility.GetObjectHierarchy(serializable, o =>
+            {
+                o.MaxDepth = MaxSerializationDepth;
+                o.SkipPropertyType = SkipPropertiesCallback;
+                o.SkipProperty = SkipPropertyCallback;
+
+            });
             bool useFactory = factory.HasDelegate;
             try
             {

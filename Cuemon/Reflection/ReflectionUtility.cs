@@ -281,104 +281,15 @@ namespace Cuemon.Reflection
         /// Gets the tree structure of the specified <paramref name="source"/> wrapped in an <see cref="IHierarchy{T}"/> node representing a hierarchical structure.
         /// </summary>
         /// <param name="source">The source whose properties will be traversed while building the hierarchical structure.</param>
+        /// <param name="setup">The <see cref="ObjectHierarchyOptions"/> which need to be configured.</param>
         /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
-        public static IHierarchy<object> GetObjectHierarchy(object source)
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source"/> is null.
+        /// </exception>
+        public static IHierarchy<object> GetObjectHierarchy(object source, Act<ObjectHierarchyOptions> setup = null)
         {
-            return GetObjectHierarchy(source, 10);
-        }
-
-        /// <summary>
-        /// Gets the tree structure of the specified <paramref name="source"/> wrapped in an <see cref="IHierarchy{T}"/> node representing a hierarchical structure.
-        /// </summary>
-        /// <param name="source">The source whose properties will be traversed while building the hierarchical structure.</param>
-        /// <param name="maxDepth">The maximum depth to safely traverse <paramref name="source"/>. Default is 10.</param>
-        /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="maxDepth"/> is less than zero.
-        /// </exception>
-        public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth)
-        {
-            return GetObjectHierarchy(source, maxDepth, DefaultSkipPropertiesCallback);
-        }
-
-        /// <summary>
-        /// Gets the tree structure of the specified <paramref name="source"/> wrapped in an <see cref="IHierarchy{T}"/> node representing a hierarchical structure.
-        /// </summary>
-        /// <param name="source">The source whose properties will be traversed while building the hierarchical structure.</param>
-        /// <param name="maxDepth">The maximum depth to safely traverse <paramref name="source"/>. Default is 10.</param>
-        /// <param name="skipProperties">The function delegate that is invoked just before public properties is being iterated and whose return value determine if the properties should be skipped or not.</param>
-        /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="maxDepth"/> is less than zero.
-        /// </exception>
-        public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties)
-        {
-            return GetObjectHierarchy(source, maxDepth, skipProperties, DefaultSkipPropertyCallback);
-        }
-
-        /// <summary>
-        /// Gets the tree structure of the specified <paramref name="source"/> wrapped in an <see cref="IHierarchy{T}"/> node representing a hierarchical structure.
-        /// </summary>
-        /// <param name="source">The source whose properties will be traversed while building the hierarchical structure.</param>
-        /// <param name="maxDepth">The maximum depth to safely traverse <paramref name="source"/>. Default is 10.</param>
-        /// <param name="skipProperties">The function delegate that is invoked just before public properties is being iterated and whose return value determine if the properties should be skipped or not.</param>
-        /// <param name="skipProperty">The function delegate that is invoked every time a public property is iterated and whose return value determine if that property should be skipped or not.</param>
-        /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="skipProperty"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="maxDepth"/> is less than zero.
-        /// </exception>
-        public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties, Doer<PropertyInfo, bool> skipProperty)
-        {
-            return GetObjectHierarchy(source, maxDepth, skipProperties, skipProperty, HasCircularReference);
-        }
-
-        /// <summary>
-        /// Gets the tree structure of the specified <paramref name="source"/> wrapped in an <see cref="IHierarchy{T}"/> node representing a hierarchical structure.
-        /// </summary>
-        /// <param name="source">The source whose properties will be traversed while building the hierarchical structure.</param>
-        /// <param name="maxDepth">The maximum depth to safely traverse <paramref name="source"/>. Default is 10.</param>
-        /// <param name="skipProperties">The function delegate that is invoked just before public properties is being iterated and whose return value determine if the properties should be skipped or not.</param>
-        /// <param name="skipProperty">The function delegate that is invoked every time a public property is iterated and whose return value determine if that property should be skipped or not.</param>
-        /// <param name="hasCircularReference">The function delegate that is invoked when a property has a value and whose return value suggest a circular reference or not.</param>
-        /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="skipProperty"/> is null - or - <paramref name="hasCircularReference"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="maxDepth"/> is less than zero.
-        /// </exception>
-        public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties, Doer<PropertyInfo, bool> skipProperty, Doer<object, bool> hasCircularReference)
-        {
-            return GetObjectHierarchy(source, maxDepth, skipProperties, skipProperty, hasCircularReference, DefaultPropertyIndexParametersResolver);
-        }
-
-        /// <summary>
-        /// Gets the tree structure of the specified <paramref name="source"/> wrapped in an <see cref="IHierarchy{T}"/> node representing a hierarchical structure.
-        /// </summary>
-        /// <param name="source">The source whose properties will be traversed while building the hierarchical structure.</param>
-        /// <param name="maxDepth">The maximum depth to safely traverse <paramref name="source"/>. Default is 10.</param>
-        /// <param name="skipProperties">The function delegate that is invoked just before public properties is being iterated and whose return value determine if the properties should be skipped or not.</param>
-        /// <param name="skipProperty">The function delegate that is invoked every time a public property is iterated and whose return value determine if that property should be skipped or not.</param>
-        /// <param name="hasCircularReference">The function delegate that is invoked when a property has a value and whose return value suggest a circular reference or not.</param>
-        /// <param name="propertyIndexParametersResolver">The function delegate that is invoked if a property has one or more index parameters.</param>
-        /// <returns>An <see cref="IHierarchy{T}"/> node representing the entirety of a hierarchical structure from the specified <paramref name="source"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="source"/> is null - or - <paramref name="skipProperty"/> is null - or - <paramref name="hasCircularReference"/> is null - or - <paramref name="propertyIndexParametersResolver"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="maxDepth"/> is less than zero.
-        /// </exception>
-        public static IHierarchy<object> GetObjectHierarchy(object source, int maxDepth, Doer<Type, bool> skipProperties, Doer<PropertyInfo, bool> skipProperty, Doer<object, bool> hasCircularReference, Doer<ParameterInfo[], object[]> propertyIndexParametersResolver)
-        {
-            if (source == null) { throw new ArgumentNullException(nameof(source)); }
-            if (maxDepth < 0) { throw new ArgumentOutOfRangeException(nameof(maxDepth)); }
-            if (skipProperties == null) { throw new ArgumentNullException(nameof(skipProperties)); }
-            if (skipProperty == null) { throw new ArgumentNullException(nameof(skipProperty)); }
-            if (hasCircularReference == null) { throw new ArgumentNullException(nameof(hasCircularReference)); }
-            if (propertyIndexParametersResolver == null) { throw new ArgumentNullException(nameof(propertyIndexParametersResolver)); }
+            Validator.ThrowIfNull(source, nameof(source));
+            var options = DelegateUtility.ConfigureAction(setup);
 
             IDictionary<int, int> referenceSafeguards = new Dictionary<int, int>();
             Stack<Wrapper<object>> stack = new Stack<Wrapper<object>>();
@@ -397,7 +308,7 @@ namespace Cuemon.Reflection
             {
                 current = stack.Pop();
                 Type currentType = current.Instance.GetType();
-                if (skipProperties(currentType))
+                if (options.SkipPropertyType(currentType))
                 {
                     if (index == 0) { continue; }
                     index++;
@@ -407,7 +318,7 @@ namespace Cuemon.Reflection
 
                 foreach (PropertyInfo property in currentType.GetProperties(BindingInstancePublic))
                 {
-                    if (skipProperty(property)) { continue; }
+                    if (options.SkipProperty(property)) { continue; }
                     if (!property.CanRead) { continue; }
                     if (TypeUtility.IsEnumerable(currentType))
                     {
@@ -418,30 +329,27 @@ namespace Cuemon.Reflection
                         }
                     }
 
-                    object propertyValue = GetPropertyValue(current.Instance, property, propertyIndexParametersResolver);
+                    object propertyValue = GetPropertyValue(current.Instance, property, options.PropertyIndexParametersResolver);
                     if (propertyValue == null) { continue; }
-                    if (!hasCircularReference(propertyValue))
+                    index++;
+                    result[(int)current.Data["index"]].Add(propertyValue, property);
+                    if (TypeUtility.IsComplex(property.PropertyType))
                     {
-                        index++;
-                        result[(int)current.Data["index"]].Add(propertyValue, property);
-                        if (TypeUtility.IsComplex(property.PropertyType))
+                        int circularCalls = 0;
+                        if (current.Data.ContainsKey("circularReference"))
                         {
-                            int circularCalls = 0;
-                            if (current.Data.ContainsKey("circularReference"))
-                            {
-                                circularCalls = (int)current.Data["circularReference"];
-                            }
-                            int safetyHashCode = propertyValue.GetHashCode();
-                            int calls;
-                            if (!referenceSafeguards.TryGetValue(safetyHashCode, out calls)) { referenceSafeguards.Add(safetyHashCode, 0); }
-                            if (calls <= maxCircularCalls && result[index].Depth < maxDepth)
-                            {
-                                referenceSafeguards[safetyHashCode]++;
-                                Wrapper<object> wrapper = new Wrapper<object>(propertyValue);
-                                wrapper.Data.Add("index", index);
-                                wrapper.Data.Add("circularReference", circularCalls + 1);
-                                stack.Push(wrapper);
-                            }
+                            circularCalls = (int)current.Data["circularReference"];
+                        }
+                        int safetyHashCode = propertyValue.GetHashCode();
+                        int calls;
+                        if (!referenceSafeguards.TryGetValue(safetyHashCode, out calls)) { referenceSafeguards.Add(safetyHashCode, 0); }
+                        if (calls <= maxCircularCalls && result[index].Depth < options.MaxDepth)
+                        {
+                            referenceSafeguards[safetyHashCode]++;
+                            Wrapper<object> wrapper = new Wrapper<object>(propertyValue);
+                            wrapper.Data.Add("index", index);
+                            wrapper.Data.Add("circularReference", circularCalls + 1);
+                            stack.Push(wrapper);
                         }
                     }
                 }
@@ -1048,7 +956,7 @@ namespace Cuemon.Reflection
         public static IEnumerable<Type> GetAssemblyTypes(Assembly assembly, string namespaceFilter, Type typeFilter)
         {
             if (assembly == null) { throw new ArgumentNullException(nameof(assembly)); }
-            bool hasNamespaceFilter = !String.IsNullOrEmpty(namespaceFilter);
+            bool hasNamespaceFilter = !string.IsNullOrEmpty(namespaceFilter);
             bool hasTypeFilter = (typeFilter != null);
             IEnumerable<Type> types = assembly.GetTypes();
             if (hasNamespaceFilter || hasTypeFilter)
@@ -1198,7 +1106,7 @@ namespace Cuemon.Reflection
         {
             if (source == null) { throw new ArgumentNullException(nameof(source), "This parameter cannot be null!"); }
             if (name == null) { throw new ArgumentNullException(nameof(name), "This parameter cannot be null!"); }
-            if (String.IsNullOrEmpty(name)) { throw new ArgumentException("This parameter cannot be empty!", nameof(name)); }
+            if (string.IsNullOrEmpty(name)) { throw new ArgumentException("This parameter cannot be empty!", nameof(name)); }
 
             Stream resource = null;
             switch (match)
@@ -1259,7 +1167,7 @@ namespace Cuemon.Reflection
         {
             if (EnableResourceCaching)
             {
-                string key = HashUtility.ComputeHash(String.Format(CultureInfo.InvariantCulture, "{0}|{1}", source.Assembly.GetName().Name.ToUpperInvariant(), name.ToUpperInvariant())).ToHexadecimal();
+                string key = HashUtility.ComputeHash(string.Format(CultureInfo.InvariantCulture, "{0}|{1}", source.Assembly.GetName().Name.ToUpperInvariant(), name.ToUpperInvariant())).ToHexadecimal();
                 return GetResourceFromAssemblyCache(key) ?? AddResourceToAssemblyCache(key, source.Assembly.GetManifestResourceStream(name));
             }
 

@@ -124,6 +124,7 @@
     <Compile Include="PreambleSequence.cs" />
     <Compile Include="RandomSeverity.cs" />
     <Compile Include="Reflection\AssemblyUtility.cs" />
+    <Compile Include="Reflection\ObjectHierarchyOptions.cs" />
     <Compile Include="RoundOffAccuracy.cs" />
     <Compile Include="Runtime\Caching\CacheAsyncState.cs" />
     <Compile Include="Runtime\Caching\CacheCollection.GetOrAdd.cs" />

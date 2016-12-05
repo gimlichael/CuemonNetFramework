@@ -92,7 +92,13 @@ namespace Cuemon.Xml.Serialization
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             if (!this.SerializationAttribute.OmitXmlDeclaration) { writer.WriteProcessingInstruction("xml", string.Format(CultureInfo.InvariantCulture, "version=\"1.0\" encoding=\"{0}\"", Encoding.Unicode)); }
             if (!this.SerializationAttribute.EnableAutomatedXmlSerialization) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The automated XML serialization is not enabled on this class: \"{0}\". Either enable the automated XML serialization using the XmlSerializationAttribute or override the WriteXml(..) method for custom serialization.", this.GetType().Name)); }
-            XmlSerializationUtility.ParseWriteXml(writer, ReflectionUtility.GetObjectHierarchy(this, XmlSerializationUtility.MaxSerializationDepth, XmlSkipPropertiesCallback, XmlSerializationUtility.SkipPropertyCallback));
+            XmlSerializationUtility.ParseWriteXml(writer, ReflectionUtility.GetObjectHierarchy(this, o =>
+            {
+                o.MaxDepth = XmlSerializationUtility.MaxSerializationDepth;
+                o.SkipPropertyType = XmlSkipPropertiesCallback;
+                o.SkipProperty = XmlSerializationUtility.SkipPropertyCallback;
+
+            }));
         }
 
         private static bool XmlSkipPropertiesCallback(Type type)
