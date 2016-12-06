@@ -12,6 +12,8 @@ namespace Cuemon
     /// </summary>
     public static class TypeUtility
     {
+        private static Dictionary<string, bool> ComplexValueTypeLookup { get; } = new Dictionary<string, bool>();
+
         /// <summary>
         /// Determines whether the specified <paramref name="source"/> is of <typeparamref name="T"/>.
         /// </summary>
@@ -493,21 +495,73 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Determines whether the specified <paramref name="source"/> is a complex <see cref="Type"/>.
+        /// Determines whether the specified <paramref name="sources"/>, as a whole, is determined a complex <see cref="Type"/>.
         /// </summary>
-        /// <param name="source">The <see cref="Type"/> to determine complexity for.</param>
-        /// <returns><c>true</c> if specified <paramref name="source"/> is a complex <see cref="Type"/>; otherwise, <c>false</c>.</returns>
+        /// <param name="sources">The <see cref="Type"/> (or types) to determine complexity for.</param>
+        /// <returns><c>true</c> if specified <paramref name="sources"/>, as a whole, is a complex <see cref="Type"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="source"/> is null.
+        /// <paramref name="sources"/> is null.
         /// </exception>
-	    public static bool IsComplex(Type source)
+	    public static bool IsComplex(params Type[] sources)
         {
-            if (source == null) { throw new ArgumentNullException(nameof(source)); }
-            return !((source.IsClass && source == typeof(string)) ||
-                     (source.IsClass && source == typeof(object)) ||
-                     (source.IsValueType ||
-                      source.IsPrimitive ||
-                      source.IsEnum));
+            Validator.ThrowIfNull(sources, nameof(sources));
+            bool result = true;
+            foreach (var source in sources)
+            {
+                bool isPrimitive = false;
+                if (source.AssemblyQualifiedName != null && !ComplexValueTypeLookup.TryGetValue(source.AssemblyQualifiedName, out isPrimitive))
+                {
+                    if (source.IsGenericType)
+                    {
+                        var generics = new List<Type>(source.GetGenericArguments());
+                        if (source.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            return IsComplex(generics[0]);
+                        }
+                        return IsComplex(generics.ToArray());
+                    }
+                    isPrimitive = source.IsPrimitive;
+                    isPrimitive |= source.IsEnum;
+                    isPrimitive |= source.IsValueType && IsSimpleValueType(source);
+                    isPrimitive |= source == typeof(string);
+                    isPrimitive |= source == typeof(decimal);
+                    DictionaryUtility.AddIfNotContainsKey(ComplexValueTypeLookup, source.AssemblyQualifiedName, isPrimitive);
+                }
+                result &= isPrimitive;
+            }
+            return !result;
+        }
+
+        private static bool IsSimpleValueType(Type source)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            bool simple = source.IsPrimitive;
+            if (!simple)
+            {
+                var constructors = source.GetConstructors(ReflectionUtility.BindingInstancePublic);
+                var propertyNames = new List<string>(EnumerableUtility.Select(EnumerableUtility.Where(source.GetProperties(ReflectionUtility.BindingInstancePublic), p => p.CanRead && !p.IsSpecialName), p => p.Name));
+                foreach (var constructor in constructors)
+                {
+                    var arguments = new List<string>(EnumerableUtility.Select(constructor.GetParameters(), p => p.Name));
+                    var match = new List<string>(EnumerableUtility.Intersect(arguments, propertyNames, StringComparer.OrdinalIgnoreCase));
+                    if (arguments.Count == match.Count)
+                    {
+                        return true;
+                    }
+                }
+
+                var staticMethods = EnumerableUtility.Where(source.GetMethods(ReflectionUtility.BindingInstancePublicAndPrivateNoneInheritedIncludeStatic), info => info.ReturnType == source && info.IsStatic);
+                foreach (var staticMethod in staticMethods)
+                {
+                    var parameters = new List<string>(EnumerableUtility.Select(staticMethod.GetParameters(), p => p.Name));
+                    var match = new List<string>(EnumerableUtility.Intersect(parameters, propertyNames, StringComparer.OrdinalIgnoreCase));
+                    if (parameters.Count == match.Count)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return simple;
         }
 
         /// <summary>
