@@ -15,13 +15,40 @@ namespace Cuemon.Collections.Generic
     public static class EnumerableUtility
     {
         /// <summary>
-        /// Returns an empty <see cref="T:System.Collections.Generic.IEnumerable`1" /> that has the specified type argument.
+        /// Produces the set intersection of two sequences by using the specified <see cref="IEnumerable{T}" /> to compare values.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An <see cref="IEnumerable{T}" /> whose distinct elements that also appear in <paramref name="second" /> will be returned.</param>
+        /// <param name="second">An <see cref="IEnumerable{T}" /> whose distinct elements that also appear in the first sequence will be returned.</param>
+        /// <returns>A sequence that contains the elements that form the set intersection of two sequences.</returns>
+        public static IEnumerable<TSource> Intersect<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second)
+        {
+            return Intersect(first, second, EqualityComparer<TSource>.Default);
+        }
+
+        /// <summary>
+        /// Produces the set intersection of two sequences by using the specified <see cref="IEnumerable{T}" /> to compare values.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An <see cref="IEnumerable{T}" /> whose distinct elements that also appear in <paramref name="second" /> will be returned.</param>
+        /// <param name="second">An <see cref="IEnumerable{T}" /> whose distinct elements that also appear in the first sequence will be returned.</param>
+        /// <param name="comparer">An <see cref="IEnumerable{T}" /> to compare values.</param>
+        /// <returns>A sequence that contains the elements that form the set intersection of two sequences.</returns>
+        public static IEnumerable<TSource> Intersect<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        {
+            Validator.ThrowIfNull(first, nameof(first));
+            Validator.ThrowIfNull(second, nameof(second));
+            return Where(first, source => Contains(second, source, comparer));
+        }
+
+        /// <summary>
+        /// Returns an empty <see cref="IEnumerable{T}" /> that has the specified type argument.
         /// </summary>
         /// <returns>
-        /// An empty <see cref="T:System.Collections.Generic.IEnumerable`1" /> whose type argument is <typeparamref name="TResult" />.
+        /// An empty <see cref="IEnumerable{T}" /> whose type argument is <typeparamref name="TResult" />.
         /// </returns>
         /// <typeparam name="TResult">
-        /// The type to assign to the type parameter of the returned generic <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+        /// The type to assign to the type parameter of the returned generic <see cref="IEnumerable{T}" />.
         /// </typeparam>
         public static IEnumerable<TResult> Empty<TResult>()
         {
@@ -673,6 +700,38 @@ namespace Cuemon.Collections.Generic
                 }
             }
             return temp;
+        }
+
+        /// <summary>
+        /// Returns the only element of a sequence, or a default value if the sequence is empty; this method throws an exception if there is more than one element in the sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to return the single element of.</param>
+        /// <returns>The single element of the input sequence, or <c>>default(TSource)</c> if the sequence contains no elements.</returns>
+        public static TSource SingleOrDefault<TSource>(IEnumerable<TSource> source)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            IList<TSource> list = source as IList<TSource>;
+            if (list != null)
+            {
+                switch (list.Count)
+                {
+                    case 0:
+                        return default(TSource);
+                    case 1:
+                        return list[0];
+                }
+            }
+            else
+            {
+                using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+                {
+                    if (!enumerator.MoveNext()) { return default(TSource); }
+                    TSource current = enumerator.Current;
+                    if (!enumerator.MoveNext()) { return current; }
+                }
+            }
+            throw new InvalidOperationException("Sequence contains more than one element.");
         }
 
         /// <summary>
