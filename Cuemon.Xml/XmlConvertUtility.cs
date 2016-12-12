@@ -93,7 +93,7 @@ namespace Cuemon.Xml
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = encoding)))
                 {
                     WriteException(writer, exception, includeStackTrace);
                     writer.Flush();

@@ -88,6 +88,7 @@
     <Compile Include="Diagnostics\XmlFileExceptionLog.cs" />
     <Compile Include="SecureXmlObfuscator.cs" />
     <Compile Include="Serialization\XmlIgnoreChainedReferenceAttribute.cs" />
+    <Compile Include="XmlCopyOptions.cs" />
     <Compile Include="XmlJsonInstance.cs" />
     <Compile Include="XmlObfuscator.cs" />
     <Compile Include="XmlReaderUtility.cs" />

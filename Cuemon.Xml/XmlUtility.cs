@@ -57,7 +57,11 @@ namespace Cuemon.Xml
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(encoding, omitXmlDeclaration)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings =>
+                {
+                    settings.Encoding = encoding;
+                    settings.OmitXmlDeclaration = omitXmlDeclaration;
+                })))
                 {
                     WriteElements(navigator, writer);
                     writer.Flush();

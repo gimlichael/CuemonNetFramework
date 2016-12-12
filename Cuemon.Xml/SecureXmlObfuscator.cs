@@ -14,8 +14,8 @@ namespace Cuemon.Security
     /// <remarks>Logic used from the <see cref="AdvancedEncryptionStandardUtility"/> class.</remarks>
     public sealed class SecureXmlObfuscator : XmlObfuscator
     {
-        private byte[] _key;
-        private byte[] _initializationVector;
+        private readonly byte[] _key;
+        private readonly byte[] _initializationVector;
         private const string MappingEncryptedElement = "E";
 
         #region Constructors
@@ -110,7 +110,7 @@ namespace Cuemon.Security
                 }
 
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = Encoding)))
                 {
                     document.WriteTo(writer);
                 }
@@ -150,7 +150,7 @@ namespace Cuemon.Security
                 mappingNode.AppendChild(encryptedNode);
 
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = Encoding)))
                 {
                     document.WriteTo(writer);
                 }

@@ -289,7 +289,11 @@ namespace Cuemon.Web.UI
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding.Unicode, true)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings =>
+                {
+                    settings.Encoding = Encoding.Unicode;
+                    settings.OmitXmlDeclaration = true;
+                })))
                 {
                     writer.WriteStartElement("Control");
                     writer.WriteAttributeString("type", controlType.Name);
@@ -354,7 +358,11 @@ namespace Cuemon.Web.UI
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding.Unicode, true)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings =>
+                {
+                    settings.Encoding = Encoding.Unicode;
+                    settings.OmitXmlDeclaration = true;
+                })))
                 {
                     writer.WriteStartElement("Controls");
                     foreach (Control control in controls)

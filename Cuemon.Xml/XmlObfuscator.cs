@@ -81,7 +81,7 @@ namespace Cuemon.Security
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = Encoding)))
                 {
                     writer.WriteStartDocument();
                     writer.WriteComment(string.Format(CultureInfo.InvariantCulture, " Legend: {0}=Obfuscated, {1}=Value, {2}=mapsTo ", MappingRootElement, MappingValueElement, MappingMapsToAttribute));
@@ -124,7 +124,7 @@ namespace Cuemon.Security
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = Encoding)))
                 {
                     using (XmlReader reader = XmlReader.Create(value))
                     {
@@ -230,7 +230,7 @@ namespace Cuemon.Security
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = Encoding)))
                 {
                     using (XmlReader reader = XmlReader.Create(value))
                     {

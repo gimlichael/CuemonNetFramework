@@ -19,7 +19,7 @@ namespace Cuemon.Xml
         /// <returns>An sequence of <see cref="XmlReader"/> objects that contains no more than 128 XML node elements from the <paramref name="reader" /> object.</returns>
         public static IEnumerable<XmlReader> Chunk(XmlReader reader)
         {
-            return Chunk(reader, 128, XmlWriterUtility.CreateSettings());
+            return Chunk(reader, 128);
         }
 
         /// <summary>
@@ -27,29 +27,17 @@ namespace Cuemon.Xml
         /// </summary>
         /// <param name="reader">The <see cref="XmlReader"/> object that contains the XML data to chunk into smaller <see cref="XmlReader"/> objects for a batch run or similar.</param>
         /// <param name="size">The amount of XML node elements allowed per <see cref="XmlReader"/> object. Default is 128 XML node element.</param>
-        /// <returns>An sequence of <see cref="XmlReader"/> objects that contains no more than the specified <paramref name="size"/> of XML node elements from the <paramref name="reader" /> object.</returns>
-        public static IEnumerable<XmlReader> Chunk(XmlReader reader, int size)
-        {
-            return Chunk(reader, size, XmlWriterUtility.CreateSettings());
-        }
-
-        /// <summary>
-        /// Creates and returns a chunked sequence of <see cref="XmlReader"/> objects with a maximum of the specified <paramref name="size"/> of XML node elements located on a depth of 1.
-        /// </summary>
-        /// <param name="reader">The <see cref="XmlReader"/> object that contains the XML data to chunk into smaller <see cref="XmlReader"/> objects for a batch run or similar.</param>
-        /// <param name="size">The amount of XML node elements allowed per <see cref="XmlReader"/> object. Default is 128 XML node element.</param>
-        /// <param name="settings">The XML settings that will be used when chunking the <paramref name="reader"/> into smaller <see cref="XmlReader"/> objects. Default is <see cref="XmlWriterUtility.CreateSettings()"/>.</param>
+        /// <param name="setup">The <see cref="XmlWriterSettings"/> which need to be configured.</param>
         /// <returns>An sequence of <see cref="XmlReader"/> objects that contains no more than the specified <paramref name="size"/> of XML node elements from the <paramref name="reader" /> object.</returns>
         /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="reader"/> is null - or - <paramref name="settings"/> is null.
+        /// <paramref name="reader"/> is null.
         /// </exception>
         /// <exception cref="System.ArgumentException">
         /// The <see cref="XmlReader.Read"/> method of the <paramref name="reader"/> object has already been called.
         /// </exception>
-        public static IEnumerable<XmlReader> Chunk(XmlReader reader, int size, XmlWriterSettings settings)
+        public static IEnumerable<XmlReader> Chunk(XmlReader reader, int size, Act<XmlWriterSettings> setup = null)
         {
-            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
-            if (settings == null) { throw new ArgumentNullException(nameof(settings)); }
+            Validator.ThrowIfNull(reader, nameof(reader));
             if (reader.ReadState != ReadState.Initial) { throw new ArgumentException("The Read method of the XmlReader object has already been called.", nameof(reader)); }
             List<XmlReader> outerReaders = new List<XmlReader>();
             XmlReaderSettings readerSettings = reader.Settings;
@@ -72,14 +60,14 @@ namespace Cuemon.Xml
 
                     if (innerReaders.Count != size) { continue; }
 
-                    result = XmlWriterUtility.CreateXml(ChunkCore, innerReaders, rootElement, settings, settings);
+                    result = XmlWriterUtility.CreateXml(ChunkCore, innerReaders, rootElement, setup);
                     outerReaders.Add(XmlReader.Create(result, readerSettings));
                     innerReaders.Clear();
                 }
 
                 if (innerReaders.Count > 0)
                 {
-                    result = XmlWriterUtility.CreateXml(ChunkCore, innerReaders, rootElement, settings, settings);
+                    result = XmlWriterUtility.CreateXml(ChunkCore, innerReaders, rootElement, setup);
                     outerReaders.Add(XmlReader.Create(result, readerSettings));
                     innerReaders.Clear();
                 }
@@ -87,7 +75,7 @@ namespace Cuemon.Xml
             return outerReaders;
         }
 
-        private static void ChunkCore(XmlWriter writer, IEnumerable<XmlReader> readers, XmlQualifiedEntity rootElement, XmlWriterSettings settings)
+        private static void ChunkCore(XmlWriter writer, IEnumerable<XmlReader> readers, XmlQualifiedEntity rootElement)
         {
             if (readers == null) { throw new ArgumentNullException(nameof(readers)); }
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }

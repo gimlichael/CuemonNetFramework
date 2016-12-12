@@ -86,7 +86,11 @@ namespace Cuemon.Web
                         try
                         {
                             tempOutput = new MemoryStream();
-                            using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding.UTF8, false)))
+                            using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings =>
+                            {
+                                settings.Encoding = Encoding.UTF8;
+                                settings.OmitXmlDeclaration = false;
+                            })))
                             {
                                 writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
                                 Website website = Website.Create(context);

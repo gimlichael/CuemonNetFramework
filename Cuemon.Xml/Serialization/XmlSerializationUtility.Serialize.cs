@@ -105,7 +105,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter> writer)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -161,7 +161,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T> writer, T arg)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -223,7 +223,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2> writer, T1 arg1, T2 arg2)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -291,7 +291,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -365,7 +365,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3, T4>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -445,7 +445,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3, T4, T5>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -622,7 +622,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3, T4, T5, T6, T7>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -720,7 +720,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3, T4, T5, T6, T7, T8>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -824,7 +824,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3, T4, T5, T6, T7, T8, T9>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -934,7 +934,7 @@ namespace Cuemon.Xml.Serialization
         /// </exception>
         public static Stream Serialize<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             var factory = ActFactory.Create(writer, null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             return SerializeCore(factory, serializable, order, omitXmlDeclaration, qualifiedRootEntity);
         }
@@ -972,7 +972,7 @@ namespace Cuemon.Xml.Serialization
 
         private static Stream SerializeCore<TTuple>(ActFactory<TTuple> factory, object serializable, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity) where TTuple : Template<XmlWriter>
         {
-            Validator.ThrowIfNull(serializable, "serializable");
+            Validator.ThrowIfNull(serializable, nameof(serializable));
             Stream output = null;
             MemoryStream tempOutput = null;
             IHierarchy<object> serializableNode = ReflectionUtility.GetObjectHierarchy(serializable, o =>
@@ -986,7 +986,11 @@ namespace Cuemon.Xml.Serialization
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding.Unicode, omitXmlDeclaration)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings =>
+                {
+                    settings.Encoding = Encoding.Unicode;
+                    settings.OmitXmlDeclaration = omitXmlDeclaration;
+                })))
                 {
                     if (useFactory) { factory.GenericArguments.Arg1 = writer; }
                     IEnumerable<IHierarchy<object>> ancestorAndSelf = Hierarchy.AncestorsAndSelf(serializableNode);

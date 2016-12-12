@@ -66,7 +66,11 @@ namespace Cuemon.Diagnostics
             try
             {
                 output = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(output, XmlWriterUtility.CreateSettings(Encoding, true)))
+                using (XmlWriter writer = XmlWriter.Create(output, XmlWriterUtility.CreateSettings(settings =>
+                {
+                    settings.OmitXmlDeclaration = true;
+                    settings.Encoding = Encoding;
+                })))
                 {
                     writer.WriteRaw(XmlConvertUtility.ToXmlElement(exception, Encoding, true).OuterXml);
                     writer.Flush();
@@ -97,7 +101,7 @@ namespace Cuemon.Diagnostics
             try
             {
                 tempOutput = new MemoryStream();
-                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(Encoding)))
+                using (XmlWriter writer = XmlWriter.Create(tempOutput, XmlWriterUtility.CreateSettings(settings => settings.Encoding = Encoding)))
                 {
                     writer.WriteStartElement("ExceptionLog");
                     writer.WriteElementString("Name", Name);
