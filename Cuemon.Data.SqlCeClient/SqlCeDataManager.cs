@@ -70,7 +70,7 @@ namespace Cuemon.Data.SqlCeClient
         public override Act<TransientOperationOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
         {
             options.EnableRecovery = true;
-            options.DetectionStrategyCallback = exception =>
+            options.DetectionStrategy = exception =>
             {
                 if (exception == null) { return false; }
                 SqlCeException sqlCeException = exception as SqlCeException;

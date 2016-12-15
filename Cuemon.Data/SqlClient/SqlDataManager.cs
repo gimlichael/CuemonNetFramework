@@ -72,7 +72,7 @@ namespace Cuemon.Data.SqlClient
         public override Act<TransientOperationOptions> TransientFaultHandlingOptionsCallback { get; set; } = options =>
         {
             options.EnableRecovery = true;
-            options.DetectionStrategyCallback = exception =>
+            options.DetectionStrategy = exception =>
             {
                 if (exception == null) { return false; }
 
