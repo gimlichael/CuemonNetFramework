@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Cuemon.Collections.Generic;
-using Cuemon.Text;
 
 namespace Cuemon
 {
@@ -11,13 +10,6 @@ namespace Cuemon
     /// </summary>
     public static class ByteUtility
     {
-        internal static Encoding GetDefaultEncoding(byte[] value)
-        {
-            Encoding encoding = null;
-            if (!EncodingUtility.TryParse(value, out encoding)) { encoding = Encoding.Default; }
-            return encoding;
-        }
-
         /// <summary>
         /// Combines a variable number of byte arrays into one byte array.
         /// </summary>
@@ -25,7 +17,7 @@ namespace Cuemon
         /// <returns>A variable number of <b>byte arrays</b> combined into one <b>byte array</b>.</returns>
         public static byte[] CombineByteArrays(params byte[][] bytes)
         {
-            List<byte> combinedBytes = new List<byte>(EnumerableUtility.Concat<byte>(bytes));
+            List<byte> combinedBytes = new List<byte>(EnumerableUtility.Concat(bytes));
             return combinedBytes.ToArray();
         }
 
