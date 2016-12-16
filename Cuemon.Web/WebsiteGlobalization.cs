@@ -217,27 +217,27 @@ namespace Cuemon.Web
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             writer.WriteAttributeString("defaultPhraseStyleSheetFile", this.DefaultPhraseStyleSheetFile.UriLocation.IsFile ? this.DefaultPhraseStyleSheetFile.UriLocation.LocalPath : this.DefaultPhraseStyleSheetFile.UriLocation.ToString());
             writer.WriteAttributeString("defaultEncodingName", this.DefaultEncodingName);
-            writer.WriteRaw(this.DefaultCultureInfo.ToString(this.DefaultCultureInfo.ToXml(true, new XmlQualifiedEntity("DefaultCultureInfo")), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.DefaultCultureInfo.ToXml(true, new XmlQualifiedEntity("DefaultCultureInfo")), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.DefaultTimeZone.ToString(this.DefaultTimeZone.ToXml(true, new XmlQualifiedEntity("DefaultTimeZone")), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.DefaultTimeZone.ToXml(true, new XmlQualifiedEntity("DefaultTimeZone")), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.CurrentCultureInfo.ToString(this.CurrentCultureInfo.ToXml(true, new XmlQualifiedEntity("CurrentCultureInfo")), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.CurrentCultureInfo.ToXml(true, new XmlQualifiedEntity("CurrentCultureInfo")), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.CurrentTimeZone.ToString(this.CurrentTimeZone.ToXml(true, new XmlQualifiedEntity("CurrentTimeZone")), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.CurrentTimeZone.ToXml(true, new XmlQualifiedEntity("CurrentTimeZone")), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.CultureInfos.ToString(this.CultureInfos.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.CultureInfos.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.TimeZones.ToString(this.TimeZones.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.TimeZones.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));

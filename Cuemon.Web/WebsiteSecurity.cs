@@ -96,7 +96,7 @@ namespace Cuemon.Web
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             writer.WriteAttributeString("defaultHasAccess", this.DefaultHasAccess.ToString().ToLowerInvariant());
             writer.WriteAttributeString("defaultRedirectOnDeniedAccess", this.DefaultTransferOnStatusCodeForbidden);
-            writer.WriteRaw(this.IPRestrictions.ToString(this.IPRestrictions.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.IPRestrictions.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));

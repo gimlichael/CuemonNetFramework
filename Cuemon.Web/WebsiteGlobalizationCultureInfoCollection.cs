@@ -136,7 +136,7 @@ namespace Cuemon.Web
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             foreach (WebsiteGlobalizationCultureInfo cultureInfo in this)
             {
-                writer.WriteRaw(cultureInfo.ToString(cultureInfo.ToXml(true), options =>
+                writer.WriteRaw(StringConverter.FromStream(cultureInfo.ToXml(true), options =>
                 {
                     options.Preamble = PreambleSequence.Remove;
                 }));

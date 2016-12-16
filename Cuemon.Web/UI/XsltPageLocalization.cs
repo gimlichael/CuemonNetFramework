@@ -78,7 +78,7 @@ namespace Cuemon.Web.UI
         public override void WriteXml(XmlWriter writer)
         {
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
-            writer.WriteRaw(this.Phrases.ToString(this.Phrases.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Phrases.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));

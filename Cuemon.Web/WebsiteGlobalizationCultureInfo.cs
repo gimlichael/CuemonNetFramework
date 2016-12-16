@@ -227,7 +227,7 @@ namespace Cuemon.Web
             writer.WriteAttributeString("twoLetterIsoLanguageName", this.TwoLetterISOLanguageName);
             writer.WriteAttributeString("threeLetterIsoLanguageName", this.ThreeLetterISOLanguageName);
             writer.WriteAttributeString("encodingName", this.EncodingName);
-            writer.WriteRaw(this.TimeZone.ToString(this.TimeZone.ToXml(true)));
+            writer.WriteRaw(StringConverter.FromStream(this.TimeZone.ToXml(true)));
             //writer.WriteRaw(this.TimeZone.ToString(this.TimeZone.ToXml(true), PreambleSequence.Remove));
         }
 
@@ -312,29 +312,6 @@ namespace Cuemon.Web
         public Stream ToXml(Encoding encoding, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity)
         {
             return this.ToXml(omitXmlDeclaration, qualifiedRootEntity, encoding);
-        }
-
-        /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
-        /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
-        public string ToString(Stream value)
-        {
-            return StringConverter.FromStream(value);
-        }
-
-        /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using the preferred encoding with the option to keep or remove any byte order (preamble sequence).
-        /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
-        /// <returns>
-        /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
-        /// </returns>
-        public string ToString(Stream value, Act<EncodingOptions> setup)
-        {
-            return StringConverter.FromStream(value, setup);
         }
         #endregion
     }

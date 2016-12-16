@@ -407,35 +407,35 @@ namespace Cuemon.Web
             writer.WriteAttributeString("enableDynamicContentApplicationPath", EnableDynamicContentApplicationPath.ToString().ToLowerInvariant());
             writer.WriteAttributeString("enableMaintenance", EnableMaintenance.ToString().ToLowerInvariant());
             writer.WriteAttributeString("enableSecurity", EnableSecurity.ToString().ToLowerInvariant());
-            writer.WriteRaw(this.Bindings.ToString(this.Bindings.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Bindings.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.Globalization.ToString(this.Globalization.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Globalization.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.Maintenance.ToString(this.Maintenance.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Maintenance.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.Robots.ToString(this.Robots.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Robots.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.Security.ToString(this.Security.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Security.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.SiteMap.ToString(this.SiteMap.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.SiteMap.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.Themes.ToString(this.Themes.ToXml(true), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Themes.ToXml(true), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));
-            writer.WriteRaw(this.Page.ToString(this.Page.ToXml(true, new XmlQualifiedEntity("Page")), options =>
+            writer.WriteRaw(StringConverter.FromStream(this.Page.ToXml(true, new XmlQualifiedEntity("Page")), options =>
             {
                 options.Preamble = PreambleSequence.Remove;
             }));

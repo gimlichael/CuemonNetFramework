@@ -152,7 +152,7 @@ namespace Cuemon.Web
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             foreach (WebsiteTheme theme in this)
             {
-                writer.WriteRaw(theme.ToString(theme.ToXml(true), options =>
+                writer.WriteRaw(StringConverter.FromStream(theme.ToXml(true), options =>
                 {
                     options.Preamble = PreambleSequence.Remove;
                 }));

@@ -217,7 +217,7 @@ namespace Cuemon.Web.UI
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
             foreach (XsltPageLocalizationPhrase phrase in this)
             {
-                writer.WriteRaw(phrase.ToString(phrase.ToXml(true), options =>
+                writer.WriteRaw(StringConverter.FromStream(phrase.ToXml(true), options =>
                 {
                     options.Preamble = PreambleSequence.Remove;
                 }));

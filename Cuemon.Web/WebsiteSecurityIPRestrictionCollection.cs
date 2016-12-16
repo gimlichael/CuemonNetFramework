@@ -127,7 +127,7 @@ namespace Cuemon.Web
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             foreach (WebsiteSecurityIPRestriction ipRestriction in this)
             {
-                writer.WriteRaw(ipRestriction.ToString(ipRestriction.ToXml(true), options =>
+                writer.WriteRaw(StringConverter.FromStream(ipRestriction.ToXml(true), options =>
                 {
                     options.Preamble = PreambleSequence.Remove;
                 }));
