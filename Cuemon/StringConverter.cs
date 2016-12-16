@@ -108,29 +108,12 @@ namespace Cuemon
         /// Converts the specified <paramref name="value"/> to its equivalent hexadecimal representation.
         /// </summary>
         /// <param name="value">The string to be converted.</param>
-        /// <returns>A hexadecimal <see cref="string"/> representation of the characters in <paramref name="value"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="value"/> is null.
-        /// </exception>
-        public static string ToHexadecimal(string value)
-        {
-            return ToHexadecimal(value, options =>
-            {
-                options.Encoding = Encoding.Unicode;
-                options.Preamble = PreambleSequence.Keep;
-            });
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="value"/> to its equivalent hexadecimal representation.
-        /// </summary>
-        /// <param name="value">The string to be converted.</param>
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A hexadecimal <see cref="string"/> representation of the characters in <paramref name="value"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="value"/> is null.
         /// </exception>
-        public static string ToHexadecimal(string value, Act<EncodingOptions> setup)
+        public static string ToHexadecimal(string value, Act<EncodingOptions> setup = null)
         {
             Validator.ThrowIfNull(value, nameof(value));
             return ToHexadecimal(ByteConverter.FromString(value, setup));
@@ -140,28 +123,12 @@ namespace Cuemon
         /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="string"/> representation.
         /// </summary>
         /// <param name="hexadecimalValue">The hexadecimal string to be converted.</param>
-        /// <returns>A <see cref="string"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="hexadecimalValue"/> is null.
-        /// </exception>
-        public static string FromHexadecimal(string hexadecimalValue)
-        {
-            return FromHexadecimal(hexadecimalValue, options =>
-            {
-                options.Preamble = PreambleSequence.Keep;
-            });
-        }
-
-        /// <summary>
-        /// Converts the specified hexadecimal <paramref name="hexadecimalValue"/> to its equivalent <see cref="string"/> representation.
-        /// </summary>
-        /// <param name="hexadecimalValue">The hexadecimal string to be converted.</param>
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="string"/> representation of the hexadecimal characters in <paramref name="hexadecimalValue"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="hexadecimalValue"/> is null.
         /// </exception>
-        public static string FromHexadecimal(string hexadecimalValue, Act<EncodingOptions> setup)
+        public static string FromHexadecimal(string hexadecimalValue, Act<EncodingOptions> setup = null)
         {
             Validator.ThrowIfNull(hexadecimalValue, nameof(hexadecimalValue));
             if (!NumberUtility.IsEven(hexadecimalValue.Length)) { throw new ArgumentException("The character length of a hexadecimal string must be an even number.", nameof(hexadecimalValue)); }
@@ -182,29 +149,17 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="value"/> to a string. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion.
-        /// </summary>
-        /// <param name="value">The byte array to be converted.</param>
-        /// <returns>A <see cref="string"/> containing the results of decoding the specified sequence of bytes.</returns>
-        public static string FromBytes(byte[] value)
-        {
-            return FromBytes(value, options =>
-            {
-                options.Encoding = ByteUtility.GetDefaultEncoding(value);
-                options.Preamble = PreambleSequence.Keep;
-            });
-        }
-
-        /// <summary>
         /// Converts the specified <paramref name="value"/> to a string using the provided preferred encoding.
         /// </summary>
         /// <param name="value">The byte array to be converted.</param>
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="string"/> containing the results of decoding the specified sequence of bytes.</returns>
-        public static string FromBytes(byte[] value, Act<EncodingOptions> setup)
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
+        public static string FromBytes(byte[] value, Act<EncodingOptions> setup = null)
         {
             Validator.ThrowIfNull(value, nameof(value));
             var options = DelegateUtility.ConfigureAction(setup);
+            if (options.Encoding.Equals(EncodingOptions.DefaultEncoding)) { options.Encoding = options.DetectEncoding(value); }
             switch (options.Preamble)
             {
                 case PreambleSequence.Keep:
@@ -835,37 +790,13 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="value"/> to a string. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
-        /// </summary>
-        /// <param name="value">The <see cref="System.IO.Stream"/> to be converted.</param>
-        /// <returns>A <see cref="string"/> containing the decoded result of the specified <paramref name="value"/>.</returns>
-        public static string FromStream(Stream value)
-        {
-            return FromStream(value, false);
-        }
-
-        /// <summary>
-        /// Converts the specified <paramref name="value"/> to a string. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
-        /// </summary>
-        /// <param name="value">The <see cref="System.IO.Stream"/> to be converted.</param>
-        /// <param name="leaveStreamOpen">if <c>true</c>, the <see cref="Stream"/> object is being left open; otherwise it is being closed and disposed.</param>
-        /// <returns>A <see cref="string"/> containing the decoded result of the specified <paramref name="value"/>.</returns>
-        public static string FromStream(Stream value, bool leaveStreamOpen)
-        {
-            return FromStream(value, options =>
-            {
-                options.Encoding = StringUtility.GetDefaultEncoding(value);
-                options.Preamble = PreambleSequence.Keep;
-            }, leaveStreamOpen);
-        }
-
-        /// <summary>
         /// Converts the specified <paramref name="value"/> to a string using the provided preferred encoding.
         /// </summary>
         /// <param name="value">The <see cref="System.IO.Stream"/> to be converted.</param>
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="string"/> containing the decoded result of the specified <paramref name="value"/>.</returns>
-        public static string FromStream(Stream value, Act<EncodingOptions> setup)
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
+        public static string FromStream(Stream value, Act<EncodingOptions> setup = null)
         {
             return FromStream(value, setup, false);
         }
@@ -877,10 +808,12 @@ namespace Cuemon
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="leaveStreamOpen">if <c>true</c>, the <see cref="Stream"/> object is being left open; otherwise it is being closed and disposed.</param>
         /// <returns>A <see cref="string"/> containing the decoded result of the specified <paramref name="value"/>.</returns>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static string FromStream(Stream value, Act<EncodingOptions> setup, bool leaveStreamOpen)
         {
             Validator.ThrowIfNull(value, nameof(value));
             var options = DelegateUtility.ConfigureAction(setup);
+            if (options.Encoding.Equals(EncodingOptions.DefaultEncoding)) { options.Encoding = options.DetectEncoding(value); }
             if (options.Preamble < PreambleSequence.Keep || options.Preamble > PreambleSequence.Remove) { throw new ArgumentOutOfRangeException(nameof(setup), "The specified argument was out of the range of valid values."); }
             return FromBytes(ByteConverter.FromStream(value, leaveStreamOpen), setup);
         }
