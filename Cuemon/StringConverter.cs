@@ -113,6 +113,7 @@ namespace Cuemon
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="value"/> is null.
         /// </exception>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static string ToHexadecimal(string value, Act<EncodingOptions> setup = null)
         {
             Validator.ThrowIfNull(value, nameof(value));
@@ -128,6 +129,7 @@ namespace Cuemon
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="hexadecimalValue"/> is null.
         /// </exception>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static string FromHexadecimal(string hexadecimalValue, Act<EncodingOptions> setup = null)
         {
             Validator.ThrowIfNull(hexadecimalValue, nameof(hexadecimalValue));
