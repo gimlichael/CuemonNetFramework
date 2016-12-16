@@ -962,13 +962,6 @@ namespace Cuemon
         {
             return StartsWith(value, comparison, (IEnumerable<string>)startWithValues);
         }
-
-        internal static Encoding GetDefaultEncoding(Stream value)
-        {
-            Encoding encoding = null;
-            if (!EncodingUtility.TryParse(value, out encoding)) { encoding = Encoding.Default; }
-            return encoding;
-        }
         #endregion
     }
 }
