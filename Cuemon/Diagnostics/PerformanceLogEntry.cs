@@ -7,13 +7,11 @@ namespace Cuemon.Diagnostics
     /// </summary>
     public sealed class PerformanceLogEntry : LogEntry
     {
-        private TimeSpan _elapsed;
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
         /// </summary>
-        public PerformanceLogEntry() : base()
+        public PerformanceLogEntry()
         {
         }
         #endregion
@@ -25,11 +23,8 @@ namespace Cuemon.Diagnostics
         /// <value>
         /// The elapsed time of a measured performance.
         /// </value>
-        public TimeSpan Elapsed
-        {
-            get { return _elapsed; }
-            set { _elapsed = value; }
-        }
+        public TimeSpan Elapsed { get; set; }
+
         #endregion
 
         #region Methods

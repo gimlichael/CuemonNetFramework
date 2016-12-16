@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Cuemon.Diagnostics
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionLog"/> class.
         /// </summary>
-        protected ExceptionLog() : base()
+        protected ExceptionLog()
         {
         }
 
@@ -73,26 +74,26 @@ namespace Cuemon.Diagnostics
         /// <param name="exception">The <see cref="Exception"/> which holds the data to write to the <see cref="ExceptionLog"/>.</param>
         public void WriteEntry(Exception exception)
         {
-            this.WriteEntry(exception, LogEntrySeverity.Error);
+            WriteEntry(exception, EventLogEntryType.Error);
         }
 
         /// <summary>
         /// Writes an error, warning, information, success audit, or failure audit entry with the <see cref="Exception"/> to the <see cref="ExceptionLog"/>.
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/> which holds the data to write to the <see cref="ExceptionLog"/>.</param>
-        /// <param name="severity">One of the <see cref="LogEntrySeverity"/> values.</param>
-        public void WriteEntry(Exception exception, LogEntrySeverity severity)
+        /// <param name="severity">One of the <see cref="EventLogEntryType"/> values.</param>
+        public void WriteEntry(Exception exception, EventLogEntryType severity)
         {
-            this.WriteEntry(exception, severity, Environment.MachineName);
+            WriteEntry(exception, severity, Environment.MachineName);
         }
 
         /// <summary>
         /// Writes an error, warning, information, success audit, or failure audit entry with the <see cref="Exception"/> to the <see cref="ExceptionLog"/>.
         /// </summary>
         /// <param name="exception">The <see cref="Exception"/> which holds the data to write to the <see cref="ExceptionLog"/>.</param>
-        /// <param name="severity">One of the <see cref="LogEntrySeverity"/> values.</param>
+        /// <param name="severity">One of the <see cref="EventLogEntryType"/> values.</param>
         /// <param name="computerName">The name of the computer to associate the <paramref name="exception"/> with.</param>
-        public virtual void WriteEntry(Exception exception, LogEntrySeverity severity, string computerName)
+        public virtual void WriteEntry(Exception exception, EventLogEntryType severity, string computerName)
         {
             if (exception == null) throw new ArgumentNullException(nameof(exception));
             MemoryStream output = null;
@@ -100,9 +101,9 @@ namespace Cuemon.Diagnostics
             try
             {
                 tempOutput = new MemoryStream();
-                using (StreamWriter writer = new StreamWriter(tempOutput, this.Encoding))
+                using (StreamWriter writer = new StreamWriter(tempOutput, Encoding))
                 {
-                    writer.Write(StringConverter.FromException(exception, this.Encoding));
+                    writer.Write(StringConverter.FromException(exception, Encoding));
                     writer.Flush();
                     tempOutput.Position = 0;
                     output = tempOutput;

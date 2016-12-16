@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -11,11 +12,7 @@ namespace Cuemon.Diagnostics
     /// </summary>
     public abstract class Log<TEntry> where TEntry : LogEntry
     {
-        private readonly string _name;
-        private string _source;
         private Collection<TEntry> _entries;
-        private Encoding _encoding;
-        private readonly object _syncRoot = new object();
 
         #region Constructors
         /// <summary>
@@ -49,9 +46,9 @@ namespace Cuemon.Diagnostics
             if (log.Source == null) { throw new ArgumentNullException(nameof(value), "The source to associate with the log has not been specified."); }
             if (log.Source.Length == 0) { throw new ArgumentException("The source to associate with the log has not been specified.", nameof(value)); }
 
-            _name = log.Name;
-            _source = log.Source;
-            _encoding = encoding;
+            Name = log.Name;
+            Source = log.Source;
+            Encoding = encoding;
         }
 
         /// <summary>
@@ -71,9 +68,9 @@ namespace Cuemon.Diagnostics
         /// <param name="encoding">The encoding to use when writing the log.</param>
         protected Log(string name, string source, Encoding encoding)
         {
-            _name = name;
-            _source = source;
-            _encoding = encoding;
+            Name = name;
+            Source = source;
+            Encoding = encoding;
         }
         #endregion
 
@@ -81,48 +78,32 @@ namespace Cuemon.Diagnostics
         /// <summary>
         /// Gets an object that can be used to synchronize access to the <see cref="Log{TEntry}"/>.
         /// </summary>
-        public object SyncRoot
-        {
-            get { return _syncRoot; }
-        }
+        public object SyncRoot { get; } = new object();
 
         /// <summary>
         /// Gets or sets the encoding to use when writing the log. Default encoding is <see cref="System.Text.Encoding.Unicode"/>.
         /// </summary>
         /// <value>The encoding to use when writing the log. Default encoding is <see cref="System.Text.Encoding.Unicode"/>.</value>
-        public Encoding Encoding
-        {
-            get { return _encoding; }
-            set { _encoding = value; }
-        }
+        public Encoding Encoding { get; set; }
 
         /// <summary>
         /// Gets the name of the log.
         /// </summary>
         /// <value>The name of the log.</value>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets or sets the source name to register and use when writing to the event log.
         /// </summary>
         /// <value>The source name to register and use when writing to the event log.</value>
-        public string Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
+        public string Source { get; set; }
 
         /// <summary>
         /// Gets the entries of this log.
         /// </summary>
         /// <value>The entries of this log.</value>
-        public Collection<TEntry> Entries
-        {
-            get { return _entries ?? (_entries = new Collection<TEntry>()); }
-        }
+        public Collection<TEntry> Entries => _entries ?? (_entries = new Collection<TEntry>());
+
         #endregion
 
         #region Methods
@@ -133,7 +114,7 @@ namespace Cuemon.Diagnostics
         /// <param name="message">The message of the entry.</param>
         public void WriteEntry(string title, string message)
         {
-            this.WriteEntry(title, message, LogEntrySeverity.Information);
+            WriteEntry(title, message, EventLogEntryType.Information);
         }
 
         /// <summary>
@@ -141,10 +122,10 @@ namespace Cuemon.Diagnostics
         /// </summary>
         /// <param name="title">The title of the entry.</param>
         /// <param name="message">The message of the entry.</param>
-        /// <param name="severity">One of the <see cref="LogEntrySeverity"/> values.</param>
-        public void WriteEntry(string title, string message, LogEntrySeverity severity)
+        /// <param name="severity">One of the <see cref="EventLogEntryType"/> values.</param>
+        public void WriteEntry(string title, string message, EventLogEntryType severity)
         {
-            this.WriteEntry(title, message, null, severity);
+            WriteEntry(title, message, null, severity);
         }
 
         /// <summary>
@@ -155,7 +136,7 @@ namespace Cuemon.Diagnostics
         /// <param name="details">The message details of the entry.</param>
         public void WriteEntry(string title, string message, string details)
         {
-            this.WriteEntry(title, message, details, LogEntrySeverity.Information);
+            WriteEntry(title, message, details, EventLogEntryType.Information);
         }
 
         /// <summary>
@@ -164,10 +145,10 @@ namespace Cuemon.Diagnostics
         /// <param name="title">The title of the entry.</param>
         /// <param name="message">The message of the entry.</param>
         /// <param name="details">The message details of the entry.</param>
-        /// <param name="severity">One of the <see cref="LogEntrySeverity"/> values.</param>
-        public void WriteEntry(string title, string message, string details, LogEntrySeverity severity)
+        /// <param name="severity">One of the <see cref="EventLogEntryType"/> values.</param>
+        public void WriteEntry(string title, string message, string details, EventLogEntryType severity)
         {
-            this.WriteEntry(title, message, details, severity, Environment.MachineName);
+            WriteEntry(title, message, details, severity, Environment.MachineName);
         }
 
         /// <summary>
@@ -176,11 +157,11 @@ namespace Cuemon.Diagnostics
         /// <param name="title">The title of the entry.</param>
         /// <param name="message">The message of the entry.</param>
         /// <param name="details">The message details of the entry.</param>
-        /// <param name="severity">One of the <see cref="LogEntrySeverity"/> values.</param>
+        /// <param name="severity">One of the <see cref="EventLogEntryType"/> values.</param>
         /// <param name="computerName">The name of the computer to associate with the entry.</param>
-        public virtual void WriteEntry(string title, string message, string details, LogEntrySeverity severity, string computerName)
+        public virtual void WriteEntry(string title, string message, string details, EventLogEntryType severity, string computerName)
         {
-            lock (this.SyncRoot)
+            lock (SyncRoot)
             {
                 LogEntry entry = new LogEntry();
                 entry.Title = title;
@@ -188,9 +169,9 @@ namespace Cuemon.Diagnostics
                 entry.Details = details;
                 entry.Severity = severity;
                 entry.ComputerName = computerName;
-                lock (this.Entries)
+                lock (Entries)
                 {
-                    this.Entries.Add((TEntry)entry);
+                    Entries.Add((TEntry)entry);
                 }
             }
         }
@@ -211,26 +192,26 @@ namespace Cuemon.Diagnostics
             {
                 using (MemoryStream content = new MemoryStream())
                 {
-                    using (StreamWriter writer = new StreamWriter(output, this.Encoding))
+                    using (StreamWriter writer = new StreamWriter(output, Encoding))
                     {
-                        string nameOfLog = string.Format(CultureInfo.InvariantCulture, "Name of log: {0}", this.Name);
-                        string nameOfSource = string.Format(CultureInfo.InvariantCulture, "Name of source: {0}", this.Source);
+                        string nameOfLog = string.Format(CultureInfo.InvariantCulture, "Name of log: {0}", Name);
+                        string nameOfSource = string.Format(CultureInfo.InvariantCulture, "Name of source: {0}", Source);
                         int lenghtOfLine = NumberUtility.GetHighestValue(nameOfLog.Length, nameOfSource.Length) + 3;
                         string line = StringUtility.CreateFixedString('-', lenghtOfLine);
                         writer.WriteLine(line);
                         writer.WriteLine(nameOfLog);
                         writer.WriteLine(nameOfSource);
                         writer.WriteLine(line);
-                        for (int i = 0; i < this.Entries.Count; i++)
+                        for (int i = 0; i < Entries.Count; i++)
                         {
                             writer.WriteLine("Entry #{0}", i + 1);
-                            writer.WriteLine("Computer: {0}", this.Entries[i].ComputerName);
-                            writer.WriteLine("Logged: {0}", StringFormatter.FromDateTime(this.Entries[i].Created, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeExtended));
-                            writer.WriteLine("Severity: {0}", this.Entries[i].Severity);
-                            writer.WriteLine("Title: {0}", this.Entries[i].Title);
-                            writer.WriteLine("Message: {0}", this.Entries[i].Message);
+                            writer.WriteLine("Computer: {0}", Entries[i].ComputerName);
+                            writer.WriteLine("Logged: {0}", StringFormatter.FromDateTime(Entries[i].Created, StandardizedDateTimeFormatPattern.Iso8601CompleteDateTimeExtended));
+                            writer.WriteLine("Severity: {0}", Entries[i].Severity);
+                            writer.WriteLine("Title: {0}", Entries[i].Title);
+                            writer.WriteLine("Message: {0}", Entries[i].Message);
                             writer.WriteLine(line);
-                            writer.WriteLine(this.Entries[i].Details);
+                            writer.WriteLine(Entries[i].Details);
                             writer.WriteLine();
                             writer.WriteLine(line);
                         }
@@ -245,7 +226,7 @@ namespace Cuemon.Diagnostics
                 output.Dispose();
                 throw;
             }
-            this.Entries.Clear();
+            Entries.Clear();
             return output;
         }
         #endregion
