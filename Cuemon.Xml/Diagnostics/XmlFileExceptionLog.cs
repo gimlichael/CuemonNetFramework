@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -76,9 +77,9 @@ namespace Cuemon.Diagnostics
         /// Writes an error, warning, information, success audit, or failure audit entry with the <see cref="Exception"/> to the exception log.
         /// </summary>
         /// <param name="exception">The exception which holds the data to write to the exception log.</param>
-        /// <param name="severity">One of the <see cref="LogEntrySeverity"/> values.</param>
+        /// <param name="severity">One of the <see cref="EventLogEntryType"/> values.</param>
         /// <param name="computerName">The name of the computer to associate the <paramref name="exception"/> with.</param>
-        public override void WriteEntry(Exception exception, LogEntrySeverity severity, string computerName)
+        public override void WriteEntry(Exception exception, EventLogEntryType severity, string computerName)
         {
             XmlExceptionLog.WriteEntry(exception, severity, computerName);
         }
