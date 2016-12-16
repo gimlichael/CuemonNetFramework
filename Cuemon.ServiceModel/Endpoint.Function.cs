@@ -2286,7 +2286,7 @@ namespace Cuemon.ServiceModel
             var expires = DateTime.MinValue;
             try
             {
-                return TimeMeasure.WithDoer(() =>
+                return TimeMeasure.WithFunc(() =>
                 {
                     HttpCacheability resolvedCacheability = cacheability.HasValue ? cacheability.Value : HttpCacheability.NoCache;
                     HttpCachingAttribute cachingAttribute = GetCachingAttribute(caller);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using Cuemon.IO;
 using Cuemon.Text;
 
@@ -118,26 +117,13 @@ namespace Cuemon
         }
 
         /// <summary>
-        /// Converts the specified <paramref name="value"/> to a byte array using UTF-16 for the encoding preserving any preamble sequences.
-        /// </summary>
-        /// <param name="value">The string to be converted.</param>
-        /// <returns>A <b>byte array</b> which is encoded in <see cref="Encoding.Unicode"/> and preserving any preamble sequences.</returns>
-        public static byte[] FromString(string value)
-        {
-            return FromString(value, options =>
-            {
-                options.Encoding = Encoding.Unicode;
-                options.Preamble = PreambleSequence.Keep;
-            });
-        }
-
-        /// <summary>
         /// Converts the specified <paramref name="value"/> to a byte array using the provided preferred encoding.
         /// </summary>
         /// <param name="value">The string to be converted.</param>
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A <b>byte array</b> which is the result of the specified delegate <paramref name="setup"/>.</returns>
-        public static byte[] FromString(string value, Act<EncodingOptions> setup)
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
+        public static byte[] FromString(string value, Act<EncodingOptions> setup = null)
         {
             Validator.ThrowIfNull(value, nameof(value));
             var options = DelegateUtility.ConfigureAction(setup);
