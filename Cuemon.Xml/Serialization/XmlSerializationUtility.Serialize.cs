@@ -1087,7 +1087,7 @@ namespace Cuemon.Xml.Serialization
 
             foreach (IHierarchy<T> value in sequence)
             {
-                XmlAttributeAttribute attribute = ReflectionUtility.GetAttribute<XmlAttributeAttribute>(value.MemberReference);
+                XmlAttributeAttribute attribute = value.MemberReference == null ? null : ReflectionUtility.GetAttribute<XmlAttributeAttribute>(value.MemberReference);
                 if (attribute != null)
                 {
                     attributes.Add(value);

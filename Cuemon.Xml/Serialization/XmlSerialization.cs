@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using Cuemon.Reflection;
-using Cuemon.Text;
 
 namespace Cuemon.Xml.Serialization
 {
@@ -19,13 +18,6 @@ namespace Cuemon.Xml.Serialization
         private readonly object _padLock = new object();
 
         #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlSerialization"/> class.
-        /// </summary>
-        protected XmlSerialization()
-        {
-        }
 
         #endregion
 
@@ -41,7 +33,7 @@ namespace Cuemon.Xml.Serialization
                     {
                         if (_serializationAttribute == null)
                         {
-                            XmlSerializationAttribute[] attributes = (XmlSerializationAttribute[])this.GetType().GetCustomAttributes(typeof(XmlSerializationAttribute), true);
+                            XmlSerializationAttribute[] attributes = (XmlSerializationAttribute[])GetType().GetCustomAttributes(typeof(XmlSerializationAttribute), true);
                             if (attributes.Length > 0)
                             {
                                 _serializationAttribute = attributes[0];
@@ -79,7 +71,7 @@ namespace Cuemon.Xml.Serialization
         public virtual void ReadXml(XmlReader reader)
         {
             if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
-            if (!this.SerializationAttribute.EnableAutomatedXmlSerialization) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The automated XML serialization is not enabled on this class: \"{0}\". Either enable the automated XML serialization using the XmlSerializationAttribute or override the ReadXml(..) method for custom deserialization.", this.GetType().Name)); }
+            if (!SerializationAttribute.EnableAutomatedXmlSerialization) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The automated XML serialization is not enabled on this class: \"{0}\". Either enable the automated XML serialization using the XmlSerializationAttribute or override the ReadXml(..) method for custom deserialization.", GetType().Name)); }
             XmlSerializationUtility.ParseReadXml(reader, this);
         }
 
@@ -90,8 +82,8 @@ namespace Cuemon.Xml.Serialization
         public virtual void WriteXml(XmlWriter writer)
         {
             if (writer == null) { throw new ArgumentNullException(nameof(writer)); }
-            if (!this.SerializationAttribute.OmitXmlDeclaration) { writer.WriteProcessingInstruction("xml", string.Format(CultureInfo.InvariantCulture, "version=\"1.0\" encoding=\"{0}\"", Encoding.Unicode)); }
-            if (!this.SerializationAttribute.EnableAutomatedXmlSerialization) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The automated XML serialization is not enabled on this class: \"{0}\". Either enable the automated XML serialization using the XmlSerializationAttribute or override the WriteXml(..) method for custom serialization.", this.GetType().Name)); }
+            if (!SerializationAttribute.OmitXmlDeclaration) { writer.WriteProcessingInstruction("xml", string.Format(CultureInfo.InvariantCulture, "version=\"1.0\" encoding=\"{0}\"", Encoding.Unicode)); }
+            if (!SerializationAttribute.EnableAutomatedXmlSerialization) { throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The automated XML serialization is not enabled on this class: \"{0}\". Either enable the automated XML serialization using the XmlSerializationAttribute or override the WriteXml(..) method for custom serialization.", GetType().Name)); }
             XmlSerializationUtility.ParseWriteXml(writer, ReflectionUtility.GetObjectHierarchy(this, o =>
             {
                 o.MaxDepth = XmlSerializationUtility.MaxSerializationDepth;
@@ -133,7 +125,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <b><see cref="System.IO.Stream"/></b> object.</returns>
         public Stream ToXml()
         {
-            return this.ToXml(false);
+            return ToXml(false);
         }
 
         /// <summary>
@@ -143,7 +135,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml(bool omitXmlDeclaration)
         {
-            return this.ToXml(omitXmlDeclaration, null);
+            return ToXml(omitXmlDeclaration, null);
         }
 
         /// <summary>
@@ -154,7 +146,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml(bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity)
         {
-            return this.ToXml(omitXmlDeclaration, qualifiedRootEntity, Encoding.Unicode);
+            return ToXml(omitXmlDeclaration, qualifiedRootEntity, Encoding.Unicode);
         }
 
         /// <summary>
@@ -180,7 +172,7 @@ namespace Cuemon.Xml.Serialization
         /// </returns>
         public Stream ToXml(Encoding encoding)
         {
-            return this.ToXml(false, null, encoding);
+            return ToXml(false, null, encoding);
         }
 
         /// <summary>
@@ -193,7 +185,7 @@ namespace Cuemon.Xml.Serialization
         /// </returns>
         public Stream ToXml(Encoding encoding, bool omitXmlDeclaration)
         {
-            return this.ToXml(omitXmlDeclaration, null, encoding);
+            return ToXml(omitXmlDeclaration, null, encoding);
         }
 
         /// <summary>
@@ -207,7 +199,7 @@ namespace Cuemon.Xml.Serialization
         /// </returns>
         public Stream ToXml(Encoding encoding, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity)
         {
-            return this.ToXml(omitXmlDeclaration, qualifiedRootEntity, encoding);
+            return ToXml(omitXmlDeclaration, qualifiedRootEntity, encoding);
         }
 
         /// <summary>
@@ -219,7 +211,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml(Encoding encoding, SerializableOrder order, Act<XmlWriter> writer)
         {
-            return this.ToXml(encoding, order, false, writer);
+            return ToXml(encoding, order, false, writer);
         }
 
         /// <summary>
@@ -232,7 +224,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, Act<XmlWriter> writer)
         {
-            return this.ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer);
+            return ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer);
         }
 
         /// <summary>
@@ -260,7 +252,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T>(Encoding encoding, SerializableOrder order, Act<XmlWriter, T> writer, T arg)
         {
-            return this.ToXml(encoding, order, false, writer, arg);
+            return ToXml(encoding, order, false, writer, arg);
         }
 
         /// <summary>
@@ -275,7 +267,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T>(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, Act<XmlWriter, T> writer, T arg)
         {
-            return this.ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg);
+            return ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg);
         }
 
         /// <summary>
@@ -307,7 +299,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2>(Encoding encoding, SerializableOrder order, Act<XmlWriter, T1, T2> writer, T1 arg1, T2 arg2)
         {
-            return this.ToXml(encoding, order, false, writer, arg1, arg2);
+            return ToXml(encoding, order, false, writer, arg1, arg2);
         }
 
         /// <summary>
@@ -324,7 +316,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2>(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, Act<XmlWriter, T1, T2> writer, T1 arg1, T2 arg2)
         {
-            return this.ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg1, arg2);
+            return ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg1, arg2);
         }
 
         /// <summary>
@@ -360,7 +352,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2, T3>(Encoding encoding, SerializableOrder order, Act<XmlWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3)
         {
-            return this.ToXml(encoding, order, false, writer, arg1, arg2, arg3);
+            return ToXml(encoding, order, false, writer, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -379,7 +371,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2, T3>(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, Act<XmlWriter, T1, T2, T3> writer, T1 arg1, T2 arg2, T3 arg3)
         {
-            return this.ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg1, arg2, arg3);
+            return ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -419,7 +411,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2, T3, T4>(Encoding encoding, SerializableOrder order, Act<XmlWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return this.ToXml(encoding, order, false, writer, arg1, arg2, arg3, arg4);
+            return ToXml(encoding, order, false, writer, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -440,7 +432,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2, T3, T4>(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, Act<XmlWriter, T1, T2, T3, T4> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
-            return this.ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg1, arg2, arg3, arg4);
+            return ToXml(encoding, order, omitXmlDeclaration, (XmlQualifiedEntity)null, writer, arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -484,7 +476,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2, T3, T4, T5>(Encoding encoding, SerializableOrder order, Act<XmlWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return this.ToXml(encoding, order, false, writer, arg1, arg2, arg3, arg4, arg5);
+            return ToXml(encoding, order, false, writer, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -507,7 +499,7 @@ namespace Cuemon.Xml.Serialization
         /// <returns>A <see cref="Stream"/> containing the serialized XML document.</returns>
         public Stream ToXml<T1, T2, T3, T4, T5>(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, Act<XmlWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
-            return this.ToXml(encoding, order, omitXmlDeclaration, null, writer, arg1, arg2, arg3, arg4, arg5);
+            return ToXml(encoding, order, omitXmlDeclaration, null, writer, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -532,29 +524,6 @@ namespace Cuemon.Xml.Serialization
         public virtual Stream ToXml<T1, T2, T3, T4, T5>(Encoding encoding, SerializableOrder order, bool omitXmlDeclaration, XmlQualifiedEntity qualifiedRootEntity, Act<XmlWriter, T1, T2, T3, T4, T5> writer, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             return XmlUtility.ConvertEncoding(XmlSerializationUtility.Serialize(this, order, omitXmlDeclaration, qualifiedRootEntity, writer, arg1, arg2, arg3, arg4, arg5), encoding, omitXmlDeclaration);
-        }
-
-        /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation. If an encoding sequence is not included, the operating system's current ANSI encoding is assumed when doing the conversion, preserving any preamble sequences.
-        /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <returns>A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.</returns>
-        public string ToString(Stream value)
-        {
-            return StringConverter.FromStream(value);
-        }
-
-        /// <summary>
-        /// Reads and decodes the specified <see cref="Stream"/> object to its equivalent <see cref="String"/> representation using the preferred encoding with the option to keep or remove any byte order (preamble sequence).
-        /// </summary>
-        /// <param name="value">The <see cref="Stream"/> object to to read and decode its equivalent <see cref="String"/> representation for.</param>
-        /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
-        /// <returns>
-        /// A <see cref="String"/> containing the decoded content of the specified <see cref="Stream"/> object.
-        /// </returns>
-        public string ToString(Stream value, Act<EncodingOptions> setup)
-        {
-            return StringConverter.FromStream(value, setup);
         }
         #endregion
     }
