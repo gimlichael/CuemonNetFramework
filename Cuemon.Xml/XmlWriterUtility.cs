@@ -36,7 +36,6 @@ namespace Cuemon.Xml
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="reader"/> is null - or - <paramref name="copier"/> is null.
         /// </exception>
-        /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings"/>.</remarks>
         public static Stream Copy(XmlReader reader, Act<XmlWriter, XmlReader> copier, Act<XmlCopyOptions> setup = null)
         {
             Validator.ThrowIfNull(reader, nameof(reader));
@@ -64,7 +63,6 @@ namespace Cuemon.Xml
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="reader"/> is null - or - <paramref name="copier"/> is null.
         /// </exception>
-        /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings"/>.</remarks>
         public static Stream Copy<T>(XmlReader reader, Act<XmlWriter, XmlReader, T> copier, T arg, Act<XmlCopyOptions> setup = null)
         {
             Validator.ThrowIfNull(reader, nameof(reader));
@@ -94,7 +92,6 @@ namespace Cuemon.Xml
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="reader"/> is null - or - <paramref name="copier"/> is null.
         /// </exception>
-        /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings"/>.</remarks>
         public static Stream Copy<T1, T2>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2> copier, T1 arg1, T2 arg2, Act<XmlCopyOptions> setup = null)
         {
             Validator.ThrowIfNull(reader, nameof(reader));
@@ -126,7 +123,6 @@ namespace Cuemon.Xml
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="reader"/> is null - or - <paramref name="copier"/> is null.
         /// </exception>
-        /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings"/>.</remarks>
         public static Stream Copy<T1, T2, T3>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2, T3> copier, T1 arg1, T2 arg2, T3 arg3, Act<XmlCopyOptions> setup = null)
         {
             Validator.ThrowIfNull(reader, nameof(reader));
@@ -160,7 +156,6 @@ namespace Cuemon.Xml
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="reader"/> is null - or - <paramref name="copier"/> is null.
         /// </exception>
-        /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings"/>.</remarks>
         public static Stream Copy<T1, T2, T3, T4>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2, T3, T4> copier, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Act<XmlCopyOptions> setup = null)
         {
             Validator.ThrowIfNull(reader, nameof(reader));
@@ -196,7 +191,6 @@ namespace Cuemon.Xml
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="reader"/> is null - or - <paramref name="copier"/> is null.
         /// </exception>
-        /// <remarks>This method uses a default implementation of <see cref="XmlWriterSettings"/> as specified by <see cref="CreateSettings"/>.</remarks>
         public static Stream Copy<T1, T2, T3, T4, T5>(XmlReader reader, Act<XmlWriter, XmlReader, T1, T2, T3, T4, T5> copier, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Act<XmlCopyOptions> setup = null)
         {
             Validator.ThrowIfNull(reader, nameof(reader));
