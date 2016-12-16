@@ -367,6 +367,7 @@ namespace Cuemon.Xml.Xsl
         /// <param name="styleSheet">The string containing the XSLT style sheet.</param>
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup)
         {
             return Transform(input, styleSheet, setup, null as XsltArgumentList);
@@ -380,6 +381,7 @@ namespace Cuemon.Xml.Xsl
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="argumentList">The XSLT arguments to use in your style sheet.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, XsltArgumentList argumentList)
         {
             return Transform(input, styleSheet, setup, argumentList, null);
@@ -394,6 +396,7 @@ namespace Cuemon.Xml.Xsl
         /// <param name="argumentList">The XSLT arguments to use in your style sheet.</param>
         /// <param name="resolver">The <see cref="XmlResolver"/> used to resolve any style sheets referenced in XSLT import and include elements. If this is null, an instance of <see cref="XmlUrlResolver"/> is instantiated.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, XsltArgumentList argumentList, XmlResolver resolver)
         {
             var options = DelegateUtility.ConfigureAction(setup);
@@ -408,6 +411,7 @@ namespace Cuemon.Xml.Xsl
         /// <param name="setup">The <see cref="EncodingOptions"/> which need to be configured.</param>
         /// <param name="parameters">The XSLT parameters to use in your style sheet.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, params IXsltParameter[] parameters)
         {
             return Transform(input, styleSheet, setup, null, parameters);
@@ -422,6 +426,7 @@ namespace Cuemon.Xml.Xsl
         /// <param name="resolver">The <see cref="XmlResolver"/> used to resolve any style sheets referenced in XSLT import and include elements. If this is null, an instance of <see cref="XmlUrlResolver"/> is instantiated.</param>
         /// <param name="parameters">The XSLT parameters to use in your style sheet.</param>
         /// <returns>A <see cref="System.IO.Stream"/> object containing the transformed content.</returns>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static Stream Transform(Stream input, string styleSheet, Act<EncodingOptions> setup, XmlResolver resolver, params IXsltParameter[] parameters)
         {
             var options = DelegateUtility.ConfigureAction(setup);
