@@ -287,7 +287,7 @@ namespace Cuemon.Diagnostics
         /// <param name="function">The function delegate to time measure.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<TResult>(Doer<TResult> function, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<TResult>(Doer<TResult> function, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function);
@@ -303,7 +303,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg">The parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T, TResult>(Doer<T, TResult> function, T arg, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T, TResult>(Doer<T, TResult> function, T arg, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg);
@@ -321,7 +321,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg2">The second parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, TResult>(Doer<T1, T2, TResult> function, T1 arg1, T2 arg2, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, TResult>(Doer<T1, T2, TResult> function, T1 arg1, T2 arg2, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2);
@@ -341,7 +341,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg3">The third parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> function, T1 arg1, T2 arg2, T3 arg3, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, TResult>(Doer<T1, T2, T3, TResult> function, T1 arg1, T2 arg2, T3 arg3, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3);
@@ -363,7 +363,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg4">The fourth parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, TResult>(Doer<T1, T2, T3, T4, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4);
@@ -387,7 +387,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg5">The fifth parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, T5, TResult>(Doer<T1, T2, T3, T4, T5, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4, arg5);
@@ -413,7 +413,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg6">The sixth parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, T5, T6, TResult>(Doer<T1, T2, T3, T4, T5, T6, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4, arg5, arg6);
@@ -441,7 +441,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg7">The seventh parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, T5, T6, T7, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
@@ -471,7 +471,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg8">The eighth parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
@@ -503,7 +503,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg9">The ninth parameter of the <paramref name="function" /> delegate .</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -537,7 +537,7 @@ namespace Cuemon.Diagnostics
         /// <param name="arg10">The tenth parameter of the <paramref name="function" /> delegate.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>A <see cref="TimeMeasureProfiler{TResult}"/> with the result of the time measuring and the encapsulated <paramref name="function"/> delegate.</returns>
-        public static TimeMeasureProfiler<TResult> WithDoer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, Act<TimeMeasureOptions> setup = null)
+        public static TimeMeasureProfiler<TResult> WithFunc<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, Act<TimeMeasureOptions> setup = null)
         {
             Validator.ThrowIfNull(function, nameof(function));
             var factory = DoerFactory.Create(function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
