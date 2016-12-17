@@ -525,7 +525,10 @@ namespace Cuemon
                     isPrimitive |= source.IsValueType && IsSimpleValueType(source);
                     isPrimitive |= source == typeof(string);
                     isPrimitive |= source == typeof(decimal);
-                    DictionaryUtility.AddIfNotContainsKey(ComplexValueTypeLookup, source.AssemblyQualifiedName, isPrimitive);
+                    lock (ComplexValueTypeLookup)
+                    {
+                        DictionaryUtility.AddIfNotContainsKey(ComplexValueTypeLookup, source.AssemblyQualifiedName, isPrimitive);
+                    }
                 }
                 result &= isPrimitive;
             }
