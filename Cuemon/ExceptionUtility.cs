@@ -126,7 +126,7 @@ namespace Cuemon
         /// </remarks>
         public static IEnumerable<Exception> Flatten(Exception exception)
         {
-            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
+            Validator.ThrowIfNull(exception, nameof(exception));
             return Flatten(exception, exception.GetType());
         }
 
@@ -148,20 +148,14 @@ namespace Cuemon
             Validator.ThrowIfNull(exception, nameof(exception));
             Validator.ThrowIfNull(exceptionType, nameof(exceptionType));
             PropertyInfo innerExceptionsProperty = ReflectionUtility.GetProperty(exceptionType, "InnerExceptions");
-            if (innerExceptionsProperty != null)
-            {
-                return innerExceptionsProperty.GetValue(exception, null) as IEnumerable<Exception>;
-            }
+            if (innerExceptionsProperty != null) { return innerExceptionsProperty.GetValue(exception, null) as IEnumerable<Exception>; }
             return EnumerableUtility.Skip(HierarchyUtility.WhileSourceTraversalHasElements(exception, FlattenCallback), 1);
         }
 
         private static IEnumerable<Exception> FlattenCallback(Exception source)
         {
             PropertyInfo innerExceptionsProperty = ReflectionUtility.GetProperty(source.GetType(), "InnerExceptions");
-            if (innerExceptionsProperty != null)
-            {
-                return innerExceptionsProperty.GetValue(source, null) as IEnumerable<Exception>;
-            }
+            if (innerExceptionsProperty != null) { return innerExceptionsProperty.GetValue(source, null) as IEnumerable<Exception>; }
             return source.InnerException == null ? EnumerableUtility.Empty<Exception>() : EnumerableUtility.Yield(source.InnerException);
         }
 
