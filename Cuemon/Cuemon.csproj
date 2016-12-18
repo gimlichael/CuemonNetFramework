@@ -114,6 +114,7 @@
     <Compile Include="IO\FileRequestWatcher.cs" />
     <Compile Include="IO\StreamConverter.cs" />
     <Compile Include="IO\TextReaderConverter.cs" />
+    <Compile Include="LatencyException.cs" />
     <Compile Include="Net\FtpRequestDependency.cs" />
     <Compile Include="Net\FtpRequestWatcher.cs" />
     <Compile Include="Net\Http\HttpRequestDependency.cs" />
