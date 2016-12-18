@@ -343,6 +343,8 @@ namespace Cuemon
                 factory.ExecuteMethod();
                 return;
             }
+            DateTime timestamp = DateTime.UtcNow;
+            TimeSpan latency = TimeSpan.Zero;
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;
             bool isTransientFault = false;
@@ -353,6 +355,7 @@ namespace Cuemon
                 TimeSpan waitTime = options.RetryStrategy(attempts);
                 try
                 {
+                    if (latency > options.MaximumAllowedLatency) { throw new LatencyException(string.Format(CultureInfo.InvariantCulture, "The latency of the operation exceeded the allowed maximum value of {0} seconds. Actual latency was: {1} seconds.", options.MaximumAllowedLatency.TotalSeconds, latency.TotalSeconds)); }
                     factory.ExecuteMethod();
                     return;
                 }
@@ -368,11 +371,12 @@ namespace Cuemon
                         totalWaitTime = totalWaitTime.Add(waitTime);
                         attempts++;
                         Thread.Sleep(waitTime);
+                        latency = DateTime.UtcNow.Subtract(timestamp).Subtract(totalWaitTime);
                     }
                     catch (Exception)
                     {
                         throwExceptions = true;
-                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime); }
+                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime, latency); }
                         break;
                     }
                 }
@@ -384,6 +388,8 @@ namespace Cuemon
         {
             var options = DelegateUtility.ConfigureAction(setup);
             if (!options.EnableRecovery) { return factory.ExecuteMethod(); }
+            DateTime timestamp = DateTime.UtcNow;
+            TimeSpan latency = TimeSpan.Zero;
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;
             bool isTransientFault = false;
@@ -396,6 +402,7 @@ namespace Cuemon
                 TimeSpan waitTime = options.RetryStrategy(attempts);
                 try
                 {
+                    if (latency > options.MaximumAllowedLatency) { throw new LatencyException(string.Format(CultureInfo.InvariantCulture, "The latency of the operation exceeded the allowed maximum value of {0} seconds. Actual latency was: {1} seconds.", options.MaximumAllowedLatency.TotalSeconds, latency.TotalSeconds)); }
                     return factory.ExecuteMethod();
                 }
                 catch (Exception ex)
@@ -410,12 +417,13 @@ namespace Cuemon
                         totalWaitTime = totalWaitTime.Add(waitTime);
                         attempts++;
                         Thread.Sleep(waitTime);
+                        latency = DateTime.UtcNow.Subtract(timestamp).Subtract(totalWaitTime);
                     }
                     catch (Exception)
                     {
                         throwExceptions = true;
                         exceptionThrown = true;
-                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime); }
+                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime, latency); }
                         break;
                     }
                 }
@@ -437,6 +445,8 @@ namespace Cuemon
             result = default(TResult);
             var options = DelegateUtility.ConfigureAction(setup);
             if (!options.EnableRecovery) { return factory.ExecuteMethod(out result); }
+            DateTime timestamp = DateTime.UtcNow;
+            TimeSpan latency = TimeSpan.Zero;
             TimeSpan totalWaitTime = TimeSpan.Zero;
             TimeSpan lastWaitTime = TimeSpan.Zero;
             bool throwExceptions;
@@ -448,6 +458,7 @@ namespace Cuemon
                 TimeSpan waitTime = options.RetryStrategy(attempts);
                 try
                 {
+                    if (latency > options.MaximumAllowedLatency) { throw new LatencyException(string.Format(CultureInfo.InvariantCulture, "The latency of the operation exceeded the allowed maximum value of {0} seconds. Actual latency was: {1} seconds.", options.MaximumAllowedLatency.TotalSeconds, latency.TotalSeconds)); }
                     return factory.ExecuteMethod(out result);
                 }
                 catch (Exception ex)
@@ -462,12 +473,13 @@ namespace Cuemon
                         totalWaitTime = totalWaitTime.Add(waitTime);
                         attempts++;
                         Thread.Sleep(waitTime);
+                        latency = DateTime.UtcNow.Subtract(timestamp).Subtract(totalWaitTime);
                     }
                     catch (Exception)
                     {
                         throwExceptions = true;
                         exceptionThrown = true;
-                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime); }
+                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime, latency); }
                         break;
                     }
                 }
@@ -484,12 +496,13 @@ namespace Cuemon
             return default(TSuccess);
         }
 
-        private static void InsertTransientFaultException(IList<Exception> aggregatedExceptions, int attempts, int retryAttempts, TimeSpan lastWaitTime, TimeSpan totalWaitTime)
+        private static void InsertTransientFaultException(IList<Exception> aggregatedExceptions, int attempts, int retryAttempts, TimeSpan lastWaitTime, TimeSpan totalWaitTime, TimeSpan latency)
         {
             TransientFaultException transientException = new TransientFaultException(attempts >= retryAttempts ? "The amount of retry attempts has been reached." : "An unhandled exception occurred during the execution of the current operation.");
             transientException.Data.Add("Attempts", (attempts).ToString(CultureInfo.InvariantCulture));
             transientException.Data.Add("RecoveryWaitTimeInSeconds", lastWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
             transientException.Data.Add("TotalRecoveryWaitTimeInSeconds", totalWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+            transientException.Data.Add("LatencyInSeconds", latency.TotalSeconds.ToString(CultureInfo.InvariantCulture));
             lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, transientException); }
         }
     }
