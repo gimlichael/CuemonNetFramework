@@ -11,8 +11,8 @@ namespace Cuemon.Collections.Generic
     /// <typeparam name="T">The type of the elements of this instance.</typeparam>
     public sealed class PartitionCollection<T> : IEnumerable<T>
     {
-        private IEnumerable<T> Source;
-        private int IteratedCount = 0;
+        private IEnumerable<T> _source;
+        private int _iteratedCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PartitionCollection{T}"/> class.
@@ -30,9 +30,9 @@ namespace Cuemon.Collections.Generic
         public PartitionCollection(IEnumerable<T> source, int partitionSize)
         {
             Validator.ThrowIfNull(source, nameof(source));
-            this.Source = source;
-            this.Count = EnumerableUtility.Count(source);
-            this.PartitionSize = partitionSize;
+            _source = source;
+            Count = EnumerableUtility.Count(source);
+            PartitionSize = partitionSize;
         }
 
         /// <summary>
@@ -45,10 +45,7 @@ namespace Cuemon.Collections.Generic
         /// Gets a value indicating whether this instance has partitions remaining to be iterated.
         /// </summary>
         /// <value><c>true</c> if this instance has partitions remaining to be iterated; otherwise, <c>false</c>.</value>
-        public bool HasPartitions
-        {
-            get { return (Remaining > 0); }
-        }
+        public bool HasPartitions => (Remaining > 0);
 
         /// <summary>
         /// Gets the total number of elements in the sequence before partitioning is applied.
@@ -60,10 +57,7 @@ namespace Cuemon.Collections.Generic
         /// Gets the number of elements remaining in the partitioned sequence.
         /// </summary>
         /// <value>The number of elements remaining in the partitioned sequence.</value>
-        public int Remaining
-        {
-            get { return (this.Count - IteratedCount); }
-        }
+        public int Remaining => (Count - _iteratedCount);
 
         /// <summary>
         /// Gets the total amount of partitions for the elements in this sequence.
@@ -71,7 +65,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>The total amount of partitions for the elements in this sequence.</returns>
         public int PartitionCount()
         {
-            double presult = this.Count / Converter.FromObject<double>(this.PartitionSize);
+            double presult = Count / Converter.FromObject<double>(PartitionSize);
             return Converter.FromObject<int>(Math.Ceiling(presult));
         }
 
@@ -82,8 +76,8 @@ namespace Cuemon.Collections.Generic
         public IEnumerator<T> GetEnumerator()
         {
             int count;
-            IEnumerable<T> result = EnumerableUtility.Chunk(ref this.Source, this.PartitionSize, out count);
-            Interlocked.Add(ref IteratedCount, count);
+            IEnumerable<T> result = EnumerableUtility.Chunk(ref _source, PartitionSize, out count);
+            Interlocked.Add(ref _iteratedCount, count);
             return result.GetEnumerator();
         }
 
@@ -93,7 +87,7 @@ namespace Cuemon.Collections.Generic
         /// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }
