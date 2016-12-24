@@ -224,6 +224,7 @@
     <Compile Include="TimeSpanConverter.cs" />
     <Compile Include="TimeUnit.cs" />
     <Compile Include="Transactions\TransactionUtility.cs" />
+    <Compile Include="TransientFaultEvidence.cs" />
     <Compile Include="TransientOperationOptions.cs" />
     <Compile Include="TupleUtility.cs" />
     <Compile Include="TypeArgumentException.cs" />

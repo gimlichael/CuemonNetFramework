@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using Cuemon.Reflection;
 using Cuemon.Threading;
 
 namespace Cuemon
@@ -335,6 +336,12 @@ namespace Cuemon
             WithActionCore(factory, setup);
         }
 
+        /// <summary>
+        /// Gets or sets the callback delegate that is invoked when a transient fault occurs.
+        /// </summary>
+        /// <value>A callback delegate that is invoked when a transient fault occurs.</value>
+        public static Act<TransientFaultEvidence> FaultCallback { get; set; }
+
         private static void WithActionCore<TTuple>(ActFactory<TTuple> factory, Act<TransientOperationOptions> setup) where TTuple : Template
         {
             var options = DelegateUtility.ConfigureAction(setup);
@@ -376,7 +383,12 @@ namespace Cuemon
                     catch (Exception)
                     {
                         throwExceptions = true;
-                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime, latency); }
+                        if (isTransientFault)
+                        {
+                            var evidence = new TransientFaultEvidence(attempts, lastWaitTime, totalWaitTime, latency, new MethodDescriptor(factory.DelegateInfo).ToString());
+                            InsertTransientFaultException(aggregatedExceptions, evidence);
+                            FaultCallback?.Invoke(evidence);
+                        }
                         break;
                     }
                 }
@@ -423,7 +435,12 @@ namespace Cuemon
                     {
                         throwExceptions = true;
                         exceptionThrown = true;
-                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime, latency); }
+                        if (isTransientFault)
+                        {
+                            var evidence = new TransientFaultEvidence(attempts, lastWaitTime, totalWaitTime, latency, new MethodDescriptor(factory.DelegateInfo).ToString());
+                            InsertTransientFaultException(aggregatedExceptions, evidence);
+                            FaultCallback?.Invoke(evidence);
+                        }
                         break;
                     }
                 }
@@ -479,7 +496,12 @@ namespace Cuemon
                     {
                         throwExceptions = true;
                         exceptionThrown = true;
-                        if (isTransientFault) { InsertTransientFaultException(aggregatedExceptions, attempts, options.RetryAttempts, lastWaitTime, totalWaitTime, latency); }
+                        if (isTransientFault)
+                        {
+                            var evidence = new TransientFaultEvidence(attempts, lastWaitTime, totalWaitTime, latency, new MethodDescriptor(factory.DelegateInfo).ToString());
+                            InsertTransientFaultException(aggregatedExceptions, evidence);
+                            FaultCallback?.Invoke(evidence);
+                        }
                         break;
                     }
                 }
@@ -496,13 +518,9 @@ namespace Cuemon
             return default(TSuccess);
         }
 
-        private static void InsertTransientFaultException(IList<Exception> aggregatedExceptions, int attempts, int retryAttempts, TimeSpan lastWaitTime, TimeSpan totalWaitTime, TimeSpan latency)
+        private static void InsertTransientFaultException(IList<Exception> aggregatedExceptions, TransientFaultEvidence evidence)
         {
-            TransientFaultException transientException = new TransientFaultException(attempts >= retryAttempts ? "The amount of retry attempts has been reached." : "An unhandled exception occurred during the execution of the current operation.");
-            transientException.Data.Add("Attempts", (attempts).ToString(CultureInfo.InvariantCulture));
-            transientException.Data.Add("RecoveryWaitTimeInSeconds", lastWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-            transientException.Data.Add("TotalRecoveryWaitTimeInSeconds", totalWaitTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-            transientException.Data.Add("LatencyInSeconds", latency.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+            TransientFaultException transientException = new TransientFaultException("The amount of retry attempts has been reached.", evidence);
             lock (aggregatedExceptions) { aggregatedExceptions.Insert(0, transientException); }
         }
     }

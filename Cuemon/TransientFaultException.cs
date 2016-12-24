@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Cuemon
@@ -13,16 +14,19 @@ namespace Cuemon
         /// <summary>
         /// Initializes a new instance of the <see cref="TransientFaultException"/> class.
         /// </summary>
-        public TransientFaultException() : base()
+        public TransientFaultException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransientFaultException"/> class.
+        /// Initializes a new instance of the <see cref="TransientFaultException" /> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public TransientFaultException(string message) : base(message)
+        /// <param name="evidence">The evidence that provide details about the transient fault.</param>
+        public TransientFaultException(string message, TransientFaultEvidence evidence) : base(message)
         {
+            Validator.ThrowIfNull(evidence, nameof(evidence));
+            Evidence = evidence;
         }
 
         /// <summary>
@@ -30,8 +34,11 @@ namespace Cuemon
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="innerException">The exception that is the cause of the current exception. If the innerException parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
-        public TransientFaultException(string message, Exception innerException) : base(message, innerException)
+        /// <param name="evidence">The evidence that provide details about the transient fault.</param>
+        public TransientFaultException(string message, Exception innerException, TransientFaultEvidence evidence) : base(message, innerException)
         {
+            Validator.ThrowIfNull(evidence, nameof(evidence));
+            Evidence = evidence;
         }
 
         /// <summary>
@@ -45,5 +52,22 @@ namespace Cuemon
         {
         }
         #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the evidence that provide details about the transient fault of this instance.
+        /// </summary>
+        /// <value>The evidence that provide details about the transient fault.</value>
+        public TransientFaultEvidence Evidence { get; }
+        #endregion
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="string" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0} {1}", base.ToString(), Evidence.ToString());
+        }
     }
 }
