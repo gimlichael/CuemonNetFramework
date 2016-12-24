@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Cuemon.Reflection;
 
 namespace Cuemon.Diagnostics
@@ -12,7 +13,7 @@ namespace Cuemon.Diagnostics
         /// Gets or sets the callback that is invoked when a time measuring operation is completed.
         /// </summary>
         /// <value>A <see cref="Act{T}"/>. The default value is <c>null</c>.</value>
-        public static Act<TimeMeasureProfiler> TimeMeasureCompletedCallback { get; set; }
+        public static Act<TimeMeasureProfiler> CompletedCallback { get; set; }
 
         /// <summary>
         /// Profile and time measure the specified <paramref name="action"/> delegate.
@@ -270,7 +271,7 @@ namespace Cuemon.Diagnostics
         private static TimeMeasureProfiler RunActionCore<TTuple>(ActFactory<TTuple> factory, Act<TimeMeasureOptions> setup) where TTuple : Template
         {
             var options = DelegateUtility.ConfigureAction(setup);
-            var descriptor = options.MethodDescriptorCallback?.Invoke() ?? new MethodDescriptor(factory.DelegateInfo);
+            var descriptor = options.MethodDescriptor?.Invoke() ?? new MethodDescriptor(factory.DelegateInfo);
             var profiler = new TimeMeasureProfiler()
             {
                 Member = descriptor.ToString(),
@@ -547,7 +548,7 @@ namespace Cuemon.Diagnostics
         private static TimeMeasureProfiler<TResult> RunFunctionCore<TTuple, TResult>(DoerFactory<TTuple, TResult> factory, Act<TimeMeasureOptions> setup) where TTuple : Template
         {
             var options = DelegateUtility.ConfigureAction(setup);
-            var descriptor = options.MethodDescriptorCallback?.Invoke() ?? new MethodDescriptor(factory.DelegateInfo);
+            var descriptor = options.MethodDescriptor?.Invoke() ?? new MethodDescriptor(factory.DelegateInfo);
             var profiler = new TimeMeasureProfiler<TResult>()
             {
                 Member = descriptor.ToString(),
@@ -559,12 +560,22 @@ namespace Cuemon.Diagnostics
 
         private static void PerformTimeMeasuring<T>(T profiler, TimeMeasureOptions options, Act<T> handler) where T : TimeMeasureProfiler
         {
-            profiler.Timer.Start();
-            handler(profiler);
-            profiler.Timer.Stop();
-            if (options.TimeMeasureCompletedThreshold == TimeSpan.Zero || profiler.Elapsed > options.TimeMeasureCompletedThreshold)
+            try
             {
-                TimeMeasureCompletedCallback?.Invoke(profiler);
+                profiler.Timer.Start();
+                handler(profiler);
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException ?? ex; // don't confuse the end-user with reflection related details; return the originating exception
+            }
+            finally
+            {
+                profiler.Timer.Stop();
+                if (options.TimeMeasureCompletedThreshold == TimeSpan.Zero || profiler.Elapsed > options.TimeMeasureCompletedThreshold)
+                {
+                    CompletedCallback?.Invoke(profiler);
+                }
             }
         }
     }
