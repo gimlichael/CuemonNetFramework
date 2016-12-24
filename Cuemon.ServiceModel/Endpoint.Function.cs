@@ -19,7 +19,7 @@ namespace Cuemon.ServiceModel
         /// <param name="method">The function delegate to instrument and invoke.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<TResult>(MethodBase caller, Doer<TResult> method, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method);
@@ -35,7 +35,7 @@ namespace Cuemon.ServiceModel
         /// <param name="method">The function delegate to instrument and invoke.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<TResult>(MethodBase caller, CacheValidator validator, Doer<TResult> method, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method);
@@ -52,7 +52,7 @@ namespace Cuemon.ServiceModel
         /// <param name="method">The function delegate to instrument and invoke.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<TResult> method, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method);
@@ -69,7 +69,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg">The parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T, TResult>(MethodBase caller, Doer<T, TResult> method, T arg, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg);
@@ -87,7 +87,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg">The parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T, TResult>(MethodBase caller, CacheValidator validator, Doer<T, TResult> method, T arg, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg);
@@ -106,7 +106,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg">The parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T, TResult> method, T arg, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg);
@@ -125,7 +125,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg2">The second parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, TResult>(MethodBase caller, Doer<T1, T2, TResult> method, T1 arg1, T2 arg2, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2);
@@ -145,7 +145,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg2">The second parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, TResult> method, T1 arg1, T2 arg2, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2);
@@ -166,7 +166,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg2">The second parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, TResult> method, T1 arg1, T2 arg2, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2);
@@ -187,7 +187,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg3">The third parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, TResult>(MethodBase caller, Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3);
@@ -209,7 +209,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg3">The third parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3);
@@ -232,7 +232,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg3">The third parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, TResult> method, T1 arg1, T2 arg2, T3 arg3, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3);
@@ -255,7 +255,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg4">The fourth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
@@ -279,7 +279,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg4">The fourth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
@@ -304,7 +304,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg4">The fourth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4);
@@ -329,7 +329,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg5">The fifth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
@@ -355,7 +355,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg5">The fifth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
@@ -382,7 +382,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg5">The fifth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5);
@@ -409,7 +409,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg6">The sixth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
@@ -437,7 +437,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg6">The sixth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
@@ -466,7 +466,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg6">The sixth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6);
@@ -495,7 +495,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg7">The seventh parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
@@ -525,7 +525,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg7">The seventh parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
@@ -556,7 +556,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg7">The seventh parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
@@ -587,7 +587,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg8">The eighth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
@@ -619,7 +619,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg8">The eighth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
@@ -652,7 +652,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg8">The eighth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
@@ -685,7 +685,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg9">The ninth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -719,7 +719,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg9">The ninth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -754,7 +754,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg9">The ninth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -789,7 +789,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg10">The tenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
@@ -825,7 +825,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg10">The tenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
@@ -862,7 +862,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg10">The tenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
@@ -899,7 +899,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg11">The eleventh parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
@@ -937,7 +937,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg11">The eleventh parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
@@ -976,7 +976,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg11">The eleventh parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
@@ -1015,7 +1015,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg12">The twelfth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
@@ -1055,7 +1055,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg12">The twelfth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
@@ -1096,7 +1096,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg12">The twelfth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
@@ -1137,7 +1137,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg13">The thirteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
@@ -1179,7 +1179,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg13">The thirteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
@@ -1222,7 +1222,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg13">The thirteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
@@ -1265,7 +1265,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg14">The fourteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
@@ -1309,7 +1309,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg14">The fourteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
@@ -1354,7 +1354,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg14">The fourteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
@@ -1399,7 +1399,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg15">The fifteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
@@ -1445,7 +1445,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg15">The fifteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
@@ -1492,7 +1492,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg15">The fifteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
@@ -1539,7 +1539,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg16">The sixteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
@@ -1587,7 +1587,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg16">The sixteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
@@ -1636,7 +1636,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg16">The sixteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
@@ -1685,7 +1685,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg17">The seventeenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
@@ -1735,7 +1735,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg17">The seventeenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
@@ -1786,7 +1786,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg17">The seventeenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
@@ -1837,7 +1837,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg18">The eighteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
@@ -1889,7 +1889,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg18">The eighteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
@@ -1942,7 +1942,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg18">The eighteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
@@ -1995,7 +1995,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg19">The nineteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
@@ -2049,7 +2049,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg19">The nineteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
@@ -2104,7 +2104,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg19">The nineteenth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
@@ -2159,7 +2159,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg20">The twentieth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(MethodBase caller, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
@@ -2215,7 +2215,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg20">The twentieth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(MethodBase caller, CacheValidator validator, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
@@ -2272,7 +2272,7 @@ namespace Cuemon.ServiceModel
         /// <param name="arg20">The twentieth parameter of the function delegate <paramref name="method"/>.</param>
         /// <param name="setup">The <see cref="TimeMeasureOptions"/> which need to be configured.</param>
         /// <returns>The result of the function delegate <paramref name="method"/>.</returns>
-        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.TimeMeasureCompletedCallback"/>.</remarks>
+        /// <remarks>The instrumentation of <paramref name="method"/> is thread safe and the instrumented result is passed to <see cref="TimeMeasure.CompletedCallback"/>.</remarks>
         public TResult ExecuteFunction<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult>(MethodBase caller, CacheValidator validator, HttpCacheability cacheability, Doer<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, TResult> method, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, T17 arg17, T18 arg18, T19 arg19, T20 arg20, Act<TimeMeasureOptions> setup = null)
         {
             var factory = DoerFactory.Create(method, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20);
@@ -2317,7 +2317,7 @@ namespace Cuemon.ServiceModel
                 }, o =>
                 {
                     o.RuntimeParameters = factory.GenericArguments.ToArray();
-                    o.MethodDescriptorCallback = () => new MethodDescriptor(caller);
+                    o.MethodDescriptor = () => new MethodDescriptor(caller);
                     o.TimeMeasureCompletedThreshold = options.TimeMeasureCompletedThreshold;
                 }).Result;
             }
