@@ -13,7 +13,7 @@ namespace Cuemon.Threading
     [Serializable]
     public class ThreadException : Exception
     {
-        private List<Exception> _innerExceptions = new List<Exception>();
+        private readonly List<Exception> _innerExceptions = new List<Exception>();
 
         #region Constructors
         /// <summary>
