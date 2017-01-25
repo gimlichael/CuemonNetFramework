@@ -15,6 +15,24 @@ namespace Cuemon.Collections.Generic
     public static class EnumerableUtility
     {
         /// <summary>
+        /// Determines whether all elements of a sequence satisfy a condition.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> that contains the elements to apply the predicate to.</param>
+        /// <param name="predicate">A function delegate to test each element for a condition.</param>
+        /// <returns><c>true</c> if every element of the source sequence passes the test in the specified predicate, or if the sequence is empty; otherwise, <c>false</c>.</returns>
+        public static bool All<TSource>(IEnumerable<TSource> source, Doer<TSource, bool> predicate)
+        {
+            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(predicate, nameof(predicate));
+            foreach (var item in source)
+            {
+                if (!predicate(item)) { return false; }
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Produces the set intersection of two sequences by using the specified <see cref="IEnumerable{T}" /> to compare values.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
