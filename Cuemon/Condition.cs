@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using Cuemon.Collections.Generic;
 using Cuemon.Security.Cryptography;
 
 namespace Cuemon
@@ -210,6 +211,17 @@ RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
         {
             if (value == null) { return false; }
             return (value.Length == 0);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="value"/> consist only of white-space characters.
+        /// </summary>
+        /// <param name="value">The string to verify consist only of white-space characters.</param>
+        /// <returns><c>true</c> if the specified <paramref name="value"/> consist only of white-space characters; otherwise, <c>false</c>.</returns>
+        public static bool IsWhiteSpace(string value)
+        {
+            if (value == null) { return false; }
+            return EnumerableUtility.All(value, char.IsWhiteSpace);
         }
 
         /// <summary>
