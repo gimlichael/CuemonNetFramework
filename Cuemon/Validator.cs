@@ -23,8 +23,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf(Doer<bool> condition, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition()) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method); }
         }
 
@@ -43,8 +43,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf<TValue>(TValue value, Doer<TValue, bool> condition, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition(value)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value); }
         }
 
@@ -65,8 +65,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf<TValue, T>(TValue value, Doer<TValue, T, bool> condition, T arg, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition(value, arg)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg); }
         }
 
@@ -89,8 +89,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf<TValue, T1, T2>(TValue value, Doer<TValue, T1, T2, bool> condition, T1 arg1, T2 arg2, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition(value, arg1, arg2)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2); }
         }
 
@@ -115,8 +115,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf<TValue, T1, T2, T3>(TValue value, Doer<TValue, T1, T2, T3, bool> condition, T1 arg1, T2 arg2, T3 arg3, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition(value, arg1, arg2, arg3)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3); }
         }
 
@@ -143,8 +143,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf<TValue, T1, T2, T3, T4>(TValue value, Doer<TValue, T1, T2, T3, T4, bool> condition, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition(value, arg1, arg2, arg3, arg4)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3, arg4); }
         }
 
@@ -173,8 +173,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIf<TValue, T1, T2, T3, T4, T5>(TValue value, Doer<TValue, T1, T2, T3, T4, T5, bool> condition, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (condition(value, arg1, arg2, arg3, arg4, arg5)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3, arg4, arg5); }
         }
 
@@ -191,8 +191,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot(Doer<bool> condition, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition()) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method); }
         }
 
@@ -211,8 +211,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot<TValue>(TValue value, Doer<TValue, bool> condition, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition(value)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value); }
         }
 
@@ -233,8 +233,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot<TValue, T>(TValue value, Doer<TValue, T, bool> condition, T arg, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition(value, arg)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg); }
         }
 
@@ -257,8 +257,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot<TValue, T1, T2>(TValue value, Doer<TValue, T1, T2, bool> condition, T1 arg1, T2 arg2, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition(value, arg1, arg2)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2); }
         }
 
@@ -283,8 +283,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot<TValue, T1, T2, T3>(TValue value, Doer<TValue, T1, T2, T3, bool> condition, T1 arg1, T2 arg2, T3 arg3, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition(value, arg1, arg2, arg3)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3); }
         }
 
@@ -311,8 +311,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot<TValue, T1, T2, T3, T4>(TValue value, Doer<TValue, T1, T2, T3, T4, bool> condition, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition(value, arg1, arg2, arg3, arg4)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3, arg4); }
         }
 
@@ -341,8 +341,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNot<TValue, T1, T2, T3, T4, T5>(TValue value, Doer<TValue, T1, T2, T3, T4, T5, bool> condition, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, Doer<string, string, Exception> exception, string paramName, string message)
         {
-            if (condition == null) { throw new ArgumentNullException("condition"); }
-            if (exception == null) { throw new ArgumentNullException("exception"); }
+            if (condition == null) { throw new ArgumentNullException(nameof(condition)); }
+            if (exception == null) { throw new ArgumentNullException(nameof(exception)); }
             if (!condition(value, arg1, arg2, arg3, arg4, arg5)) { throw ExceptionUtility.Refine(exception(paramName, message), condition.Method, value, arg1, arg2, arg3, arg4, arg5); }
         }
 
@@ -658,9 +658,6 @@ namespace Cuemon
         /// <param name="value">The value to be evaluated.</param>
         /// <param name="paramName">The name of the parameter that caused the exception.</param>
         /// <param name="message">A message that describes the error.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="value"/> cannot be null.
-        /// </exception>
         /// <exception cref="ArgumentEmptyException">
         /// <paramref name="value"/> cannot be empty.
         /// </exception>
@@ -670,11 +667,41 @@ namespace Cuemon
             {
                 ThrowIf(value, Condition.IsEmpty, ExceptionUtility.CreateArgumentEmptyException, paramName, message);
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentEmptyException ex)
             {
                 throw ex;
             }
-            catch (ArgumentEmptyException ex)
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentEmptyException"/> if the specified <paramref name="value"/> consist only of white-space characters.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> cannot consist only of white-space characters.
+        /// </exception>
+        public static void ThrowIfWhiteSpace(string value, string paramName)
+        {
+            ThrowIfWhiteSpace(value, paramName, "Value cannot consist only of white-space characters.");
+        }
+
+        /// <summary>
+        /// Validates and throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/> consist only of white-space characters.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> cannot consist only of white-space characters.
+        /// </exception>
+        public static void ThrowIfWhiteSpace(string value, string paramName, string message)
+        {
+            try
+            {
+                ThrowIf(value, Condition.IsWhiteSpace, ExceptionUtility.CreateArgumentException, paramName, message);
+            }
+            catch (ArgumentException ex)
             {
                 throw ex;
             }
@@ -732,6 +759,79 @@ namespace Cuemon
                 throw ex;
             }
             catch (ArgumentEmptyException ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws either an <see cref="ArgumentNullException"/>, <see cref="ArgumentEmptyException"/> or <see cref="ArgumentException"/> if the specified <paramref name="value"/> is respectively null, empty or consist only of white-space characters.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentEmptyException">
+        /// <paramref name="value"/> cannot be empty.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> cannot consist only of white-space characters.
+        /// </exception>
+        public static void ThrowIfNullOrWhitespace(string value, string paramName)
+        {
+            try
+            {
+                ThrowIfNull(value, paramName);
+                ThrowIfEmpty(value, paramName);
+                ThrowIfWhiteSpace(value, paramName);
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentEmptyException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentException ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Validates and throws either an <see cref="ArgumentNullException"/>, <see cref="ArgumentEmptyException"/> or <see cref="ArgumentException"/> if the specified <paramref name="value"/> is respectively null, empty or consist only of white-space characters.
+        /// </summary>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <param name="paramName">The name of the parameter that caused the exception.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentEmptyException">
+        /// <paramref name="value"/> cannot be empty.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="value"/> cannot consist only of white-space characters.
+        /// </exception>
+        public static void ThrowIfNullOrWhitespace(string value, string paramName, string message)
+        {
+            try
+            {
+                ThrowIfNull(value, paramName, message);
+                ThrowIfEmpty(value, paramName, message);
+                ThrowIfWhiteSpace(value, paramName, message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentEmptyException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentException ex)
             {
                 throw ex;
             }
@@ -1383,8 +1483,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfContainsType(object value, string paramName, string message, params Type[] types)
         {
-            ThrowIfNull(value, "value");
-            ThrowIfNull(types, "types");
+            ThrowIfNull(value, nameof(value));
+            ThrowIfNull(types, nameof(types));
             try
             {
                 ThrowIf(value, TypeUtility.ContainsType, types, ExceptionUtility.CreateArgumentOutOfRangeException, paramName, message);
@@ -1427,8 +1527,8 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNotContainsType(object value, string paramName, string message, params Type[] types)
         {
-            ThrowIfNull(value, "value");
-            ThrowIfNull(types, "types");
+            ThrowIfNull(value, nameof(value));
+            ThrowIfNull(types, nameof(types));
             try
             {
                 ThrowIfNot(value, TypeUtility.ContainsType, types, ExceptionUtility.CreateArgumentOutOfRangeException, paramName, message);
@@ -1469,7 +1569,7 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfContainsType<T>(string typeParamName, string message, params Type[] types)
         {
-            ThrowIfNull(types, "types");
+            ThrowIfNull(types, nameof(types));
             try
             {
                 ThrowIf(typeof(T), TypeUtility.ContainsType, types, ExceptionUtility.CreateTypeArgumentOutOfRangeException, typeParamName, message);
@@ -1510,7 +1610,7 @@ namespace Cuemon
         /// </exception>
         public static void ThrowIfNotContainsType<T>(string typeParamName, string message, params Type[] types)
         {
-            ThrowIfNull(types, "types");
+            ThrowIfNull(types, nameof(types));
             try
             {
                 ThrowIfNot(typeof(T), TypeUtility.ContainsType, types, ExceptionUtility.CreateTypeArgumentException, typeParamName, message);
