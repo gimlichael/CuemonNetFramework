@@ -76,19 +76,21 @@ namespace Cuemon.Reflection
         /// </exception>
 	    public static bool IsAutoProperty(PropertyInfo property)
         {
-            if (property == null) { throw new ArgumentNullException(nameof(property)); }
-            if (!property.CanRead && !property.CanWrite) { return false; }
-            CompilerGeneratedAttribute compilerAttribute = GetAttribute<CompilerGeneratedAttribute>(property);
-            if (compilerAttribute != null)
+            Validator.ThrowIfNull(property, nameof(property));
+            var getter = property.GetGetMethod(true);
+            var setter = property.GetSetMethod(true);
+
+            bool hasCompilerGeneratedAttribute;
+            if (getter != null)
             {
-                IEnumerable<FieldInfo> fields = GetFields(property.DeclaringType);
-                if (fields != null)
-                {
-                    IEnumerable<FieldInfo> autoFields = EnumerableUtility.FindAll(fields, MatchPropertyName, property.Name);
-                    return EnumerableUtility.Any(autoFields);
-                }
+                hasCompilerGeneratedAttribute = GetAttribute<CompilerGeneratedAttribute>(getter) != null;
             }
-            return false;
+            else
+            {
+                hasCompilerGeneratedAttribute = GetAttribute<CompilerGeneratedAttribute>(setter) != null;
+            }
+
+            return hasCompilerGeneratedAttribute && EnumerableUtility.Any(EnumerableUtility.FindAll(property.DeclaringType?.GetFields(BindingInstancePublicAndPrivateNoneInheritedIncludeStatic), f => f.Name.Contains(string.Format(CultureInfo.InvariantCulture, "<{0}>", property.Name))));
         }
 
         private static bool MatchPropertyName(FieldInfo fieldInfo, string propertyName)
