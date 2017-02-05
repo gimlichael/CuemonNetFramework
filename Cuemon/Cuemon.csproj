@@ -91,6 +91,7 @@
     <Compile Include="Annotations\ValidationUtility.cs" />
     <Compile Include="ArrayUtility.cs" />
     <Compile Include="ByteConverter.cs" />
+    <Compile Include="CasingMethod.cs" />
     <Compile Include="CharConverter.cs" />
     <Compile Include="Collections\Generic\DictionaryConverter.cs" />
     <Compile Include="Collections\Generic\EnumerableConverter.cs" />
