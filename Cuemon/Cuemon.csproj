@@ -110,6 +110,9 @@
     <Compile Include="GuidConverter.cs" />
     <Compile Include="Infrastructure.cs" />
     <Compile Include="Int32Converter.cs" />
+    <Compile Include="Integrity\CacheValidatorOptions.cs" />
+    <Compile Include="Integrity\ChecksumMethod.cs" />
+    <Compile Include="Integrity\ChecksumStrength.cs" />
     <Compile Include="IO\Compression\CompressionType.cs" />
     <Compile Include="IO\FileRequestDependency.cs" />
     <Compile Include="IO\FileRequestWatcher.cs" />
