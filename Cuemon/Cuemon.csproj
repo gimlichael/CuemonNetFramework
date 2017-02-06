@@ -114,6 +114,7 @@
     <Compile Include="Integrity\ChecksumMethod.cs" />
     <Compile Include="Integrity\ChecksumStrength.cs" />
     <Compile Include="IO\Compression\CompressionType.cs" />
+    <Compile Include="IO\FileInfoConverter.cs" />
     <Compile Include="IO\FileRequestDependency.cs" />
     <Compile Include="IO\FileRequestWatcher.cs" />
     <Compile Include="IO\StreamConverter.cs" />

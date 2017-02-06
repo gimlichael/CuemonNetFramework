@@ -58,35 +58,22 @@ namespace Cuemon.IO
         /// <summary>
         /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="fileName"/>.
         /// </summary>
-        /// <param name="fileName">The fully qualified name of the new file. Do not end the path with the directory separator character.</param>
-        /// <returns>A <see cref="CacheValidator"/> that represents a weak integrity check of the specified <paramref name="fileName"/>.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// <paramref name="fileName"/> is null.
-        /// </exception>
-        /// <remarks>Should the specified <paramref name="fileName"/> trigger any sort of exception, a <see cref="CacheValidator.Default"/> is returned.</remarks>
-        public static CacheValidator GetCacheValidator(string fileName)
-        {
-            return GetCacheValidator(fileName, 0);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="fileName"/>.
-        /// </summary>
-        /// <param name="fileName">The fully qualified name of the new file. Do not end the path with the directory separator character.</param>
+        /// <param name="fileName">The fully qualified name of the file.</param>
         /// <param name="bytesToRead">The maximum size of a byte-for-byte that promotes a medium/strong integrity check of the specified <paramref name="fileName"/>. A value of 0 (or less) leaves the integrity check at weak.</param>
+        /// <param name="setup">The <see cref="CacheValidatorOptions" /> which need to be configured.</param>
         /// <returns>A <see cref="CacheValidator"/> that represents either a weak, medium or strong integrity check of the specified <paramref name="fileName"/>.</returns>
         /// <exception cref="System.ArgumentNullException">
         /// <paramref name="fileName"/> is null.
         /// </exception>
         /// <remarks>Should the specified <paramref name="fileName"/> trigger any sort of exception, a <see cref="CacheValidator.Default"/> is returned.</remarks>
-        public static CacheValidator GetCacheValidator(string fileName, int bytesToRead)
+        public static CacheValidator GetCacheValidator(string fileName, int bytesToRead = 0, Act<CacheValidatorOptions> setup = null)
         {
             if (fileName == null) { throw new ArgumentNullException(nameof(fileName)); }
-            Doer<string, int, CacheValidator> getCacheValidator = CachingManager.Cache.Memoize<string, int, CacheValidator>(GetCacheValidatorCore, FileVersionDependencies);
-            return getCacheValidator(fileName.ToUpperInvariant(), bytesToRead).Clone();
+            Doer<string, int, Act<CacheValidatorOptions>, CacheValidator> getCacheValidator = CachingManager.Cache.Memoize<string, int, Act<CacheValidatorOptions>, CacheValidator>(GetCacheValidatorCore, FileVersionDependencies);
+            return getCacheValidator(fileName.ToUpperInvariant(), bytesToRead, setup).Clone();
         }
 
-        private static IEnumerable<IDependency> FileVersionDependencies(string fileName, int bytesToRead)
+        private static IEnumerable<IDependency> FileVersionDependencies(string fileName, int bytesToRead, Act<CacheValidatorOptions> setup)
         {
             return FileVersionDependencies(fileName);
         }
@@ -98,24 +85,18 @@ namespace Cuemon.IO
             yield return new FileDependency(directory, filter);
         }
 
-        private static CacheValidator GetCacheValidatorCore(string fileName, int bytesToRead)
+        private static CacheValidator GetCacheValidatorCore(string fileName, int bytesToRead = 0, Act<CacheValidatorOptions> setup = null)
         {
             try
             {
-                FileInfo fi = new FileInfo(fileName);
-                if (bytesToRead > 0)
+                return FileInfoConverter.Convert(fileName, bytesToRead, (fi, checksumBytes) =>
                 {
-                    long buffer = bytesToRead;
-                    if (fi.Length < buffer) { buffer = fi.Length; }
-
-                    byte[] checksumBytes = new byte[buffer];
-                    using (FileStream openFile = fi.OpenRead())
+                    if (checksumBytes.Length > 0)
                     {
-                        openFile.Read(checksumBytes, 0, (int)buffer);
+                        return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, StructUtility.GetHashCode64(checksumBytes), setup);
                     }
-                    return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, StructUtility.GetHashCode32(checksumBytes));
-                }
-                return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, ChecksumMethod.Combined);
+                    return new CacheValidator(fi.CreationTimeUtc, fi.LastWriteTimeUtc, setup);
+                });
             }
             catch (Exception)
             {
@@ -127,7 +108,7 @@ namespace Cuemon.IO
         /// Parses and removes invalid characters from the specified <paramref name="fileName"/>.
         /// </summary>
         /// <param name="fileName">A relative or absolute path for the file to parse.</param>
-        /// <returns>A <see cref="String"/> cleansed for possible invalid characters in regards to a file location.</returns>
+        /// <returns>A <see cref="string"/> cleansed for possible invalid characters in regards to a file location.</returns>
         public static string ParseFileName(string fileName)
         {
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));

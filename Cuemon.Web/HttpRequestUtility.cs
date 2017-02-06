@@ -422,7 +422,7 @@ namespace Cuemon.Web
                         clientSideContentEntityTag = clientSideContentEntityTag.Remove(indexOfStartQuote, 1);
                     }
 
-                    isClientSideContentCached = validator.Checksum.Equals(clientSideContentEntityTag, StringComparison.OrdinalIgnoreCase);
+                    isClientSideContentCached = validator.Checksum.ToHexadecimal().Equals(clientSideContentEntityTag, StringComparison.OrdinalIgnoreCase);
                 }
             }
             return isClientSideContentCached;

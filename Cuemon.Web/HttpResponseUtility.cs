@@ -540,7 +540,7 @@ namespace Cuemon.Web
         public static WebHeaderCollection CreateClientSideContentCacheExpiresHeaders(DateTime lastModified, DateTime expires, HttpCacheability cacheability, Doer<DateTime, NameValueCollection, string, bool> isClientSideResourceCached, NameValueCollection headers, string entityTag, out HttpStatusCode statusCode)
         {
             CacheValidator validator = new CacheValidator(lastModified, lastModified, entityTag);
-            var factory = DoerFactory.Create(isClientSideResourceCached, validator.GetMostSignificant(), headers, validator.Checksum);
+            var factory = DoerFactory.Create(isClientSideResourceCached, validator.GetMostSignificant(), headers, entityTag);
             return CreateClientSideContentCacheExpiresHeadersCore(factory, validator, expires, cacheability, out statusCode);
         }
 
@@ -553,7 +553,7 @@ namespace Cuemon.Web
 
             if (validator.Strength != ChecksumStrength.None)
             {
-                entityTag = (validator.Strength == ChecksumStrength.Weak && !validator.Checksum.StartsWith("W/", StringComparison.OrdinalIgnoreCase)) ? string.Concat("W/", "\"", validator.Checksum, "\"") : string.Concat("\"", validator.Checksum, "\"");
+                entityTag = (validator.Strength == ChecksumStrength.Weak) ? string.Concat("W/", "\"", validator.Checksum, "\"") : string.Concat("\"", validator.Checksum, "\"");
             }
 
             bool suppressContent = factory.ExecuteMethod();

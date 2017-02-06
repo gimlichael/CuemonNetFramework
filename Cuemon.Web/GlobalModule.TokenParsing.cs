@@ -116,7 +116,7 @@ namespace Cuemon.Web
             int arguments;
             if (StringUtility.ParseFormat(contentAsString, out arguments))
             {
-                contentAsString = contentAsString.Replace("{0}", validator.Checksum);
+                contentAsString = contentAsString.Replace("{0}", validator.Checksum.ToHexadecimal());
                 return new MemoryStream(encoding.GetBytes(contentAsString));
             }
             return content;
