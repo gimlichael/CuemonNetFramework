@@ -15,19 +15,18 @@ namespace Cuemon.Reflection
     public static class AssemblyUtility
     {
         /// <summary>
-        /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="assembly"/>.
+        /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="assembly" />.
         /// </summary>
-        /// <param name="assembly">The assembly to resolve a <see cref="CacheValidator"/> from.</param>
-        /// <returns>A <see cref="CacheValidator"/> that fully represents the integrity of the specified <paramref name="assembly"/>.</returns>
-        public static CacheValidator GetCacheValidator(Assembly assembly)
+        /// <param name="assembly">The assembly to resolve a <see cref="CacheValidator" /> from.</param>
+        /// <param name="readByteForByteChecksum"><c>true</c> to read the <paramref name="assembly"/> byte-for-byte to promote a strong integrity checksum; <c>false</c> to read common properties of the <paramref name="assembly"/> for a weak (but reliable) integrity checksum.</param>
+        /// <param name="setup">The <see cref="CacheValidatorOptions" /> which need to be configured.</param>
+        /// <returns>A <see cref="CacheValidator" /> that fully represents the integrity of the specified <paramref name="assembly" />.</returns>
+        public static CacheValidator GetCacheValidator(Assembly assembly, bool readByteForByteChecksum = false, Act<CacheValidatorOptions> setup = null)
         {
             if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return CacheValidator.Default; }
-            if (!string.IsNullOrEmpty(assembly.Location))
-            {
-                var fileValidator = FileUtility.GetCacheValidator(assembly.Location);
-                return fileValidator.CombineWith(StructUtility.GetHashCode64(assembly.FullName));
-            }
-            return new CacheValidator(DateTime.MinValue, DateTime.MaxValue, StructUtility.GetHashCode64(assembly.FullName));
+            var assemblyHashCode64 = StructUtility.GetHashCode64(assembly.FullName);
+            var assemblyLocation = assembly.Location;
+            return string.IsNullOrEmpty(assemblyLocation) ? new CacheValidator(DateTime.MinValue, DateTime.MaxValue, assemblyHashCode64, setup) : FileUtility.GetCacheValidator(assemblyLocation, readByteForByteChecksum ? int.MaxValue : 0, setup).CombineWith(assemblyHashCode64);
         }
 
         /// <summary>
