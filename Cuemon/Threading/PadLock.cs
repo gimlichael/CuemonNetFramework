@@ -56,6 +56,12 @@ namespace Cuemon.Threading
         }
 
         /// <summary>
+        /// Gets a value that indicates whether a value has been created for this <see cref="PadLock{T}"/> instance.
+        /// </summary>
+        /// <value><c>true</c> if a value has been created for this <see cref="PadLock{T}"/> instance; otherwise, <c>false</c>.</value>
+        public bool IsValueCreated => _isValueCreated;
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
