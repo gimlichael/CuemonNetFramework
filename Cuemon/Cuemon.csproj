@@ -107,6 +107,7 @@
     <Compile Include="Diagnostics\TimeMeasureProfiler.cs" />
     <Compile Include="DoubleConverter.cs" />
     <Compile Include="ExceptionDescriptor.cs" />
+    <Compile Include="Globalization\World.cs" />
     <Compile Include="GuidConverter.cs" />
     <Compile Include="Infrastructure.cs" />
     <Compile Include="Int32Converter.cs" />
