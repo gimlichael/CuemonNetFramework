@@ -18,7 +18,7 @@ namespace Cuemon.Threading
         /// Initializes a new instance of the <see cref="PadLock{T}"/> class.
         /// </summary>
         public PadLock()
-            : this(() => ActivatorUtility.CreateInstance<T>())
+            : this(ActivatorUtility.CreateInstance<T>)
         {
         }
 
