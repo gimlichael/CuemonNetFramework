@@ -26,7 +26,7 @@ namespace Cuemon.Reflection
             if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return CacheValidator.Default; }
             var assemblyHashCode64 = StructUtility.GetHashCode64(assembly.FullName);
             var assemblyLocation = assembly.Location;
-            return string.IsNullOrEmpty(assemblyLocation) ? new CacheValidator(DateTime.MinValue, DateTime.MaxValue, assemblyHashCode64, setup) : FileUtility.GetCacheValidator(assemblyLocation, readByteForByteChecksum ? int.MaxValue : 0, setup).CombineWith(assemblyHashCode64);
+            return string.IsNullOrEmpty(assemblyLocation) ? new CacheValidator(DateTime.MinValue, DateTime.MaxValue, setup).CombineWith(assemblyHashCode64) : FileUtility.GetCacheValidator(assemblyLocation, readByteForByteChecksum ? int.MaxValue : 0, setup).CombineWith(assemblyHashCode64);
         }
 
         /// <summary>
