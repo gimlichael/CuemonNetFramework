@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Reflection.Emit;
 using Cuemon.Collections.Generic;
+using Cuemon.Reflection;
 using Cuemon.Security.Cryptography;
+using Cuemon.Threading;
 
 namespace Cuemon.Integrity
 {
@@ -16,6 +17,18 @@ namespace Cuemon.Integrity
         private static CacheValidator _referencePointCacheValidator;
         private static Assembly _assemblyValue = typeof(CacheValidator).Assembly;
         private const long NullOrZeroLengthChecksum = 23719;
+        private static readonly PadLock<Assembly> LazyAssembly = new PadLock<Assembly>(() =>
+        {
+            Assembly result = null;
+            try
+            {
+                result = Assembly.GetEntryAssembly();
+            }
+            catch (Exception)
+            {
+            }
+            return result ?? typeof(CacheValidator).Assembly;
+        });
 
         /// <summary>
         /// Gets or sets the <see cref="System.Reflection.Assembly"/> that will serve as the ideal candidate for a <see cref="CacheValidator"/> reference point. Default is <see cref="Cuemon"/>.
@@ -26,13 +39,20 @@ namespace Cuemon.Integrity
         /// </exception>
         public static Assembly Assembly
         {
-            get { return _assemblyValue; }
+            get
+            {
+                return _assemblyValue ?? (_assemblyValue = LazyAssembly.Value);
+            }
             set
             {
                 Validator.ThrowIfNull(value, nameof(value));
                 _assemblyValue = value;
                 _referencePointCacheValidator = null;
             }
+        }
+
+        CacheValidator()
+        {
         }
 
         /// <summary>
@@ -191,7 +211,7 @@ namespace Cuemon.Integrity
                 case ChecksumMethod.Combined:
                     var checksumValue = isChecksumNullOrZeroLength ? NullOrZeroLengthChecksum : StructUtility.GetHashCode64(checksum);
                     checksum = ByteConverter.FromConvertibles(Created.Ticks ^ Modified.Ticks ^ checksumValue);
-                    strength = ChecksumStrength.Weak;
+                    strength = isChecksumNullOrZeroLength ? ChecksumStrength.Weak : ChecksumStrength.Strong;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(options.Method));
@@ -202,19 +222,19 @@ namespace Cuemon.Integrity
             Options = options;
         }
 
-        private CacheValidatorOptions Options { get; }
+        private CacheValidatorOptions Options { get; set; }
 
         /// <summary>
         /// Gets a <see cref="DateTime"/> value from when data this instance represents was first created, expressed as the Coordinated Universal Time (UTC).
         /// </summary>
         /// <value>A <see cref="DateTime"/> value from when data this instance represents was first created, expressed as the Coordinated Universal Time (UTC).</value>
-        public DateTime Created { get; }
+        public DateTime Created { get; private set; }
 
         /// <summary>
         /// Gets a <see cref="DateTime"/> value from when data this instance represents was last modified, expressed as the Coordinated Universal Time (UTC).
         /// </summary>
         /// <value>A <see cref="DateTime"/> value from when data this instance represents was last modified, expressed as the Coordinated Universal Time (UTC).</value>
-        public DateTime Modified { get; }
+        public DateTime Modified { get; private set; }
 
         /// <summary>
         /// Gets a <see cref="HashResult"/> containing a computed hash value of the data this instance represents.
@@ -231,45 +251,6 @@ namespace Cuemon.Integrity
         public static CacheValidator Default => DefaultCacheValidatorValue.Clone();
 
         /// <summary>
-        /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="assembly"/>.
-        /// </summary>
-        /// <param name="assembly">The assembly to resolve a <see cref="CacheValidator"/> from.</param>
-        /// <returns>A <see cref="CacheValidator"/> that fully represents the integrity of the specified <paramref name="assembly"/>.</returns>
-        public static CacheValidator DefaultOr(Assembly assembly)
-        {
-            return DefaultOr(assembly, DateTime.MinValue);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="assembly"/>.
-        /// </summary>
-        /// <param name="assembly">The assembly to resolve a <see cref="CacheValidator"/> from.</param>
-        /// <param name="created">The creation time, in coordinated universal time (UTC), of the <paramref name="assembly"/>.</param>
-        /// <returns>A <see cref="CacheValidator"/> that fully represents the integrity of the specified <paramref name="assembly"/>.</returns>
-        public static CacheValidator DefaultOr(Assembly assembly, DateTime created)
-        {
-            return DefaultOr(assembly, DateTime.MinValue, DateTime.MaxValue);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="CacheValidator"/> from the specified <paramref name="assembly"/>.
-        /// </summary>
-        /// <param name="assembly">The assembly to resolve a <see cref="CacheValidator"/> from.</param>
-        /// <param name="created">The creation time, in coordinated universal time (UTC), of the <paramref name="assembly"/>.</param>
-        /// <param name="modified">The time, in coordinated universal time (UTC), of when the <paramref name="assembly"/> was last modified.</param>
-        /// <returns>A <see cref="CacheValidator"/> that fully represents the integrity of the specified <paramref name="assembly"/>.</returns>
-        public static CacheValidator DefaultOr(Assembly assembly, DateTime created, DateTime modified)
-        {
-            if ((assembly == null) || (assembly.ManifestModule is ModuleBuilder)) { return Default; }
-            return new CacheValidator(created, modified, StructUtility.GetHashCode64(assembly.FullName));
-        }
-
-        /// <summary>
-        /// The reference point callback that is invoked from <see cref="ReferencePoint"/>.
-        /// </summary>
-        public static Doer<CacheValidator> ReferencePointCallback = () => DefaultOr(Assembly);
-
-        /// <summary>
         /// Gets a <see cref="CacheValidator"/> object that represents an <see cref="System.Reflection.Assembly"/> reference point.
         /// </summary>
         /// <value>A <see cref="CacheValidator"/> object that represents an <see cref="System.Reflection.Assembly"/> reference point.</value>
@@ -279,7 +260,7 @@ namespace Cuemon.Integrity
             {
                 if (_referencePointCacheValidator == null)
                 {
-                    _referencePointCacheValidator = ReferencePointCallback();
+                    _referencePointCacheValidator = AssemblyUtility.GetCacheValidator(Assembly);
                 }
                 return _referencePointCacheValidator.Clone();
             }
@@ -291,18 +272,17 @@ namespace Cuemon.Integrity
         /// <value>The byte array that is the result of the associated <see cref="CacheValidator"/>.</value>
         internal List<byte> Bytes { get; set; }
 
-
         /// <summary>
         /// Gets an enumeration value of <see cref="ChecksumMethod"/> indicating the usage method of this instance.
         /// </summary>
         /// <value>One of the enumeration values of <see cref="ChecksumMethod"/> that indicates the usage method of this instance.</value>
-        public ChecksumMethod Method { get; }
+        public ChecksumMethod Method { get; private set; }
 
         /// <summary>
         /// Gets an enumeration value of <see cref="ChecksumStrength"/> indicating the strength of this instance.
         /// </summary>
         /// <value>One of the enumeration values of <see cref="ChecksumStrength"/> that specifies the strength of this instance.</value>
-        public ChecksumStrength Strength { get; }
+        public ChecksumStrength Strength { get; private set; }
 
         /// <summary>
         /// Converts the the <see cref="Bytes"/> of this instance to its equivalent hexadecimal representation.
@@ -319,7 +299,16 @@ namespace Cuemon.Integrity
         /// <returns>A new <see cref="CacheValidator"/> that is a copy of this instance.</returns>
         public virtual CacheValidator Clone()
         {
-            return new CacheValidator(Created, Modified, Bytes.ToArray());
+            return new CacheValidator()
+            {
+                Options = Options,
+                Method = Method,
+                Modified = Modified,
+                Created = Created,
+                Strength = Strength,
+                Bytes = new List<byte>(Bytes),
+                ComputedChecksum = ComputedChecksum
+            };
         }
 
         /// <summary>
