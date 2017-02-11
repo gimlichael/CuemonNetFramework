@@ -100,6 +100,8 @@
     <Compile Include="ConvertibleConverter.cs" />
     <Compile Include="DateTimeConverter.cs" />
     <Compile Include="DateTimeFormatPattern.cs" />
+    <Compile Include="DayPart.cs" />
+    <Compile Include="DayParts.cs" />
     <Compile Include="Diagnostics\Profiler.cs" />
     <Compile Include="Diagnostics\ProfilerOptions.cs" />
     <Compile Include="Diagnostics\TimeMeasure.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="Threading\ParallelThreadPool.ForTask.cs" />
     <Compile Include="Threading\ThreadSettings.cs" />
     <Compile Include="Threading\ThreadUtility.cs" />
+    <Compile Include="TimeRange.cs" />
     <Compile Include="TimeSpanConverter.cs" />
     <Compile Include="TimeUnit.cs" />
     <Compile Include="Transactions\TransactionUtility.cs" />
