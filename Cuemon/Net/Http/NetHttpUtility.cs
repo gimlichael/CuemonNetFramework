@@ -141,6 +141,7 @@ namespace Cuemon.Net.Http
         /// <exception cref="System.Net.WebException">
         /// The specified <paramref name="expectedStatusCodes"/> did not contain the resulting <see cref="HttpWebResponse.StatusCode"/>.
         /// </exception>
+        /// <remarks><see cref="EncodingOptions"/> will be initialized with <see cref="EncodingOptions.DefaultPreambleSequence"/> and <see cref="EncodingOptions.DefaultEncoding"/>.</remarks>
         public static string ResponseAsString(HttpWebResponse response, Act<EncodingOptions> setup, params HttpStatusCode[] expectedStatusCodes)
         {
             if (response == null) { throw new ArgumentNullException(nameof(response)); }
@@ -543,6 +544,30 @@ namespace Cuemon.Net.Http
         public static HttpWebResponse HttpPut(Uri location, Stream content, Act<HttpWebRequestOptions> setup)
         {
             return Http(HttpMethods.Put.ToString(), location, content, setup);
+        }
+
+        /// <summary>
+        /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
+        /// </summary>
+        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
+        /// <param name="contentType">The value of the Content-Type HTTP header.</param>
+        /// <param name="content">The content value of the HTTP request body.</param>
+        /// <returns>Returns a <see cref="HttpMethods.Patch"/> response from an Internet resource.</returns>
+        public static HttpWebResponse HttpPatch(Uri location, string contentType, Stream content)
+        {
+            return Http(HttpMethods.Patch.ToString(), location, contentType, content);
+        }
+
+        /// <summary>
+        /// Creates and returns a <see cref="HttpWebResponse"/> from the specified URI <paramref name="location"/>.
+        /// </summary>
+        /// <param name="location">The URI to retrieve a <see cref="HttpWebResponse"/> from.</param>
+        /// <param name="content">The content value of the HTTP request body.</param>
+        /// <param name="setup">The <see cref="HttpWebRequestOptions"/> which need to be configured.</param>
+        /// <returns>Returns a <see cref="HttpMethods.Patch"/> response from an Internet resource.</returns>
+        public static HttpWebResponse HttpPatch(Uri location, Stream content, Act<HttpWebRequestOptions> setup)
+        {
+            return Http(HttpMethods.Patch.ToString(), location, content, setup);
         }
 
         /// <summary>
