@@ -1,4 +1,7 @@
-**Cuemon .NET Framework**
+![Cuemon .NET Framework](https://nblcdn.net/themes/cuemon.net/img/128x128.png)
+
+Cuemon .NET Framework
+----------------
 The Cuemon .NET Framework is a free and flexible assembly package for the Microsoft .NET Framework. It was built to extend and boost your codebelt - providing vast ways of possibilities for all breeds of coders, programmers, developers and the likes thereof. Ideal for Windows-, Web-, Cloud- and WCF projects.
 
 **Simple**, **intuitive** and **logical** every-day-usage additions to the Microsoft .NET Framework 2.0 SP1 and newer. Follows the same namespace structure already found in the .NET Framework.
